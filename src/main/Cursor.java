@@ -14,7 +14,6 @@ public class Cursor {
     private int spriteCounter = 0;
     private int spriteNum = 1;
     private boolean moving = false;
-    private int pixelCounter = 0;
 
     // Variables that control cursor movement speed
     private int moveDelayCounter = 0; // Increments each frame, and when it reaches moveDelayThreshold, the cursor is allowed to move.
@@ -159,7 +158,6 @@ public class Cursor {
                 }
             }
 
-
         spriteCounter++;
         if (spriteCounter > 20 ) {
             if (spriteNum == 1) {
@@ -170,12 +168,6 @@ public class Cursor {
             }
             spriteCounter = 0;
         }
-
-//        pixelCounter += spriteSpeed;
-//        if (pixelCounter == 16) {
-//            moving = false;
-//            pixelCounter = 0;
-//        }
     }
 
     public void draw (Graphics2D g2) {
