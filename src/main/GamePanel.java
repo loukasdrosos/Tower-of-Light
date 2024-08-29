@@ -11,30 +11,33 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements Runnable{
+
     // Screen Settings
-    private final int tileSize = 16;                   // 16x16 tile
+    private final int tileSize = 16;    // 16x16 tile
+    private final int maxMapCol = 52;
+    private final int maxMapRow = 52;
     private final int maxScreenCol = 82;
     private final int maxScreenRow = 52;
     private final int screenWidth = tileSize * maxScreenCol;  // 1312 pixels
     private final int screenHeight = tileSize * maxScreenRow; // 832 pixels
-
-    final int FPS = 60; // Game runs in 60 fps
+    private final int FPS = 60;  // Game runs in 60 fps
 
     //UNITS
     public static ArrayList<LightUnit> LightUnits = new ArrayList<>();
-    public static ArrayList<ChaosUnit> ChaosUnits = new ArrayList<>();
+    public static ArrayList<LightUnit> simLightUnits = new ArrayList<>();
+    LightUnit selectedUnit = null;
 
-    public static ArrayList<LightUnit> copyLightUnits = new ArrayList<>();
-    public static ArrayList<ChaosUnit> copyChaosUnits = new ArrayList<>();
+    public static ArrayList<ChaosUnit> ChaosUnits = new ArrayList<>();
+    public static ArrayList<ChaosUnit> simChaosUnits = new ArrayList<>();
 
     public void setUnits() {
-        LightUnits.add(new LightUnit(this, keyH, tileSize, tileSize*50));
-        LightUnits.add(new LightUnit(this, keyH, tileSize*5, tileSize*50));
-        ChaosUnits.add(new ChaosUnit(this, keyH, tileSize*10, tileSize));
-        ChaosUnits.add(new ChaosUnit(this, keyH, tileSize*20, tileSize*10));
+        simLightUnits.add(new LightUnit(this, keyH, tileSize*2, tileSize*48));
+        simLightUnits.add(new LightUnit(this, keyH, tileSize*5, tileSize*50));
+        simChaosUnits.add(new ChaosUnit(this, keyH, tileSize*10, tileSize));
+        simChaosUnits.add(new ChaosUnit(this, keyH, tileSize*20, tileSize*10));
     }
 
-//    public void copysetUnits (ArrayList<Entity> source, ArrayList<Entity> target) {
+//    private void copysetUnits (ArrayList<Entity> source, ArrayList<Entity> target) {
 //        target.clear();
 //        for (int i = 0; i < source.size(); i++) {
 //            target.add(source.get(i));
@@ -42,35 +45,26 @@ public class GamePanel extends JPanel implements Runnable{
 //    }
 
     TileManager tileM = new TileManager(this);
-    Cursor cursor = new Cursor(this, tileSize, tileSize*50);
-    KeyHandler keyH = new KeyHandler(LightUnits, cursor);
+    KeyHandler keyH = new KeyHandler(this);
+    Cursor cursor = new Cursor(this, keyH);
     Thread gameThread;
-  //  public CollisionChecker cChecker = new CollisionChecker(this);
+    //  public CollisionChecker cChecker = new CollisionChecker(this);
 
-        // Game screen
+    // Game screen
     public GamePanel() {
-        this.setPreferredSize(new Dimension(this.getScreenWidth(), this.getScreenHeight())); // Set size of GamePanel
+        this.setPreferredSize(new Dimension(this.screenWidth, this.screenHeight)); // Set size of GamePanel
         this.setBackground(Color.GRAY);  // Set screen color
         this.setDoubleBuffered(true);   // Draws all components in an off-screen buffer
         this.addKeyListener(keyH);
         this.setFocusable(true);
-        cursor.setKeyHandler(keyH);// GamePanel can receive key input
 
         setUnits();
+        int startCursorX = simLightUnits.get(0).getX();
+        int startCursorY = simLightUnits.get(0).getY();
+        cursor.setStartingPosition(startCursorX, startCursorY);
+
 //        copysetUnits(LightUnits, copyLightUnits);
 //        copysetUnits(ChaosUnits, copyChaosUnits);
-    }
-
-    public int getTileSize() {
-        return tileSize;
-    }
-
-    public int getScreenWidth() {
-        return screenWidth;
-    }
-
-    public int getScreenHeight() {
-        return screenHeight;
     }
 
     // Game Launcher
@@ -87,12 +81,9 @@ public class GamePanel extends JPanel implements Runnable{
         long lastTime = System.nanoTime(); //Returns in nanoseconds the current value of the running JVM's time source
         long currentTime;
 
+        /* Checks current time, then at every loop we add the pastime divided by draw interval to delta
+        and when delta reaches the drawInterval the screen updates and is repainted, then delta is reset */
         while(gameThread != null) {
-        /*
-        Checks current time, then at every loop we add the pastime divided by draw interval to delta
-        and when delta reaches the drawInterval the screen updates and is repainted, then delta is reset
-        */
-
             currentTime = System.nanoTime();
             delta += (currentTime - lastTime) / drawInterval;
             lastTime = currentTime;
@@ -107,11 +98,11 @@ public class GamePanel extends JPanel implements Runnable{
 
     //Update Game information
     public void update() {
-        for (Entity lightunit : LightUnits) {
+        for (Entity lightunit : simLightUnits) {
             lightunit.update();
         }
 
-        for (Entity chaosunit : ChaosUnits) {
+        for (Entity chaosunit : simChaosUnits) {
             chaosunit.update();
         }
 
@@ -125,16 +116,32 @@ public class GamePanel extends JPanel implements Runnable{
 
         tileM.draw(g2);
 
-        for (Entity l : LightUnits) {
-            l.draw(g2);
+        for (Entity lightunit : simLightUnits) {
+            lightunit.draw(g2);
         }
 
-        for (Entity c : ChaosUnits) {
-            c.draw(g2);
+        for (Entity chaosunit : simChaosUnits) {
+            chaosunit.draw(g2);
         }
 
         cursor.draw(g2);
 
         g2.dispose(); // Dispose this graphics content
+    }
+
+    //GETTERS
+
+    // tileSize getter
+    public int getTileSize() {
+        return tileSize;
+    }
+    // maxMapRow getter
+    public int getMaxMapRow() {
+        return maxMapRow;
+    }
+
+    // maxMapCol getter
+    public int getMaxMapCol() {
+        return maxMapCol;
     }
 }

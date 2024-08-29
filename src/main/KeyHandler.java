@@ -1,28 +1,18 @@
 package main;
 
 import Entity.*;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
 
 public class KeyHandler implements KeyListener {
 
-    public boolean CursorUpPressed, CursorDownPressed, CursorLeftPressed, CursorRightPressed;
-    public boolean UnitUpPressed;
-    public boolean UnitDownPressed;
-    public boolean UnitLeftPressed;
-    public boolean UnitRightPressed;
+    private boolean CursorUpPressed, CursorDownPressed, CursorLeftPressed, CursorRightPressed;
+    private boolean UnitUpPressed, UnitDownPressed, UnitLeftPressed, UnitRightPressed;
 
-    private ArrayList<LightUnit> units; // List of all players
-    private Cursor cursor; // Reference to the Cursor object
-    private LightUnit selectedUnit; // Reference to the currently selected player
+    GamePanel gp;
 
-    // Constructor to initialize KeyHandler with references to players and cursor
-    public KeyHandler(ArrayList<LightUnit> units, Cursor cursor) {
-        this.units = units;
-        this.cursor = cursor;
-        this.selectedUnit = null;
+    public KeyHandler(GamePanel gp) {
+        this.gp = gp;
     }
 
     @Override
@@ -35,42 +25,44 @@ public class KeyHandler implements KeyListener {
 
         if (code == KeyEvent.VK_UP) {
             CursorUpPressed = true;
-            if (selectedUnit != null && selectedUnit.getSelected() == true) {
+            if (gp.selectedUnit != null && gp.selectedUnit.isSelected() == true) {
                 UnitUpPressed = true;
             }
         }
         if (code == KeyEvent.VK_DOWN) {
             CursorDownPressed = true;
-            if (selectedUnit != null && selectedUnit.getSelected() == true) {
+            if (gp.selectedUnit != null && gp.selectedUnit.isSelected() == true) {
                 UnitDownPressed = true;
             }
         }
         if (code == KeyEvent.VK_LEFT) {
             CursorLeftPressed = true;
-            if (selectedUnit != null && selectedUnit.getSelected() == true) {
+            if (gp.selectedUnit != null && gp.selectedUnit.isSelected() == true) {
                 UnitLeftPressed = true;
             }
         }
         if (code == KeyEvent.VK_RIGHT) {
             CursorRightPressed = true;
-            if (selectedUnit != null && selectedUnit.getSelected() == true) {
+            if (gp.selectedUnit != null && gp.selectedUnit.isSelected() == true) {
                 UnitRightPressed = true;
             }
         }
         if (code == KeyEvent.VK_A) {
-            // Check if the cursor's position matches the position of any player
-            for (LightUnit unit : units) {
-                if (cursor.getX() == unit.getX() && cursor.getY() == unit.getY()) {
-                    unit.setSelected(true);
-                    selectedUnit = unit; // Set the selected player
-                    break; // Exit loop once a match is found
+            // Check if the cursor's position matches the position of any player unit (LightUnit)
+           if (gp.selectedUnit == null) {
+                for (LightUnit unit : gp.simLightUnits) {
+                    if (gp.cursor.getX() == unit.getX() && gp.cursor.getY() == unit.getY()) {
+                        gp.selectedUnit = unit; // Select player unit
+                        gp.selectedUnit.setSelected(true); //Activate the selected player unit
+                        break; // Exit loop once a match is found
+                    }
                 }
-            }
+           }
         }
         if (code == KeyEvent.VK_Z) {
-            if (selectedUnit != null && selectedUnit.getSelected() == true) {
-                selectedUnit.setSelected(false);
-                selectedUnit = null; // Deselect the player
+            if (gp.selectedUnit != null && gp.selectedUnit.isSelected() == true) {
+                gp.selectedUnit.setSelected(false);
+                gp.selectedUnit = null; // Deselect the player
             }
         }
     }
@@ -81,37 +73,71 @@ public class KeyHandler implements KeyListener {
 
         if (code == KeyEvent.VK_UP) {
             CursorUpPressed = false;
-            if (selectedUnit != null && selectedUnit.getSelected() == true) {
+            if (gp.selectedUnit != null && gp.selectedUnit.isSelected() == true) {
                 UnitUpPressed = false;
             }
         }
         if (code == KeyEvent.VK_DOWN) {
             CursorDownPressed = false;
-            if (selectedUnit != null && selectedUnit.getSelected() == true) {
+            if (gp.selectedUnit != null && gp.selectedUnit.isSelected() == true) {
                 UnitDownPressed = false;
             }
         }
         if (code == KeyEvent.VK_LEFT) {
             CursorLeftPressed = false;
-            if (selectedUnit != null && selectedUnit.getSelected() == true) {
+            if (gp.selectedUnit != null && gp.selectedUnit.isSelected() == true) {
                 UnitLeftPressed = false;
             }
         }
         if (code == KeyEvent.VK_RIGHT) {
             CursorRightPressed = false;
-            if (selectedUnit != null && selectedUnit.getSelected() == true) {
+            if (gp.selectedUnit != null && gp.selectedUnit.isSelected() == true) {
                 UnitRightPressed = false;
             }
         }
     }
 
     public boolean UnitSelected() {
-        if (selectedUnit != null && selectedUnit.getSelected() == true) {
-            return true;
+        if (gp.selectedUnit != null && gp.selectedUnit.isSelected() == true) {
+                return true;
         }
         else {
             return false;
         }
+    }
+
+    // GETTERS && SETTERS
+
+    public boolean isCursorUpPressed() {
+        return CursorUpPressed;
+    }
+
+    public boolean isCursorDownPressed() {
+        return CursorDownPressed;
+    }
+
+    public boolean isCursorLeftPressed() {
+        return CursorLeftPressed;
+    }
+
+    public boolean isCursorRightPressed() {
+        return CursorRightPressed;
+    }
+
+    public boolean isUnitUpPressed() {
+        return UnitUpPressed;
+    }
+
+    public boolean isUnitDownPressed() {
+        return UnitDownPressed;
+    }
+
+    public boolean isUnitLeftPressed() {
+        return UnitLeftPressed;
+    }
+
+    public boolean isUnitRightPressed() {
+        return UnitRightPressed;
     }
 }
 

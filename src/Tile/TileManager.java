@@ -2,8 +2,9 @@ package Tile;
 
 import main.GamePanel;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,15 +12,16 @@ import java.io.InputStreamReader;
 
 public class TileManager {
 
-    private final int Max_Col = 52;
-    private final int Max_Row = 52;
-    public int mapTileNum[][];
-
     GamePanel gp;
+    private final int Max_Col;
+    private final int Max_Row;
+    public int mapTileNum[][];
     public Tile[] tile;
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
+        Max_Col = gp.getMaxMapCol();
+        Max_Row = gp.getMaxMapRow();
         tile = new Tile[14]; // Number of different tiles we use
         mapTileNum = new int[Max_Col][Max_Row];
         loadImage();

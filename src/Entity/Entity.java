@@ -1,6 +1,5 @@
 package Entity;
 
-import main.Cursor;
 import main.GamePanel;
 import main.KeyHandler;
 
@@ -13,33 +12,15 @@ public class Entity {
 
     private int x, y; // x and y position on map
 
-    public BufferedImage default1, default2, up1, up2, down1, down2, left1, left2, right1, right2;
-    public String direction = "none";
-    public int movement = 2; // Sprite Tile Movement
-    public int spriteCounter = 0;
-    public int spriteNum = 1;
-    private boolean collisionOn;
+    protected BufferedImage default1, default2, up1, up2, down1, down2, left1, left2, right1, right2;
+    protected String direction = "none";
+    protected int movement = 2; // Sprite Tile Movement
+    protected int spriteCounter = 0;
+    protected int spriteNum = 1;
+    protected boolean collisionOn;
 
     GamePanel gp;
-
     KeyHandler keyH;
-    private Cursor cursor;
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
 
     public boolean getCollision () {
         return collisionOn;
@@ -49,7 +30,7 @@ public class Entity {
         this.collisionOn = x;
     }
 
-    //Images of a unit's animations
+    //Images of a unit's animations, all images are set to error figure if something doesn't load properly
     public void loadImage() {
         try{
             up1 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Error_Figure.png"));
@@ -141,6 +122,24 @@ public class Entity {
                 }
         }
         g2.drawImage(image, x, y, gp.getTileSize(), gp.getTileSize(), null);
+    }
+
+    //GETTERS && SETTERS
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 }
 

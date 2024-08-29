@@ -18,11 +18,11 @@ public class LightUnit extends Entity{
 
         try { loadImage(); }
         catch (Exception e){
-            System.out.println("Exception loadImage in LightUnit not working properly");
+            System.out.println("Exception loadImage, LightUnit not loading properly");
         }
     }
 
-    public boolean getSelected () {
+    public boolean isSelected () {
         return selected;
     }
 
@@ -34,16 +34,16 @@ public class LightUnit extends Entity{
     public void update() {
 
         if (this.selected == true) {
-            if (keyH.UnitUpPressed == true) {
+            if (keyH.isUnitUpPressed() == true) {
                 this.direction = "up";
-            } else if (keyH.UnitDownPressed == true) {
+            } else if (keyH.isUnitDownPressed() == true) {
                 this.direction = "down";
-            } else if (keyH.UnitLeftPressed == true) {
+            } else if (keyH.isUnitLeftPressed() == true) {
                 this.direction = "left";
-            } else if (keyH.UnitRightPressed == true) {
+            } else if (keyH.isUnitRightPressed() == true) {
                 this.direction = "right";
-            } else if (keyH.UnitUpPressed == false && keyH.UnitDownPressed == false
-               && keyH.UnitLeftPressed == false && keyH.UnitRightPressed == false) {
+            } else if (keyH.isUnitUpPressed() == false && keyH.isUnitDownPressed() == false
+               && keyH.isUnitLeftPressed() == false && keyH.isUnitRightPressed() == false) {
                 this.direction = "none";
             }
         }
@@ -82,6 +82,7 @@ public class LightUnit extends Entity{
         }
     }
 
+    //Images of a unit's animations
     @Override
     public void loadImage() {
         try {

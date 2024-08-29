@@ -16,11 +16,11 @@ public class ChaosUnit extends Entity {
 
         try { loadImage(); }
         catch (Exception e){
-            System.out.println("Exception loadImage in ChaosUnit not working properly");
+            System.out.println("Exception loadImage, ChaosUnit not loading properly");
         }
     }
 
-    @Override
+    //Images of a unit's animations
     public void loadImage() {
         try {
             up1 = ImageIO.read(getClass().getResourceAsStream("/ChaosUnits/Human_Herald_of_Chaos_Up_1.png"));

@@ -8,55 +8,32 @@ import java.io.IOException;
 public class Cursor {
 
     private int x, y; // x and y position on map
-    public int movement = 2; // Sprite Tile Movement
-    public String direction = "none";
-    public BufferedImage sprite;
-    public int spriteCounter = 0;
-    public int spriteNum = 1;
+    private int movement = 2; // Sprite Tile Movement
+    private String direction = "none";
+    private BufferedImage sprite;
+    private int spriteCounter = 0;
+    private int spriteNum = 1;
     private boolean collisionOn;
-
-    public boolean getCollision () {
-        return collisionOn;
-    }
-
-    public void setCollision (boolean x) {
-        this.collisionOn = x;
-    }
 
     GamePanel gp;
     private KeyHandler keyH;
 
-    public Cursor (GamePanel gp, int startX, int startY) {
+    public Cursor (GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
-        setX(startX);
-        setY(startY);
+        this.keyH = keyH;
 
         try { loadImage(); }
         catch (Exception e){
-            System.out.println("Exception loadImage in Cursor not working properly");
+            System.out.println("Exception loadImage, Cursor not loading properly");
         }
     }
 
-    public void setKeyHandler(KeyHandler keyH) {
-        this.keyH = keyH;
+    public void setStartingPosition(int startX, int startY) {
+        setX(startX);
+        setY(startY);
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
+    //CURSOR MOVEMENT
     public void moveUp (int movement) {
         this.y -= movement;
     }
@@ -81,16 +58,17 @@ public class Cursor {
         }
     }
 
+
     public void update() {
 
            // if (keyH.UnitSelected() == false) {
-                if (keyH.CursorUpPressed == true) {
+                if (keyH.isCursorUpPressed() == true) {
                     moveUp(movement);
-                } else if (keyH.CursorDownPressed == true) {
+                } else if (keyH.isCursorDownPressed() == true) {
                     moveDown(movement);
-                } else if (keyH.CursorLeftPressed == true) {
+                } else if (keyH.isCursorLeftPressed() == true) {
                     moveLeft(movement);
-                } else if (keyH.CursorRightPressed == true) {
+                } else if (keyH.isCursorRightPressed() == true) {
                     moveRight(movement);
                 }
           //  }
@@ -154,5 +132,31 @@ public class Cursor {
                    image = sprite;
             }
        g2.drawImage(image, x, y, gp.getTileSize(), gp.getTileSize(), null);
+    }
+
+    //GETTERS && SETTERS
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public boolean getCollision () {
+        return collisionOn;
+    }
+
+    public void setCollision (boolean x) {
+        this.collisionOn = x;
     }
 }
