@@ -8,12 +8,14 @@ import java.io.IOException;
 public class Cursor {
 
     private int x, y; // x and y position on map
-    private int movement = 2; // Sprite Tile Movement
+    private int spriteSpeed = 4; // Sprite Tile Movement
     private String direction = "none";
     private BufferedImage sprite;
     private int spriteCounter = 0;
     private int spriteNum = 1;
-    private boolean collisionOn;
+    private boolean moving = false;
+    private int pixelCounter = 0;
+    private int standCounter = 0;
 
     GamePanel gp;
     private KeyHandler keyH;
@@ -34,20 +36,20 @@ public class Cursor {
     }
 
     //CURSOR MOVEMENT
-    public void moveUp (int movement) {
-        this.y -= movement;
+    public void moveUp (int spriteSpeed) {
+        this.y -= spriteSpeed;
     }
 
-    public void moveDown (int movement) {
-        this.y += movement;
+    public void moveDown (int spriteSpeed) {
+        this.y += spriteSpeed;
     }
 
-    public void moveLeft (int movement) {
-        this.x -= movement;
+    public void moveLeft (int spriteSpeed) {
+        this.x -= spriteSpeed;
     }
 
-    public void moveRight (int movement) {
-        this.x += movement;
+    public void moveRight (int spriteSpeed) {
+        this.x += spriteSpeed;
     }
 
     public void loadImage() {
@@ -58,70 +60,71 @@ public class Cursor {
         }
     }
 
-
     public void update() {
 
-           // if (keyH.UnitSelected() == false) {
-                if (keyH.isCursorUpPressed() == true) {
-                    moveUp(movement);
-                } else if (keyH.isCursorDownPressed() == true) {
-                    moveDown(movement);
-                } else if (keyH.isCursorLeftPressed() == true) {
-                    moveLeft(movement);
-                } else if (keyH.isCursorRightPressed() == true) {
-                    moveRight(movement);
-                }
-          //  }
-        /*    else {
-                if (keyH.CursorUpPressed == true) {
-                    this.direction = "up";
-                } else if (keyH.CursorDownPressed == true) {
-                    this.direction = "down";
-                } else if (keyH.CursorLeftPressed == true) {
-                    this.direction = "left";
-                } else if (keyH.CursorRightPressed == true) {
-                    this.direction = "right";
-                }
+        if (moving == false) {
 
-                // Check tile collision
-                setCollision(false);
-                gp.cChecker.checkCursorTile(this);
+            if (gp.selectedUnit == null) {
 
-                // If collision is false, cursor can move
-                if (getCollision() == false) {
-                    switch (direction) {
-                        case "up" :
-                            moveUp(movement);
-                            break;
-                        case "down" :
-                            moveDown(movement);
-                            break;
-                        case "left" :
-                            moveLeft(movement);
-                            break;
-                        case "right" :
-                            moveRight(movement);
-                            break;
+                if (keyH.isCursorUpPressed() == true || keyH.isCursorDownPressed() == true
+                || keyH.isCursorLeftPressed() == true || keyH.isCursorRightPressed() == true) {
+
+                    if (keyH.isCursorUpPressed() == true) {
+                        moveUp(spriteSpeed);
+                    } else if (keyH.isCursorDownPressed() == true) {
+                        moveDown(spriteSpeed);
+                    } else if (keyH.isCursorLeftPressed() == true) {
+                        moveLeft(spriteSpeed);
+                    } else if (keyH.isCursorRightPressed() == true) {
+                        moveRight(spriteSpeed);
                     }
-                }
-            } */
 
-        spriteCounter++;
-        if (spriteCounter > 20) {
-            if (spriteNum == 1) {
-                spriteNum = 2;
+                    moving  = true;
+                }
             }
-            else if (spriteNum == 2) {
-                spriteNum = 1;
+            if (gp.selectedUnit != null) {
+                if (keyH.isCursorUpPressed() == true) {
+                    moveUp(spriteSpeed);
+                } else if (keyH.isCursorDownPressed() == true) {
+                    moveDown(spriteSpeed);
+                } else if (keyH.isCursorLeftPressed() == true) {
+                    moveLeft(spriteSpeed);
+                } else if (keyH.isCursorRightPressed() == true) {
+                    moveRight(spriteSpeed);
+                }
             }
-            spriteCounter = 0;
+            else {
+                standCounter++;
+                if (standCounter == 20) {
+                    spriteNum = 1;
+                    standCounter = 0;
+                }
+            }
+        }
+        if (moving == true) {
+            spriteCounter++;
+            if (spriteCounter > 20) {
+                if (spriteNum == 1) {
+                    spriteNum = 2;
+                }
+                else if (spriteNum == 2) {
+                    spriteNum = 1;
+                }
+                spriteCounter = 0;
+            }
+        }
+
+        pixelCounter += spriteSpeed;
+        if (pixelCounter == 16) {
+            moving = false;
+            pixelCounter = 0;
         }
     }
 
     public void draw (Graphics2D g2) {
         BufferedImage image = null;
 
-            if (keyH.UnitSelected() == false) {
+            if (gp.selectedUnit == null) {
                 if (spriteNum == 1) {
                     image = sprite;
                 }
@@ -150,13 +153,5 @@ public class Cursor {
 
     public void setY(int y) {
         this.y = y;
-    }
-
-    public boolean getCollision () {
-        return collisionOn;
-    }
-
-    public void setCollision (boolean x) {
-        this.collisionOn = x;
     }
 }

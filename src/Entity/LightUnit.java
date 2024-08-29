@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class LightUnit extends Entity{
 
-    private boolean selected = false;
+    private boolean isSelected = false;
 
     public LightUnit (GamePanel gp, KeyHandler keyH, int startX, int startY) {
         this.gp = gp;
@@ -22,18 +22,10 @@ public class LightUnit extends Entity{
         }
     }
 
-    public boolean isSelected () {
-        return selected;
-    }
-
-    public void setSelected (boolean x) {
-        this.selected = x;
-    }
-
     @Override
     public void update() {
 
-        if (this.selected == true) {
+        if (this.isSelected == true) {
             if (keyH.isUnitUpPressed() == true) {
                 this.direction = "up";
             } else if (keyH.isUnitDownPressed() == true) {
@@ -56,16 +48,16 @@ public class LightUnit extends Entity{
         if (getCollision() == false) { */
             switch (direction) {
                 case "up" :
-                    moveUp(movement);
+                    moveUp(spriteSpeed);
                     break;
                 case "down" :
-                    moveDown(movement);
+                    moveDown(spriteSpeed);
                     break;
                 case "left" :
-                    moveLeft(movement);
+                    moveLeft(spriteSpeed);
                     break;
                 case "right" :
-                    moveRight(movement);
+                    moveRight(spriteSpeed);
                     break;
             }
      // }
@@ -100,5 +92,15 @@ public class LightUnit extends Entity{
                 IOException e) {
             e.printStackTrace();
         }
+    }
+
+    //GETTERS && SETTERS
+
+    public boolean getIsSelected () {
+        return isSelected;
+    }
+
+    public void setIsSelected (boolean x) {
+        this.isSelected = x;
     }
 }

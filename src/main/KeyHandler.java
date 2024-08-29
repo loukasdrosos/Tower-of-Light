@@ -25,25 +25,25 @@ public class KeyHandler implements KeyListener {
 
         if (code == KeyEvent.VK_UP) {
             CursorUpPressed = true;
-            if (gp.selectedUnit != null && gp.selectedUnit.isSelected() == true) {
+            if (gp.selectedUnit != null) {
                 UnitUpPressed = true;
             }
         }
         if (code == KeyEvent.VK_DOWN) {
             CursorDownPressed = true;
-            if (gp.selectedUnit != null && gp.selectedUnit.isSelected() == true) {
+            if (gp.selectedUnit != null) {
                 UnitDownPressed = true;
             }
         }
         if (code == KeyEvent.VK_LEFT) {
             CursorLeftPressed = true;
-            if (gp.selectedUnit != null && gp.selectedUnit.isSelected() == true) {
+            if (gp.selectedUnit != null) {
                 UnitLeftPressed = true;
             }
         }
         if (code == KeyEvent.VK_RIGHT) {
             CursorRightPressed = true;
-            if (gp.selectedUnit != null && gp.selectedUnit.isSelected() == true) {
+            if (gp.selectedUnit != null) {
                 UnitRightPressed = true;
             }
         }
@@ -53,15 +53,15 @@ public class KeyHandler implements KeyListener {
                 for (LightUnit unit : gp.simLightUnits) {
                     if (gp.cursor.getX() == unit.getX() && gp.cursor.getY() == unit.getY()) {
                         gp.selectedUnit = unit; // Select player unit
-                        gp.selectedUnit.setSelected(true); //Activate the selected player unit
+                        gp.selectedUnit.setIsSelected(true); //Activate the selected player unit
                         break; // Exit loop once a match is found
                     }
                 }
            }
         }
         if (code == KeyEvent.VK_Z) {
-            if (gp.selectedUnit != null && gp.selectedUnit.isSelected() == true) {
-                gp.selectedUnit.setSelected(false);
+            if (gp.selectedUnit != null) {
+                gp.selectedUnit.setIsSelected(false);
                 gp.selectedUnit = null; // Deselect the player
             }
         }
@@ -73,36 +73,27 @@ public class KeyHandler implements KeyListener {
 
         if (code == KeyEvent.VK_UP) {
             CursorUpPressed = false;
-            if (gp.selectedUnit != null && gp.selectedUnit.isSelected() == true) {
+            if (gp.selectedUnit != null) {
                 UnitUpPressed = false;
             }
         }
         if (code == KeyEvent.VK_DOWN) {
             CursorDownPressed = false;
-            if (gp.selectedUnit != null && gp.selectedUnit.isSelected() == true) {
+            if (gp.selectedUnit != null) {
                 UnitDownPressed = false;
             }
         }
         if (code == KeyEvent.VK_LEFT) {
             CursorLeftPressed = false;
-            if (gp.selectedUnit != null && gp.selectedUnit.isSelected() == true) {
+            if (gp.selectedUnit != null) {
                 UnitLeftPressed = false;
             }
         }
         if (code == KeyEvent.VK_RIGHT) {
             CursorRightPressed = false;
-            if (gp.selectedUnit != null && gp.selectedUnit.isSelected() == true) {
+            if (gp.selectedUnit != null) {
                 UnitRightPressed = false;
             }
-        }
-    }
-
-    public boolean UnitSelected() {
-        if (gp.selectedUnit != null && gp.selectedUnit.isSelected() == true) {
-                return true;
-        }
-        else {
-            return false;
         }
     }
 

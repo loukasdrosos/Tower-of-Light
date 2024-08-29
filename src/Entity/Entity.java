@@ -14,7 +14,7 @@ public class Entity {
 
     protected BufferedImage default1, default2, up1, up2, down1, down2, left1, left2, right1, right2;
     protected String direction = "none";
-    protected int movement = 2; // Sprite Tile Movement
+    protected int spriteSpeed = 2; // Sprite Tile Movement
     protected int spriteCounter = 0;
     protected int spriteNum = 1;
     protected boolean collisionOn;
