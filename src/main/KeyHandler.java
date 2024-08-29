@@ -51,7 +51,7 @@ public class KeyHandler implements KeyListener {
             // Check if the cursor's position matches the position of any player unit (LightUnit)
            if (gp.selectedUnit == null) {
                 for (LightUnit unit : gp.simLightUnits) {
-                    if (gp.cursor.getX() == unit.getX() && gp.cursor.getY() == unit.getY()) {
+                    if (gp.cursor.getCol() == unit.getCol() && gp.cursor.getRow() == unit.getRow()) {
                         gp.selectedUnit = unit; // Select player unit
                         gp.selectedUnit.setIsSelected(true); //Activate the selected player unit
                         break; // Exit loop once a match is found
@@ -97,7 +97,7 @@ public class KeyHandler implements KeyListener {
         }
     }
 
-    // GETTERS && SETTERS
+    // GETTERS
 
     public boolean isCursorUpPressed() {
         return CursorUpPressed;

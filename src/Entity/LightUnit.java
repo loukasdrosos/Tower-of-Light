@@ -10,11 +10,15 @@ public class LightUnit extends Entity{
 
     private boolean isSelected = false;
 
-    public LightUnit (GamePanel gp, KeyHandler keyH, int startX, int startY) {
+    public LightUnit (GamePanel gp, KeyHandler keyH, int startCol, int startRow) {
         this.gp = gp;
         this.keyH = keyH;
-        setX(startX);
-        setY(startY);
+        this.col =  startCol;
+        this.row = startRow;
+        x = getX(col);
+        y = getY(row);
+        preCol = col;
+        preRow = row;
 
         try { loadImage(); }
         catch (Exception e){
@@ -48,16 +52,16 @@ public class LightUnit extends Entity{
         if (getCollision() == false) { */
             switch (direction) {
                 case "up" :
-                    moveUp(spriteSpeed);
+                    moveUp();
                     break;
                 case "down" :
-                    moveDown(spriteSpeed);
+                    moveDown();
                     break;
                 case "left" :
-                    moveLeft(spriteSpeed);
+                    moveLeft();
                     break;
                 case "right" :
-                    moveRight(spriteSpeed);
+                    moveRight();
                     break;
             }
      // }
