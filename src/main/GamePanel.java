@@ -95,19 +95,6 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
 
-    //Update Game information
-    public void update() {
-        for (Entity lightunit : simLightUnits) {
-            lightunit.update();
-        }
-
-        for (Entity chaosunit : simChaosUnits) {
-            chaosunit.update();
-        }
-
-        cursor.update();
-    }
-
     public void UnitSelection() {
         if (keyH.isAPressed() == true) {
             // Check if the cursor's position matches the position of any player unit (LightUnit)
@@ -131,6 +118,21 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
 
+    //Update Game information
+    public void update() {
+        for (Entity lightunit : simLightUnits) {
+            lightunit.update();
+        }
+
+        for (Entity chaosunit : simChaosUnits) {
+            chaosunit.update();
+        }
+
+        UnitSelection();
+
+        cursor.update();
+    }
+
     // Draw the screen with the updated information
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -148,23 +150,19 @@ public class GamePanel extends JPanel implements Runnable{
 
         cursor.draw(g2);
 
-        UnitSelection();
-
         g2.dispose(); // Dispose this graphics content
     }
 
     //GETTERS
 
-    // tileSize getter
     public int getTileSize() {
         return tileSize;
     }
-    // maxMapRow getter
+
     public int getMaxMapRow() {
         return maxMapRow;
     }
 
-    // maxMapCol getter
     public int getMaxMapCol() {
         return maxMapCol;
     }
