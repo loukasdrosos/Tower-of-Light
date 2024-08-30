@@ -1,5 +1,6 @@
 package Tile;
 
+import Entity.ChaosUnit;
 import main.GamePanel;
 
 import java.awt.*;
@@ -108,6 +109,31 @@ public class TileManager {
         catch (Exception e) {  }
     }
 
+    // Draw tiles that the player can move
+    public void drawMovementTile(Graphics2D g2, int col, int row) {
+        int tileNum = mapTileNum[col][row];
+        if (tile[tileNum].collision == false) {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
+            g2.setColor(Color.BLUE);
+            for (ChaosUnit enemy : gp.simChaosUnits) {
+                if (col == enemy.getPreCol() && row == enemy.getPreRow()) {
+                    g2.setColor(Color.RED);
+                }
+                g2.fillRect(col * gp.getTileSize(), row * gp.getTileSize(), gp.getTileSize(),gp.getTileSize());
+            }
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+        }
+    }
+
+    // Load tiles for available movement of selected unit
+    public void drawPlayerMovement(Graphics2D g2, int col, int row) {
+            drawMovementTile(g2, col, row);
+            drawMovementTile(g2,col + 1, row);
+            drawMovementTile(g2,col - 1, row);
+            drawMovementTile(g2, col, row + 1);
+            drawMovementTile(g2, col, row - 1);
+    }
+
     public void draw (Graphics2D g2) {
 
         int col, row;
@@ -134,17 +160,8 @@ public class TileManager {
                 y += gp.getTileSize();
             }
         }
-
-        // Load Selected Units Available Movement
         if (gp.selectedUnit != null) {
-            g2.setColor(Color.BLUE);
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-            g2.fillRect(gp.selectedUnit.getX(gp.selectedUnit.getPreCol()), gp.selectedUnit.getY(gp.selectedUnit.getPreRow()), gp.getTileSize(), gp.getTileSize());
-            g2.fillRect(gp.selectedUnit.getX(gp.selectedUnit.getPreCol() + 1), gp.selectedUnit.getY(gp.selectedUnit.getPreRow()), gp.getTileSize(), gp.getTileSize());
-            g2.fillRect(gp.selectedUnit.getX(gp.selectedUnit.getPreCol() - 1), gp.selectedUnit.getY(gp.selectedUnit.getPreRow()), gp.getTileSize(), gp.getTileSize());
-            g2.fillRect(gp.selectedUnit.getX(gp.selectedUnit.getPreCol()), gp.selectedUnit.getY(gp.selectedUnit.getPreRow() + 1), gp.getTileSize(), gp.getTileSize());
-            g2.fillRect(gp.selectedUnit.getX(gp.selectedUnit.getPreCol()), gp.selectedUnit.getY(gp.selectedUnit.getPreRow() - 1), gp.getTileSize(), gp.getTileSize());
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+            drawPlayerMovement(g2, gp.selectedUnit.getPreCol(), gp.selectedUnit.getPreRow());
         }
     }
 }

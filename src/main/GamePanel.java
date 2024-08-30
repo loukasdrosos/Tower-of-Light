@@ -31,18 +31,16 @@ public class GamePanel extends JPanel implements Runnable{
     public static ArrayList<ChaosUnit> simChaosUnits = new ArrayList<>();
 
     public void setUnits() {
-        simLightUnits.add(new LightUnit(this, keyH, 2, 48));
-        simLightUnits.add(new LightUnit(this, keyH, 5, 50));
-        simChaosUnits.add(new ChaosUnit(this, keyH, 10, 1));
+        simLightUnits.add(new LightUnit(this, keyH, 30, 15));
+        simLightUnits.add(new LightUnit(this, keyH, 2, 50));
+        simChaosUnits.add(new ChaosUnit(this, keyH, 31, 15));
         simChaosUnits.add(new ChaosUnit(this, keyH, 20, 10));
     }
 
-//    private void copysetUnits (ArrayList<Entity> source, ArrayList<Entity> target) {
-//        target.clear();
-//        for (int i = 0; i < source.size(); i++) {
-//            target.add(source.get(i));
-//        }
-//    }
+    public <T extends Entity> void copysetUnits(ArrayList<T> source, ArrayList<T> target) {
+        target.clear();
+        target.addAll(source);
+    }
 
     TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler(this);
@@ -63,8 +61,8 @@ public class GamePanel extends JPanel implements Runnable{
         int startCursorRow = simLightUnits.get(0).getRow();
         cursor.setStartingPosition(startCursorCol, startCursorRow);
 
-//        copysetUnits(LightUnits, copyLightUnits);
-//        copysetUnits(ChaosUnits, copyChaosUnits);
+        copysetUnits(simLightUnits, LightUnits);
+        copysetUnits(simChaosUnits, ChaosUnits);
     }
 
     // Game Launcher

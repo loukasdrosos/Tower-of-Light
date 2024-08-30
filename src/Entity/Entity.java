@@ -19,6 +19,9 @@ public class Entity {
     protected int spriteCounter = 0;
     protected int spriteNum = 1;
 
+    protected boolean wait;
+    protected boolean isMoving;
+
     GamePanel gp;
     KeyHandler keyH;
 
