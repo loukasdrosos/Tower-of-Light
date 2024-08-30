@@ -14,11 +14,15 @@ public class Entity {
     protected int col, row, preCol, preRow;
 
     protected BufferedImage default1, default2, up1, up2, down1, down2, left1, left2, right1, right2;
-    protected String direction = "none";
-    protected int spriteSpeed = 2; // Sprite Tile Movement
     protected int spriteCounter = 0;
     protected int spriteNum = 1;
 
+    // Variables that control unit's movement speed
+    protected String direction = "none";
+    protected int moveDelayCounter = 0; // Increments each frame, and when it reaches moveDelayThreshold, the unit is allowed to move.
+    protected int moveDelayThreshold = 8; // Adjust this value to change the speed
+
+    // Variables that control unit's actions
     protected boolean wait = false;
     protected boolean isSelected = false;
     protected boolean isMoving = false;
@@ -80,7 +84,7 @@ public class Entity {
 
     public boolean allowedMove (int targetCol, int targetRow) {
         if (gp.cChecker.isWithinMap(targetCol, targetRow) == true) {
-            if (Math.abs(targetCol - preCol) + Math.abs(targetRow - preRow) == 1) {
+            if ((targetCol == preCol && targetRow == preRow)|| Math.abs(targetCol - preCol) + Math.abs(targetRow - preRow) == 1) {
                 return true;
             }
         }
@@ -90,6 +94,9 @@ public class Entity {
     public void updatePosition () {
         x = getX(col);
         y = getY(row);
+    }
+
+    public void endTurn() {
         preCol = col;
         preRow = row;
     }

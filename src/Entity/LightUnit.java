@@ -30,35 +30,58 @@ public class LightUnit extends Entity{
     public void update() {
 
         if (this.isSelected == true) {
-            if (keyH.isUnitUpPressed() == true) {
-                this.direction = "up";
-            } else if (keyH.isUnitDownPressed() == true) {
-                this.direction = "down";
-            } else if (keyH.isUnitLeftPressed() == true) {
-                this.direction = "left";
-            } else if (keyH.isUnitRightPressed() == true) {
-                this.direction = "right";
-            } else if (keyH.isUnitUpPressed() == false && keyH.isUnitDownPressed() == false
-               && keyH.isUnitLeftPressed() == false && keyH.isUnitRightPressed() == false) {
-                this.direction = "none";
+            // Increment the delay counter
+            moveDelayCounter++;
+
+            // Only move the unit when the delay counter reaches the threshold
+            if (moveDelayCounter >= moveDelayThreshold) {
+                // Capture the intended move direction
+                if (keyH.isUnitUpPressed() == true) {
+                    this.direction = "up";
+                } else if (keyH.isUnitDownPressed() == true) {
+                    this.direction = "down";
+                } else if (keyH.isUnitLeftPressed() == true) {
+                    this.direction = "left";
+                } else if (keyH.isUnitRightPressed() == true) {
+                    this.direction = "right";
+                } else if (keyH.isUnitUpPressed() == false && keyH.isUnitDownPressed() == false
+                        && keyH.isUnitLeftPressed() == false && keyH.isUnitRightPressed() == false) {
+                    // If no key is pressed, stop movement
+                    this.direction = "none";
+                }
+
+                // Calculate target position based on direction
+                int targetCol = col;
+                int targetRow = row;
+
+                switch (direction) {
+                    case "up":
+                        targetRow = row - 1;
+                        break;
+                    case "down":
+                        targetRow = row + 1;
+                        break;
+                    case "left":
+                        targetCol = col - 1;
+                        break;
+                    case "right":
+                        targetCol = col + 1;
+                        break;
+                }
+
+                // Check if the move is allowed and update position accordingly
+                if (allowedMove(targetCol, targetRow)) {
+                    this.col = targetCol;
+                    this.row = targetRow;
+                    updatePosition();
+                }
+
+                // Reset the delay counter after moving
+                moveDelayCounter = 0;
             }
         }
 
-            switch (direction) {
-                case "up" :
-                    moveUp();
-                    break;
-                case "down" :
-                    moveDown();
-                    break;
-                case "left" :
-                    moveLeft();
-                    break;
-                case "right" :
-                    moveRight();
-                    break;
-            }
-
+        // Update sprite animation
         spriteCounter++;
         if (spriteCounter > 20) {
             if (spriteNum == 1) {

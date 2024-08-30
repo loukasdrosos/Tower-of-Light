@@ -9,13 +9,15 @@ public class Cursor {
 
     private int x, y; // x and y position on map
     private int col, row;
-    private String direction = "none";
+
     private BufferedImage sprite;
     private int spriteCounter = 0;
     private int spriteNum = 1;
-    private boolean moving = false;
 
     // Variables that control cursor movement speed
+    private String direction = "none";
+
+    private boolean moving = false;
     private int moveDelayCounter = 0; // Increments each frame, and when it reaches moveDelayThreshold, the cursor is allowed to move.
     private int moveDelayThreshold = 5; // Adjust this value to change the speed
 
