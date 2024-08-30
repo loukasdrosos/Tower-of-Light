@@ -22,7 +22,7 @@ public class Entity {
     // Variables that control unit's movement speed
     protected String direction = "none";
     protected int moveDelayCounter = 0; // Increments each frame, and when it reaches moveDelayThreshold, the unit is allowed to move.
-    protected int moveDelayThreshold = 8; // Adjust this value to change the speed
+    protected int moveDelayThreshold = 7; // Frame threshold
 
     // Variables that control unit's actions
     protected boolean wait = false;
@@ -74,6 +74,7 @@ public class Entity {
         }
     }
 
+    // Unit's allowed movement
     public boolean allowedMove (int targetCol, int targetRow) {
         if (gp.cChecker.isWithinMap(targetCol, targetRow) == true) {
             if ((targetCol == preCol && targetRow == preRow)|| Math.abs(targetCol - preCol) + Math.abs(targetRow - preRow) == 1) {
@@ -98,6 +99,7 @@ public class Entity {
         row = preRow;
         x = getX(col);
         y = getY(row);
+        direction = "none";
     }
 
     public void draw(Graphics2D g2) {

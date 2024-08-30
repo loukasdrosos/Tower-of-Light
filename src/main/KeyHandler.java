@@ -8,7 +8,7 @@ public class KeyHandler implements KeyListener {
 
     private boolean CursorUpPressed, CursorDownPressed, CursorLeftPressed, CursorRightPressed;
     private boolean UnitUpPressed, UnitDownPressed, UnitLeftPressed, UnitRightPressed;
-    private boolean APressed, ZPressed;
+    private boolean APressed, ZPressed, WPressed;
 
     GamePanel gp;
 
@@ -54,6 +54,9 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_Z) {
             ZPressed = true;
         }
+        if (code == KeyEvent.VK_W) {
+            WPressed = true;
+        }
     }
 
     @Override
@@ -89,6 +92,9 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_Z) {
             ZPressed = false;
+        }
+        if (code == KeyEvent.VK_W) {
+            WPressed = false;
         }
     }
 
@@ -132,6 +138,10 @@ public class KeyHandler implements KeyListener {
 
     public boolean isZPressed() {
         return ZPressed;
+    }
+
+    public boolean isWPressed() {
+        return WPressed;
     }
 }
 

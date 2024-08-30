@@ -107,6 +107,31 @@ public class GamePanel extends JPanel implements Runnable{
         cursor.update();
     }
 
+    public void UnitSelection() {
+        if (keyH.isAPressed() == true) {
+            // Check if the cursor's position matches the position of any player unit (LightUnit)
+            if (selectedUnit == null) {
+                for (LightUnit unit : simLightUnits) {
+                    if (cursor.getCol() == unit.getCol() && cursor.getRow() == unit.getRow() && unit.getWait() == false) {
+                        selectedUnit = unit; // Select player unit
+                        selectedUnit.setIsSelected(true); // Allow player to move
+                        selectedUnit.setIsMoving(true);//Activate the selected player unit
+                        break; // Exit loop once a match is found
+                    }
+                }
+            }
+        }
+
+        if (keyH.isZPressed() == true) {
+            if (selectedUnit != null && selectedUnit.getIsSelected() == true && selectedUnit.getIsMoving() == true) {
+                selectedUnit.resetPosition(); // Return player to starting position
+                selectedUnit.setIsMoving(false); //Disallow player to move
+                selectedUnit.setIsSelected(false); // Deselect the player
+                selectedUnit = null; //Can choose new player
+            }
+        }
+    }
+
     // Draw the screen with the updated information
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -124,27 +149,7 @@ public class GamePanel extends JPanel implements Runnable{
 
         cursor.draw(g2);
 
-        if (keyH.isAPressed() == true) {
-            // Check if the cursor's position matches the position of any player unit (LightUnit)
-            if (selectedUnit == null) {
-                for (LightUnit unit : simLightUnits) {
-                    if (cursor.getCol() == unit.getCol() && cursor.getRow() == unit.getRow()) {
-                        selectedUnit = unit; // Select player unit
-                        selectedUnit.setIsSelected(true); // Allow player to move
-                        selectedUnit.setIsMoving(true);//Activate the selected player unit
-                        break; // Exit loop once a match is found
-                    }
-                }
-            }
-        }
-
-        if (keyH.isZPressed() == true) {
-            if (selectedUnit != null && selectedUnit.getIsSelected() == true && selectedUnit.getIsMoving() == true) {
-                selectedUnit.setIsMoving(false); //Disallow player to move
-                selectedUnit.setIsSelected(false); // Deselect the player
-                selectedUnit = null; //Can choose new player
-            }
-        }
+        UnitSelection();
 
         g2.dispose(); // Dispose this graphics content
     }

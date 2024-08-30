@@ -26,58 +26,57 @@ public class LightUnit extends Entity{
         }
     }
 
+    public void move() {
+        // Capture the intended move direction
+        if (keyH.isUnitUpPressed() == true) {
+            direction = "up";
+        } else if (keyH.isUnitDownPressed() == true) {
+            direction = "down";
+        } else if (keyH.isUnitLeftPressed() == true) {
+            direction = "left";
+        } else if (keyH.isUnitRightPressed() == true) {
+            direction = "right";
+        } else if (keyH.isUnitUpPressed() == false && keyH.isUnitDownPressed() == false
+                && keyH.isUnitLeftPressed() == false && keyH.isUnitRightPressed() == false) {
+            direction = "none"; // If no key is pressed, stop movement
+        }
+
+        // Calculate target position based on direction
+        int targetCol = col;
+        int targetRow = row;
+
+        switch (direction) {
+            case "up":
+                targetRow = row - 1;
+                break;
+            case "down":
+                targetRow = row + 1;
+                break;
+            case "left":
+                targetCol = col - 1;
+                break;
+            case "right":
+                targetCol = col + 1;
+                break;
+        }
+
+        // Check if the move is allowed and update position accordingly
+        if (allowedMove(targetCol, targetRow) == true) {
+            col = targetCol;
+            row = targetRow;
+            updatePosition();
+        }
+    }
+
     @Override
     public void update() {
-
-        if (isSelected == true) {
-            // Increment the delay counter
-            moveDelayCounter++;
-
-            // Only move the unit when the delay counter reaches the threshold
-            if (moveDelayCounter >= moveDelayThreshold) {
-                // Capture the intended move direction
-                if (keyH.isUnitUpPressed() == true) {
-                    direction = "up";
-                } else if (keyH.isUnitDownPressed() == true) {
-                    direction = "down";
-                } else if (keyH.isUnitLeftPressed() == true) {
-                    direction = "left";
-                } else if (keyH.isUnitRightPressed() == true) {
-                    direction = "right";
-                } else if (keyH.isUnitUpPressed() == false && keyH.isUnitDownPressed() == false
-                        && keyH.isUnitLeftPressed() == false && keyH.isUnitRightPressed() == false) {
-                    // If no key is pressed, stop movement
-                    direction = "none";
+        if (wait == false) {
+            if (isSelected == true && isMoving == true) {
+                moveDelayCounter++;  // Increment the delay counter
+                if (moveDelayCounter >= moveDelayThreshold) {  // Only move the unit when the delay counter reaches the threshold
+                    move(); // Move the selected unit
+                    moveDelayCounter = 0; // Reset the delay counter after moving
                 }
-
-                // Calculate target position based on direction
-                int targetCol = col;
-                int targetRow = row;
-
-                switch (direction) {
-                    case "up":
-                        targetRow = row - 1;
-                        break;
-                    case "down":
-                        targetRow = row + 1;
-                        break;
-                    case "left":
-                        targetCol = col - 1;
-                        break;
-                    case "right":
-                        targetCol = col + 1;
-                        break;
-                }
-
-                // Check if the move is allowed and update position accordingly
-                if (allowedMove(targetCol, targetRow)) {
-                    col = targetCol;
-                    row = targetRow;
-                    updatePosition();
-                }
-
-                // Reset the delay counter after moving
-                moveDelayCounter = 0;
             }
         }
 
