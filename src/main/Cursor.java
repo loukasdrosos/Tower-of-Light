@@ -78,6 +78,17 @@ public class Cursor {
         }
     }
 
+    public void updatePosition() {
+        x = getX(col);
+        y = getY(row);
+        preCol = getCol();
+        preRow = getRow();
+    }
+
+    public boolean canMove(int targetCol, int targetRow) {
+        return false;
+    }
+
     public void update() {
 
         if (gp.selectedUnit == null) {
@@ -87,20 +98,20 @@ public class Cursor {
             // Only move the cursor when the delay counter reaches the threshold
             if (moveDelayCounter >= moveDelayThreshold) {
                 // Determine if any cursor movement key is pressed
-                if (keyH.isCursorUpPressed() && !moving) {
+                if (keyH.isCursorUpPressed() == true && moving == false ) {
                     direction = "up";
                     moving = true;
-                } else if (keyH.isCursorDownPressed() && !moving) {
+                } else if (keyH.isCursorDownPressed() == true && moving == false) {
                     direction = "down";
                     moving = true;
-                } else if (keyH.isCursorLeftPressed() && !moving) {
+                } else if (keyH.isCursorLeftPressed() == true && moving == false) {
                     direction = "left";
                     moving = true;
-                } else if (keyH.isCursorRightPressed() && !moving) {
+                } else if (keyH.isCursorRightPressed() == true && moving == false) {
                     direction = "right";
                     moving = true;
-                } else if (!keyH.isCursorUpPressed() && !keyH.isCursorDownPressed() &&
-                        !keyH.isCursorLeftPressed() && !keyH.isCursorRightPressed()) {
+                } else if (keyH.isCursorUpPressed() == false && keyH.isCursorDownPressed() == false &&
+                        keyH.isCursorLeftPressed() == false && keyH.isCursorRightPressed() == false) {
                     // If no key is pressed, stop movement
                     moving = false;
                     direction = "none";
@@ -124,14 +135,13 @@ public class Cursor {
                     }
 
                     // Ensure the cursor stays centered on the tile
-                    x = col * gp.getTileSize();
-                    y = row * gp.getTileSize();
+                    updatePosition();
 
                     // Reset the moving flag if the key is released or tile movement is complete
-                    if ((!keyH.isCursorUpPressed() && direction.equals("up")) ||
-                            (!keyH.isCursorDownPressed() && direction.equals("down")) ||
-                            (!keyH.isCursorLeftPressed() && direction.equals("left")) ||
-                            (!keyH.isCursorRightPressed() && direction.equals("right"))) {
+                    if ((keyH.isCursorUpPressed() == false && direction.equals("up")) ||
+                            (keyH.isCursorDownPressed() == false && direction.equals("down")) ||
+                            (keyH.isCursorLeftPressed() == false && direction.equals("left")) ||
+                            (keyH.isCursorRightPressed() == false && direction.equals("right"))) {
                         moving = false;
                         direction = "none";
                     }

@@ -8,6 +8,7 @@ public class KeyHandler implements KeyListener {
 
     private boolean CursorUpPressed, CursorDownPressed, CursorLeftPressed, CursorRightPressed;
     private boolean UnitUpPressed, UnitDownPressed, UnitLeftPressed, UnitRightPressed;
+    private boolean APressed, ZPressed;
 
     GamePanel gp;
 
@@ -48,22 +49,10 @@ public class KeyHandler implements KeyListener {
             }
         }
         if (code == KeyEvent.VK_A) {
-            // Check if the cursor's position matches the position of any player unit (LightUnit)
-           if (gp.selectedUnit == null) {
-                for (LightUnit unit : gp.simLightUnits) {
-                    if (gp.cursor.getCol() == unit.getCol() && gp.cursor.getRow() == unit.getRow()) {
-                        gp.selectedUnit = unit; // Select player unit
-                        gp.selectedUnit.setIsSelected(true); //Activate the selected player unit
-                        break; // Exit loop once a match is found
-                    }
-                }
-           }
+            APressed = true;
         }
         if (code == KeyEvent.VK_Z) {
-            if (gp.selectedUnit != null) {
-                gp.selectedUnit.setIsSelected(false);
-                gp.selectedUnit = null; // Deselect the player
-            }
+            ZPressed = true;
         }
     }
 
@@ -94,6 +83,12 @@ public class KeyHandler implements KeyListener {
             if (gp.selectedUnit != null) {
                 UnitRightPressed = false;
             }
+        }
+        if (code == KeyEvent.VK_A) {
+            APressed = false;
+        }
+        if (code == KeyEvent.VK_Z) {
+            ZPressed = false;
         }
     }
 
@@ -129,6 +124,14 @@ public class KeyHandler implements KeyListener {
 
     public boolean isUnitRightPressed() {
         return UnitRightPressed;
+    }
+
+    public boolean isAPressed() {
+        return APressed;
+    }
+
+    public boolean isZPressed() {
+        return ZPressed;
     }
 }
 

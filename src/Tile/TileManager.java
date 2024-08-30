@@ -2,8 +2,7 @@ package Tile;
 
 import main.GamePanel;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 import javax.imageio.ImageIO;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -134,6 +133,18 @@ public class TileManager {
                 row++;
                 y += gp.getTileSize();
             }
+        }
+
+        // Load Selected Units Available Movement
+        if (gp.selectedUnit != null) {
+            g2.setColor(Color.BLUE);
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+            g2.fillRect(gp.selectedUnit.getX(gp.selectedUnit.getPreCol()), gp.selectedUnit.getY(gp.selectedUnit.getPreRow()), gp.getTileSize(), gp.getTileSize());
+            g2.fillRect(gp.selectedUnit.getX(gp.selectedUnit.getPreCol() + 1), gp.selectedUnit.getY(gp.selectedUnit.getPreRow()), gp.getTileSize(), gp.getTileSize());
+            g2.fillRect(gp.selectedUnit.getX(gp.selectedUnit.getPreCol() - 1), gp.selectedUnit.getY(gp.selectedUnit.getPreRow()), gp.getTileSize(), gp.getTileSize());
+            g2.fillRect(gp.selectedUnit.getX(gp.selectedUnit.getPreCol()), gp.selectedUnit.getY(gp.selectedUnit.getPreRow() + 1), gp.getTileSize(), gp.getTileSize());
+            g2.fillRect(gp.selectedUnit.getX(gp.selectedUnit.getPreCol()), gp.selectedUnit.getY(gp.selectedUnit.getPreRow() - 1), gp.getTileSize(), gp.getTileSize());
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         }
     }
 }

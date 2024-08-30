@@ -25,7 +25,7 @@ public class GamePanel extends JPanel implements Runnable{
     //UNITS
     public static ArrayList<LightUnit> LightUnits = new ArrayList<>();
     public static ArrayList<LightUnit> simLightUnits = new ArrayList<>();
-    LightUnit selectedUnit = null;
+    public LightUnit selectedUnit = null;
 
     public static ArrayList<ChaosUnit> ChaosUnits = new ArrayList<>();
     public static ArrayList<ChaosUnit> simChaosUnits = new ArrayList<>();
@@ -125,6 +125,25 @@ public class GamePanel extends JPanel implements Runnable{
         }
 
         cursor.draw(g2);
+
+        if (keyH.isAPressed() == true) {
+            // Check if the cursor's position matches the position of any player unit (LightUnit)
+            if (selectedUnit == null) {
+                for (LightUnit unit : simLightUnits) {
+                    if (cursor.getCol() == unit.getCol() && cursor.getRow() == unit.getRow()) {
+                        selectedUnit = unit; // Select player unit
+                        selectedUnit.setIsSelected(true); //Activate the selected player unit
+                        break; // Exit loop once a match is found
+                    }
+                }
+            }
+        }
+        if (keyH.isZPressed() == true) {
+            if (selectedUnit != null) {
+                selectedUnit.setIsSelected(false); // Deselect the player
+                selectedUnit = null; //Can choose new player
+            }
+        }
 
         g2.dispose(); // Dispose this graphics content
     }
