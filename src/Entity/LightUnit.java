@@ -10,8 +10,6 @@ import java.io.IOException;
 
 public class LightUnit extends Entity{
 
-    private boolean isSelected = false;
-
     public LightUnit (GamePanel gp, KeyHandler keyH, int startCol, int startRow) {
         this.gp = gp;
         this.keyH = keyH;
@@ -46,12 +44,6 @@ public class LightUnit extends Entity{
             }
         }
 
-       /* // Check tile collision
-        setCollision(false);
-        gp.cChecker.checkEntityTile(this);
-
-        // If collision is false, unit can move
-        if (getCollision() == false) { */
             switch (direction) {
                 case "up" :
                     moveUp();
@@ -66,7 +58,6 @@ public class LightUnit extends Entity{
                     moveRight();
                     break;
             }
-     // }
 
         spriteCounter++;
         if (spriteCounter > 20) {
@@ -146,15 +137,5 @@ public class LightUnit extends Entity{
                 }
         }
         g2.drawImage(image, x, y, gp.getTileSize(), gp.getTileSize(), null);
-    }
-
-    //GETTERS && SETTERS
-
-    public boolean getIsSelected () {
-        return isSelected;
-    }
-
-    public void setIsSelected (boolean x) {
-        this.isSelected = x;
     }
 }

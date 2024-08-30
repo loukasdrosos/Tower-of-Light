@@ -19,8 +19,9 @@ public class Entity {
     protected int spriteCounter = 0;
     protected int spriteNum = 1;
 
-    protected boolean wait;
-    protected boolean isMoving;
+    protected boolean wait = false;
+    protected boolean isSelected = false;
+    protected boolean isMoving = false;
 
     GamePanel gp;
     KeyHandler keyH;
@@ -77,6 +78,29 @@ public class Entity {
         }
     }
 
+    public boolean allowedMove (int targetCol, int targetRow) {
+        if (gp.cChecker.isWithinMap(targetCol, targetRow) == true) {
+            if (Math.abs(targetCol - preCol) + Math.abs(targetRow - preRow) == 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void updatePosition () {
+        x = getX(col);
+        y = getY(row);
+        preCol = col;
+        preRow = row;
+    }
+
+    public void resetPosition() {
+        col = preCol;
+        row = preRow;
+        x = getX(col);
+        y = getY(row);
+    }
+
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
 
@@ -124,7 +148,7 @@ public class Entity {
         g2.drawImage(image, x, y, gp.getTileSize(), gp.getTileSize(), null);
     }
 
-    //GETTERS && SETTERS
+    //GETTERS && SETTERS for UNIT POSITION
 
     public int getX(int col) {
         return col * gp.getTileSize();
@@ -172,6 +196,32 @@ public class Entity {
 
     public void setPreRow(int preRow) {
         this.preRow = preRow;
+    }
+
+    //GETTERS && SETTERS for BOOLEANS
+
+    public boolean getIsSelected () {
+        return isSelected;
+    }
+
+    public void setIsSelected (boolean x) {
+        this.isSelected = x;
+    }
+
+    public boolean getWait () {
+        return wait;
+    }
+
+    public void setWait (boolean x) {
+        this.wait = x;
+    }
+
+    public boolean getIsMoving () {
+        return isMoving;
+    }
+
+    public void setIsMoving(boolean x) {
+        this.isMoving = x;
     }
 }
 

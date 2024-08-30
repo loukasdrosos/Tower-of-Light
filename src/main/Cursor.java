@@ -8,7 +8,7 @@ import java.io.IOException;
 public class Cursor {
 
     private int x, y; // x and y position on map
-    private int col, row, preCol, preRow;
+    private int col, row;
     private String direction = "none";
     private BufferedImage sprite;
     private int spriteCounter = 0;
@@ -37,8 +37,6 @@ public class Cursor {
         this.row = startRow;
         x = getX(col);
         y = getY(row);
-        preCol = col;
-        preRow = row;
     }
 
     //CURSOR MOVEMENT
@@ -81,8 +79,6 @@ public class Cursor {
     public void updatePosition() {
         x = getX(col);
         y = getY(row);
-        preCol = getCol();
-        preRow = getRow();
     }
 
     public boolean canMove(int targetCol, int targetRow) {
@@ -118,7 +114,7 @@ public class Cursor {
                 }
 
                 // Move cursor by a full tile (16 pixels) in the direction
-                if (moving) {
+                if (moving == true) {
                     switch (direction) {
                         case "up":
                             moveUp();
@@ -151,22 +147,14 @@ public class Cursor {
                 }
             }
         }
-            if (gp.selectedUnit != null) {
 
-                if (keyH.isCursorUpPressed() == true || keyH.isCursorDownPressed() == true
-                        || keyH.isCursorLeftPressed() == true || keyH.isCursorRightPressed() == true) {
-
-                    if (keyH.isCursorUpPressed() == true) {
-                        moveUp();
-                    } else if (keyH.isCursorDownPressed() == true) {
-                        moveDown();
-                    } else if (keyH.isCursorLeftPressed() == true) {
-                        moveLeft();
-                    } else if (keyH.isCursorRightPressed() == true) {
-                        moveRight();
-                    }
-                }
+        if (gp.selectedUnit != null && gp.selectedUnit.getIsSelected() == true) {
+            if (gp.selectedUnit.getIsMoving() == true) {
+                col = gp.selectedUnit.getCol();
+                row = gp.selectedUnit.getRow();
+                updatePosition();
             }
+        }
 
         spriteCounter++;
         if (spriteCounter > 20 ) {
@@ -228,21 +216,5 @@ public class Cursor {
 
     public void setRow(int row) {
         this.row = row;
-    }
-
-    public int getPreCol() {
-        return preCol;
-    }
-
-    public void setPreCol(int preCol) {
-        this.preCol = preCol;
-    }
-
-    public int getPreRow() {
-        return preRow;
-    }
-
-    public void setPreRow(int preRow) {
-        this.preRow = preRow;
     }
 }
