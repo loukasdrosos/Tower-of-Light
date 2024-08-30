@@ -28,16 +28,16 @@ public class LightUnit extends Entity{
 
     public void move() {
         // Capture the intended move direction
-        if (keyH.isUnitUpPressed() == true) {
+        if (keyH.isUpPressed() == true) {
             direction = "up";
-        } else if (keyH.isUnitDownPressed() == true) {
+        } else if (keyH.isDownPressed() == true) {
             direction = "down";
-        } else if (keyH.isUnitLeftPressed() == true) {
+        } else if (keyH.isLeftPressed() == true) {
             direction = "left";
-        } else if (keyH.isUnitRightPressed() == true) {
+        } else if (keyH.isRightPressed() == true) {
             direction = "right";
-        } else if (keyH.isUnitUpPressed() == false && keyH.isUnitDownPressed() == false
-                && keyH.isUnitLeftPressed() == false && keyH.isUnitRightPressed() == false) {
+        } else if (keyH.isUpPressed() == false && keyH.isDownPressed() == false
+                && keyH.isLeftPressed() == false && keyH.isRightPressed() == false) {
             direction = "none"; // If no key is pressed, stop movement
         }
 
@@ -61,7 +61,7 @@ public class LightUnit extends Entity{
         }
 
         // Check if the move is allowed and update position accordingly
-        if (allowedMove(targetCol, targetRow) == true) {
+        if (allowedMove(targetCol, targetRow) == true && gp.cChecker.validTile(targetCol, targetRow) == true) {
             col = targetCol;
             row = targetRow;
             updatePosition();

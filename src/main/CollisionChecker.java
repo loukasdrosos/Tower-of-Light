@@ -1,11 +1,10 @@
 package main;
 
-import Entity.Entity;
+import Entity.*;
 
 public class CollisionChecker {
 
     GamePanel gp;
-    private boolean canMove;
     private boolean validSquare;
 
     public CollisionChecker(GamePanel gp) {
@@ -19,22 +18,39 @@ public class CollisionChecker {
         return false;
     }
 
-    public void simulate() {
-        canMove = false;
-        validSquare = false;
-
-        if (gp.selectedUnit.allowedMove(gp.selectedUnit.getCol(), gp.selectedUnit.getRow()) == true) {
-            canMove = true;
-            validSquare = true;
+    public boolean noEnemyOnTile(int targetCol, int targetRow) {
+        for (ChaosUnit enemy : gp.simChaosUnits) {
+            if (targetCol == enemy.getCol() && targetRow == enemy.getRow()) {
+                return false;
+            }
         }
+        return true;
     }
 
-    public boolean isValidSquare() {
-        return validSquare;
+    public boolean noPlayerOnTile (int targetCol, int targetRow) {
+        for (LightUnit player : gp.simLightUnits) {
+            if (player != gp.selectedUnit) {
+                if (targetCol == player.getCol() && targetRow == player.getRow()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
-    public boolean isCanMove() {
-        return canMove;
+    public boolean NonCollisionTile  (int targetCol, int targetRow) {
+        int tileNum = gp.tileM.mapTileNum[targetCol][targetRow];
+        if (gp.tileM.tile[tileNum].collision == true) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean validTile (int targetCol, int targetRow) {
+        if (noEnemyOnTile(targetCol, targetRow) == true && noPlayerOnTile(targetCol, targetRow) == true && NonCollisionTile(targetCol, targetRow) == true) {
+            return true;
+        }
+        return false;
     }
 }
 

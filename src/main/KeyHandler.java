@@ -6,8 +6,7 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
-    private boolean CursorUpPressed, CursorDownPressed, CursorLeftPressed, CursorRightPressed;
-    private boolean UnitUpPressed, UnitDownPressed, UnitLeftPressed, UnitRightPressed;
+    private boolean UpPressed, DownPressed, LeftPressed, RightPressed;
     private boolean APressed, ZPressed, WPressed;
 
     GamePanel gp;
@@ -25,28 +24,16 @@ public class KeyHandler implements KeyListener {
         int code = e.getKeyCode(); // Returns the keyCode associated with the key in this event
 
         if (code == KeyEvent.VK_UP) {
-            CursorUpPressed = true;
-            if (gp.selectedUnit != null) {
-                UnitUpPressed = true;
-            }
+            UpPressed = true;
         }
         if (code == KeyEvent.VK_DOWN) {
-            CursorDownPressed = true;
-            if (gp.selectedUnit != null) {
-                UnitDownPressed = true;
-            }
+            DownPressed = true;
         }
         if (code == KeyEvent.VK_LEFT) {
-            CursorLeftPressed = true;
-            if (gp.selectedUnit != null) {
-                UnitLeftPressed = true;
-            }
+            LeftPressed = true;
         }
         if (code == KeyEvent.VK_RIGHT) {
-            CursorRightPressed = true;
-            if (gp.selectedUnit != null) {
-                UnitRightPressed = true;
-            }
+            RightPressed = true;
         }
         if (code == KeyEvent.VK_A) {
             APressed = true;
@@ -64,28 +51,16 @@ public class KeyHandler implements KeyListener {
         int code = e.getKeyCode();
 
         if (code == KeyEvent.VK_UP) {
-            CursorUpPressed = false;
-            if (gp.selectedUnit != null) {
-                UnitUpPressed = false;
-            }
+            UpPressed = false;
         }
         if (code == KeyEvent.VK_DOWN) {
-            CursorDownPressed = false;
-            if (gp.selectedUnit != null) {
-                UnitDownPressed = false;
-            }
+            DownPressed = false;
         }
         if (code == KeyEvent.VK_LEFT) {
-            CursorLeftPressed = false;
-            if (gp.selectedUnit != null) {
-                UnitLeftPressed = false;
-            }
+            LeftPressed = false;
         }
         if (code == KeyEvent.VK_RIGHT) {
-            CursorRightPressed = false;
-            if (gp.selectedUnit != null) {
-                UnitRightPressed = false;
-            }
+            RightPressed = false;
         }
         if (code == KeyEvent.VK_A) {
             APressed = false;
@@ -100,36 +75,20 @@ public class KeyHandler implements KeyListener {
 
     // GETTERS
 
-    public boolean isCursorUpPressed() {
-        return CursorUpPressed;
+    public boolean isUpPressed() {
+        return UpPressed;
     }
 
-    public boolean isCursorDownPressed() {
-        return CursorDownPressed;
+    public boolean isDownPressed() {
+        return DownPressed;
     }
 
-    public boolean isCursorLeftPressed() {
-        return CursorLeftPressed;
+    public boolean isLeftPressed() {
+        return LeftPressed;
     }
 
-    public boolean isCursorRightPressed() {
-        return CursorRightPressed;
-    }
-
-    public boolean isUnitUpPressed() {
-        return UnitUpPressed;
-    }
-
-    public boolean isUnitDownPressed() {
-        return UnitDownPressed;
-    }
-
-    public boolean isUnitLeftPressed() {
-        return UnitLeftPressed;
-    }
-
-    public boolean isUnitRightPressed() {
-        return UnitRightPressed;
+    public boolean isRightPressed() {
+        return RightPressed;
     }
 
     public boolean isAPressed() {

@@ -121,7 +121,7 @@ public class TileManager {
 
             // Check if an enemy is on this tile and change color to red if true
             for (ChaosUnit enemy : gp.simChaosUnits) {
-                if (col == enemy.getPreCol() && row == enemy.getPreRow()) {
+                if (col == enemy.getCol() && row == enemy.getRow()) {
                     g2.setColor(Color.RED);
                     break;
                 }

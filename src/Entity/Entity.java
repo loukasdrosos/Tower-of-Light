@@ -50,15 +50,52 @@ public class Entity {
         }
     }
 
-    //UNIT MOVEMENT
+    //UNIT ALLOWED MOVEMENT
     public List<int[]> getMovementRange() {
         List<int[]> moves = new ArrayList<>();
-        moves.add(new int[]{0, 0});   // Current position
-        moves.add(new int[]{1, 0});   // Right
-        moves.add(new int[]{-1, 0});  // Left
-        moves.add(new int[]{0, 1});   // Down
-        moves.add(new int[]{0, -1});  // Up
+        // Current position
+        moves.add(new int[]{0, 0});
+
+        // Movement by 1 tile
+        moves.add(new int[]{1, 0});   // 1 tile right
+        moves.add(new int[]{-1, 0});  // 1 tile left
+        moves.add(new int[]{0, 1});   // 1 tile down
+        moves.add(new int[]{0, -1});  // 1 tile up
+
         return moves;
+    }
+
+    public boolean allowedMove (int targetCol, int targetRow) {
+        if (gp.cChecker.isWithinMap(targetCol, targetRow) == true) {
+            if ((targetCol == preCol && targetRow == preRow) || Math.abs(targetCol - preCol) + Math.abs(targetRow - preRow) == 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void updatePosition () {
+        x = getX(col);
+        y = getY(row);
+    }
+
+    public void endTurn() {
+        setIsSelected(false);
+        setIsMoving(false);
+        setWait(true);
+        preCol = col;
+        preRow = row;
+        direction = "none";
+    }
+
+    public void resetPosition() {
+        setIsMoving(false);
+        setIsSelected(false);
+        col = preCol;
+        row = preRow;
+        x = getX(col);
+        y = getY(row);
+        direction = "none";
     }
 
     public void update() {
@@ -72,34 +109,6 @@ public class Entity {
             }
             spriteCounter = 0;
         }
-    }
-
-    // Unit's allowed movement
-    public boolean allowedMove (int targetCol, int targetRow) {
-        if (gp.cChecker.isWithinMap(targetCol, targetRow) == true) {
-            if ((targetCol == preCol && targetRow == preRow)|| Math.abs(targetCol - preCol) + Math.abs(targetRow - preRow) == 1) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void updatePosition () {
-        x = getX(col);
-        y = getY(row);
-    }
-
-    public void endTurn() {
-        preCol = col;
-        preRow = row;
-    }
-
-    public void resetPosition() {
-        col = preCol;
-        row = preRow;
-        x = getX(col);
-        y = getY(row);
-        direction = "none";
     }
 
     public void draw(Graphics2D g2) {
