@@ -44,28 +44,28 @@ public class Cursor {
     //CURSOR MOVEMENT
     public void moveUp () {
         if (row > 0) { // Check if not at the top edge
-            this.row -= 1;
+            row -= 1;
             y = getY(row);
         }
     }
 
     public void moveDown () {
         if (row < 51) { // Check if not at the bottom edge
-            this.row += 1;
+            row += 1;
             y = getY(row);
         }
     }
 
     public void moveLeft () {
         if (col > 0) { // Check if not at the left edge
-            this.col -= 1;
+            col -= 1;
             x = getX(col);
         }
     }
 
     public void moveRight () {
         if (col < 51) { // Check if not at the right edge
-            this.col += 1;
+            col += 1;
             x = getX(col);
         }
     }

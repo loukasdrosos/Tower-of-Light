@@ -29,7 +29,7 @@ public class LightUnit extends Entity{
     @Override
     public void update() {
 
-        if (this.isSelected == true) {
+        if (isSelected == true) {
             // Increment the delay counter
             moveDelayCounter++;
 
@@ -37,17 +37,17 @@ public class LightUnit extends Entity{
             if (moveDelayCounter >= moveDelayThreshold) {
                 // Capture the intended move direction
                 if (keyH.isUnitUpPressed() == true) {
-                    this.direction = "up";
+                    direction = "up";
                 } else if (keyH.isUnitDownPressed() == true) {
-                    this.direction = "down";
+                    direction = "down";
                 } else if (keyH.isUnitLeftPressed() == true) {
-                    this.direction = "left";
+                    direction = "left";
                 } else if (keyH.isUnitRightPressed() == true) {
-                    this.direction = "right";
+                    direction = "right";
                 } else if (keyH.isUnitUpPressed() == false && keyH.isUnitDownPressed() == false
                         && keyH.isUnitLeftPressed() == false && keyH.isUnitRightPressed() == false) {
                     // If no key is pressed, stop movement
-                    this.direction = "none";
+                    direction = "none";
                 }
 
                 // Calculate target position based on direction
@@ -71,8 +71,8 @@ public class LightUnit extends Entity{
 
                 // Check if the move is allowed and update position accordingly
                 if (allowedMove(targetCol, targetRow)) {
-                    this.col = targetCol;
-                    this.row = targetRow;
+                    col = targetCol;
+                    row = targetRow;
                     updatePosition();
                 }
 

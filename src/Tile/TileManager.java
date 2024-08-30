@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 public class TileManager {
 
@@ -112,26 +113,37 @@ public class TileManager {
     // Draw tiles that the player can move
     public void drawMovementTile(Graphics2D g2, int col, int row) {
         int tileNum = mapTileNum[col][row];
+
+        // Only highlight tiles that are passable (no collision)
         if (tile[tileNum].collision == false) {
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
-            g2.setColor(Color.BLUE);
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.35f));
+            g2.setColor(Color.BLUE);  // Set movement color to blue
+
+            // Check if an enemy is on this tile and change color to red if true
             for (ChaosUnit enemy : gp.simChaosUnits) {
                 if (col == enemy.getPreCol() && row == enemy.getPreRow()) {
                     g2.setColor(Color.RED);
+                    break;
                 }
-                g2.fillRect(col * gp.getTileSize(), row * gp.getTileSize(), gp.getTileSize(),gp.getTileSize());
             }
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+            // Draw the tile rectangle
+            g2.fillRect(col * gp.getTileSize(), row * gp.getTileSize(), gp.getTileSize(),gp.getTileSize());
+
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));// Reset transparency
         }
     }
 
     // Load tiles for available movement of selected unit
     public void drawPlayerMovement(Graphics2D g2, int col, int row) {
-            drawMovementTile(g2, col, row);
-            drawMovementTile(g2,col + 1, row);
-            drawMovementTile(g2,col - 1, row);
-            drawMovementTile(g2, col, row + 1);
-            drawMovementTile(g2, col, row - 1);
+        // Get the movement range from the selected unit
+        List<int[]> movementRange = gp.selectedUnit.getMovementRange();
+
+        // Check each possible move
+        for (int[] move : movementRange) {
+            int targetCol = col + move[0];
+            int targetRow = row + move[1];
+            drawMovementTile(g2, targetCol, targetRow);
+        }
     }
 
     public void draw (Graphics2D g2) {

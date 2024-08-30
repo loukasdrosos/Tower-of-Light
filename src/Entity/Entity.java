@@ -7,6 +7,8 @@ import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Entity {
 
@@ -49,24 +51,14 @@ public class Entity {
     }
 
     //UNIT MOVEMENT
-    public void moveUp () {
-        this.row -= 1;
-        y = getY(row);
-    }
-
-    public void moveDown () {
-        this.row += 1;
-        y = getY(row);
-    }
-
-    public void moveLeft () {
-        this.col -= 1;
-        x = getX(col);
-    }
-
-    public void moveRight () {
-        this.col += 1;
-        x = getX(col);
+    public List<int[]> getMovementRange() {
+        List<int[]> moves = new ArrayList<>();
+        moves.add(new int[]{0, 0});   // Current position
+        moves.add(new int[]{1, 0});   // Right
+        moves.add(new int[]{-1, 0});  // Left
+        moves.add(new int[]{0, 1});   // Down
+        moves.add(new int[]{0, -1});  // Up
+        return moves;
     }
 
     public void update() {
