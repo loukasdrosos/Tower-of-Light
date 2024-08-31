@@ -10,6 +10,9 @@ import java.io.IOException;
 
 public class LightUnit extends Entity{
 
+    protected boolean isSelected = false;
+    protected boolean isMoving = false;
+
     public LightUnit (GamePanel gp, KeyHandler keyH, int startCol, int startRow) {
         this.gp = gp;
         this.keyH = keyH;
@@ -69,6 +72,26 @@ public class LightUnit extends Entity{
     }
 
     @Override
+    public void endTurn() {
+        setIsSelected(false);
+        setIsMoving(false);
+        setWait(true);
+        preCol = col;
+        preRow = row;
+        direction = "none";
+    }
+
+    public void resetPosition() {
+        setIsMoving(false);
+        setIsSelected(false);
+        col = preCol;
+        row = preRow;
+        x = getX(col);
+        y = getY(row);
+        direction = "none";
+    }
+
+    @Override
     public void update() {
         if (wait == false) {
             if (isSelected == true && isMoving == true) {
@@ -113,51 +136,21 @@ public class LightUnit extends Entity{
         }
     }
 
-    @Override
-    public void draw(Graphics2D g2) {
-        BufferedImage image = null;
+    // GETTERS && SETTERS for Booleans
 
-        switch (direction) {
-            case "up":
-                if (spriteNum == 1) {
-                    image = up1;
-                }
-                if (spriteNum == 2) {
-                    image = up2;
-                }
-                break;
-            case "down":
-                if (spriteNum == 1) {
-                    image = down1;
-                }
-                if (spriteNum == 2) {
-                    image = down2;
-                }
-                break;
-            case "right":
-                if (spriteNum == 1) {
-                    image = right1;
-                }
-                if (spriteNum == 2) {
-                    image = right2;
-                }
-                break;
-            case "left":
-                if (spriteNum == 1) {
-                    image = left1;
-                }
-                if (spriteNum == 2) {
-                    image = left2;
-                }
-                break;
-            default:
-                if (spriteNum == 1) {
-                    image = default1;
-                }
-                if (spriteNum == 2) {
-                    image = default2;
-                }
-        }
-        g2.drawImage(image, x, y, gp.getTileSize(), gp.getTileSize(), null);
+    public boolean getIsSelected () {
+        return isSelected;
+    }
+
+    public void setIsSelected (boolean x) {
+        this.isSelected = x;
+    }
+
+    public boolean getIsMoving () {
+        return isMoving;
+    }
+
+    public void setIsMoving(boolean x) {
+        this.isMoving = x;
     }
 }

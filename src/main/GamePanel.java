@@ -43,9 +43,9 @@ public class GamePanel extends JPanel implements Runnable{
         target.addAll(source);
     }
 
-    TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler(this);
-    Cursor cursor = new Cursor(this, keyH);
+    TileManager tileM = new TileManager(this, keyH);
+    public Cursor cursor = new Cursor(this, keyH);
     Thread gameThread;
     public CollisionChecker cChecker = new CollisionChecker(this);
 
@@ -113,6 +113,13 @@ public class GamePanel extends JPanel implements Runnable{
         if (keyH.isZPressed() == true) {
             if (selectedUnit != null && selectedUnit.getIsSelected() == true && selectedUnit.getIsMoving() == true) {
                 selectedUnit.resetPosition(); // Return player to starting position
+                selectedUnit = null; // Deselect the player
+            }
+        }
+
+        if (keyH.isWPressed() == true) {
+            if (selectedUnit != null && selectedUnit.getIsSelected() == true && selectedUnit.getIsMoving() == true) {
+                selectedUnit.endTurn(); // End player's turn
                 selectedUnit = null; // Deselect the player
             }
         }

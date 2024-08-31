@@ -26,8 +26,6 @@ public class Entity {
 
     // Variables that control unit's actions
     protected boolean wait = false;
-    protected boolean isSelected = false;
-    protected boolean isMoving = false;
 
     GamePanel gp;
     KeyHandler keyH;
@@ -65,6 +63,7 @@ public class Entity {
         return moves;
     }
 
+    // Check is unit's movement is legal
     public boolean allowedMove (int targetCol, int targetRow) {
         if (gp.cChecker.isWithinMap(targetCol, targetRow) == true) {
             if ((targetCol == preCol && targetRow == preRow) || Math.abs(targetCol - preCol) + Math.abs(targetRow - preRow) == 1) {
@@ -80,22 +79,6 @@ public class Entity {
     }
 
     public void endTurn() {
-        setIsSelected(false);
-        setIsMoving(false);
-        setWait(true);
-        preCol = col;
-        preRow = row;
-        direction = "none";
-    }
-
-    public void resetPosition() {
-        setIsMoving(false);
-        setIsSelected(false);
-        col = preCol;
-        row = preRow;
-        x = getX(col);
-        y = getY(row);
-        direction = "none";
     }
 
     public void update() {
@@ -210,14 +193,6 @@ public class Entity {
 
     //GETTERS && SETTERS for BOOLEANS
 
-    public boolean getIsSelected () {
-        return isSelected;
-    }
-
-    public void setIsSelected (boolean x) {
-        this.isSelected = x;
-    }
-
     public boolean getWait () {
         return wait;
     }
@@ -226,13 +201,7 @@ public class Entity {
         this.wait = x;
     }
 
-    public boolean getIsMoving () {
-        return isMoving;
-    }
 
-    public void setIsMoving(boolean x) {
-        this.isMoving = x;
-    }
 }
 
 

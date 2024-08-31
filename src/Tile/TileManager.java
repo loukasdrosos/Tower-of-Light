@@ -1,7 +1,9 @@
 package Tile;
 
 import Entity.ChaosUnit;
+import Entity.LightUnit;
 import main.GamePanel;
+import main.KeyHandler;
 
 import java.awt.*;
 import javax.imageio.ImageIO;
@@ -9,18 +11,25 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TileManager {
 
     GamePanel gp;
+    KeyHandler keyH;
+
     private final int Max_Col;
     private final int Max_Row;
     public int mapTileNum[][];
     public Tile[] tile;
+    private ChaosUnit selectedEnemy = null;
+    private static ArrayList<ChaosUnit> selectedEnemies = new ArrayList<>();
+    private boolean aKeyPressed = false;
 
-    public TileManager(GamePanel gp) {
+    public TileManager(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
+        this.keyH = keyH;
         Max_Col = gp.getMaxMapCol();
         Max_Row = gp.getMaxMapRow();
         tile = new Tile[14]; // Number of different tiles we use
@@ -111,7 +120,7 @@ public class TileManager {
     }
 
     // Draw tiles that the player can move
-    public void drawMovementTile(Graphics2D g2, int col, int row) {
+    public void drawPlayerMovementTile(Graphics2D g2, int col, int row) {
         int tileNum = mapTileNum[col][row];
 
         // Only highlight tiles that are passable (no collision)
@@ -126,14 +135,14 @@ public class TileManager {
                     break;
                 }
             }
-            // Draw the tile rectangle
+            // Draw the tile
             g2.fillRect(col * gp.getTileSize(), row * gp.getTileSize(), gp.getTileSize(),gp.getTileSize());
 
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));// Reset transparency
         }
     }
 
-    // Load tiles for available movement of selected unit
+    // Load tiles for available movement of selected player unit
     public void drawPlayerMovement(Graphics2D g2, int col, int row) {
         // Get the movement range from the selected unit
         List<int[]> movementRange = gp.selectedUnit.getMovementRange();
@@ -142,12 +151,65 @@ public class TileManager {
         for (int[] move : movementRange) {
             int targetCol = col + move[0];
             int targetRow = row + move[1];
-            drawMovementTile(g2, targetCol, targetRow);
+            drawPlayerMovementTile(g2, targetCol, targetRow);
         }
     }
 
-    public void draw (Graphics2D g2) {
+    // Draw tiles that the enemy can move
+    public void drawEnemyMovementTile(Graphics2D g2, int col, int row) {
+        int tileNum = mapTileNum[col][row];
 
+        // Only highlight tiles that are passable (no collision)
+        if (tile[tileNum].collision == false) {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.35f));
+            g2.setColor(Color.RED);  // Set movement color to blue
+
+            // Draw the tile
+            g2.fillRect(col * gp.getTileSize(), row * gp.getTileSize(), gp.getTileSize(),gp.getTileSize());
+
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));// Reset transparency
+        }
+    }
+
+    // Load tiles for available movement of selected enemy unit
+    public void drawEnemyMovement(Graphics2D g2, ArrayList<ChaosUnit> selectedEnemies) {
+        // Get the movement range from the selected unit
+        for (ChaosUnit selectedEnemy : selectedEnemies) {
+            List<int[]> movementRange = selectedEnemy.getMovementRange();
+
+            // Check each possible move
+            for (int[] move : movementRange) {
+                int targetCol = selectedEnemy.getPreCol() + move[0];
+                int targetRow = selectedEnemy.getPreRow() + move[1];
+                drawEnemyMovementTile(g2, targetCol, targetRow);
+            }
+        }
+    }
+
+    public void EnemySelection() {
+        if (keyH.isAPressed() == true && !aKeyPressed) {
+            aKeyPressed = true;  // Mark the key as pressed
+
+            // Check if the cursor's position matches the position of any enemy unit (ChaosUnit)
+            if (gp.selectedUnit == null) {
+                for (ChaosUnit enemy : gp.simChaosUnits) {
+                    if (gp.cursor.getCol() == enemy.getCol() && gp.cursor.getRow() == enemy.getRow()) {
+                        if (selectedEnemies.contains(enemy)) {
+                            selectedEnemies.remove(enemy);
+                        } else {
+                            selectedEnemies.add(enemy);
+                        }
+                        break; // Exit loop once a match is found
+                    }
+                }
+            }
+        }
+        else if (!keyH.isAPressed()) {
+            aKeyPressed = false;  // Reset the flag when the key is released
+        }
+    }
+
+    public void drawMap(Graphics2D g2) {
         int col, row;
         for (row = 0; row < Max_Row; row++) {
             for (col = 0; col < Max_Col; col++) {
@@ -172,7 +234,18 @@ public class TileManager {
                 y += gp.getTileSize();
             }
         }
-        if (gp.selectedUnit != null) {
+    }
+
+    public void draw (Graphics2D g2) {
+
+        drawMap(g2);
+
+        EnemySelection();
+        if(selectedEnemies != null) {
+            drawEnemyMovement(g2, selectedEnemies);
+        }
+
+        if (gp.selectedUnit != null && gp.selectedUnit.getWait() == false && gp.selectedUnit.getIsMoving() == true) {
             drawPlayerMovement(g2, gp.selectedUnit.getPreCol(), gp.selectedUnit.getPreRow());
         }
     }
