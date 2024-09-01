@@ -46,6 +46,7 @@ public class GamePanel extends JPanel implements Runnable{
     KeyHandler keyH = new KeyHandler(this);
     TileManager tileM = new TileManager(this, keyH);
     public Cursor cursor = new Cursor(this, keyH);
+    UnitSelector UnitSel =  new UnitSelector(this, keyH);
     Thread gameThread;
     public CollisionChecker cChecker = new CollisionChecker(this);
 
@@ -95,36 +96,6 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
 
-    public void UnitSelection() {
-        if (keyH.isAPressed() == true) {
-            // Check if the cursor's position matches the position of any player unit (LightUnit)
-            if (selectedUnit == null) {
-                for (LightUnit unit : simLightUnits) {
-                    if (cursor.getCol() == unit.getCol() && cursor.getRow() == unit.getRow() && unit.getWait() == false) {
-                        selectedUnit = unit; // Select player unit
-                        selectedUnit.setIsSelected(true); //Activate the selected player unit
-                        selectedUnit.setIsMoving(true); // Allow player to move
-                        break; // Exit loop once a match is found
-                    }
-                }
-            }
-        }
-
-        if (keyH.isZPressed() == true) {
-            if (selectedUnit != null && selectedUnit.getIsSelected() == true && selectedUnit.getIsMoving() == true) {
-                selectedUnit.resetPosition(); // Return player to starting position
-                selectedUnit = null; // Deselect the player
-            }
-        }
-
-        if (keyH.isWPressed() == true) {
-            if (selectedUnit != null && selectedUnit.getIsSelected() == true && selectedUnit.getIsMoving() == true) {
-                selectedUnit.endTurn(); // End player's turn
-                selectedUnit = null; // Deselect the player
-            }
-        }
-    }
-
     //Update Game information
     public void update() {
         for (Entity lightunit : simLightUnits) {
@@ -135,9 +106,10 @@ public class GamePanel extends JPanel implements Runnable{
             chaosunit.update();
         }
 
-        UnitSelection();
-
         cursor.update();
+
+        UnitSel.update();
+
     }
 
     // Draw the screen with the updated information

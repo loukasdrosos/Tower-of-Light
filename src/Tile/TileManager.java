@@ -187,7 +187,7 @@ public class TileManager {
     }
 
     public void EnemySelection() {
-        if (keyH.isAPressed() == true && !aKeyPressed) {
+        if (gp.selectedUnit == null && keyH.isAPressed() == true && !aKeyPressed) {
             aKeyPressed = true;  // Mark the key as pressed
 
             // Check if the cursor's position matches the position of any enemy unit (ChaosUnit)
