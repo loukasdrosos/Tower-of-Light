@@ -1,7 +1,6 @@
 package Tile;
 
 import Entity.ChaosUnit;
-import Entity.LightUnit;
 import main.GamePanel;
 import main.KeyHandler;
 
@@ -187,26 +186,27 @@ public class TileManager {
     }
 
     public void EnemySelection() {
-        if (gp.selectedUnit == null && keyH.isAPressed() == true && !aKeyPressed) {
-            aKeyPressed = true;  // Mark the key as pressed
+       if (gp.TurnM.getPlayerPhase() == true) {
+           if (gp.selectedUnit == null && keyH.isAPressed() == true && !aKeyPressed) {
+               aKeyPressed = true;  // Mark the key as pressed
 
-            // Check if the cursor's position matches the position of any enemy unit (ChaosUnit)
-            if (gp.selectedUnit == null) {
-                for (ChaosUnit enemy : gp.simChaosUnits) {
-                    if (gp.cursor.getCol() == enemy.getCol() && gp.cursor.getRow() == enemy.getRow()) {
-                        if (selectedEnemies.contains(enemy)) {
-                            selectedEnemies.remove(enemy);
-                        } else {
-                            selectedEnemies.add(enemy);
-                        }
-                        break; // Exit loop once a match is found
-                    }
-                }
-            }
-        }
-        else if (!keyH.isAPressed()) {
-            aKeyPressed = false;  // Reset the flag when the key is released
-        }
+               // Check if the cursor's position matches the position of any enemy unit (ChaosUnit)
+               if (gp.selectedUnit == null) {
+                   for (ChaosUnit enemy : gp.simChaosUnits) {
+                       if (gp.cursor.getCol() == enemy.getCol() && gp.cursor.getRow() == enemy.getRow()) {
+                           if (selectedEnemies.contains(enemy)) {
+                               selectedEnemies.remove(enemy);
+                           } else {
+                               selectedEnemies.add(enemy);
+                           }
+                           break; // Exit loop once a match is found
+                       }
+                   }
+               }
+           } else if (!keyH.isAPressed()) {
+               aKeyPressed = false;  // Reset the flag when the key is released
+           }
+       }
     }
 
     public void drawMap(Graphics2D g2) {

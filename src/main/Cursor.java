@@ -84,85 +84,91 @@ public class Cursor {
     }
 
     public void update() {
+        if (gp.TurnM.getPlayerPhase() == true) {
+            if (gp.selectedUnit == null) {
 
-        if (gp.selectedUnit == null) {
-            // Increment the delay counter
-            moveDelayCounter++;
+                // Increment the delay counter
+                moveDelayCounter++;
 
-            // Only move the cursor when the delay counter reaches the threshold
-            if (moveDelayCounter >= moveDelayThreshold) {
-                // Determine if any cursor movement key is pressed
-                if (keyH.isUpPressed() == true && moving == false ) {
-                    direction = "up";
-                    moving = true;
-                } else if (keyH.isDownPressed() == true && moving == false) {
-                    direction = "down";
-                    moving = true;
-                } else if (keyH.isLeftPressed() == true && moving == false) {
-                    direction = "left";
-                    moving = true;
-                } else if (keyH.isRightPressed() == true && moving == false) {
-                    direction = "right";
-                    moving = true;
-                } else if (keyH.isUpPressed() == false && keyH.isDownPressed() == false &&
-                        keyH.isLeftPressed() == false && keyH.isRightPressed() == false) {
-                    // If no key is pressed, stop movement
-                    moving = false;
-                    direction = "none";
-                }
-
-                // Move cursor by a full tile (16 pixels) in the direction
-                if (moving == true) {
-                    switch (direction) {
-                        case "up":
-                            moveUp();
-                            break;
-                        case "down":
-                            moveDown();
-                            break;
-                        case "left":
-                            moveLeft();
-                            break;
-                        case "right":
-                            moveRight();
-                            break;
-                    }
-
-                    // Ensure the cursor stays centered on the tile
-                    updatePosition();
-
-                    // Reset the moving flag if the key is released or tile movement is complete
-                    if ((keyH.isUpPressed() == false && direction.equals("up")) ||
-                            (keyH.isDownPressed() == false && direction.equals("down")) ||
-                            (keyH.isLeftPressed() == false && direction.equals("left")) ||
-                            (keyH.isRightPressed() == false && direction.equals("right"))) {
+                // Only move the cursor when the delay counter reaches the threshold
+                if (moveDelayCounter >= moveDelayThreshold) {
+                    // Determine if any cursor movement key is pressed
+                    if (keyH.isUpPressed() == true && moving == false) {
+                        direction = "up";
+                        moving = true;
+                    } else if (keyH.isDownPressed() == true && moving == false) {
+                        direction = "down";
+                        moving = true;
+                    } else if (keyH.isLeftPressed() == true && moving == false) {
+                        direction = "left";
+                        moving = true;
+                    } else if (keyH.isRightPressed() == true && moving == false) {
+                        direction = "right";
+                        moving = true;
+                    } else if (keyH.isUpPressed() == false && keyH.isDownPressed() == false &&
+                            keyH.isLeftPressed() == false && keyH.isRightPressed() == false) {
+                        // If no key is pressed, stop movement
                         moving = false;
                         direction = "none";
                     }
 
-                    // Reset the delay counter after moving
-                    moveDelayCounter = 0;
+                    // Move cursor by a full tile (16 pixels) in the direction
+                    if (moving == true) {
+                        switch (direction) {
+                            case "up":
+                                moveUp();
+                                break;
+                            case "down":
+                                moveDown();
+                                break;
+                            case "left":
+                                moveLeft();
+                                break;
+                            case "right":
+                                moveRight();
+                                break;
+                        }
+
+                        // Ensure the cursor stays centered on the tile
+                        updatePosition();
+
+                        // Reset the moving flag if the key is released or tile movement is complete
+                        if ((keyH.isUpPressed() == false && direction.equals("up")) ||
+                                (keyH.isDownPressed() == false && direction.equals("down")) ||
+                                (keyH.isLeftPressed() == false && direction.equals("left")) ||
+                                (keyH.isRightPressed() == false && direction.equals("right"))) {
+                            moving = false;
+                            direction = "none";
+                        }
+
+                        // Reset the delay counter after moving
+                        moveDelayCounter = 0;
+                    }
                 }
             }
-        }
 
-        if (gp.selectedUnit != null && gp.selectedUnit.getIsSelected() == true) {
-            if (gp.selectedUnit.getIsMoving() == true) {
-                col = gp.selectedUnit.getCol();
-                row = gp.selectedUnit.getRow();
-                updatePosition();
+            if (gp.selectedUnit != null && gp.selectedUnit.getIsSelected() == true) {
+                if (gp.selectedUnit.getIsMoving() == true) {
+                    col = gp.selectedUnit.getCol();
+                    row = gp.selectedUnit.getRow();
+                    updatePosition();
+                }
+            }
+
+            spriteCounter++;
+            if (spriteCounter > 20) {
+                if (spriteNum == 1) {
+                    spriteNum = 2;
+                } else if (spriteNum == 2) {
+                    spriteNum = 1;
+                }
+                spriteCounter = 0;
             }
         }
-
-        spriteCounter++;
-        if (spriteCounter > 20 ) {
-            if (spriteNum == 1) {
-                spriteNum = 2;
-            }
-            else if (spriteNum == 2) {
-                spriteNum = 1;
-            }
-            spriteCounter = 0;
+        else {
+            col = gp.simLightUnits.get(0).getCol();
+            row = gp.simLightUnits.get(0).getRow();
+            updatePosition();
         }
     }
 

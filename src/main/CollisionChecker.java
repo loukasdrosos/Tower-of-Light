@@ -29,7 +29,12 @@ public class CollisionChecker {
 
     public boolean noPlayerOnTile (int targetCol, int targetRow) {
         for (LightUnit player : gp.simLightUnits) {
-            if (player != gp.selectedUnit) {
+            if (gp.selectedUnit!= null && player != gp.selectedUnit) {
+                if (targetCol == player.getCol() && targetRow == player.getRow()) {
+                    return false;
+                }
+            }
+            else if (gp.selectedUnit == null) {
                 if (targetCol == player.getCol() && targetRow == player.getRow()) {
                     return false;
                 }

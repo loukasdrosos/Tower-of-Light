@@ -4,11 +4,12 @@ import main.GamePanel;
 import main.KeyHandler;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Objects;
 
 public class LightUnit extends Entity{
+
+    protected int moveDelayThreshold = 7; // Frame threshold
 
     protected boolean isSelected = false;
     protected boolean isMoving = false;
@@ -30,52 +31,66 @@ public class LightUnit extends Entity{
     }
 
     public void move() {
-        // Capture the intended move direction
-        if (keyH.isUpPressed() == true) {
-            direction = "up";
-        } else if (keyH.isDownPressed() == true) {
-            direction = "down";
-        } else if (keyH.isLeftPressed() == true) {
-            direction = "left";
-        } else if (keyH.isRightPressed() == true) {
-            direction = "right";
-        } else if (keyH.isUpPressed() == false && keyH.isDownPressed() == false
-                && keyH.isLeftPressed() == false && keyH.isRightPressed() == false) {
-            direction = "none"; // If no key is pressed, stop movement
-        }
+        if (wait == false) {
+            if (isSelected == true && isMoving == true) {
+                moveDelayCounter++;  // Increment the delay counter
+                if (moveDelayCounter >= moveDelayThreshold) {  // Only move the unit when the delay counter reaches the threshold
+                    moveDelayCounter = 0; // Reset the counter after moving
 
-        // Calculate target position based on direction
-        int targetCol = col;
-        int targetRow = row;
+                    // Capture the intended move direction
+                    if (keyH.isUpPressed() == true) {
+                        direction = "up";
+                    } else if (keyH.isDownPressed() == true) {
+                        direction = "down";
+                    } else if (keyH.isLeftPressed() == true) {
+                        direction = "left";
+                    } else if (keyH.isRightPressed() == true) {
+                        direction = "right";
+                    } else if (keyH.isUpPressed() == false && keyH.isDownPressed() == false
+                            && keyH.isLeftPressed() == false && keyH.isRightPressed() == false) {
+                        direction = "none"; // If no key is pressed, stop movement
+                    }
 
-        switch (direction) {
-            case "up":
-                targetRow = row - 1;
-                break;
-            case "down":
-                targetRow = row + 1;
-                break;
-            case "left":
-                targetCol = col - 1;
-                break;
-            case "right":
-                targetCol = col + 1;
-                break;
-        }
+                    // Calculate target position based on direction
+                    int targetCol = col;
+                    int targetRow = row;
 
-        // Check if the move is allowed and update position accordingly
-        if (allowedMove(targetCol, targetRow) == true && gp.cChecker.validTile(targetCol, targetRow) == true) {
-            col = targetCol;
-            row = targetRow;
-            updatePosition();
+                    switch (direction) {
+                        case "up":
+                            targetRow = row - 1;
+                            break;
+                        case "down":
+                            targetRow = row + 1;
+                            break;
+                        case "left":
+                            targetCol = col - 1;
+                            break;
+                        case "right":
+                            targetCol = col + 1;
+                            break;
+                    }
+
+                    // Check if the move is allowed and update position accordingly
+                    if (allowedMove(targetCol, targetRow) == true && gp.cChecker.validTile(targetCol, targetRow) == true) {
+                        col = targetCol;
+                        row = targetRow;
+                        updatePosition();
+                    }
+                }
+            }
         }
     }
 
     @Override
+    public void startTurn() {
+        wait = false;
+    }
+
+    @Override
     public void endTurn() {
-        setIsSelected(false);
-        setIsMoving(false);
-        setWait(true);
+        isSelected = false;
+        isMoving = false;
+        wait = true;
         preCol = col;
         preRow = row;
         direction = "none";
@@ -93,14 +108,9 @@ public class LightUnit extends Entity{
 
     @Override
     public void update() {
-        if (wait == false) {
-            if (isSelected == true && isMoving == true) {
-                moveDelayCounter++;  // Increment the delay counter
-                if (moveDelayCounter >= moveDelayThreshold) {  // Only move the unit when the delay counter reaches the threshold
-                    move(); // Move the selected unit
-                    moveDelayCounter = 0; // Reset the delay counter after moving
-                }
-            }
+
+        if (gp.TurnM.getPlayerPhase() == true) {
+            move();
         }
 
         // Update sprite animation
@@ -126,7 +136,7 @@ public class LightUnit extends Entity{
             down2 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Human_Prince_Down_2.png"));
             left1 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Human_Prince_Left_1.png"));
             left2 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Human_Prince_Left_2.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Human_Prince_Right_1.png"));
+            right1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/LightUnits/Human_Prince_Right_1.png")));
             right2 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Human_Prince_Right_2.png"));
             default1 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Human_Prince_Default_1.png"));
             default2 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Human_Prince_Default_2.png"));

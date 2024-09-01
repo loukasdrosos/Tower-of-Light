@@ -31,11 +31,11 @@ public class GamePanel extends JPanel implements Runnable{
     public static ArrayList<ChaosUnit> simChaosUnits = new ArrayList<>();
 
     public void setUnits() {
+        simLightUnits.add(new LightUnit(this, keyH, 30, 14));
         simLightUnits.add(new LightUnit(this, keyH, 30, 15));
-        simLightUnits.add(new LightUnit(this, keyH, 2, 50));
         simLightUnits.add(new LightUnit(this, keyH, 30, 16));
-        simChaosUnits.add(new ChaosUnit(this, keyH, 31, 15));
-        simChaosUnits.add(new ChaosUnit(this, keyH, 20, 10));
+        simChaosUnits.add(new ChaosUnit(this, keyH, 30, 13));
+        simChaosUnits.add(new ChaosUnit(this, keyH, 30, 17));
     }
 
     public <T extends Entity> void copysetUnits(ArrayList<T> source, ArrayList<T> target) {
@@ -49,6 +49,7 @@ public class GamePanel extends JPanel implements Runnable{
     UnitSelector UnitSel =  new UnitSelector(this, keyH);
     Thread gameThread;
     public CollisionChecker cChecker = new CollisionChecker(this);
+    public TurnManager TurnM = new TurnManager(this);
 
     // Game screen
     public GamePanel() {
@@ -106,8 +107,8 @@ public class GamePanel extends JPanel implements Runnable{
             chaosunit.update();
         }
 
+        TurnM.manageTurns();
         cursor.update();
-
         UnitSel.update();
 
     }

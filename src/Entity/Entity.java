@@ -22,7 +22,6 @@ public class Entity {
     // Variables that control unit's movement speed
     protected String direction = "none";
     protected int moveDelayCounter = 0; // Increments each frame, and when it reaches moveDelayThreshold, the unit is allowed to move.
-    protected int moveDelayThreshold = 7; // Frame threshold
 
     // Variables that control unit's actions
     protected boolean wait = false;
@@ -76,6 +75,9 @@ public class Entity {
     public void updatePosition () {
         x = getX(col);
         y = getY(row);
+    }
+
+    public void startTurn() {
     }
 
     public void endTurn() {
@@ -196,11 +198,6 @@ public class Entity {
     public boolean getWait () {
         return wait;
     }
-
-    public void setWait (boolean x) {
-        this.wait = x;
-    }
-
 
 }
 

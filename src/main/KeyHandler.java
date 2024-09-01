@@ -7,7 +7,7 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener {
 
     private boolean UpPressed, DownPressed, LeftPressed, RightPressed;
-    private boolean APressed, ZPressed, WPressed;
+    private boolean APressed, ZPressed, WPressed, EPressed, QPressed;
 
     GamePanel gp;
 
@@ -44,6 +44,9 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_W) {
             WPressed = true;
         }
+        if (code == KeyEvent.VK_E) {
+            EPressed = true;
+        }
     }
 
     @Override
@@ -70,6 +73,9 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_W) {
             WPressed = false;
+        }
+        if (code == KeyEvent.VK_E) {
+            EPressed = false;
         }
     }
 
@@ -102,5 +108,10 @@ public class KeyHandler implements KeyListener {
     public boolean isWPressed() {
         return WPressed;
     }
+
+    public boolean isEPressed() {
+        return EPressed;
+    }
+
 }
 
