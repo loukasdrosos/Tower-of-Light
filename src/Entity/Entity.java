@@ -3,51 +3,31 @@ package Entity;
 import main.GamePanel;
 import main.KeyHandler;
 
-import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Entity {
 
-    protected int x, y; // x and y position on map
-    protected int col, row, preCol, preRow;
+    // Variables representing the unit's position on the map in pixels and tiles
+    protected int x, y;  // x and y position on the map in pixels
+    protected int col, row, preCol, preRow; // Current and previous tile positions (columns and rows)
 
-    protected BufferedImage default1, default2, up1, up2, down1, down2, left1, left2, right1, right2;
-    protected int spriteCounter = 0;
-    protected int spriteNum = 1;
+    protected BufferedImage default1, default2, up1, up2, down1, down2, left1, left2, right1, right2; // BufferedImages for different animation frames and directions
+    protected int spriteCounter = 0;  // Counter to control sprite animation timing
+    protected int spriteNum = 1;      // Variable to track which sprite frame to display
 
-    // Variables that control unit's movement speed
-    protected String direction = "none";
-    protected int moveDelayCounter = 0; // Increments each frame, and when it reaches moveDelayThreshold, the unit is allowed to move.
+    // Movement-related variables
+    protected String direction = "none"; // Direction the unit is currently moving in
+    protected int moveDelayCounter = 0;  // Counter for delaying movement, allowing smooth movement between tiles
 
-    // Variables that control unit's actions
-    protected boolean wait = false;
+    protected boolean wait = false; // Variable that controls if unit can take action or not
 
     GamePanel gp;
     KeyHandler keyH;
 
-    //Images of a unit's animations, all images are set to error figure if something doesn't load properly
-    public void loadImage() {
-        try{
-            up1 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Error_Figure.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Error_Figure.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Error_Figure.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Error_Figure.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Error_Figure.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Error_Figure.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Error_Figure.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Error_Figure.png"));
-            default1 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Error_Figure.png"));
-            default2 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Error_Figure.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //UNIT ALLOWED MOVEMENT
+    // Method to get the range of movement for the unit (returns a list of possible moves)
     public List<int[]> getMovementRange() {
         List<int[]> moves = new ArrayList<>();
         // Current position
@@ -62,9 +42,11 @@ public class Entity {
         return moves;
     }
 
-    // Check is unit's movement is legal
+    // Method to check if a move to a target tile is allowed
     public boolean allowedMove (int targetCol, int targetRow) {
-        if (gp.cChecker.isWithinMap(targetCol, targetRow) == true) {
+        // Check if the target tile is within the map bounds
+        if (gp.cChecker.isWithinMap(targetCol, targetRow)) {
+            // Check if the move is valid based on unit's movement range
             if ((targetCol == preCol && targetRow == preRow) || Math.abs(targetCol - preCol) + Math.abs(targetRow - preRow) == 1) {
                 return true;
             }
@@ -72,33 +54,17 @@ public class Entity {
         return false;
     }
 
+    // Method to update the unit's pixel position based on its current tile position
     public void updatePosition () {
         x = getX(col);
         y = getY(row);
     }
 
-    public void startTurn() {
-    }
-
-    public void endTurn() {
-    }
-
-    public void update() {
-        spriteCounter++;
-        if (spriteCounter > 20) {
-            if (spriteNum == 1) {
-                spriteNum = 2;
-            }
-            else if (spriteNum == 2) {
-                spriteNum = 1;
-            }
-            spriteCounter = 0;
-        }
-    }
-
+    // Method to draw the unit on the screen
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
 
+        // Select the correct image based on the unit's direction and current sprite frame
         switch (direction) {
             case "up":
                 if (spriteNum == 1) {
@@ -140,64 +106,37 @@ public class Entity {
                     image = default2;
                 }
         }
+        // Draw the selected image at the unit's position, scaled to the tile size
         g2.drawImage(image, x, y, gp.getTileSize(), gp.getTileSize(), null);
     }
 
-    //GETTERS && SETTERS for UNIT POSITION
+    // Placeholder methods
+
+    public void loadImage() {  }   // Placeholder method that loads images for the unit's animation frames
+
+    public void startTurn() {  }  // Placeholder method to start the unit's turn
+
+    public void endTurn() {  }   // Placeholder method to end the unit's turn
+
+    public void update() {    }  // Placeholder method to update the unit's state
+
+    // Getter methods
 
     public int getX(int col) {
         return col * gp.getTileSize();
-    }
+    } // Calculate x position in pixels based on column
 
-    public void setX(int x) {
-        this.x = x;
-    }
+    public int getY(int row) { return row * gp.getTileSize(); } // Calculate y position in pixels based on row
 
-    public int getY(int row) {
-        return row * gp.getTileSize();
-    }
+    public int getCol() { return col; } // Get the unit's current column
 
-    public void setY(int y) {
-        this.y = y;
-    }
+    public int getRow() { return row; } // Get the unit's current row
 
-    public int getCol() {
-        return col;
-    }
+    public int getPreCol() { return preCol; } // Get the unit's previous column
 
-    public void setCol(int col) {
-        this.col = col;
-    }
+    public int getPreRow() { return preRow; } // Get the unit's previous row
 
-    public int getRow() {
-        return row;
-    }
-
-    public void setRow(int row) {
-        this.row = row;
-    }
-
-    public int getPreCol() {
-        return preCol;
-    }
-
-    public void setPreCol(int preCol) {
-        this.preCol = preCol;
-    }
-
-    public int getPreRow() {
-        return preRow;
-    }
-
-    public void setPreRow(int preRow) {
-        this.preRow = preRow;
-    }
-
-    //GETTERS && SETTERS for BOOLEANS
-
-    public boolean getWait () {
-        return wait;
-    }
+    public boolean getWait () { return wait; } // Get the unit's wait status
 
 }
 

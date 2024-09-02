@@ -1,5 +1,7 @@
 package main;
 
+import Entity.LightUnit;
+
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -8,18 +10,19 @@ import java.io.IOException;
 public class Cursor {
 
     private int x, y; // x and y position on map
-    private int col, row;
+    private int col, row; // column and row position on the map
 
-    private BufferedImage sprite;
-    private int spriteCounter = 0;
-    private int spriteNum = 1;
+    private BufferedImage sprite; // Sprite for the cursor's visual representation
+    private int spriteCounter = 0; // Counter for sprite animation timing
+    private int spriteNum = 1; // Determines which sprite image to display
 
-    // Variables that control cursor movement speed
-    private String direction = "none";
+    // Variables that control cursor movement
+    private String direction = "none"; // Direction of cursor movement
+    private boolean moving = false; // Indicates if the cursor is currently moving
+    private int moveDelayCounter = 0; // Counts frames to manage movement delay
+    private int moveDelayThreshold = 5; // Threshold to control the speed of cursor movement
 
-    private boolean moving = false;
-    private int moveDelayCounter = 0; // Increments each frame, and when it reaches moveDelayThreshold, the cursor is allowed to move.
-    private int moveDelayThreshold = 5; // Adjust this value to change the speed
+    private boolean shiftPressed = false; // Track if shift has been handled in this update
 
     GamePanel gp;
     private KeyHandler keyH;
@@ -34,6 +37,7 @@ public class Cursor {
         }
     }
 
+    // Sets the starting position of the cursor on the map grid
     public void setStartingPosition(int startCol, int startRow) {
         this.col = startCol;
         this.row = startRow;
@@ -41,7 +45,7 @@ public class Cursor {
         y = getY(row);
     }
 
-    //CURSOR MOVEMENT
+    // Moves the cursor up by one tile if not at the top edge of the map
     public void moveUp () {
         if (row > 0) { // Check if not at the top edge
             row -= 1;
@@ -49,6 +53,7 @@ public class Cursor {
         }
     }
 
+    // Moves the cursor down by one tile if not at the bottom edge of the map
     public void moveDown () {
         if (row < 51) { // Check if not at the bottom edge
             row += 1;
@@ -56,6 +61,7 @@ public class Cursor {
         }
     }
 
+    // Moves the cursor left by one tile if not at the left edge of the map
     public void moveLeft () {
         if (col > 0) { // Check if not at the left edge
             col -= 1;
@@ -63,6 +69,7 @@ public class Cursor {
         }
     }
 
+    // Moves the cursor right by one tile if not at the right edge of the map
     public void moveRight () {
         if (col < 51) { // Check if not at the right edge
             col += 1;
@@ -70,6 +77,7 @@ public class Cursor {
         }
     }
 
+    // Loads the cursor sprite image
     public void loadImage() {
         try{
             sprite = ImageIO.read(getClass().getResourceAsStream("/Cursor/Cursor.png"));
@@ -78,14 +86,25 @@ public class Cursor {
         }
     }
 
+    // Updates the cursor's position based on its current column and row
     public void updatePosition() {
         x = getX(col);
         y = getY(row);
     }
 
+    // Updates the cursor's state and position based on input and game state
     public void update() {
-        if (gp.TurnM.getPlayerPhase() == true) {
+        // Check if it's the player's turn
+        if (gp.TurnM.getPlayerPhase()) {
+            // Check if no unit is currently selected
             if (gp.selectedUnit == null) {
+
+                moveAroundPlayers(); // Traverse through light units
+
+                // Reset shiftPressed if Shift key is released
+                if (!keyH.isShiftPressed()) {
+                    shiftPressed = false;
+                }
 
                 // Increment the delay counter
                 moveDelayCounter++;
@@ -93,27 +112,27 @@ public class Cursor {
                 // Only move the cursor when the delay counter reaches the threshold
                 if (moveDelayCounter >= moveDelayThreshold) {
                     // Determine if any cursor movement key is pressed
-                    if (keyH.isUpPressed() == true && moving == false) {
+                    if (keyH.isUpPressed() && !moving) {
                         direction = "up";
                         moving = true;
-                    } else if (keyH.isDownPressed() == true && moving == false) {
+                    } else if (keyH.isDownPressed() && !moving) {
                         direction = "down";
                         moving = true;
-                    } else if (keyH.isLeftPressed() == true && moving == false) {
+                    } else if (keyH.isLeftPressed() && !moving) {
                         direction = "left";
                         moving = true;
-                    } else if (keyH.isRightPressed() == true && moving == false) {
+                    } else if (keyH.isRightPressed() && !moving) {
                         direction = "right";
                         moving = true;
-                    } else if (keyH.isUpPressed() == false && keyH.isDownPressed() == false &&
-                            keyH.isLeftPressed() == false && keyH.isRightPressed() == false) {
+                    } else if (!keyH.isUpPressed() && !keyH.isDownPressed() &&
+                            !keyH.isLeftPressed() && !keyH.isRightPressed()) {
                         // If no key is pressed, stop movement
                         moving = false;
                         direction = "none";
                     }
 
                     // Move cursor by a full tile (16 pixels) in the direction
-                    if (moving == true) {
+                    if (moving) {
                         switch (direction) {
                             case "up":
                                 moveUp();
@@ -133,10 +152,10 @@ public class Cursor {
                         updatePosition();
 
                         // Reset the moving flag if the key is released or tile movement is complete
-                        if ((keyH.isUpPressed() == false && direction.equals("up")) ||
-                                (keyH.isDownPressed() == false && direction.equals("down")) ||
-                                (keyH.isLeftPressed() == false && direction.equals("left")) ||
-                                (keyH.isRightPressed() == false && direction.equals("right"))) {
+                        if ((!keyH.isUpPressed() && direction.equals("up")) ||
+                                (!keyH.isDownPressed() && direction.equals("down")) ||
+                                (!keyH.isLeftPressed() && direction.equals("left")) ||
+                                (!keyH.isRightPressed() && direction.equals("right"))) {
                             moving = false;
                             direction = "none";
                         }
@@ -147,34 +166,74 @@ public class Cursor {
                 }
             }
 
-            if (gp.selectedUnit != null && gp.selectedUnit.getIsSelected() == true) {
-                if (gp.selectedUnit.getIsMoving() == true) {
+            // Update cursor position if a selected unit is moving
+            if (gp.selectedUnit != null && gp.selectedUnit.getIsSelected()) {
+                if (gp.selectedUnit.getIsMoving()) {
                     col = gp.selectedUnit.getCol();
                     row = gp.selectedUnit.getRow();
                     updatePosition();
                 }
             }
 
+            // Update sprite animation
             spriteCounter++;
+            // Toggle between two sprite images for animation
             if (spriteCounter > 20) {
                 if (spriteNum == 1) {
                     spriteNum = 2;
                 } else if (spriteNum == 2) {
                     spriteNum = 1;
                 }
-                spriteCounter = 0;
+                spriteCounter = 0; // Reset sprite counter
             }
-        }
-        else {
-            col = gp.simLightUnits.get(0).getCol();
-            row = gp.simLightUnits.get(0).getRow();
-            updatePosition();
+        } else {
+            // If it's not the player's turn, position cursor at the first light unit
+            if (!gp.simLightUnits.isEmpty()) {
+                col = gp.simLightUnits.get(0).getCol();
+                row = gp.simLightUnits.get(0).getRow();
+                updatePosition();
+            }
         }
     }
 
+    // Handles cursor movement when Shift key is pressed
+    private void moveAroundPlayers() {
+        if (gp.selectedUnit == null && keyH.isShiftPressed() && !shiftPressed) {
+            if (gp.simLightUnits.isEmpty()) return; // Exit if there are no light units
+
+            // Find the current light unit under the cursor
+            LightUnit currentUnit = null;
+            for (LightUnit unit : gp.simLightUnits) {
+                if (unit.getCol() == col && unit.getRow() == row) {
+                    currentUnit = unit;
+                    break;
+                }
+            }
+
+            if (currentUnit != null) {
+                // Move to the next light unit in the list, wrapping around if necessary
+                int index = gp.simLightUnits.indexOf(currentUnit);
+                int nextIndex = (index + 1) % gp.simLightUnits.size(); // Wrap around
+                LightUnit nextUnit = gp.simLightUnits.get(nextIndex);
+                col = nextUnit.getCol();
+                row = nextUnit.getRow();
+            } else {
+                // If not on a light unit, move to the first light unit
+                LightUnit firstUnit = gp.simLightUnits.get(0);
+                col = firstUnit.getCol();
+                row = firstUnit.getRow();
+            }
+
+            updatePosition();     // Update cursor position
+            shiftPressed = true;  // Mark Shift key as handled
+        }
+    }
+
+    // Draws the cursor on the screen
     public void draw (Graphics2D g2) {
         BufferedImage image = null;
 
+            // Cursor blinks if no unit is selected, solid cursor if a player unit is selected
             if (gp.selectedUnit == null) {
                 if (spriteNum == 1) {
                     image = sprite;
@@ -188,37 +247,15 @@ public class Cursor {
        g2.drawImage(image, x, y, gp.getTileSize(), gp.getTileSize(), null);
     }
 
-    //GETTERS && SETTERS
+    //Getters
 
     public int getX(int col) {
         return col * gp.getTileSize();
-    }
+    } // Calculate x position in pixels based on column
 
-    public void setX(int x) {
-        this.x = x;
-    }
+    public int getY(int row) { return row * gp.getTileSize(); } // Calculate y position in pixels based on row
 
-    public int getY(int row) {
-        return row * gp.getTileSize();
-    }
+    public int getCol() { return col; } // Get the cursor's current column
 
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public int getCol() {
-        return col;
-    }
-
-    public void setCol(int col) {
-        this.col = col;
-    }
-
-    public int getRow() {
-        return row;
-    }
-
-    public void setRow(int row) {
-        this.row = row;
-    }
+    public int getRow() { return row; } // Get the cursor's current row
 }

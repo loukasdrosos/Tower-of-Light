@@ -8,42 +8,45 @@ import java.io.IOException;
 
 public class ChaosUnit extends Entity {
 
-    protected int moveDelayThreshold = 7; // Frame threshold
+    protected int moveDelayThreshold = 7; // Number of frames to wait before moving
     protected int moveSpeed = 8; // Speed at which the unit moves between tiles
 
     public ChaosUnit(GamePanel gp, KeyHandler keyH, int startCol, int startRow) {
-        this.gp = gp;
-        this.keyH = keyH;
-        this.col =  startCol;
-        this.row = startRow;
-        x = getX(col);
-        y = getY(row);
-        preCol = col;
-        preRow = row;
+        this.gp = gp;           // Reference to the game panel
+        this.keyH = keyH;       // Reference to the key handler
+        this.col =  startCol;   // Initial column position
+        this.row = startRow;    // Initial row position
+        x = getX(col);          // Calculate initial x position based on column
+        y = getY(row);          // Calculate initial y position based on row
+        preCol = col;           // Set previous column to current column
+        preRow = row;           // Set previous row to current row
 
+        // Load unit's images for animations
         try { loadImage(); }
         catch (Exception e){
             System.out.println("Exception loadImage, ChaosUnit not loading properly");
         }
     }
 
+    // Method to start the unit's turn (called at the beginning of its turn)
     @Override
     public void startTurn() {
-        wait = false;
+        wait = false; // Allows the unit to perform actions
     }
 
+    // Method to end the unit's turn (called at the end of its turn)
     @Override
     public void endTurn() {
-        wait = true;
-        preCol = col;
-        preRow = row;
-        direction = "none";
+        wait = true;    // Prevents the unit from performing actions
+        preCol = col;   // Save the current column as the previous column
+        preRow = row;   // Save the current row as the previous row
+        direction = "none";  // Reset the movement direction
     }
 
+    // Method to handle the unit's movement logic
     public void move() {
-        if (!wait) {
-            // Increment the delay counter
-            moveDelayCounter++;
+        if (!wait) { // If the unit is allowed to move
+            moveDelayCounter++;  // Increment the delay counter
 
             // Only move if the counter reaches the threshold
             if (moveDelayCounter >= moveDelayThreshold) {
@@ -81,9 +84,10 @@ public class ChaosUnit extends Entity {
 
                 // Update the ChaosUnit's position gradually
                 if (targetCol != col || targetRow != row) {
-                    int targetX = getX(targetCol);
-                    int targetY = getY(targetRow);
+                    int targetX = getX(targetCol); // Target x position
+                    int targetY = getY(targetRow); // Target y position
 
+                    // Gradually move towards the target x position
                     if (x < targetX) {
                         x += moveSpeed;
                         if (x > targetX) x = targetX;
@@ -92,6 +96,7 @@ public class ChaosUnit extends Entity {
                         if (x < targetX) x = targetX;
                     }
 
+                    // Gradually move towards the target y position
                     if (y < targetY) {
                         y += moveSpeed;
                         if (y > targetY) y = targetY;
@@ -102,37 +107,38 @@ public class ChaosUnit extends Entity {
 
                     // Check if the unit has reached the new tile
                     if (x == targetX && y == targetY) {
-                        col = targetCol;
-                        row = targetRow;
-                        updatePosition(); // Update the col and row based on the new position
-                        endTurn();
+                        col = targetCol;    // Update the unit's column
+                        row = targetRow;    // Update the unit's row
+                        updatePosition();   // Update the col and row based on the new position
+                        endTurn();          // End the turn after moving
                     }
                 }
             }
         }
     }
 
+    // Method to update the unit's state (called every frame)
     @Override
     public void update() {
-
-        if (gp.TurnM.getPlayerPhase() == false) {
+        // Only move if it's not the player's turn
+        if (!gp.TurnM.getPlayerPhase()) {
             move();
         }
 
-        // Update sprite animation
-        spriteCounter++;
-        if (spriteCounter > 20) {
+        // Update the sprite animation
+        spriteCounter++;  // Increment the sprite counter
+        if (spriteCounter > 20) {   // Change sprite every 20 frames
             if (spriteNum == 1) {
                 spriteNum = 2;
             }
             else if (spriteNum == 2) {
                 spriteNum = 1;
             }
-            spriteCounter = 0;
+            spriteCounter = 0;  // Reset sprite counter
         }
     }
 
-    //Images of a unit's animations
+    //Load images for the unit's animations
     public void loadImage() {
         try {
             up1 = ImageIO.read(getClass().getResourceAsStream("/ChaosUnits/Human_Herald_of_Chaos_Up_1.png"));

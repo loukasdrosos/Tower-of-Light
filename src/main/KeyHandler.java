@@ -1,13 +1,13 @@
 package main;
 
-import Entity.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
+    // Flags to track whether specific keys are currently pressed
     private boolean UpPressed, DownPressed, LeftPressed, RightPressed;
-    private boolean APressed, ZPressed, WPressed, EPressed, QPressed;
+    private boolean APressed, ZPressed, WPressed, EPressed, ShiftPressed;
 
     GamePanel gp;
 
@@ -15,14 +15,16 @@ public class KeyHandler implements KeyListener {
         this.gp = gp;
     }
 
+    // Not used in this implementation
     @Override
-    public void keyTyped(KeyEvent e) {
-    }
+    public void keyTyped(KeyEvent e) {  }
 
+    // Gets the key code of the pressed key
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode(); // Returns the keyCode associated with the key in this event
 
+        // Set the corresponding flag to true when a key is pressed
         if (code == KeyEvent.VK_UP) {
             UpPressed = true;
         }
@@ -47,12 +49,16 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_E) {
             EPressed = true;
         }
+        if (code == KeyEvent.VK_SHIFT) {
+            ShiftPressed = true;
+        }
     }
 
     @Override
     public void keyReleased (KeyEvent e){
         int code = e.getKeyCode();
 
+        // Set the corresponding flag to false when a key is released
         if (code == KeyEvent.VK_UP) {
             UpPressed = false;
         }
@@ -76,6 +82,9 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_E) {
             EPressed = false;
+        }
+        if (code == KeyEvent.VK_SHIFT) {
+            ShiftPressed = false;
         }
     }
 
@@ -113,5 +122,8 @@ public class KeyHandler implements KeyListener {
         return EPressed;
     }
 
+    public boolean isShiftPressed() {
+        return ShiftPressed;
+    }
 }
 
