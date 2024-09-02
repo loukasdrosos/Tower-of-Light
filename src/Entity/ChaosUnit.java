@@ -9,7 +9,7 @@ import java.io.IOException;
 public class ChaosUnit extends Entity {
 
     protected int moveDelayThreshold = 7; // Frame threshold
-    protected int moveSpeed = 12; // Speed at which the unit moves between tiles
+    protected int moveSpeed = 8; // Speed at which the unit moves between tiles
 
     public ChaosUnit(GamePanel gp, KeyHandler keyH, int startCol, int startRow) {
         this.gp = gp;

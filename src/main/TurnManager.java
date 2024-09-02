@@ -4,9 +4,10 @@ import Entity.*;
 
 public class TurnManager {
 
-    boolean playerPhase = true; // Sets player or enemy turn
-    int turnCounter = 0; // Initialize the turn counter
-    boolean turnCompleted = false; // Flag to check if the turn has switched
+    private boolean playerPhase = true; // Sets player or enemy turn
+    private int turnCounter = 0; // Initialize the turn counter
+    private boolean turnCompleted = false; // Flag to check if the turn has switched
+    private int currentEnemyUnitIndex = 0; // Index to track the current enemy unit
 
     GamePanel gp;
 
@@ -36,39 +37,49 @@ public class TurnManager {
             if (allPlayersWait) {
                 playerPhase = false;
                 turnCompleted = false;
+                currentEnemyUnitIndex = 0; // Reset the enemy unit index
+
                 // Set all player units' wait = true to prevent them from acting during the Chaos units' turn
                 for (LightUnit unit : gp.simLightUnits) {
                     unit.endTurn();
                 }
-                // Activate Chaos units' turn
-                for (ChaosUnit unit : gp.simChaosUnits) {
-                    unit.startTurn();
+
+                // Activate the first Chaos unit's turn
+                if (!gp.simChaosUnits.isEmpty()) {
+                    gp.simChaosUnits.get(currentEnemyUnitIndex).startTurn();
                 }
             }
 
-        } else {
+        }
+        else {
             if (!turnCompleted) {
                 System.out.println("Enemy Phase");
                 turnCompleted = true; // Ensure we only print once per switch
             }
 
             // Chaos units' turn logic
-            boolean allEnemiesWait = true;
-            for (ChaosUnit unit : gp.simChaosUnits) {
-                if (!unit.getWait()) { // Check if any Chaos unit hasn't finished its turn
-                    allEnemiesWait = false;
-                    break;
-                }
-            }
+            if (currentEnemyUnitIndex < gp.simChaosUnits.size()) {
+                ChaosUnit currentEnemy = gp.simChaosUnits.get(currentEnemyUnitIndex);
+                if (currentEnemy.getWait()) { // If the current unit has finished its turn
+                    currentEnemy.endTurn(); // Ensure it's properly ended
+                    currentEnemyUnitIndex++; // Move to the next unit
 
-            // If all Chaos units have finished, switch to the player's turn
-            if (allEnemiesWait) {
+                    if (currentEnemyUnitIndex < gp.simChaosUnits.size()) {
+                        // Start the next unit's turn
+                        gp.simChaosUnits.get(currentEnemyUnitIndex).startTurn();
+                    }
+                }
+                // If the current unit is still waiting, do nothing and let it continue moving
+            } else {
+                // All Chaos units have finished their turns, switch back to player phase
                 playerPhase = true;
                 turnCompleted = false;
+
                 // Set all Chaos units' wait = true to prevent them from acting during the player's turn
                 for (ChaosUnit unit : gp.simChaosUnits) {
                     unit.endTurn();
                 }
+
                 // Activate player's turn
                 for (LightUnit unit : gp.simLightUnits) {
                     unit.startTurn();
@@ -77,8 +88,14 @@ public class TurnManager {
         }
     }
 
+    // GETTERS
+
     public boolean getPlayerPhase() {
         return playerPhase;
+    }
+
+    public int getTurnCounter() {
+        return turnCounter;
     }
 }
 
