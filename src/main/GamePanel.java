@@ -53,10 +53,9 @@ public class GamePanel extends JPanel implements Runnable{
     KeyHandler keyH = new KeyHandler(this);
     TileManager tileM = new TileManager (this, keyH);
     public Cursor cursor = new Cursor(this, keyH);
-    UnitSelector UnitSel =  new UnitSelector(this, keyH);
     Thread gameThread;
     public CollisionChecker cChecker = new CollisionChecker(this);
-    public TurnManager TurnM = new TurnManager(this);
+    public TurnManager TurnM = new TurnManager(this, keyH);
 
     // Setup the game panel (initializes the game screen)
     public GamePanel() {
@@ -119,9 +118,8 @@ public class GamePanel extends JPanel implements Runnable{
             chaosunit.update();
         }
 
-        TurnM.manageTurns();  // Manage turns between players and enemies
+        TurnM.update();  // Manage turns between players and enemies
         cursor.update(); // Update the cursor
-        UnitSel.update(); // Update unit selector
     }
 
     // Draw the screen with the updated information: called every frame

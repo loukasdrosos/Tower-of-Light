@@ -6,6 +6,8 @@ import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Cursor {
 
@@ -197,13 +199,21 @@ public class Cursor {
     }
 
     // Handles cursor movement when Shift key is pressed
-    private void moveAroundPlayers() {
+    public void moveAroundPlayers() {
         if (gp.selectedUnit == null && keyH.isShiftPressed() && !shiftPressed) {
-            if (gp.simLightUnits.isEmpty()) return; // Exit if there are no light units
-
-            // Find the current light unit under the cursor
-            LightUnit currentUnit = null;
+            // Filter the light units to include only those that have wait == false
+            List<LightUnit> activeUnits = new ArrayList<>();
             for (LightUnit unit : gp.simLightUnits) {
+                if (!unit.getWait()) {
+                    activeUnits.add(unit);
+                }
+            }
+
+            if (activeUnits.isEmpty()) return; // Exit if there are no active light units
+
+            // Find the current active light unit under the cursor
+            LightUnit currentUnit = null;
+            for (LightUnit unit : activeUnits) {
                 if (unit.getCol() == col && unit.getRow() == row) {
                     currentUnit = unit;
                     break;
@@ -211,15 +221,15 @@ public class Cursor {
             }
 
             if (currentUnit != null) {
-                // Move to the next light unit in the list, wrapping around if necessary
-                int index = gp.simLightUnits.indexOf(currentUnit);
-                int nextIndex = (index + 1) % gp.simLightUnits.size(); // Wrap around
-                LightUnit nextUnit = gp.simLightUnits.get(nextIndex);
+                // Move to the next active light unit in the list, wrapping around if necessary
+                int index = activeUnits.indexOf(currentUnit);
+                int nextIndex = (index + 1) % activeUnits.size(); // Wrap around
+                LightUnit nextUnit = activeUnits.get(nextIndex);
                 col = nextUnit.getCol();
                 row = nextUnit.getRow();
             } else {
-                // If not on a light unit, move to the first light unit
-                LightUnit firstUnit = gp.simLightUnits.get(0);
+                // If not on an active light unit, move to the first active light unit
+                LightUnit firstUnit = activeUnits.get(0);
                 col = firstUnit.getCol();
                 row = firstUnit.getRow();
             }
@@ -228,6 +238,7 @@ public class Cursor {
             shiftPressed = true;  // Mark Shift key as handled
         }
     }
+
 
     // Draws the cursor on the screen
     public void draw (Graphics2D g2) {

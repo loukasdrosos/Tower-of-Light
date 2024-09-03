@@ -92,7 +92,22 @@ public class ChaosUnit extends Entity {
         return movementRange; // Return the list of all valid move tiles
     }
 
+    @Override
+    public void move() {
+        // If enemy phase
+        if (!gp.TurnM.getPlayerPhase()) {
+            // If the unit is allowed to move
+            if (!wait) {
+                endTurn();
+            }
+        }
+    }
+
+
+    /*
+    //WRONG MOVEMENT METHOD
     // Method to handle the unit's movement logic
+    @Override
     public void move() {
         if (!wait) { // If the unit is allowed to move
             moveDelayCounter++;  // Increment the delay counter
@@ -169,6 +184,7 @@ public class ChaosUnit extends Entity {
             }
         }
     }
+    */
 
     // Method to update the unit's state (called every frame)
     @Override

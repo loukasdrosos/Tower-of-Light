@@ -31,6 +31,43 @@ public class LightUnit extends Entity{
         }
     }
 
+    // Method to select a player unit (LightUnit) based on the cursor's position
+    public void SelectPlayerUnit() {
+        if (keyH.isAPressed()) {
+            // Check if a player is currently selected
+            if (gp.selectedUnit == null) {
+                // Check if the cursor's position matches the position of this player unit (LightUnit)
+                if (gp.cursor.getCol() == this.col && gp.cursor.getRow() == this.row && !this.wait) {
+                    gp.selectedUnit = this; // Select player unit
+                    isSelected = true; //Activate the selected player unit
+                    isMoving = true; // Allow player to move
+                }
+            }
+        }
+    }
+
+    // Method to deselect the currently selected player unit and reset its position
+    public void UnselectPlayerUnit() {
+        if (keyH.isZPressed()) {
+            // Only proceed if a unit is selected, is marked as selected, and is currently moving
+            if (gp.selectedUnit != null && isSelected && isMoving) {
+                resetPosition(); // Return player to starting position
+                gp.selectedUnit = null; // Deselect the player
+            }
+        }
+    }
+
+    // Method to end the turn of the currently selected player unit
+    public void endSelectedUnitTurn() {
+        if (keyH.isWPressed()) {
+            // Only proceed if a unit is selected, is marked as selected, and is currently moving
+            if (gp.selectedUnit != null && isSelected && !wait && isMoving) {
+                endTurn(); // End player's turn
+                gp.selectedUnit = null; // Deselect the player
+            }
+        }
+    }
+
     /* Calculate all valid tiles the unit can move to within its movement range with the use of Breadth-First-Search (BFS)
     BFS is well-suited for this scenario because explores all possible moves level by level, which means it considers
     all closer tiles before moving on to further ones. This is useful in grid-based games where movement range is limited */
@@ -79,7 +116,7 @@ public class LightUnit extends Entity{
     @Override
     public void move() {
         // Check if the unit is not in a waiting state, is selected, and is allowed to move
-        if (!wait && isSelected && isMoving) {
+        if (gp.selectedUnit != null && !wait && isSelected && isMoving) {
             moveDelayCounter++; // Increment the move delay counter
 
             // Check if the delay counter has reached or exceeded the move delay threshold
@@ -151,23 +188,23 @@ public class LightUnit extends Entity{
     // Method to end the unit's turn, disabling actions and resetting state
     @Override
     public void endTurn() {
-        isSelected = false; // Deselect the unit
         isMoving = false;   // Stop the unit's movement
         wait = true;        // Set the unit to a waiting state
         preCol = col;       // Update the previous column to the current column
         preRow = row;       // Update the previous row to the current row
         direction = "none"; // Reset the direction
+        isSelected = false; // Deselect the unit
     }
 
     // Method to reset the unit's position to the previous position
     public void resetPosition() {
-        setIsMoving(false);     // Stop the unit's movement
-        setIsSelected(false);   // Deselect the unit
+        isMoving = false;     // Stop the unit's movement
         col = preCol;   // Revert to the previous column
         row = preRow;   // Revert to the previous row
         x = getX(col);  // Update the x position in pixels
         y = getY(row);  // Update the y position in pixels
         direction = "none"; // Reset the direction
+        isSelected = false;   // Deselect the unit
     }
 
     // Method to update the unit's state, called every frame
@@ -175,6 +212,9 @@ public class LightUnit extends Entity{
     public void update() {
         // Allow movement only during the player's phase
         if (gp.TurnM.getPlayerPhase()) {
+            SelectPlayerUnit();
+            UnselectPlayerUnit();
+            endSelectedUnitTurn();
             move();
         }
 

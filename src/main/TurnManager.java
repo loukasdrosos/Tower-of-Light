@@ -8,11 +8,14 @@ public class TurnManager {
     private int turnCounter = 0; // Initialize the turn counter
     private boolean turnCompleted = false; // Flag to check if the turn has switched
     private int currentEnemyUnitIndex = 0; // Index to track the current enemy unit
+    private boolean ePressed = false; // Flag to track if E was pressed in the last frame
 
     GamePanel gp;
+    KeyHandler keyH;
 
-    public TurnManager(GamePanel gp) {
+    public TurnManager(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
+        this.keyH = keyH;
     }
 
     // Manages the turns between player and enemy phases
@@ -91,6 +94,31 @@ public class TurnManager {
                 }
             }
         }
+    }
+
+    // Method to end the turn for all player units when the 'E' key is pressed
+    public void endPlayerTurn() {
+        if (keyH.isEPressed() && !ePressed) {
+            // Check if E is pressed and it wasn't pressed in the last frame
+            ePressed = true; // Set the flag so we don't register another press immediately
+
+            if (gp.selectedUnit == null) {
+                // End the turn for all player units
+                for (LightUnit player : gp.simLightUnits) {
+                    player.endTurn();
+                }
+            }
+        }
+
+        // Reset the flag when the 'E' key is released
+        if (!keyH.isEPressed()) {
+            ePressed = false;
+        }
+    }
+
+    public void update() {
+        manageTurns();
+        endPlayerTurn();
     }
 
     // GETTERS
