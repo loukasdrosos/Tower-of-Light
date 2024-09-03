@@ -72,7 +72,9 @@ public class TurnManager {
                         gp.simChaosUnits.get(currentEnemyUnitIndex).startTurn();
                     }
                 }
-                // If the current unit is still waiting, do nothing and let it continue moving
+                else {
+                    currentEnemy.move(); // Only move if the unit hasn't finished its turn
+                }
             } else {
                 // All Chaos units have finished their turns, switch back to player phase
                 playerPhase = true;

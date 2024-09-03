@@ -5,7 +5,7 @@ import main.KeyHandler;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
-import java.util.Objects;
+import java.util.*;
 
 public class LightUnit extends Entity{
 
@@ -31,56 +31,112 @@ public class LightUnit extends Entity{
         }
     }
 
-    // Method to handle the movement of the LightUnit
+    /* Calculate all valid tiles the unit can move to within its movement range with the use of Breadth-First-Search (BFS)
+    BFS is well-suited for this scenario because explores all possible moves level by level, which means it considers
+    all closer tiles before moving on to further ones. This is useful in grid-based games where movement range is limited */
+    public List<int[]> calculateValidMoves() {
+        List<int[]> validMoves = new ArrayList<>();
+
+        /* Use a queue for breadth-first search (BFS) to explore tiles within the movement range
+        This queue will hold the tiles to be explored, with each tile being represented by its column, row,
+        and the distance from the starting position */
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[]{preCol, preRow, 0}); // Start from the current position with 0 distance traveled
+
+        // Track visited tiles to prevent revisiting the same tile
+        boolean[][] visited = new boolean[gp.getMaxMapCol()][gp.getMaxMapRow()];
+        visited[preCol][preRow] = true; // Mark the starting position as visited
+
+        // Continue exploring tiles until there are no more to explore
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll(); // Get the current tile from the front of the queue
+            int currentCol = current[0];
+            int currentRow = current[1];
+            int currentDistance = current[2];
+
+            // Add the current tile as a valid move option
+            validMoves.add(new int[]{currentCol, currentRow});
+
+            // Checks all possible movement directions (up, down, left, right) from the current tile
+            int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+            for (int[] dir : directions) {
+                int newCol = currentCol + dir[0];
+                int newRow = currentRow + dir[1];
+                int newDistance = currentDistance + 1;
+
+                // Check if the new tile is within the map bounds, not visited, within movement range, not wall and not occupied by an enemy unit
+                if (gp.cChecker.isWithinMap(newCol, newRow) && !visited[newCol][newRow] &&
+                        newDistance <= movement && gp.cChecker.NonCollisionTile(newCol, newRow) && gp.cChecker.noEnemyOnTile(newCol, newRow)) {
+                    // If the tile is valid, add it to the queue to be explored
+                    queue.add(new int[]{newCol, newRow, newDistance});
+                    visited[newCol][newRow] = true; // Mark the tile as visited
+                }
+            }
+        }
+        return validMoves; // Return the list of all valid move tiles
+    }
+
+    @Override
     public void move() {
-        // Check if the unit is not in a waiting state
-        if (!wait) {
-            // Only move the unit if it is selected and is able to move
-            if (isSelected && isMoving) {
-                moveDelayCounter++;  // Increment the delay counter
-                // Check if the delay counter has reached the threshold to move the unit
-                if (moveDelayCounter >= moveDelayThreshold) {
-                    moveDelayCounter = 0; // Reset the counter after moving
+        // Check if the unit is not in a waiting state, is selected, and is allowed to move
+        if (!wait && isSelected && isMoving) {
+            moveDelayCounter++; // Increment the move delay counter
 
-                    // Capture the intended move direction
-                    if (keyH.isUpPressed()) {
-                        direction = "up";
-                    } else if (keyH.isDownPressed()) {
-                        direction = "down";
-                    } else if (keyH.isLeftPressed()) {
-                        direction = "left";
-                    } else if (keyH.isRightPressed()) {
-                        direction = "right";
-                    } else if (!keyH.isUpPressed()  && !keyH.isDownPressed()
-                            && !keyH.isLeftPressed() && !keyH.isRightPressed()) {
-                        direction = "none"; // If no key is pressed, stop movement
+            // Check if the delay counter has reached or exceeded the move delay threshold
+            if (moveDelayCounter >= moveDelayThreshold) {
+                moveDelayCounter = 0; // Reset the move delay counter
+
+                // Calculate all possible valid moves from the current position
+                List<int[]> validMoves = calculateValidMoves();
+
+                // Initialize the target position with the current position
+                int targetCol = col;
+                int targetRow = row;
+
+                // Determine the intended move direction based on key presses
+                if (keyH.isUpPressed()) {
+                    direction = "up";
+                } else if (keyH.isDownPressed()) {
+                    direction = "down";
+                } else if (keyH.isLeftPressed()) {
+                    direction = "left";
+                } else if (keyH.isRightPressed()) {
+                    direction = "right";
+                } else if (!keyH.isUpPressed() && !keyH.isDownPressed() &&
+                        !keyH.isLeftPressed() && !keyH.isRightPressed()) {
+                    direction = "none"; // If no key is pressed, stop movement
+                }
+
+                // Update target position based on the direction
+                switch (direction) {
+                    case "up":
+                        targetRow = row - 1; // Move up
+                        break;
+                    case "down":
+                        targetRow = row + 1; // Move down
+                        break;
+                    case "left":
+                        targetCol = col - 1; // Move left
+                        break;
+                    case "right":
+                        targetCol = col + 1; // Move right
+                        break;
+                }
+
+                // Check if the target position is within the list of valid moves
+                boolean canMove = false;
+                for (int[] move : validMoves) {
+                    if (move[0] == targetCol && move[1] == targetRow) {
+                        canMove = true; // The move is valid
+                        break;
                     }
+                }
 
-                    // Calculate target position based on direction
-                    int targetCol = col;
-                    int targetRow = row;
-
-                    switch (direction) {
-                        case "up":
-                            targetRow = row - 1;
-                            break;
-                        case "down":
-                            targetRow = row + 1;
-                            break;
-                        case "left":
-                            targetCol = col - 1;
-                            break;
-                        case "right":
-                            targetCol = col + 1;
-                            break;
-                    }
-
-                    // Check if the move is allowed and update position accordingly
-                    if (allowedMove(targetCol, targetRow) && gp.cChecker.validTile(targetCol, targetRow)) {
-                        col = targetCol;    // Update the column position
-                        row = targetRow;    // Update the row position
-                        updatePosition();   // Update the pixel position based on the new tile position
-                    }
+                // If the move is valid, update the unit's position
+                if (canMove) {
+                    col = targetCol;  // Update column position
+                    row = targetRow;  // Update row position
+                    updatePosition(); // Update pixel position based on the new tile position
                 }
             }
         }

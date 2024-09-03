@@ -22,7 +22,6 @@ public class TileManager {
     private final int Max_Row; // Maximum number of rows in the map
     public int mapTileNum[][]; // 2D array to store the tile numbers of the map
     public Tile[] tile; // Array to hold different types of tiles
-    private ChaosUnit selectedEnemy = null; // Currently selected enemy unit
     private static ArrayList<ChaosUnit> selectedEnemies = new ArrayList<>(); // List of selected enemy units
     private boolean aKeyPressed = false; // Flag to track if the A key was pressed in the last frame
 
@@ -121,72 +120,49 @@ public class TileManager {
         catch (Exception e) {  }
     }
 
-    // Method to draw tiles that the player can move to
-    public void drawPlayerMovementTile(Graphics2D g2, int col, int row) {
-        int tileNum = mapTileNum[col][row];
-
-        // Only highlight tiles that are passable (no collision)
-        if (!tile[tileNum].collision) {
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.35f));
-            g2.setColor(Color.BLUE);  // Set movement color to blue
-
-            // Check if an enemy is on this tile and change color to red if true
-            for (ChaosUnit enemy : gp.simChaosUnits) {
-                if (col == enemy.getCol() && row == enemy.getRow()) {
-                    g2.setColor(Color.RED);
-                    break;
-                }
-            }
-            // Draw the tile
-            g2.fillRect(col * gp.getTileSize(), row * gp.getTileSize(), gp.getTileSize(),gp.getTileSize());
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));// Reset transparency
-        }
+    // Method to draw tiles that the player can move to as blue
+    public void drawPlayerMovement(Graphics2D g2, int col, int row) {
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.35f));
+        g2.setColor(Color.BLUE);
+        g2.fillRect(col * gp.getTileSize(), row * gp.getTileSize(), gp.getTileSize(), gp.getTileSize());
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
 
     // Method to load and draw tiles for the player's available movement range
-    public void drawPlayerMovement(Graphics2D g2, int col, int row) {
+    public void getPlayerMovement(Graphics2D g2) {
         // Get the movement range from the selected unit
-        List<int[]> movementRange = gp.selectedUnit.getMovementRange();
-
+        List<int[]> movementTiles = gp.selectedUnit.calculateValidMoves();
         // Check each possible move and draw the corresponding tile
-        for (int[] move : movementRange) {
-            int targetCol = col + move[0];
-            int targetRow = row + move[1];
-            drawPlayerMovementTile(g2, targetCol, targetRow);
+        for (int[] move : movementTiles) {
+            int targetCol = move[0];  // Column position of the valid move
+            int targetRow = move[1];  // Row position of the valid move
+            drawPlayerMovement(g2, targetCol, targetRow);
         }
     }
 
     // Method to draw tiles that the enemy can move to
-    public void drawEnemyMovementTile(Graphics2D g2, int col, int row) {
-        int tileNum = mapTileNum[col][row];
-
-        // Only highlight tiles that are passable (no collision)
-        if (!tile[tileNum].collision) {
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.35f));
-            g2.setColor(Color.RED);  // Set movement color to blue
-
-            // Draw the tile
-            g2.fillRect(col * gp.getTileSize(), row * gp.getTileSize(), gp.getTileSize(),gp.getTileSize());
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));// Reset transparency
-        }
+    public void drawEnemyMovement(Graphics2D g2, int col, int row) {
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.35f));
+        g2.setColor(Color.RED);  // Set movement color to blue
+        g2.fillRect(col * gp.getTileSize(), row * gp.getTileSize(), gp.getTileSize(), gp.getTileSize());
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
 
     // Method to load and draw tiles for the selected enemy units' available movement range
-    public void drawEnemyMovement(Graphics2D g2, ArrayList<ChaosUnit> selectedEnemies) {
+    public void getEnemyMovement(Graphics2D g2, ArrayList<ChaosUnit> selectedEnemies) {
         // Get the movement range from the selected unit
         for (ChaosUnit selectedEnemy : selectedEnemies) {
-            List<int[]> movementRange = selectedEnemy.getMovementRange();
-
-            // Check each possible move
-            for (int[] move : movementRange) {
-                int targetCol = selectedEnemy.getPreCol() + move[0];
-                int targetRow = selectedEnemy.getPreRow() + move[1];
-                drawEnemyMovementTile(g2, targetCol, targetRow);
+            List<int[]> movementTiles = selectedEnemy.calculateMovementRange();
+            // Check each possible move and draw the corresponding tile
+            for (int[] move : movementTiles) {
+                int targetCol = move[0];  // Column position of the valid move
+                int targetRow = move[1];  // Row position of the valid move
+                drawEnemyMovement(g2, targetCol, targetRow);
             }
         }
     }
 
-    // Method to handle enemy selection logic
+    // Method to handle which enemies to highlight their range
     public void EnemySelection() {
        if (gp.TurnM.getPlayerPhase() == true) {
            if (gp.selectedUnit == null && keyH.isAPressed() && !aKeyPressed) {
@@ -249,12 +225,12 @@ public class TileManager {
 
         // Draw enemy movement tiles
         if(selectedEnemies != null) {
-            drawEnemyMovement(g2, selectedEnemies);
+            getEnemyMovement(g2, selectedEnemies);
         }
 
         // Draw player movement tiles if a unit is selected
-        if (gp.selectedUnit != null && !gp.selectedUnit.getWait()) {
-            drawPlayerMovement(g2, gp.selectedUnit.getPreCol(), gp.selectedUnit.getPreRow());
+        if (gp.selectedUnit != null && !gp.selectedUnit.getWait() && gp.selectedUnit.getIsMoving()) {
+            getPlayerMovement(g2);
         }
     }
 }

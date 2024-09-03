@@ -41,10 +41,6 @@ public class GamePanel extends JPanel implements Runnable{
         simChaosUnits.add(new ChaosUnit(this, keyH, 30, 13));
         simChaosUnits.add(new ChaosUnit(this, keyH, 30, 17));
         simChaosUnits.add(new ChaosUnit(this, keyH, 30, 18));
-        simChaosUnits.add(new ChaosUnit(this, keyH, 31, 16));
-        simChaosUnits.add(new ChaosUnit(this, keyH, 31, 14));
-        simChaosUnits.add(new ChaosUnit(this, keyH, 32, 14));
-        simChaosUnits.add(new ChaosUnit(this, keyH, 29, 17));
     }
 
     // Copy units from one list to another

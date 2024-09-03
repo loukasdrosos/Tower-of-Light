@@ -5,8 +5,6 @@ import main.KeyHandler;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Entity {
 
@@ -19,6 +17,7 @@ public class Entity {
     protected int spriteNum = 1;      // Variable to track which sprite frame to display
 
     // Movement-related variables
+    protected int movement = 3; // The number of tiles the unit can move
     protected String direction = "none"; // Direction the unit is currently moving in
     protected int moveDelayCounter = 0;  // Counter for delaying movement, allowing smooth movement between tiles
 
@@ -26,33 +25,6 @@ public class Entity {
 
     GamePanel gp;
     KeyHandler keyH;
-
-    // Method to get the range of movement for the unit (returns a list of possible moves)
-    public List<int[]> getMovementRange() {
-        List<int[]> moves = new ArrayList<>();
-        // Current position
-        moves.add(new int[]{0, 0});
-
-        // Movement by 1 tile
-        moves.add(new int[]{1, 0});   // 1 tile right
-        moves.add(new int[]{-1, 0});  // 1 tile left
-        moves.add(new int[]{0, 1});   // 1 tile down
-        moves.add(new int[]{0, -1});  // 1 tile up
-
-        return moves;
-    }
-
-    // Method to check if a move to a target tile is allowed
-    public boolean allowedMove (int targetCol, int targetRow) {
-        // Check if the target tile is within the map bounds
-        if (gp.cChecker.isWithinMap(targetCol, targetRow)) {
-            // Check if the move is valid based on unit's movement range
-            if ((targetCol == preCol && targetRow == preRow) || Math.abs(targetCol - preCol) + Math.abs(targetRow - preRow) == 1) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     // Method to update the unit's pixel position based on its current tile position
     public void updatePosition () {
@@ -120,6 +92,8 @@ public class Entity {
 
     public void update() {    }  // Placeholder method to update the unit's state
 
+    public void move() {    }  // Placeholder method to move a unit
+
     // Getter methods
 
     public int getX(int col) {
@@ -137,6 +111,8 @@ public class Entity {
     public int getPreRow() { return preRow; } // Get the unit's previous row
 
     public boolean getWait () { return wait; } // Get the unit's wait status
+
+    public int getMovement() { return movement; } // Get the unit's wait status
 
 }
 

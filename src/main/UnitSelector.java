@@ -45,7 +45,7 @@ public class UnitSelector {
     public void endSelectedUnitTurn() {
         if (keyH.isWPressed()) {
             // Only proceed if a unit is selected, is marked as selected, and is currently moving
-            if (gp.selectedUnit != null && gp.selectedUnit.getIsSelected() && gp.selectedUnit.getIsMoving()) {
+            if (gp.selectedUnit != null && gp.selectedUnit.getIsSelected() && gp.selectedUnit.getIsMoving() && gp.cChecker.validTile(gp.selectedUnit.getCol(), gp.selectedUnit.getRow())) {
                 gp.selectedUnit.endTurn(); // End player's turn
                 gp.selectedUnit = null; // Deselect the player
             }
