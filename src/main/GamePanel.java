@@ -1,6 +1,7 @@
 package main;
 
 import Entity.*;
+import Item.*;
 import Tile.TileManager;
 
 import javax.swing.JPanel;
@@ -56,6 +57,8 @@ public class GamePanel extends JPanel implements Runnable{
     Thread gameThread;
     public CollisionChecker cChecker = new CollisionChecker(this);
     public TurnManager TurnM = new TurnManager(this, keyH);
+
+    public Item items[] = new Item[10];
 
     // Setup the game panel (initializes the game screen)
     public GamePanel() {
