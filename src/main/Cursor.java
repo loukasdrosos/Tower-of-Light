@@ -52,6 +52,7 @@ public class Cursor {
         if (row > 0) { // Check if not at the top edge
             row -= 1;
             y = getY(row);
+            gp.playSE(0);
         }
     }
 
@@ -60,6 +61,7 @@ public class Cursor {
         if (row < 51) { // Check if not at the bottom edge
             row += 1;
             y = getY(row);
+            gp.playSE(0);
         }
     }
 
@@ -68,6 +70,7 @@ public class Cursor {
         if (col > 0) { // Check if not at the left edge
             col -= 1;
             x = getX(col);
+            gp.playSE(0);
         }
     }
 
@@ -76,6 +79,7 @@ public class Cursor {
         if (col < 51) { // Check if not at the right edge
             col += 1;
             x = getX(col);
+            gp.playSE(0);
         }
     }
 

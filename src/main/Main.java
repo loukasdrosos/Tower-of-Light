@@ -18,6 +18,7 @@ public class Main {
         window.setLocationRelativeTo(null);  // Window displayed at screen center
         window.setVisible(true);   // Window is visible on screen
 
+        gamePanel.setupGame();
         gamePanel.launchGame(); // Launch the Game
     }
 }

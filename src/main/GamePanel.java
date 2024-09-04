@@ -23,7 +23,7 @@ public class GamePanel extends JPanel implements Runnable{
     private final int screenHeight = tileSize * maxScreenRow; // Height of the screen in pixels (832 pixels)
     private final int FPS = 60;  // Game runs at 60 frames per second (FPS)
 
-    //UNITS
+    // UNITS
     public static ArrayList<LightUnit> LightUnits = new ArrayList<>();  // List to store player units (Light Units) (permanent)
     public static ArrayList<LightUnit> simLightUnits = new ArrayList<>(); // List to store active player units (Light Units) (simulation)
     public LightUnit selectedUnit = null; // Reference to the currently selected unit
@@ -35,13 +35,9 @@ public class GamePanel extends JPanel implements Runnable{
     public void setUnits() {
         // Add player units to the simulation list
         simLightUnits.add(new LightUnit(this, keyH, 30, 14));
-        simLightUnits.add(new LightUnit(this, keyH, 30, 15));
-        simLightUnits.add(new LightUnit(this, keyH, 30, 16));
 
         // Add enemy units to the simulation list
-        simChaosUnits.add(new ChaosUnit(this, keyH, 30, 13));
-        simChaosUnits.add(new ChaosUnit(this, keyH, 30, 17));
-        simChaosUnits.add(new ChaosUnit(this, keyH, 30, 18));
+        simChaosUnits.add(new ChaosUnit(this, keyH, 32, 15));
     }
 
     // Copy units from one list to another
@@ -58,7 +54,12 @@ public class GamePanel extends JPanel implements Runnable{
     public CollisionChecker cChecker = new CollisionChecker(this);
     public TurnManager TurnM = new TurnManager(this, keyH);
 
+    // ITEMS
+    public AssetSetter aSetter = new AssetSetter(this);
     public Item items[] = new Item[10];
+
+    // SOUND
+    Sound sound = new Sound();
 
     // Setup the game panel (initializes the game screen)
     public GamePanel() {
@@ -82,6 +83,12 @@ public class GamePanel extends JPanel implements Runnable{
     public void launchGame() {
         gameThread = new Thread(this); // Create a new thread for the game loop
         gameThread.start();                // Start the game thread
+    }
+
+    public void setupGame() {
+        aSetter.setItem();
+
+        playMusic(0);
     }
 
     @Override
@@ -130,7 +137,15 @@ public class GamePanel extends JPanel implements Runnable{
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        tileM.draw(g2); // Draw the game map tiles
+        // Draw the game map tiles
+        tileM.draw(g2);
+
+        // Draw Items
+        for (int i = 0; i<items.length; i++) {
+            if (items[i] != null) {
+                items[i].draw(g2, this);
+            }
+        }
 
         // Draw each Light Unit in the simulation
         for (Entity lightunit : simLightUnits) {
@@ -145,6 +160,21 @@ public class GamePanel extends JPanel implements Runnable{
         cursor.draw(g2);  // Draw the cursor
 
         g2.dispose(); // Dispose this graphics content
+    }
+
+    public void playMusic(int i) {
+        sound.setGameMusicFile(i);
+        sound.play();
+        sound.loop();
+    }
+
+    public void stopMusic() {
+        sound.stop();
+    }
+
+    public void playSE(int i) {
+        sound.setSoundEffectFile(i);
+        sound.play();
     }
 
     //GETTERS

@@ -8,11 +8,10 @@ public class MainWeapon extends Item{
     public MainWeapon() {
         name = "MainWeapon";
         try {
-            image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Lightbringer.png")))
+            image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Lightbringer.png")));
         }
         catch (IOException e){
             e.printStackTrace();
         }
     }
-
 }
