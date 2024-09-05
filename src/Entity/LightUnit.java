@@ -2,8 +2,10 @@ package Entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import main.UtilityTool;
 
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.*;
 
@@ -41,6 +43,7 @@ public class LightUnit extends Entity{
                     gp.selectedUnit = this; // Select player unit
                     isSelected = true; //Activate the selected player unit
                     isMoving = true; // Allow player to move
+                    gp.playSE(5);
                 }
             }
         }
@@ -53,6 +56,7 @@ public class LightUnit extends Entity{
             if (gp.selectedUnit != null && isSelected && isMoving) {
                 resetPosition(); // Return player to starting position
                 gp.selectedUnit = null; // Deselect the player
+                gp.playSE(6);
             }
         }
     }
@@ -169,11 +173,22 @@ public class LightUnit extends Entity{
                     }
                 }
 
-                // If the move is valid, update the unit's position
-                if (canMove) {
-                    col = targetCol;  // Update column position
-                    row = targetRow;  // Update row position
+// If the move is valid and the unit is actually moving to a new position
+                if (canMove && (col != targetCol || row != targetRow)) {
+                    // Update column and row positions
+                    col = targetCol;
+                    row = targetRow;
+
                     updatePosition(); // Update pixel position based on the new tile position
+
+                    // Play the movement sound effect only if the position has changed
+                    if (mounted) {
+                        gp.playSE(8);
+                    } else if (armored) {
+                        gp.playSE(7);
+                    } else {
+                        gp.playSE(4);
+                    }
                 }
             }
         }
@@ -235,21 +250,16 @@ public class LightUnit extends Entity{
     //Load images for the unit's animations
     @Override
     public void loadImage() {
-        try {
-            up1 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Human_Prince_Up_1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Human_Prince_Up_2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Human_Prince_Down_1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Human_Prince_Down_2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Human_Prince_Left_1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Human_Prince_Left_2.png"));
-            right1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/LightUnits/Human_Prince_Right_1.png")));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Human_Prince_Right_2.png"));
-            default1 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Human_Prince_Default_1.png"));
-            default2 = ImageIO.read(getClass().getResourceAsStream("/LightUnits/Human_Prince_Default_2.png"));
-        } catch (
-                IOException e) {
-            e.printStackTrace();
-        }
+        up1 = setup("/LightUnits/Human_Prince_Up_1");
+        up2 = setup("/LightUnits/Human_Prince_Up_2");
+        down1 = setup("/LightUnits/Human_Prince_Down_1");
+        down2 = setup("/LightUnits/Human_Prince_Down_2");
+        left1 = setup("/LightUnits/Human_Prince_Left_1");
+        left2 = setup("/LightUnits/Human_Prince_Left_2");
+        right1 = setup("/LightUnits/Human_Prince_Right_1");
+        right2 = setup("/LightUnits/Human_Prince_Right_2");
+        default1 = setup("/LightUnits/Human_Prince_Default_1");
+        default2 = setup("/LightUnits/Human_Prince_Default_2");
     }
 
     // Getters && Setters

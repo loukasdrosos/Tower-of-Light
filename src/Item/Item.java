@@ -1,6 +1,7 @@
 package Item;
 
 import main.GamePanel;
+import main.UtilityTool;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -14,13 +15,15 @@ public class Item {
     protected int tileSize = 16;
     protected boolean collision = false;
 
+    UtilityTool uTool = new UtilityTool();
+
     // Method to update the item's pixel position based on its current tile position
     public void updatePosition () {
         x = getX(col);
         y = getY(row);
     }
 
-    public void draw(Graphics2D g2, GamePanel gp) {
+    public void draw(Graphics2D g2) {
         g2.drawImage(image, x, y, tileSize, tileSize, null);
     }
 

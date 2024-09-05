@@ -2,9 +2,12 @@ package Entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import main.UtilityTool;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class Entity {
 
@@ -23,6 +26,9 @@ public class Entity {
 
     protected boolean wait = false; // Variable that controls if unit can take action or not
 
+    protected boolean armored = false;
+    protected boolean mounted = false;
+
     GamePanel gp;
     KeyHandler keyH;
 
@@ -30,6 +36,20 @@ public class Entity {
     public void updatePosition () {
         x = getX(col);
         y = getY(row);
+    }
+
+    public BufferedImage setup (String imagePath) {
+        UtilityTool uTool = new UtilityTool();
+        BufferedImage image = null;
+
+        try {
+            image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
+            image = uTool.scaleImage(image, gp.getTileSize(), gp.getTileSize());
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
     }
 
     // Method to draw the unit on the screen
@@ -79,7 +99,7 @@ public class Entity {
                 }
         }
         // Draw the selected image at the unit's position, scaled to the tile size
-        g2.drawImage(image, x, y, gp.getTileSize(), gp.getTileSize(), null);
+        g2.drawImage(image, x, y,null);
     }
 
     // Placeholder methods

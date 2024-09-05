@@ -9,6 +9,7 @@ public class MainWeapon extends Item{
         name = "MainWeapon";
         try {
             image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Lightbringer.png")));
+            uTool.scaleImage(image, tileSize, tileSize);
         }
         catch (IOException e){
             e.printStackTrace();

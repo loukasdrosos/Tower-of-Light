@@ -53,6 +53,7 @@ public class GamePanel extends JPanel implements Runnable{
     Thread gameThread;
     public CollisionChecker cChecker = new CollisionChecker(this);
     public TurnManager TurnM = new TurnManager(this, keyH);
+    public UI ui = new UI(this);
 
     // ITEMS
     public AssetSetter aSetter = new AssetSetter(this);
@@ -74,7 +75,6 @@ public class GamePanel extends JPanel implements Runnable{
         int startCursorRow = simLightUnits.get(0).getRow();
         cursor.setStartingPosition(startCursorCol, startCursorRow);
 
-
         copysetUnits(simLightUnits, LightUnits);
         copysetUnits(simChaosUnits, ChaosUnits);
     }
@@ -87,7 +87,6 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void setupGame() {
         aSetter.setItem();
-
         playMusic(0);
     }
 
@@ -137,13 +136,20 @@ public class GamePanel extends JPanel implements Runnable{
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
+        // DEBUG
+        long drawStart = 0;
+        if (keyH.getCheckDrawTime()) {
+            drawStart = System.nanoTime();
+        }
+
+
         // Draw the game map tiles
         tileM.draw(g2);
 
         // Draw Items
         for (int i = 0; i<items.length; i++) {
             if (items[i] != null) {
-                items[i].draw(g2, this);
+                items[i].draw(g2);
             }
         }
 
@@ -157,7 +163,20 @@ public class GamePanel extends JPanel implements Runnable{
             chaosunit.draw(g2);
         }
 
-        cursor.draw(g2);  // Draw the cursor
+        // Draw the cursor
+        cursor.draw(g2);
+
+        // UI
+        ui.draw(g2);
+
+        // DEBUG
+        if (keyH.getCheckDrawTime()) {
+            long drawEnd = System.nanoTime();
+            long passed = drawEnd - drawStart;
+            g2.setColor(Color.WHITE);
+            g2.drawString("Draw time: " + passed, 68 * 16, 10 * 16);
+            System.out.println("Draw time; " + passed);
+        }
 
         g2.dispose(); // Dispose this graphics content
     }

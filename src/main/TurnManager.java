@@ -9,6 +9,8 @@ public class TurnManager {
     private boolean turnCompleted = false; // Flag to check if the turn has switched
     private int currentEnemyUnitIndex = 0; // Index to track the current enemy unit
     private boolean ePressed = false; // Flag to track if E was pressed in the last frame
+    private boolean playerPhaseSoundPlayed = false;
+    private boolean enemyPhaseSoundPlayed = false;
 
     GamePanel gp;
     KeyHandler keyH;
@@ -24,9 +26,15 @@ public class TurnManager {
             // Player's turn phase
             if (!turnCompleted) {
                 turnCounter++; // Increment the turn counter
-                System.out.println("Turn: " + turnCounter);
-                System.out.println("Player Phase ");
                 turnCompleted = true; // Mark the turn as completed to avoid multiple increments
+                gp.playSE(1);  // Play sound effect for player phase start
+            }
+
+            // Play the sound effect for the player phase start only once
+            if (!playerPhaseSoundPlayed) {
+                gp.playSE(1);  // Play sound effect for player phase start
+                playerPhaseSoundPlayed = true; // Mark that the sound has been played
+                enemyPhaseSoundPlayed = false; // Reset enemy phase sound flag for the next switch
             }
 
             // Check if all player units have finished their turn
@@ -54,13 +62,18 @@ public class TurnManager {
                     gp.simChaosUnits.get(currentEnemyUnitIndex).startTurn();
                 }
             }
-
         }
         else {
             // Enemy's turn phase
             if (!turnCompleted) {
-                System.out.println("Enemy Phase");
                 turnCompleted = true; // Ensure we only print once per switch
+            }
+
+            // Play the sound effect for the enemy phase start only once
+            if (!enemyPhaseSoundPlayed) {
+                gp.playSE(2);  // Play sound effect for enemy phase start
+                enemyPhaseSoundPlayed = true; // Mark that the sound has been played
+                playerPhaseSoundPlayed = false; // Reset player phase sound flag for the next switch
             }
 
             // Chaos units' turn logic

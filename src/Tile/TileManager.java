@@ -3,9 +3,11 @@ package Tile;
 import Entity.ChaosUnit;
 import main.GamePanel;
 import main.KeyHandler;
+import main.UtilityTool;
 
 import java.awt.*;
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,58 +40,33 @@ public class TileManager {
 
     // Method to load tile images
     public void loadImage() {
+        setup(0, "Floor", false);
+        setup(1, "Floor_Stairs_Down", false);
+        setup(2, "Floor_Stairs_Left", false);
+        setup(3, "Floor_Stairs_Right", false);
+        setup(4, "Floor_Stairs_Up", false);
+        setup(5, "Left_Up_Corner", true);
+        setup(6, "Pit_Left", true);
+        setup(7, "Pit_Right", true);
+        setup(8, "Right_Up_Corner", true);
+        setup(9, "Stairs_Level_Down", false);
+        setup(10, "Stairs_Level_Up", false);
+        setup(11, "Wall_Middle", true);
+        setup(12, "Wall_Left", true);
+        setup(13, "Wall_Right", true);
+    }
+
+    public void setup(int index, String imageName, boolean collision) {
+        UtilityTool uTool = new UtilityTool();
+
         try {
-            tile[0] = new Tile();
-            tile[0].image = ImageIO.read(getClass().getResourceAsStream("/MapTiles/Floor.png"));
-
-            tile[1] = new Tile();
-            tile[1].image = ImageIO.read(getClass().getResourceAsStream("/MapTiles/Floor_Stairs_Down.png"));
-
-            tile[2] = new Tile();
-            tile[2].image = ImageIO.read(getClass().getResourceAsStream("/MapTiles/Floor_Stairs_Left.png"));
-
-            tile[3] = new Tile();
-            tile[3].image = ImageIO.read(getClass().getResourceAsStream("/MapTiles/Floor_Stairs_Right.png"));
-
-            tile[4] = new Tile();
-            tile[4].image = ImageIO.read(getClass().getResourceAsStream("/MapTiles/Floor_Stairs_Up.png"));
-
-            tile[5] = new Tile();
-            tile[5].image = ImageIO.read(getClass().getResourceAsStream("/MapTiles/Left_Up_Corner.png"));
-            tile[5].collision = true;
-
-            tile[6] = new Tile();
-            tile[6].image = ImageIO.read(getClass().getResourceAsStream("/MapTiles/Pit_Left.png"));
-            tile[6].collision = true;
-
-            tile[7] = new Tile();
-            tile[7].image = ImageIO.read(getClass().getResourceAsStream("/MapTiles/Pit_Right.png"));
-            tile[7].collision = true;
-
-            tile[8] = new Tile();
-            tile[8].image = ImageIO.read(getClass().getResourceAsStream("/MapTiles/Right_Up_Corner.png"));
-            tile[8].collision = true;
-
-            tile[9] = new Tile();
-            tile[9].image = ImageIO.read(getClass().getResourceAsStream("/MapTiles/Stairs_Level_Down.png"));
-
-            tile[10] = new Tile();
-            tile[10].image = ImageIO.read(getClass().getResourceAsStream("/MapTiles/Stairs_Level_Up.png"));
-
-            tile[11] = new Tile();
-            tile[11].image = ImageIO.read(getClass().getResourceAsStream("/MapTiles/Wall_Middle.png"));
-            tile[11].collision = true;
-
-            tile[12] = new Tile();
-            tile[12].image = ImageIO.read(getClass().getResourceAsStream("/MapTiles/Wall_Left.png"));
-            tile[12].collision = true;
-
-            tile[13] = new Tile();
-            tile[13].image = ImageIO.read(getClass().getResourceAsStream("/MapTiles/Wall_Right.png"));
-            tile[13].collision = true;
+            tile[index] = new Tile();
+            tile[index].image = ImageIO.read(getClass().getResourceAsStream("/MapTiles/" + imageName +".png"));
+            tile[index].image = uTool.scaleImage(tile[index].image, gp.getTileSize() - 1, gp.getTileSize() - 1);
         }
         catch (IOException e) {
-            e.printStackTrace();        }
+            e.printStackTrace();
+        }
     }
 
     // Method to load the map from a text file
@@ -173,8 +150,10 @@ public class TileManager {
                    for (ChaosUnit enemy : gp.simChaosUnits) {
                        if (gp.cursor.getCol() == enemy.getCol() && gp.cursor.getRow() == enemy.getRow()) {
                            if (selectedEnemies.contains(enemy)) {
+                               gp.playSE(6);
                                selectedEnemies.remove(enemy); // Deselect the enemy if it's already selected
                            } else {
+                               gp.playSE(6);
                                selectedEnemies.add(enemy); // Select the enemy if it's not already selected
                            }
                            break; // Exit loop once a match is found
@@ -205,7 +184,7 @@ public class TileManager {
         // Draw the map tiles based on the mapTileNum array
         while (col < Max_Col && row < Max_Row) {
             int tileNum = mapTileNum[col][row];
-            g2.drawImage(tile[tileNum].image, x, y, gp.getTileSize() - 1, gp.getTileSize() - 1, null);
+            g2.drawImage(tile[tileNum].image, x, y, null);
             col++;
             x += gp.getTileSize();
             if (col == Max_Col) {

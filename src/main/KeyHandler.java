@@ -9,6 +9,9 @@ public class KeyHandler implements KeyListener {
     private boolean UpPressed, DownPressed, LeftPressed, RightPressed;
     private boolean APressed, ZPressed, WPressed, EPressed, ShiftPressed;
 
+    // DEBUG
+    private boolean checkDrawTime = false;
+
     GamePanel gp;
 
     public KeyHandler(GamePanel gp) {
@@ -51,6 +54,16 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_SHIFT) {
             ShiftPressed = true;
+        }
+
+        // DEBUG
+        if (code == KeyEvent.VK_ALT) {
+            if (!checkDrawTime) {
+                checkDrawTime = true;
+            }
+            else if (checkDrawTime) {
+                checkDrawTime = false;
+            }
         }
     }
 
@@ -124,6 +137,10 @@ public class KeyHandler implements KeyListener {
 
     public boolean isShiftPressed() {
         return ShiftPressed;
+    }
+
+    public boolean getCheckDrawTime() {
+        return checkDrawTime;
     }
 }
 

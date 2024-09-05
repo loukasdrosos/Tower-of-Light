@@ -104,7 +104,7 @@ public class ChaosUnit extends Entity {
     }
 
 
-    /*
+/*
     //WRONG MOVEMENT METHOD
     // Method to handle the unit's movement logic
     @Override
@@ -184,7 +184,9 @@ public class ChaosUnit extends Entity {
             }
         }
     }
-    */
+
+ */
+
 
     // Method to update the unit's state (called every frame)
     @Override
@@ -204,21 +206,17 @@ public class ChaosUnit extends Entity {
     }
 
     //Load images for the unit's animations
+    @Override
     public void loadImage() {
-        try {
-            up1 = ImageIO.read(getClass().getResourceAsStream("/ChaosUnits/Human_Herald_of_Chaos_Up_1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/ChaosUnits/Human_Herald_of_Chaos_Up_2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/ChaosUnits/Human_Herald_of_Chaos_Down_1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/ChaosUnits/Human_Herald_of_Chaos_Down_2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/ChaosUnits/Human_Herald_of_Chaos_Left_1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/ChaosUnits/Human_Herald_of_Chaos_Left_2.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/ChaosUnits/Human_Herald_of_Chaos_Right_1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/ChaosUnits/Human_Herald_of_Chaos_Right_2.png"));
-            default1 = ImageIO.read(getClass().getResourceAsStream("/ChaosUnits/Human_Herald_of_Chaos_Default_1.png"));
-            default2 = ImageIO.read(getClass().getResourceAsStream("/ChaosUnits/Human_Herald_of_Chaos_Default_2.png"));
-        } catch (
-                IOException e) {
-            e.printStackTrace();
-        }
+        up1 = setup("ChaosUnits/Human_Herald_of_Chaos_Up_1");
+        up2 = setup("/ChaosUnits/Human_Herald_of_Chaos_Up_2");
+        down1 = setup("/ChaosUnits/Human_Herald_of_Chaos_Down_1");
+        down2 = setup("/ChaosUnits/Human_Herald_of_Chaos_Down_2");
+        left1 = setup("/ChaosUnits/Human_Herald_of_Chaos_Left_1");
+        left2 = setup("/ChaosUnits/Human_Herald_of_Chaos_Left_2");
+        right1 = setup("/ChaosUnits/Human_Herald_of_Chaos_Right_1");
+        right2 = setup("/ChaosUnits/Human_Herald_of_Chaos_Right_2");
+        default1 = setup("/ChaosUnits/Human_Herald_of_Chaos_Default_1");
+        default2 = setup("/ChaosUnits/Human_Herald_of_Chaos_Default_2");
     }
 }

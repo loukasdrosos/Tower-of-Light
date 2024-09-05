@@ -238,8 +238,9 @@ public class Cursor {
                 row = firstUnit.getRow();
             }
 
-            updatePosition();     // Update cursor position
+            updatePosition();      // Update cursor position
             shiftPressed = true;  // Mark Shift key as handled
+            gp.playSE(6);
         }
     }
 
