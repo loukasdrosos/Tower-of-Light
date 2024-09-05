@@ -32,7 +32,7 @@ public class TileManager {
         this.keyH = keyH;
         Max_Col = gp.getMaxMapCol(); // Get maximum columns from the game panel
         Max_Row = gp.getMaxMapRow(); // Get maximum rows from the game panel
-        tile = new Tile[14]; // Initialize the tile array with 14 different types of tiles
+        tile = new Tile[24]; // Initialize the tile array with 14 different types of tiles
         mapTileNum = new int[Max_Col][Max_Row]; // Initialize the map tile number array
         loadImage(); // Load tile images
         loadMap("/Maps/Map_1.txt"); // Load the map from a file
@@ -40,20 +40,33 @@ public class TileManager {
 
     // Method to load tile images
     public void loadImage() {
+        // Placeholders
         setup(0, "Floor", false);
-        setup(1, "Floor_Stairs_Down", false);
-        setup(2, "Floor_Stairs_Left", false);
-        setup(3, "Floor_Stairs_Right", false);
-        setup(4, "Floor_Stairs_Up", false);
-        setup(5, "Left_Up_Corner", true);
-        setup(6, "Pit_Left", true);
-        setup(7, "Pit_Right", true);
-        setup(8, "Right_Up_Corner", true);
-        setup(9, "Stairs_Level_Down", false);
-        setup(10, "Stairs_Level_Up", false);
-        setup(11, "Wall_Middle", true);
-        setup(12, "Wall_Left", true);
-        setup(13, "Wall_Right", true);
+        setup(1, "Floor", false);
+        setup(2, "Floor", false);
+        setup(3, "Floor", false);
+        setup(4, "Floor", false);
+        setup(5, "Floor", false);
+        setup(6, "Floor", false);
+        setup(7, "Floor", false);
+        setup(8, "Floor", false);
+        setup(9, "Floor", false);
+
+        // Actual Tiles
+        setup(10, "Floor", false);
+        setup(11, "Floor_Stairs_Down", false);
+        setup(12, "Floor_Stairs_Left", false);
+        setup(13, "Floor_Stairs_Right", false);
+        setup(14, "Floor_Stairs_Up", false);
+        setup(15, "Left_Up_Corner", true);
+        setup(16, "Pit_Left", true);
+        setup(17, "Pit_Right", true);
+        setup(18, "Right_Up_Corner", true);
+        setup(19, "Stairs_Level_Down", false);
+        setup(20, "Stairs_Level_Up", false);
+        setup(21, "Wall_Middle", true);
+        setup(22, "Wall_Left", true);
+        setup(23, "Wall_Right", true);
     }
 
     public void setup(int index, String imageName, boolean collision) {
@@ -63,6 +76,7 @@ public class TileManager {
             tile[index] = new Tile();
             tile[index].image = ImageIO.read(getClass().getResourceAsStream("/MapTiles/" + imageName +".png"));
             tile[index].image = uTool.scaleImage(tile[index].image, gp.getTileSize() - 1, gp.getTileSize() - 1);
+            tile[index].collision = collision;
         }
         catch (IOException e) {
             e.printStackTrace();

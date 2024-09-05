@@ -187,7 +187,6 @@ public class ChaosUnit extends Entity {
 
  */
 
-
     // Method to update the unit's state (called every frame)
     @Override
     public void update() {
@@ -208,7 +207,7 @@ public class ChaosUnit extends Entity {
     //Load images for the unit's animations
     @Override
     public void loadImage() {
-        up1 = setup("ChaosUnits/Human_Herald_of_Chaos_Up_1");
+        up1 = setup("/ChaosUnits/Human_Herald_of_Chaos_Up_1");
         up2 = setup("/ChaosUnits/Human_Herald_of_Chaos_Up_2");
         down1 = setup("/ChaosUnits/Human_Herald_of_Chaos_Down_1");
         down2 = setup("/ChaosUnits/Human_Herald_of_Chaos_Down_2");

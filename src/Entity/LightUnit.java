@@ -173,7 +173,7 @@ public class LightUnit extends Entity{
                     }
                 }
 
-// If the move is valid and the unit is actually moving to a new position
+                // If the move is valid and the unit is actually moving to a new position
                 if (canMove && (col != targetCol || row != targetRow)) {
                     // Update column and row positions
                     col = targetCol;

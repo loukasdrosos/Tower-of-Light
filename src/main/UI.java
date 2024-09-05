@@ -14,7 +14,7 @@ public class UI {
     // Draw the turn counter rectangle (smaller rectangle)
     int turnRectX = 52 * 16;     // Position X
     int turnRectY = 2 * 16 - 40; // Position Y
-    int turnRectWidth = 120;                   // Width of the rectangle
+    int turnRectWidth = 150;                   // Width of the rectangle
     int turnRectHeight = 50;                   // Height of the rectangle
 
     public UI(GamePanel gp) {
