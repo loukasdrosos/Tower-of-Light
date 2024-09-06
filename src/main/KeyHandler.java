@@ -27,42 +27,43 @@ public class KeyHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode(); // Returns the keyCode associated with the key in this event
 
-        // Set the corresponding flag to true when a key is pressed
-        if (code == KeyEvent.VK_UP) {
-            UpPressed = true;
-        }
-        if (code == KeyEvent.VK_DOWN) {
-            DownPressed = true;
-        }
-        if (code == KeyEvent.VK_LEFT) {
-            LeftPressed = true;
-        }
-        if (code == KeyEvent.VK_RIGHT) {
-            RightPressed = true;
-        }
-        if (code == KeyEvent.VK_A) {
-            APressed = true;
-        }
-        if (code == KeyEvent.VK_Z) {
-            ZPressed = true;
-        }
-        if (code == KeyEvent.VK_W) {
-            WPressed = true;
-        }
-        if (code == KeyEvent.VK_E) {
-            EPressed = true;
-        }
-        if (code == KeyEvent.VK_SHIFT) {
-            ShiftPressed = true;
-        }
-
-        // DEBUG
-        if (code == KeyEvent.VK_ALT) {
-            if (!checkDrawTime) {
-                checkDrawTime = true;
+        if (gp.gameState == gp.playState) {
+            // Set the corresponding flag to true when a key is pressed
+            if (code == KeyEvent.VK_UP) {
+                UpPressed = true;
             }
-            else if (checkDrawTime) {
-                checkDrawTime = false;
+            if (code == KeyEvent.VK_DOWN) {
+                DownPressed = true;
+            }
+            if (code == KeyEvent.VK_LEFT) {
+                LeftPressed = true;
+            }
+            if (code == KeyEvent.VK_RIGHT) {
+                RightPressed = true;
+            }
+            if (code == KeyEvent.VK_A) {
+                APressed = true;
+            }
+            if (code == KeyEvent.VK_Z) {
+                ZPressed = true;
+            }
+            if (code == KeyEvent.VK_W) {
+                WPressed = true;
+            }
+            if (code == KeyEvent.VK_E) {
+                EPressed = true;
+            }
+            if (code == KeyEvent.VK_SHIFT) {
+                ShiftPressed = true;
+            }
+
+            // DEBUG
+            if (code == KeyEvent.VK_ALT) {
+                if (!checkDrawTime) {
+                    checkDrawTime = true;
+                } else if (checkDrawTime) {
+                    checkDrawTime = false;
+                }
             }
         }
     }

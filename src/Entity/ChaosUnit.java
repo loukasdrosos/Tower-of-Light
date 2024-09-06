@@ -3,8 +3,6 @@ package Entity;
 import main.GamePanel;
 import main.KeyHandler;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,9 +13,8 @@ public class ChaosUnit extends Entity {
     protected int moveDelayThreshold = 7; // Number of frames to wait before moving
     protected int moveSpeed = 8; // Speed at which the unit moves between tiles
 
-    public ChaosUnit(GamePanel gp, KeyHandler keyH, int startCol, int startRow) {
-        this.gp = gp;           // Reference to the game panel
-        this.keyH = keyH;       // Reference to the key handler
+    public ChaosUnit(GamePanel gp, int startCol, int startRow) {
+        super(gp);
         this.col =  startCol;   // Initial column position
         this.row = startRow;    // Initial row position
         x = getX(col);          // Calculate initial x position based on column

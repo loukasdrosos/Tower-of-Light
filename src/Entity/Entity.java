@@ -30,7 +30,10 @@ public class Entity {
     protected boolean mounted = false;
 
     GamePanel gp;
-    KeyHandler keyH;
+
+    public Entity (GamePanel gp) {
+        this.gp = gp;
+    }
 
     // Method to update the unit's pixel position based on its current tile position
     public void updatePosition () {

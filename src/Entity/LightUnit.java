@@ -2,14 +2,11 @@ package Entity;
 
 import main.GamePanel;
 import main.KeyHandler;
-import main.UtilityTool;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.*;
 
 public class LightUnit extends Entity{
+    KeyHandler keyH;
 
     protected int moveDelayThreshold = 7; // Number of frames to wait before moving
 
@@ -17,7 +14,7 @@ public class LightUnit extends Entity{
     protected boolean isMoving = false;  // Track if the unit is moving
 
     public LightUnit (GamePanel gp, KeyHandler keyH, int startCol, int startRow) {
-        this.gp = gp;           // Reference to the game panel
+        super(gp);
         this.keyH = keyH;       // Reference to the key handler
         this.col =  startCol;   // Initial column position
         this.row = startRow;    // Initial row position
@@ -65,7 +62,7 @@ public class LightUnit extends Entity{
     public void endSelectedUnitTurn() {
         if (keyH.isWPressed()) {
             // Only proceed if a unit is selected, is marked as selected, and is currently moving
-            if (gp.selectedUnit != null && isSelected && !wait && isMoving) {
+            if (gp.selectedUnit != null && isSelected && !wait && isMoving && gp.cChecker.noPlayerOnTile(col, row)) {
                 endTurn(); // End player's turn
                 gp.selectedUnit = null; // Deselect the player
             }
@@ -178,7 +175,6 @@ public class LightUnit extends Entity{
                     // Update column and row positions
                     col = targetCol;
                     row = targetRow;
-
                     updatePosition(); // Update pixel position based on the new tile position
 
                     // Play the movement sound effect only if the position has changed
@@ -227,10 +223,10 @@ public class LightUnit extends Entity{
     public void update() {
         // Allow movement only during the player's phase
         if (gp.TurnM.getPlayerPhase()) {
+            move();
             SelectPlayerUnit();
             UnselectPlayerUnit();
             endSelectedUnitTurn();
-            move();
         }
 
         // Update sprite animation

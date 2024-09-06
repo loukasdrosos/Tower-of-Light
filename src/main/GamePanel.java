@@ -4,11 +4,14 @@ import Entity.*;
 import Item.*;
 import Tile.TileManager;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements Runnable{
@@ -23,6 +26,9 @@ public class GamePanel extends JPanel implements Runnable{
     private final int screenHeight = tileSize * maxScreenRow; // Height of the screen in pixels (832 pixels)
     private final int FPS = 60;  // Game runs at 60 frames per second (FPS)
 
+    // Title Screen
+    private BufferedImage titleScreenImage;
+
     // UNITS
     public static ArrayList<LightUnit> LightUnits = new ArrayList<>();  // List to store player units (Light Units) (permanent)
     public static ArrayList<LightUnit> simLightUnits = new ArrayList<>(); // List to store active player units (Light Units) (simulation)
@@ -30,21 +36,6 @@ public class GamePanel extends JPanel implements Runnable{
 
     public static ArrayList<ChaosUnit> ChaosUnits = new ArrayList<>(); // List to store enemy units (Chaos Units) (permanent)
     public static ArrayList<ChaosUnit> simChaosUnits = new ArrayList<>();  // List to store active enemy units (Chaos Units) (simulation)
-
-    // Initialize units and set their starting positions
-    public void setUnits() {
-        // Add player units to the simulation list
-        simLightUnits.add(new LightUnit(this, keyH, 30, 14));
-
-        // Add enemy units to the simulation list
-        simChaosUnits.add(new ChaosUnit(this, keyH, 32, 15));
-    }
-
-    // Copy units from one list to another
-    public <T extends Entity> void copysetUnits(ArrayList<T> source, ArrayList<T> target) {
-        target.clear();
-        target.addAll(source);
-    }
 
     // Key handler and managers for the game
     KeyHandler keyH = new KeyHandler(this);
@@ -55,8 +46,15 @@ public class GamePanel extends JPanel implements Runnable{
     public TurnManager TurnM = new TurnManager(this, keyH);
     public UI ui = new UI(this);
 
+    // GAME STATE
+    public int gameState;
+    public final int titleState = 0;
+    public final int playState = 1;
+    public final int gameOverState = 2;
+    public final int creditsState = 3;
+
     // ITEMS
-    public AssetSetter aSetter = new AssetSetter(this);
+    public AssetSetter aSetter = new AssetSetter(this, keyH);
     public Item items[] = new Item[10];
 
     // SOUND
@@ -70,13 +68,11 @@ public class GamePanel extends JPanel implements Runnable{
         this.addKeyListener(keyH);      // Add the key listener to handle keyboard input
         this.setFocusable(true);        // Ensure the panel can receive keyboard input
 
-        setUnits();   // Initialize units and set their starting positions
-        int startCursorCol = simLightUnits.get(0).getCol();
-        int startCursorRow = simLightUnits.get(0).getRow();
-        cursor.setStartingPosition(startCursorCol, startCursorRow);
-
-        copysetUnits(simLightUnits, LightUnits);
-        copysetUnits(simChaosUnits, ChaosUnits);
+        // Load titleScreen image
+        try { loadImage(); }
+        catch (Exception e){
+            System.out.println("Exception loadImage, titleScreen not loading properly");
+        }
     }
 
     // Game Launcher: Starts the game thread
@@ -86,8 +82,36 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void setupGame() {
-        aSetter.setItem();
-        playMusic(0);
+        aSetter.setLightUnits();
+        aSetter.setChaosUnits();
+        aSetter.copysetUnits(simLightUnits, LightUnits);
+        aSetter.copysetUnits(simChaosUnits, ChaosUnits);
+        aSetter.setCursor();
+
+      //  aSetter.setItem();
+      //  playMusic(0);
+       // stopMusic();
+
+        playSE(9);
+        gameState = titleState;
+    }
+
+    public BufferedImage setup (String imagePath) {
+        UtilityTool uTool = new UtilityTool();
+        BufferedImage image = null;
+
+        try {
+            image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
+            image = uTool.scaleImage(image, screenWidth, screenHeight);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
+
+    public void loadImage() {
+        titleScreenImage = setup("/TitleScreen/Title_Screen");
     }
 
     @Override
@@ -117,24 +141,28 @@ public class GamePanel extends JPanel implements Runnable{
 
     // Update game information: called every frame
     public void update() {
-        // Update each Light Unit in the simulation
-        for (Entity lightunit : simLightUnits) {
-            lightunit.update();
-        }
 
-        // Update each Chaos Unit in the simulation
-        for (Entity chaosunit : simChaosUnits) {
-            chaosunit.update();
-        }
+        if (gameState == playState) {
+            // Update each Light Unit in the simulation
+            for (Entity lightunit : simLightUnits) {
+                lightunit.update();
+            }
 
-        TurnM.update();  // Manage turns between players and enemies
-        cursor.update(); // Update the cursor
+            // Update each Chaos Unit in the simulation
+            for (Entity chaosunit : simChaosUnits) {
+                chaosunit.update();
+            }
+
+            TurnM.update();  // Manage turns between players and enemies
+            cursor.update(); // Update the cursor
+        }
     }
 
     // Draw the screen with the updated information: called every frame
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+        BufferedImage image = null;
 
         // DEBUG
         long drawStart = 0;
@@ -142,39 +170,45 @@ public class GamePanel extends JPanel implements Runnable{
             drawStart = System.nanoTime();
         }
 
+        // Title Screen
+        if (gameState == titleState) {
+            image = titleScreenImage;
+            g2.drawImage(image, 0, 0,null);
+        }
+        else if (gameState == playState) {
+            // Draw the game map tiles
+            tileM.draw(g2);
 
-        // Draw the game map tiles
-        tileM.draw(g2);
-
-        // Draw Items
-        for (int i = 0; i<items.length; i++) {
-            if (items[i] != null) {
-                items[i].draw(g2);
+            // Draw Items
+            for (int i = 0; i < items.length; i++) {
+                if (items[i] != null) {
+                    items[i].draw(g2);
+                }
             }
+
+            // Draw each Light Unit in the simulation
+            for (Entity lightunit : simLightUnits) {
+                lightunit.draw(g2);
+            }
+
+            // Draw each Chaos Unit in the simulation
+            for (Entity chaosunit : simChaosUnits) {
+                chaosunit.draw(g2);
+            }
+
+            // Draw the cursor
+            cursor.draw(g2);
+
+            // UI
+            ui.draw(g2);
         }
-
-        // Draw each Light Unit in the simulation
-        for (Entity lightunit : simLightUnits) {
-            lightunit.draw(g2);
-        }
-
-        // Draw each Chaos Unit in the simulation
-        for (Entity chaosunit : simChaosUnits) {
-            chaosunit.draw(g2);
-        }
-
-        // Draw the cursor
-        cursor.draw(g2);
-
-        // UI
-        ui.draw(g2);
 
         // DEBUG
         if (keyH.getCheckDrawTime()) {
             long drawEnd = System.nanoTime();
             long passed = drawEnd - drawStart;
             g2.setColor(Color.WHITE);
-            g2.drawString("Draw time: " + passed, 68 * 16, 10 * 16);
+            g2.drawString("Draw time: " + passed, 60 * 16, 10 * 16);
             System.out.println("Draw time; " + passed);
         }
 
@@ -208,5 +242,13 @@ public class GamePanel extends JPanel implements Runnable{
 
     public int getMaxMapCol() {
         return maxMapCol;
+    }
+
+    public int getScreenWidth() {
+        return screenWidth;
+    }
+
+    public int getScreenHeight() {
+        return screenHeight;
     }
 }

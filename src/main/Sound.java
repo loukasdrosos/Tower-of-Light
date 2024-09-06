@@ -23,12 +23,13 @@ public class Sound {
         soundEffectURL[0] = getClass().getResource("/Sound_Effects/Cursor_Movement.wav");
         soundEffectURL[1] = getClass().getResource("/Sound_Effects/Player_Phase.wav");
         soundEffectURL[2] = getClass().getResource("/Sound_Effects/Enemy_Phase.wav");
-        soundEffectURL[3] = getClass().getResource("/Sound_Effects/Map_Start.wav");
+        soundEffectURL[3] = getClass().getResource("/Sound_Effects/Game_Start.wav");
         soundEffectURL[4] = getClass().getResource("/Sound_Effects/UnitWalking.wav");
         soundEffectURL[5] = getClass().getResource("/Sound_Effects/Select_Player.wav");
         soundEffectURL[6] = getClass().getResource("/Sound_Effects/Cancel_Button.wav");
         soundEffectURL[7] = getClass().getResource("/Sound_Effects/ArmorUnitWalking.wav");
         soundEffectURL[8] = getClass().getResource("/Sound_Effects/Mounted_Walking.wav");
+        soundEffectURL[9] = getClass().getResource("/Sound_Effects/Opening_Theme.wav");
     }
 
 
@@ -41,8 +42,14 @@ public class Sound {
             clip.open(ais); // Open the audio clip from the stream
 
             // Adjust volume for sound effects
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(-10.0f); // Reduce the volume by 10 decibels
+            if (i != 1 && i != 2) {
+                FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                gainControl.setValue(-13.0f); // Reduce the volume by 13 decibels
+            }
+            else if (i == 1 || i == 2) {
+                FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                gainControl.setValue(-10.0f); // Reduce the volume by 10 decibels
+            }
         } catch (Exception e) {
         }
     }
