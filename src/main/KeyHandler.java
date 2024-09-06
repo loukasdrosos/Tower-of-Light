@@ -27,6 +27,15 @@ public class KeyHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode(); // Returns the keyCode associated with the key in this event
 
+        if (gp.gameState == gp.titleState) {
+            if (code == KeyEvent.VK_A) {
+                gp.stopMusic();
+                gp.playSE(3);
+              //  gp.gameState = gp.menuState;
+                gp.gameState = gp.playState;
+            }
+        }
+
         if (gp.gameState == gp.playState) {
             // Set the corresponding flag to true when a key is pressed
             if (code == KeyEvent.VK_UP) {
@@ -72,33 +81,35 @@ public class KeyHandler implements KeyListener {
     public void keyReleased (KeyEvent e){
         int code = e.getKeyCode();
 
-        // Set the corresponding flag to false when a key is released
-        if (code == KeyEvent.VK_UP) {
-            UpPressed = false;
-        }
-        if (code == KeyEvent.VK_DOWN) {
-            DownPressed = false;
-        }
-        if (code == KeyEvent.VK_LEFT) {
-            LeftPressed = false;
-        }
-        if (code == KeyEvent.VK_RIGHT) {
-            RightPressed = false;
-        }
-        if (code == KeyEvent.VK_A) {
-            APressed = false;
-        }
-        if (code == KeyEvent.VK_Z) {
-            ZPressed = false;
-        }
-        if (code == KeyEvent.VK_W) {
-            WPressed = false;
-        }
-        if (code == KeyEvent.VK_E) {
-            EPressed = false;
-        }
-        if (code == KeyEvent.VK_SHIFT) {
-            ShiftPressed = false;
+        if (gp.gameState == gp.playState) {
+            // Set the corresponding flag to false when a key is released
+            if (code == KeyEvent.VK_UP) {
+                UpPressed = false;
+            }
+            if (code == KeyEvent.VK_DOWN) {
+                DownPressed = false;
+            }
+            if (code == KeyEvent.VK_LEFT) {
+                LeftPressed = false;
+            }
+            if (code == KeyEvent.VK_RIGHT) {
+                RightPressed = false;
+            }
+            if (code == KeyEvent.VK_A) {
+                APressed = false;
+            }
+            if (code == KeyEvent.VK_Z) {
+                ZPressed = false;
+            }
+            if (code == KeyEvent.VK_W) {
+                WPressed = false;
+            }
+            if (code == KeyEvent.VK_E) {
+                EPressed = false;
+            }
+            if (code == KeyEvent.VK_SHIFT) {
+                ShiftPressed = false;
+            }
         }
     }
 

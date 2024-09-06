@@ -27,7 +27,7 @@ public class GamePanel extends JPanel implements Runnable{
     private final int FPS = 60;  // Game runs at 60 frames per second (FPS)
 
     // Title Screen
-    private BufferedImage titleScreenImage;
+    private BufferedImage titleScreenImage, gameOverScreen;
 
     // UNITS
     public static ArrayList<LightUnit> LightUnits = new ArrayList<>();  // List to store player units (Light Units) (permanent)
@@ -49,9 +49,10 @@ public class GamePanel extends JPanel implements Runnable{
     // GAME STATE
     public int gameState;
     public final int titleState = 0;
-    public final int playState = 1;
-    public final int gameOverState = 2;
-    public final int creditsState = 3;
+    public final int menuState = 1;
+    public final int playState = 2;
+    public final int gameOverState = 3;
+    public final int creditsState = 4;
 
     // ITEMS
     public AssetSetter aSetter = new AssetSetter(this, keyH);
@@ -111,7 +112,7 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void loadImage() {
-        titleScreenImage = setup("/TitleScreen/Title_Screen");
+        titleScreenImage = setup("/TitleScreen/Title_Screen_2");
     }
 
     @Override
