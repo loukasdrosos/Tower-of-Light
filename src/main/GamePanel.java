@@ -34,7 +34,7 @@ public class GamePanel extends JPanel implements Runnable{
     // Initialize units and set their starting positions
     public void setUnits() {
         // Add player units to the simulation list
-        simLightUnits.add(new LightUnit(this, keyH, 31, 15));
+        simLightUnits.add(new LightUnit(this, keyH, 30, 14));
 
         // Add enemy units to the simulation list
         simChaosUnits.add(new ChaosUnit(this, keyH, 32, 15));
