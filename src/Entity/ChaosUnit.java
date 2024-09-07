@@ -41,8 +41,8 @@ public class ChaosUnit extends Entity {
         name = "Celica";
         className = "Herald of Chaos";
         level = 1;
-        MaxHP = 20;
-        HP = MaxHP;
+        maxHP = 20;
+        HP = maxHP;
         strength = 10;
         magic = 5;
         skill = 7;
@@ -54,7 +54,7 @@ public class ChaosUnit extends Entity {
         type = UnitType.Human;
         armored = false;
         mounted = false;
-        description = new String[]{"Princess of Valentia", "and Alm's wife.", "Controlled by the", "Chaos God, she has" , "become the Herald",  "of Chaos."};
+        description = new String[]{"Princess of Valentia", "and Alm's wife.", "Controlled by the", "Chaos God, she has", "become the Herald", "of Chaos."};
     }
 
     // Method to start the unit's turn (called at the beginning of its turn)
@@ -243,138 +243,5 @@ public class ChaosUnit extends Entity {
         default2 = setup("/ChaosUnits/Herald_of_Chaos/Human_Herald_of_Chaos_Default_2");
         portrait = setupPortrait("/ChaosUnits/Herald_of_Chaos/Human_Herald_of_Chaos_Portrait");
     }
-
-    // Draw Chaos Unit Window
-    public void drawChaosUnitScreen(Graphics2D g2) {
-        int x = 69 * 16 - 12;
-        int y = 5 * 16;
-        int width = 16 * 16 + 12;
-        int height = 31 * 16 + 10;
-        g2.setColor(new Color(0, 0, 0, 150)); // Semi-transparent black
-        g2.fillRoundRect(x, y, width, height, 25, 25);
-    }
-
-    // Draw Chaos Unit Portrait
-    public void drawChaosUnitPortrait(Graphics2D g2) {
-        BufferedImage image = null;
-        int x = 69 * 16 - 12;
-        int y = 5 * 16;
-        int width = 8 * gp.getTileSize();
-        int height = 8 * gp.getTileSize();
-
-        drawChaosUnitScreen(g2);
-        // Draw a semi-transparent background
-        g2.setColor(new Color(0, 0, 0, 150)); // RGBA, 150 is the transparency
-        g2.fillRect(x, y, width, height);
-
-        // Draw the portrait image
-        image = portrait;
-        g2.drawImage(image, x, y, null);
-
-        // Draw a thin white line on the right and bottom sides
-        g2.setColor(Color.WHITE);
-        g2.setStroke(new BasicStroke(2)); // thin line
-        // Right side line
-        g2.drawLine(x + width - 1, y, x + width - 1, y + height - 1);
-        // Bottom side line
-        g2.drawLine(x, y + height - 1, x + width - 1, y + height - 1);
-    }
-
-    // Draw Chaos Unit's stats
-    public void drawChaosUnitStats(Graphics2D g2) {
-        // Coordinates for text next to the portrait
-        int textX = 69 * 16 + 7 * gp.getTileSize() + 9; // Right side of the portrait
-        int textY = 5 * 16 + 20; // Slightly below the top of the portrait
-        int lineHeight = 20; // Spacing between each line of text
-
-        // Set font for text
-        g2.setFont(new Font("Arial", Font.PLAIN, 17));
-        g2.setColor(Color.WHITE);
-
-        // Draw unit's name, class name, and level next to the portrait
-        g2.drawString(name, textX, textY);
-        g2.drawString(String.valueOf(type), textX, textY + lineHeight);
-        if (armored) {
-            g2.drawString(", Armored", textX + 5, textY + lineHeight);
-        }
-        if (mounted) {
-            g2.drawString(", Mounted", textX + 5, textY + lineHeight);
-        }
-        g2.drawString(className, textX, textY + 2 * lineHeight);
-        g2.drawString("Level: " + level, textX, textY + 3 * lineHeight);
-
-        // Coordinates for stats below the portrait
-        int statsX = 69 * 16 - 5; // Align with the portrait's X position
-        int statsY = 5 * 16 + 8 * gp.getTileSize() + 20; // Start drawing below the portrait
-
-        // Draw the unit's stats below the portrait
-        g2.drawString("HP: " + HP + "/" + MaxHP, statsX, statsY);
-        g2.drawString("Strength: " + strength, statsX, statsY + lineHeight);
-        g2.drawString("Magic: " + magic, statsX, statsY + 2 * lineHeight);
-        g2.drawString("Skill: " + skill, statsX, statsY + 3 * lineHeight);
-        g2.drawString("Speed: " + speed, statsX, statsY + 4 * lineHeight);
-        g2.drawString("Luck: " + luck, statsX, statsY + 5 * lineHeight);
-        g2.drawString("Defense: " + defense, statsX, statsY + 6 * lineHeight);
-        g2.drawString("Resistance: " + resistance, statsX, statsY + 7 * lineHeight);
-        g2.drawString("Movement: " + movement, statsX, statsY + 8 * lineHeight);
-    }
-
-    public void drawChaosUnitDetails (Graphics2D g2) {
-        int textX = 69 * 16 + 7 * gp.getTileSize() + 9; // Right side of the portrait
-        int textY = 5 * 16 + 20; // Slightly below the top of the portrait
-        int lineHeight = 20; // Spacing between each line of text
-
-        // Set font for text
-        g2.setFont(new Font("Arial", Font.PLAIN, 13));
-        g2.setColor(Color.WHITE);
-
-        // Draw unit's description line by line
-        for (String line : description) {
-            g2.drawString(line, textX, textY);
-            textY += lineHeight;
-        }
-
-        /*
-        // Draw unit's weapons and their stats/descriptions
-        g2.drawString("Weapons:", textX, textY);
-        textY += lineHeight;
-        for (Weapon weapon : weapons) {
-            g2.drawString(weapon.getName() + " (Damage: " + weapon.getDamage() + ", Range: " + weapon.getRange() + ")", textX, textY);
-            textY += lineHeight;
-            g2.drawString("  " + weapon.getDescription(), textX + 20, textY);
-            textY += lineHeight;
-        }
-
-        // Draw unit's skills and their descriptions
-        textY += lineHeight; // Add some space between weapons and skills
-        g2.drawString("Skills:", textX, textY);
-        textY += lineHeight;
-        for (Skill skill : skills) {
-            g2.drawString(skill.getName(), textX, textY);
-            textY += lineHeight;
-            g2.drawString("  " + skill.getDescription(), textX + 20, textY);
-            textY += lineHeight;
-        }
-
-         */
-    }
-
-    // Method to draw the Chaos Unit on the screen
-    @Override
-    public void draw(Graphics2D g2) {
-        drawUnitAnimation(g2);
-
-        if (gp.TurnM.getPlayerPhase()) {
-            if (gp.selectedUnit == null) {
-                if (gp.cursor.getCol() == col && gp.cursor.getRow() == row) {
-                    drawChaosUnitPortrait(g2);
-                    if (gp.keyH.isQPressed()) {
-                        drawChaosUnitStats(g2);
-                    } else {
-                        drawChaosUnitDetails(g2);
-                    }
-                }
-            }
-        }
-    }
 }
+

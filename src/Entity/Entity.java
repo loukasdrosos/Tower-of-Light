@@ -32,7 +32,7 @@ public class Entity {
     protected int exp; // Unit's experience points
     protected int maxExp = 100;
     protected int HP; // Unit's current Health Points
-    protected int MaxHP; // Unit's Max Health Points
+    protected int maxHP; // Unit's Max Health Points
     protected int strength; // Unit's strentgh, used for physical attack damage
     protected int magic; // Unit's magic, used for magic attack damage
     protected int skill; // // Unit's skill, used for accuracy, critical hit rate, and skill activation
@@ -127,7 +127,7 @@ public class Entity {
         return image;
     }
 
-    public void drawUnitAnimation(Graphics2D g2) {
+    public void draw (Graphics2D g2) {
         BufferedImage image = null;
 
         // Select the correct image based on the unit's direction and current sprite frame
@@ -178,8 +178,6 @@ public class Entity {
 
     // Placeholder methods
 
-    public void draw(Graphics2D g2) {   }  // Placeholder method to draw the unit on the screen
-
     public void loadImage() {  }   // Placeholder method that loads images for the unit's animation frames
 
     public void startTurn() {  }  // Placeholder method to start the unit's turn
@@ -221,6 +219,10 @@ public class Entity {
     public int getExp() { return exp; } // Get the unit's experience points
 
     public int getMaxExp() { return maxExp; } // Get the unit's max experience points
+
+    public int getHP() { return HP; } // Get the unit's health points
+
+    public int getMaxHP() { return maxHP; } // Get the unit's max health points
 
     public int getStrength() { return strength; } // Get the unit's strength
 
