@@ -67,8 +67,10 @@ public class Entity {
 
     // Unit types, human, orc, tauren, elf or dragon
     // can be mounted (on a horse) or armored, attacks strong against these types deal damage multiplied by 3
-    protected boolean armored;
-    protected boolean mounted;
+    protected enum UnitType {Human, Orc, Tauren, Elf, Dragon}
+    protected UnitType type;  // Variable to store the unit type
+    protected boolean armored; // Unit's armored status
+    protected boolean mounted; // Unit's mounted status
 
     /* BATTLE CALCULATIONS
 
@@ -202,14 +204,45 @@ public class Entity {
 
     public int getRow() { return row; } // Get the unit's current row
 
-    public int getPreCol() { return preCol; } // Get the unit's previous column
-
-    public int getPreRow() { return preRow; } // Get the unit's previous row
-
     public boolean getWait () { return wait; } // Get the unit's wait status
 
-    public int getMovement() { return movement; } // Get the unit's wait status
+    public BufferedImage getPortrait() { return portrait; } // Get the unit's portrait image
 
+    public String getName() { return name; } // Get the unit's name
+
+    public String getClassName() { return className; } // Get the unit's class name
+
+    public String[] getDescription() { return description; } // Get the unit's description
+
+    public int getLevel() { return level; } // Get the unit's level
+
+    public int getMaxLevel() { return maxLevel; } // Get the unit's max level
+
+    public int getExp() { return exp; } // Get the unit's experience points
+
+    public int getMaxExp() { return maxExp; } // Get the unit's max experience points
+
+    public int getStrength() { return strength; } // Get the unit's strength
+
+    public int getMagic() { return magic; } // Get the unit's magic
+
+    public int getSkill() { return skill; } // Get the unit's skill
+
+    public int getSpeed() { return speed; } // Get the unit's speed
+
+    public int getLuck() { return strength; } // Get the unit's luck
+
+    public int getDefense() { return defense; } // Get the unit's defense
+
+    public int getResistance() { return resistance; } // Get the unit's resistance
+
+    public int getMovement() { return movement; } // Get the unit's movement
+
+    public boolean isArmored() { return armored; } // Get the unit's armored status
+
+    public boolean isMounted() { return mounted; } // Get the unit's mounted status
+
+    public UnitType getType() { return type; } // Get the unit's type
 }
 
 

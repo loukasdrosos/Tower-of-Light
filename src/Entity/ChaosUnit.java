@@ -51,6 +51,7 @@ public class ChaosUnit extends Entity {
         defense = 6;
         resistance = 4;
         movement = 3;
+        type = UnitType.Human;
         armored = false;
         mounted = false;
         description = new String[]{"Princess of Valentia", "and Alm's wife.", "Controlled by the", "Chaos God, she has" , "become the Herald",  "of Chaos."};
@@ -292,7 +293,13 @@ public class ChaosUnit extends Entity {
 
         // Draw unit's name, class name, and level next to the portrait
         g2.drawString(name, textX, textY);
-        g2.drawString("Human", textX, textY + lineHeight);
+        g2.drawString(String.valueOf(type), textX, textY + lineHeight);
+        if (armored) {
+            g2.drawString(", Armored", textX + 5, textY + lineHeight);
+        }
+        if (mounted) {
+            g2.drawString(", Mounted", textX + 5, textY + lineHeight);
+        }
         g2.drawString(className, textX, textY + 2 * lineHeight);
         g2.drawString("Level: " + level, textX, textY + 3 * lineHeight);
 
