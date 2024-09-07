@@ -26,7 +26,9 @@ public class Entity {
     // Unit stats
     protected String name; // Unit's name
     protected String className; // Unit's class
+    protected String[] description; // Information about the unit
     protected int level; // Unit's level
+    protected int maxLevel = 20; // Unit's max level it can reach
     protected int exp; // Unit's experience points
     protected int maxExp = 100;
     protected int HP; // Unit's current Health Points
@@ -56,7 +58,7 @@ public class Entity {
      */
 
     // Unit's Combat stats
-    protected int attack; // Strength or Magic + Weapon’s Might
+    protected int attack; // Strength or Magic + Weapon’s or Spell's Might
     protected int hitRate; // Weapon’s Hit rate + [(Skill x 3 + Luck) / 2]
     protected int critical; // Weapon’s Critical + (Skill / 2), critical hits deal damage multiplied by 3
     protected int avoid; // (Speed x 3 + Luck) / 2
@@ -67,7 +69,7 @@ public class Entity {
 
     /* BATTLE CALCULATIONS
 
-     Attack (damage)= Attack – Enemy’s (Defence or Resistance)
+     Attack (damage)= Attack – Enemy’s Defence or Resistance
      Hit rate = (Hit rate  – Enemy’s Avoid) [%]
      Critical rate = (Critical  – Enemy’s Luck) [%]
      Level difference (LD) 	= enemy’s Level – player’s Level

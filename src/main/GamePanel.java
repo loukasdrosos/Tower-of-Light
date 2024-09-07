@@ -38,7 +38,7 @@ public class GamePanel extends JPanel implements Runnable{
     public static ArrayList<ChaosUnit> simChaosUnits = new ArrayList<>();  // List to store active enemy units (Chaos Units) (simulation)
 
     // Key handler and managers for the game
-    KeyHandler keyH = new KeyHandler(this);
+    public KeyHandler keyH = new KeyHandler(this);
     TileManager tileM = new TileManager (this, keyH);
     public Cursor cursor = new Cursor(this, keyH);
     Thread gameThread;
@@ -91,8 +91,8 @@ public class GamePanel extends JPanel implements Runnable{
 
       //  aSetter.setItem();
 
-        playSE(9);
-        gameState = titleState;
+      //  playSE(9);
+        gameState = playState;
     }
 
     public BufferedImage setup (String imagePath) {

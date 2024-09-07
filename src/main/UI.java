@@ -107,6 +107,7 @@ public class UI {
                 "A: Select Player Unit",
                 "W: End Player Unit's Turn",
                 "Z: Cancel",
+                "Q: Toggle between Unit's stats and Unit's inventory",
                 "Shift: Switch between Player Units",
                 "E: End Player Phase",
                 "P: View Controls Screen"

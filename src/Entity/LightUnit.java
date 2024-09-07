@@ -54,19 +54,21 @@ public class LightUnit extends Entity{
         movement = 3;
         armored = false;
         mounted = false;
+        description = new String[]{"The prince of ", "the kingdom of", "Valentia and the", "one worthy to wield", "the divine blade", "Lightbringer."} ;
     }
 
     // Method to set up the player's growth rates
     @Override
     public void setupGrowthRates() {
-        HPGrowthRate = 80;
-        strengthGrowthRate = 60;
-        magicGrowthRate = 50;
-        skillGrowthRate = 50;
-        speedGrowthRate = 60;
-        luckGrowthRate = 60;
+        HPGrowthRate = 75;
+        strengthGrowthRate = 65;
+        magicGrowthRate = 35;
+        skillGrowthRate = 60;
+        speedGrowthRate = 65;
+        luckGrowthRate = 50;
         defenseGrowthRate = 45;
         resistanceGrowthRate = 25;
+        // Total Growth Rates = 420
     }
 
     // Method to select a player unit (LightUnit) based on the cursor's position
@@ -368,6 +370,47 @@ public class LightUnit extends Entity{
         g2.drawString("Movement: " + movement, statsX, statsY + 8 * lineHeight);
     }
 
+    public void drawLightUnitDetails (Graphics2D g2) {
+        int textX = 52 * 16 + 8 * gp.getTileSize() + 4; // Right side of the portrait
+        int textY = 5 * 16 + 20; // Slightly below the top of the portrait
+        int lineHeight = 20; // Spacing between each line of text
+
+        // Set font for text
+        g2.setFont(new Font("Arial", Font.PLAIN, 13));
+        g2.setColor(Color.WHITE);
+
+        // Draw unit's description line by line
+        for (String line : description) {
+            g2.drawString(line, textX, textY);
+            textY += lineHeight;
+        }
+
+        /*
+        // Draw unit's weapons and their stats/descriptions
+        g2.drawString("Weapons:", textX, textY);
+        textY += lineHeight;
+        for (Weapon weapon : weapons) {
+            g2.drawString(weapon.getName() + " (Damage: " + weapon.getDamage() + ", Range: " + weapon.getRange() + ")", textX, textY);
+            textY += lineHeight;
+            g2.drawString("  " + weapon.getDescription(), textX + 20, textY);
+            textY += lineHeight;
+        }
+
+        // Draw unit's skills and their descriptions
+        textY += lineHeight; // Add some space between weapons and skills
+        g2.drawString("Skills:", textX, textY);
+        textY += lineHeight;
+        for (Skill skill : skills) {
+            g2.drawString(skill.getName(), textX, textY);
+            textY += lineHeight;
+            g2.drawString("  " + skill.getDescription(), textX + 20, textY);
+            textY += lineHeight;
+        }
+
+         */
+    }
+
+
     // Method to draw the Light Unit on the screen
     @Override
     public void draw(Graphics2D g2) {
@@ -377,14 +420,23 @@ public class LightUnit extends Entity{
             if (gp.selectedUnit == null) {
                 if (gp.cursor.getCol() == col && gp.cursor.getRow() == row) {
                     drawLightUnitPortrait(g2);
-                    drawLightUnitStats(g2);
+                    if (keyH.isQPressed()) {
+                        drawLightUnitStats(g2);
+                    } else {
+                        drawLightUnitDetails(g2);
+                    }
                 }
             } else if (gp.selectedUnit != null && isSelected) {
                 drawLightUnitPortrait(g2);
-                drawLightUnitStats(g2);
+                if (keyH.isQPressed()) {
+                    drawLightUnitStats(g2);
+                } else {
+                    drawLightUnitDetails(g2);
+                }
             }
         }
     }
+
 
     // Getters && Setters
 

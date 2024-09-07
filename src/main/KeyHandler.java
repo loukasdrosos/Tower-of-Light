@@ -9,6 +9,7 @@ public class KeyHandler implements KeyListener {
     private boolean UpPressed, DownPressed, LeftPressed, RightPressed;
     private boolean APressed, ZPressed, WPressed, EPressed, ShiftPressed;
     private boolean ENTERPressed = false;
+    private boolean QPressed = true;
 
     // DEBUG
     private boolean checkDrawTime = false;
@@ -79,14 +80,17 @@ public class KeyHandler implements KeyListener {
                 gp.playSE(6);
                 gp.gameState = gp.controlsState;
             }
+            if (code == KeyEvent.VK_Q) {
+                QPressed = !QPressed; // Toggle between showing stats and details
+            }
+        }
 
-            // DEBUG
-            if (code == KeyEvent.VK_ALT) {
-                if (!checkDrawTime) {
-                    checkDrawTime = true;
-                } else if (checkDrawTime) {
-                    checkDrawTime = false;
-                }
+        // DEBUG
+        if (code == KeyEvent.VK_ALT) {
+            if (!checkDrawTime) {
+                checkDrawTime = true;
+            } else if (checkDrawTime) {
+                checkDrawTime = false;
             }
         }
     }
@@ -133,7 +137,7 @@ public class KeyHandler implements KeyListener {
         }
     }
 
-    // GETTERS
+    // GETTERS && SETTERS when needed
 
     public boolean isUpPressed() {
         return UpPressed;
@@ -169,6 +173,14 @@ public class KeyHandler implements KeyListener {
 
     public boolean isShiftPressed() {
         return ShiftPressed;
+    }
+
+    public boolean isQPressed() {
+        return QPressed;
+    }
+
+    public void setQPressed(boolean x) {
+        QPressed = x;
     }
 
     public boolean getCheckDrawTime() {

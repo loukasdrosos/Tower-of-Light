@@ -14,9 +14,12 @@ public class ChaosUnit extends Entity {
     protected int moveDelayThreshold = 7; // Number of frames to wait before moving
     protected int moveSpeed = 8; // Speed at which the unit moves between tiles
 
+    protected boolean boss;
+    protected boolean canMove;
+
     public ChaosUnit(GamePanel gp, int startCol, int startRow) {
         super(gp);
-        this.col =  startCol;   // Initial column position
+        this.col = startCol;   // Initial column position
         this.row = startRow;    // Initial row position
         x = getX(col);          // Calculate initial x position based on column
         y = getY(row);          // Calculate initial y position based on row
@@ -25,8 +28,9 @@ public class ChaosUnit extends Entity {
         setupStats();
 
         // Load unit's images for animations
-        try { loadImage(); }
-        catch (Exception e){
+        try {
+            loadImage();
+        } catch (Exception e) {
             System.out.println("Exception loadImage, ChaosUnit not loading properly");
         }
     }
@@ -49,6 +53,7 @@ public class ChaosUnit extends Entity {
         movement = 3;
         armored = false;
         mounted = false;
+        description = new String[]{"Princess of Valentia", "and Alm's wife.", "Controlled by the", "Chaos God, she has" , "become the Herald",  "of Chaos."};
     }
 
     // Method to start the unit's turn (called at the beginning of its turn)
@@ -215,8 +220,7 @@ public class ChaosUnit extends Entity {
         if (spriteCounter > 20) {   // Change sprite every 20 frames
             if (spriteNum == 1) {
                 spriteNum = 2;
-            }
-            else if (spriteNum == 2) {
+            } else if (spriteNum == 2) {
                 spriteNum = 1;
             }
             spriteCounter = 0;  // Reset sprite counter
@@ -308,6 +312,46 @@ public class ChaosUnit extends Entity {
         g2.drawString("Movement: " + movement, statsX, statsY + 8 * lineHeight);
     }
 
+    public void drawChaosUnitDetails (Graphics2D g2) {
+        int textX = 69 * 16 + 7 * gp.getTileSize() + 9; // Right side of the portrait
+        int textY = 5 * 16 + 20; // Slightly below the top of the portrait
+        int lineHeight = 20; // Spacing between each line of text
+
+        // Set font for text
+        g2.setFont(new Font("Arial", Font.PLAIN, 13));
+        g2.setColor(Color.WHITE);
+
+        // Draw unit's description line by line
+        for (String line : description) {
+            g2.drawString(line, textX, textY);
+            textY += lineHeight;
+        }
+
+        /*
+        // Draw unit's weapons and their stats/descriptions
+        g2.drawString("Weapons:", textX, textY);
+        textY += lineHeight;
+        for (Weapon weapon : weapons) {
+            g2.drawString(weapon.getName() + " (Damage: " + weapon.getDamage() + ", Range: " + weapon.getRange() + ")", textX, textY);
+            textY += lineHeight;
+            g2.drawString("  " + weapon.getDescription(), textX + 20, textY);
+            textY += lineHeight;
+        }
+
+        // Draw unit's skills and their descriptions
+        textY += lineHeight; // Add some space between weapons and skills
+        g2.drawString("Skills:", textX, textY);
+        textY += lineHeight;
+        for (Skill skill : skills) {
+            g2.drawString(skill.getName(), textX, textY);
+            textY += lineHeight;
+            g2.drawString("  " + skill.getDescription(), textX + 20, textY);
+            textY += lineHeight;
+        }
+
+         */
+    }
+
     // Method to draw the Chaos Unit on the screen
     @Override
     public void draw(Graphics2D g2) {
@@ -317,7 +361,11 @@ public class ChaosUnit extends Entity {
             if (gp.selectedUnit == null) {
                 if (gp.cursor.getCol() == col && gp.cursor.getRow() == row) {
                     drawChaosUnitPortrait(g2);
-                    drawChaosUnitStats(g2);
+                    if (gp.keyH.isQPressed()) {
+                        drawChaosUnitStats(g2);
+                    } else {
+                        drawChaosUnitDetails(g2);
+                    }
                 }
             }
         }
