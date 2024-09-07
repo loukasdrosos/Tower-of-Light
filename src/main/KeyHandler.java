@@ -8,6 +8,7 @@ public class KeyHandler implements KeyListener {
     // Flags to track whether specific keys are currently pressed
     private boolean UpPressed, DownPressed, LeftPressed, RightPressed;
     private boolean APressed, ZPressed, WPressed, EPressed, ShiftPressed;
+    private boolean ENTERPressed = false;
 
     // DEBUG
     private boolean checkDrawTime = false;
@@ -27,16 +28,25 @@ public class KeyHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode(); // Returns the keyCode associated with the key in this event
 
-        if (gp.gameState == gp.titleState) {
-            if (code == KeyEvent.VK_A) {
+        if (gp.gameState == gp.titleState && !ENTERPressed) {
+            if (code == KeyEvent.VK_ENTER) {
                 gp.stopMusic();
                 gp.playSE(3);
-              //  gp.gameState = gp.menuState;
-                gp.gameState = gp.playState;
+                gp.gameState = gp.controlsState;  // Transition to controlsState
+                ENTERPressed = true;
+            }
+        }
+
+        if (gp.gameState == gp.controlsState && !ENTERPressed) {
+            if (code == KeyEvent.VK_ENTER) {
+                gp.playSE(6);
+                gp.gameState = gp.playState;  // Transition to playState
+                ENTERPressed = true;
             }
         }
 
         if (gp.gameState == gp.playState) {
+            ENTERPressed = false;
             // Set the corresponding flag to true when a key is pressed
             if (code == KeyEvent.VK_UP) {
                 UpPressed = true;
@@ -65,6 +75,10 @@ public class KeyHandler implements KeyListener {
             if (code == KeyEvent.VK_SHIFT) {
                 ShiftPressed = true;
             }
+            if (code == KeyEvent.VK_P) {
+                gp.playSE(6);
+                gp.gameState = gp.controlsState;
+            }
 
             // DEBUG
             if (code == KeyEvent.VK_ALT) {
@@ -80,6 +94,12 @@ public class KeyHandler implements KeyListener {
     @Override
     public void keyReleased (KeyEvent e){
         int code = e.getKeyCode();
+
+        if (gp.gameState == gp.titleState || gp.gameState == gp.controlsState) {
+            if (code == KeyEvent.VK_ENTER) {
+                ENTERPressed = false;
+            }
+        }
 
         if (gp.gameState == gp.playState) {
             // Set the corresponding flag to false when a key is released

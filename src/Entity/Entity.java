@@ -1,7 +1,6 @@
 package Entity;
 
 import main.GamePanel;
-import main.KeyHandler;
 import main.UtilityTool;
 
 import javax.imageio.ImageIO;
@@ -15,19 +14,71 @@ public class Entity {
     protected int x, y;  // x and y position on the map in pixels
     protected int col, row, preCol, preRow; // Current and previous tile positions (columns and rows)
 
-    protected BufferedImage default1, default2, up1, up2, down1, down2, left1, left2, right1, right2; // BufferedImages for different animation frames and directions
+    protected BufferedImage default1, default2, up1, up2, down1, down2, left1, left2, right1, right2, portrait; // BufferedImages for different animation frames and directions
     protected int spriteCounter = 0;  // Counter to control sprite animation timing
     protected int spriteNum = 1;      // Variable to track which sprite frame to display
 
     // Movement-related variables
-    protected int movement = 3; // The number of tiles the unit can move
     protected String direction = "none"; // Direction the unit is currently moving in
     protected int moveDelayCounter = 0;  // Counter for delaying movement, allowing smooth movement between tiles
-
     protected boolean wait = false; // Variable that controls if unit can take action or not
 
-    protected boolean armored = false;
-    protected boolean mounted = false;
+    // Unit stats
+    protected String name; // Unit's name
+    protected String className; // Unit's class
+    protected int level; // Unit's level
+    protected int exp; // Unit's experience points
+    protected int maxExp = 100;
+    protected int HP; // Unit's current Health Points
+    protected int MaxHP; // Unit's Max Health Points
+    protected int strength; // Unit's strentgh, used for physical attack damage
+    protected int magic; // Unit's magic, used for magic attack damage
+    protected int skill; // // Unit's skill, used for accuracy, critical hit rate, and skill activation
+    protected int speed; // // Unit's speed, if unit's speed is 5 points higher than the opponent’s, attacking unit performs a follow-up attack
+    protected int luck; // Unit's luck, used to calculate hit, avoid, and to dodge critical hits, and skill activation
+    protected int defense; // Unit's defense against physical attacks
+    protected int resistance; // Unit's defence against magic attacks
+    protected int movement; // The number of tiles the unit can move
+
+    // Unit Growth Rates (chance of stat increasing by 1 when unit levels up), only for player units
+    protected int HPGrowthRate;
+    protected int strengthGrowthRate;
+    protected int magicGrowthRate;
+    protected int skillGrowthRate;
+    protected int speedGrowthRate;
+    protected int luckGrowthRate;
+    protected int defenseGrowthRate;
+    protected int resistanceGrowthRate;
+
+    /* Growth Rate Calculations
+       Growth rates for each stat is a number between 1 and 100, and we use a randomizer to get a random number,
+       if the number is between 1 and the growth rate value then stat is increased by 1 during level up, else it is not
+     */
+
+    // Unit's Combat stats
+    protected int attack; // Strength or Magic + Weapon’s Might
+    protected int hitRate; // Weapon’s Hit rate + [(Skill x 3 + Luck) / 2]
+    protected int critical; // Weapon’s Critical + (Skill / 2), critical hits deal damage multiplied by 3
+    protected int avoid; // (Speed x 3 + Luck) / 2
+
+    // Unit types, can be mounted (on a horse) or armored, attacks strong against these types deal damage multiplied by 3
+    protected boolean armored;
+    protected boolean mounted;
+
+    /* BATTLE CALCULATIONS
+
+     Attack (damage)= Attack – Enemy’s (Defence or Resistance)
+     Hit rate = (Hit rate  – Enemy’s Avoid) [%]
+     Critical rate = (Critical  – Enemy’s Luck) [%]
+     Level difference (LD) 	= enemy’s Level – player’s Level
+     Experience from doing no damage = 0
+     Exp. from damaging enemy = (31 + LD) / 3, if LD >= 0
+                              = 10, if LD = -1
+                              = Max[ (33 + LD) / 3, 1], if LD <= -2
+     Exp. from killing enemy  = 20 + (LD x 3), if LD >= 0
+                              = 20, if LD = -1
+                              = Max[ 26 + (LD) x 3), 7], if LD <= -2
+     */
 
     GamePanel gp;
 
@@ -55,8 +106,21 @@ public class Entity {
         return image;
     }
 
-    // Method to draw the unit on the screen
-    public void draw(Graphics2D g2) {
+    public BufferedImage setupPortrait (String imagePath) {
+        UtilityTool uTool = new UtilityTool();
+        BufferedImage image = null;
+
+        try {
+            image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
+            image = uTool.scaleImage(image, 8 *gp.getTileSize(), 8 *gp.getTileSize());
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
+
+    public void drawUnitAnimation(Graphics2D g2) {
         BufferedImage image = null;
 
         // Select the correct image based on the unit's direction and current sprite frame
@@ -102,10 +166,12 @@ public class Entity {
                 }
         }
         // Draw the selected image at the unit's position, scaled to the tile size
-        g2.drawImage(image, x, y,null);
+        g2.drawImage(image, x, y, null);
     }
 
     // Placeholder methods
+
+    public void draw(Graphics2D g2) {   }  // Placeholder method to draw the unit on the screen
 
     public void loadImage() {  }   // Placeholder method that loads images for the unit's animation frames
 
@@ -117,11 +183,13 @@ public class Entity {
 
     public void move() {    }  // Placeholder method to move a unit
 
+    public void setupStats() {   }  // Placeholder method to set up the unit's stats
+
+    public void setupGrowthRates() {   }  // Placeholder method to set up the player growth rates
+
     // Getter methods
 
-    public int getX(int col) {
-        return col * gp.getTileSize();
-    } // Calculate x position in pixels based on column
+    public int getX(int col) { return col * gp.getTileSize(); } // Calculate x position in pixels based on column
 
     public int getY(int row) { return row * gp.getTileSize(); } // Calculate y position in pixels based on row
 

@@ -12,7 +12,7 @@ public class UI {
     // Variables to control the phase dipslay
     int phaseRectWidth = 300; // Width of the phase rectangle
     int phaseRectHeight = 50; // Height of the phase rectangle
-    int phaseRectX = 68 * 16; // Starting X position of the rectangle
+    int phaseRectX = 69 * 16; // Starting X position of the rectangle
 
     // Draw the turn counter rectangle (smaller rectangle)
     int turnRectX = 52 * 16;     // Position X
@@ -61,28 +61,8 @@ public class UI {
     public void drawLogScreen() {
         int x = 52 * 16;
         int y = 37 * 16;
-        int width = 30 * 16;
+        int width = 32 * 16;
         int height = 15 * 16;
-        g2.setColor(new Color(0, 0, 0, 150)); // Semi-transparent black
-        g2.fillRoundRect(x, y, width, height, 25, 25);
-    }
-
-    // Draw Player Window
-    public void drawPlayerScreen() {
-        int x = 52 * 16;
-        int y = 5 * 16;
-        int width = 14 * 16 + 12;
-        int height = 31 * 16 + 10;
-        g2.setColor(new Color(0, 0, 0, 150)); // Semi-transparent black
-        g2.fillRoundRect(x, y, width, height, 25, 25);
-    }
-
-    // Draw Enemy Window
-    public void drawEnemyScreen() {
-        int x = 68 * 16 - 12;
-        int y = 5 * 16;
-        int width = 14 * 16 + 12;
-        int height = 31 * 16 + 10;
         g2.setColor(new Color(0, 0, 0, 150)); // Semi-transparent black
         g2.fillRoundRect(x, y, width, height, 25, 25);
     }
@@ -90,7 +70,7 @@ public class UI {
     public void drawBeaconOfLightTurns() {
         int x = 52 * 16;
         int y = 3 * 16;
-        int width = 30 * 16;
+        int width = 32 * 16;
         int height = 2 * 16 - 5;
 
         // if (Beacon of Light turns > 0 && numberofBeaconsUsed < 3)  {
@@ -117,18 +97,56 @@ public class UI {
         //    }
     }
 
+    public void drawControls() {
+        // Title "Controls" at the top
+        g2.drawString("Controls:", 50, 4 * 16);
+
+        // Control instructions text
+        String[] controlsText = {
+                "Up, Down, Left, Right: Move Cursor and Player Unit",
+                "A: Select Player Unit",
+                "W: End Player Unit's Turn",
+                "Z: Cancel",
+                "Shift: Switch between Player Units",
+                "E: End Player Phase",
+                "P: View Controls Screen"
+        };
+
+        // Draw each control instruction line
+        int lineHeight = 40; // Spacing between lines
+        for (int i = 0; i < controlsText.length; i++) {
+            g2.drawString(controlsText[i], 50, 4 * 16 + (i + 2) * lineHeight);
+        }
+
+        // "Press Enter to continue" at the bottom of the screen
+        g2.drawString("Press Enter to continue", 30 * 16, 50 * 16);
+    }
+
+
     public void draw(Graphics2D g2) {
         this.g2 = g2;
 
+        int col, row;
+        // Draw the map background as black rectangles
+        for (row = 0; row < gp.getMaxMapRow(); row++) {
+            for (col = 0; col < gp.getMaxMapCol(); col++) {
+                g2.setColor(Color.BLACK);
+                g2.fillRect(col * gp.getTileSize(), row * gp.getTileSize(), gp.getTileSize(), gp.getTileSize());
+            }
+        }
+
         g2.setFont(arial_30);
         g2.setColor(Color.WHITE);
+
+        // CONTROLS
+        if (gp.gameState == gp.controlsState) {
+            drawControls();
+        }
 
         // PLAY STATE
         if (gp.gameState == gp.playState) {
             drawTurns();
             drawLogScreen();
-            drawPlayerScreen();
-            drawEnemyScreen();
             drawBeaconOfLightTurns();
         }
     }

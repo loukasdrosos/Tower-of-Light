@@ -182,17 +182,8 @@ public class TileManager {
 
     // Method to draw the map grid and tiles
     public void drawMap(Graphics2D g2) {
-        int col, row;
-        // Draw the map background as black rectangles
-        for (row = 0; row < Max_Row; row++) {
-            for (col = 0; col < Max_Col; col++) {
-                g2.setColor(Color.BLACK);
-                g2.fillRect(col * gp.getTileSize(), row * gp.getTileSize(), gp.getTileSize(), gp.getTileSize());
-            }
-        }
-
-        col = 0;
-        row = 0;
+        int col = 0;
+        int row = 0;
         int x = 0;
         int y = 0;
         // Draw the map tiles based on the mapTileNum array

@@ -20,9 +20,9 @@ public class GamePanel extends JPanel implements Runnable{
     private final int tileSize = 16;    // Size of each tile in pixels (16x16)
     private final int maxMapCol = 52;   // Number of columns in the map
     private final int maxMapRow = 52;   // Number of rows in the map
-    private final int maxScreenCol = 82;  // Number of columns displayed on the screen
+    private final int maxScreenCol = 84;  // Number of columns displayed on the screen
     private final int maxScreenRow = 52;  // Number of rows displayed on the screen
-    private final int screenWidth = tileSize * maxScreenCol;  // Width of the screen in pixels (1312 pixels)
+    private final int screenWidth = tileSize * maxScreenCol;  // Width of the screen in pixels (1344 pixels)
     private final int screenHeight = tileSize * maxScreenRow; // Height of the screen in pixels (832 pixels)
     private final int FPS = 60;  // Game runs at 60 frames per second (FPS)
 
@@ -49,7 +49,7 @@ public class GamePanel extends JPanel implements Runnable{
     // GAME STATE
     public int gameState;
     public final int titleState = 0;
-    public final int menuState = 1;
+    public final int controlsState = 1;
     public final int playState = 2;
     public final int gameOverState = 3;
     public final int creditsState = 4;
@@ -90,8 +90,6 @@ public class GamePanel extends JPanel implements Runnable{
         aSetter.setCursor();
 
       //  aSetter.setItem();
-      //  playMusic(0);
-       // stopMusic();
 
         playSE(9);
         gameState = titleState;
@@ -176,7 +174,14 @@ public class GamePanel extends JPanel implements Runnable{
             image = titleScreenImage;
             g2.drawImage(image, 0, 0,null);
         }
+        else if (gameState == controlsState) {
+            // UI
+            ui.draw(g2);
+        }
         else if (gameState == playState) {
+            // UI
+            ui.draw(g2);
+
             // Draw the game map tiles
             tileM.draw(g2);
 
@@ -199,9 +204,6 @@ public class GamePanel extends JPanel implements Runnable{
 
             // Draw the cursor
             cursor.draw(g2);
-
-            // UI
-            ui.draw(g2);
         }
 
         // DEBUG
