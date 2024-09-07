@@ -36,7 +36,7 @@ public class Entity {
     protected int strength; // Unit's strentgh, used for physical attack damage
     protected int magic; // Unit's magic, used for magic attack damage
     protected int skill; // // Unit's skill, used for accuracy, critical hit rate, and skill activation
-    protected int speed; // // Unit's speed, if unit's speed is 5 points higher than the opponent’s, attacking unit performs a follow-up attack
+    protected int speed; // // Unit's speed if unit's speed is 5 points higher than the opponent’s, attacking unit performs a follow-up attack
     protected int luck; // Unit's luck, used to calculate hit, avoid, and to dodge critical hits, and skill activation
     protected int defense; // Unit's defense against physical attacks
     protected int resistance; // Unit's defence against magic attacks
@@ -61,9 +61,12 @@ public class Entity {
     protected int attack; // Strength or Magic + Weapon’s or Spell's Might
     protected int hitRate; // Weapon’s Hit rate + [(Skill x 3 + Luck) / 2]
     protected int critical; // Weapon’s Critical + (Skill / 2), critical hits deal damage multiplied by 3
+    protected int effSpeed; // Unit's effective speed = (unit's speed - weapon's weight) - (enemy's speed - enemy weapons' weight)
+                            // if it's > 5 then attacking unit performs a follow-up attack
     protected int avoid; // (Speed x 3 + Luck) / 2
 
-    // Unit types, can be mounted (on a horse) or armored, attacks strong against these types deal damage multiplied by 3
+    // Unit types, human, orc, tauren, elf or dragon
+    // can be mounted (on a horse) or armored, attacks strong against these types deal damage multiplied by 3
     protected boolean armored;
     protected boolean mounted;
 

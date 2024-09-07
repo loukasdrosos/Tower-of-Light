@@ -27,6 +27,7 @@ public class UI {
         arial_20 = new Font("Arial", Font.PLAIN, 20);
     }
 
+    // TURN AND PHASE UI
     // Draw Turn counter and phases
     public void drawTurns() {
         // Draw the turn counter
@@ -57,6 +58,7 @@ public class UI {
         }
     }
 
+    // LOG UI
     // Draw Log Window
     public void drawLogScreen() {
         int x = 52 * 16;
@@ -67,6 +69,7 @@ public class UI {
         g2.fillRoundRect(x, y, width, height, 25, 25);
     }
 
+    // BEACONS OF LIGHT UI
     public void drawBeaconOfLightTurns() {
         int x = 52 * 16;
         int y = 3 * 16;
@@ -97,6 +100,7 @@ public class UI {
         //    }
     }
 
+    // CONTROLS SCREEN UI
     public void drawControls() {
         // Title "Controls" at the top
         g2.drawString("Controls:", 50, 4 * 16);
@@ -123,6 +127,11 @@ public class UI {
         g2.drawString("Press Enter to continue", 30 * 16, 50 * 16);
     }
 
+    // UNIT UI
+
+
+
+    // BATTLE UI
 
     public void draw(Graphics2D g2) {
         this.g2 = g2;
