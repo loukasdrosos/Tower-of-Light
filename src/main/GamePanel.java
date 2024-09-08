@@ -45,6 +45,7 @@ public class GamePanel extends JPanel implements Runnable{
     public CollisionChecker cChecker = new CollisionChecker(this);
     public TurnManager TurnM = new TurnManager(this, keyH);
     public UI ui = new UI(this);
+    public AssetSetter aSetter = new AssetSetter(this, keyH);
 
     // GAME STATE
     public int gameState;
@@ -53,10 +54,6 @@ public class GamePanel extends JPanel implements Runnable{
     public final int playState = 2;
     public final int gameOverState = 3;
     public final int creditsState = 4;
-
-    // ITEMS
-    public AssetSetter aSetter = new AssetSetter(this, keyH);
-    public Item items[] = new Item[10];
 
     // SOUND
     Sound sound = new Sound();
@@ -89,8 +86,6 @@ public class GamePanel extends JPanel implements Runnable{
         aSetter.copysetUnits(simChaosUnits, ChaosUnits);
         aSetter.setCursor();
 
-      //  aSetter.setItem();
-
       //  playSE(9);
         gameState = playState;
     }
@@ -110,7 +105,7 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void loadImage() {
-        titleScreenImage = setup("/TitleScreen/Title_Screen_2");
+        titleScreenImage = setup("/TitleScreen/Title_Screen");
     }
 
     @Override
@@ -185,13 +180,6 @@ public class GamePanel extends JPanel implements Runnable{
             // Draw the game map tiles
             tileM.draw(g2);
 
-            // Draw Items
-            for (int i = 0; i < items.length; i++) {
-                if (items[i] != null) {
-                    items[i].draw(g2);
-                }
-            }
-
             // Draw each Light Unit in the simulation
             for (Entity lightunit : simLightUnits) {
                 lightunit.draw(g2);
@@ -235,23 +223,10 @@ public class GamePanel extends JPanel implements Runnable{
 
     //GETTERS
 
-    public int getTileSize() {
-        return tileSize;
-    }
+    public int getTileSize() { return tileSize; }
 
-    public int getMaxMapRow() {
-        return maxMapRow;
-    }
+    public int getMaxMapRow() { return maxMapRow; }
 
-    public int getMaxMapCol() {
-        return maxMapCol;
-    }
+    public int getMaxMapCol() { return maxMapCol; }
 
-    public int getScreenWidth() {
-        return screenWidth;
-    }
-
-    public int getScreenHeight() {
-        return screenHeight;
-    }
 }

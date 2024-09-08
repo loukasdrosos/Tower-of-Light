@@ -111,7 +111,7 @@ public class UI {
 
         // Control instructions text
         String[] controlsText = {
-                "Up, Down, Left, Right: Move Cursor and Player Unit",
+                "↑, ↓, ←, →: Move Cursor and Player Unit",
                 "A: Select Player Unit",
                 "W: End Player Unit's Turn",
                 "Z: Cancel",
