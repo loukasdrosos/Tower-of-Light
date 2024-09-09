@@ -7,7 +7,6 @@ import main.UtilityTool;
 
 import java.awt.*;
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -121,18 +120,35 @@ public class TileManager {
 
     // Method to load and draw tiles for the player's available movement range
     public void getPlayerMovement(Graphics2D g2) {
-        // Get the movement range from the selected unit
-        List<int[]> movementTiles = gp.selectedUnit.calculateValidMoves();
-        // Check each possible move and draw the corresponding tile
-        for (int[] move : movementTiles) {
-            int targetCol = move[0];  // Column position of the valid move
-            int targetRow = move[1];  // Row position of the valid move
-            drawPlayerMovement(g2, targetCol, targetRow);
+        // Draw player movement tiles if a unit is selected
+        if (gp.selectedUnit != null && gp.selectedUnit.getIsSelected() && !gp.selectedUnit.getWait() && gp.selectedUnit.getIsMoving()) {
+            // Get the movement range from the selected unit
+            List<int[]> movementTiles = gp.selectedUnit.calculateValidMovement();
+            // Check each possible move and draw the corresponding tile
+            for (int[] move : movementTiles) {
+                int targetCol = move[0];  // Column position of the valid move
+                int targetRow = move[1];  // Row position of the valid move
+                drawPlayerMovement(g2, targetCol, targetRow);
+            }
         }
     }
 
-    // Method to draw tiles that the enemy can move to
-    public void drawEnemyMovement(Graphics2D g2, int col, int row) {
+    // Method to highlight enemies within player's range
+    public void drawEnemiesInRange(Graphics2D g2) {
+        if (gp.selectedUnit != null && gp.selectedUnit.getIsSelected() && !gp.selectedUnit.getWait() && gp.selectedUnit.getIsAttacking()) {
+            List<int[]> enemiesInRange = new ArrayList<>(); // To store the tiles with enemies
+            enemiesInRange = gp.selectedUnit.getEnemiesWithinRange();
+
+            for (int[] move : enemiesInRange) {
+                int targetCol = move[0];  // Column position of an enemy in range
+                int targetRow = move[1];  // Row position of an enemy in range
+                drawAttackingTile(g2, targetCol, targetRow);
+            }
+        }
+    }
+
+    // Method to draw tiles in range of an attack
+    public void drawAttackingTile(Graphics2D g2, int col, int row) {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.35f));
         g2.setColor(Color.RED);  // Set movement color to blue
         g2.fillRect(col * gp.getTileSize(), row * gp.getTileSize(), gp.getTileSize(), gp.getTileSize());
@@ -140,7 +156,7 @@ public class TileManager {
     }
 
     // Method to load and draw tiles for the selected enemy units' available movement range
-    public void getEnemyMovement(Graphics2D g2, ArrayList<ChaosUnit> selectedEnemies) {
+    public void getEnemyAttackRange(Graphics2D g2, ArrayList<ChaosUnit> selectedEnemies) {
         // Get the movement range from the selected unit
         for (ChaosUnit selectedEnemy : selectedEnemies) {
             List<int[]> movementTiles = selectedEnemy.calculateAttackRange();
@@ -148,7 +164,7 @@ public class TileManager {
             for (int[] move : movementTiles) {
                 int targetCol = move[0];  // Column position of the valid move
                 int targetRow = move[1];  // Row position of the valid move
-                drawEnemyMovement(g2, targetCol, targetRow);
+                drawAttackingTile(g2, targetCol, targetRow);
             }
         }
     }
@@ -208,13 +224,14 @@ public class TileManager {
         EnemySelection(); // Handle enemy selection logic
 
         // Draw enemy movement tiles
-        if(selectedEnemies != null) {
-            getEnemyMovement(g2, selectedEnemies);
+        if (selectedEnemies != null) {
+            getEnemyAttackRange(g2, selectedEnemies);
         }
 
         // Draw player movement tiles if a unit is selected
-        if (gp.selectedUnit != null && !gp.selectedUnit.getWait() && gp.selectedUnit.getIsMoving()) {
-            getPlayerMovement(g2);
-        }
+        getPlayerMovement(g2);
+        // Draw tiles with enemies in range
+        drawEnemiesInRange(g2);
     }
+
 }

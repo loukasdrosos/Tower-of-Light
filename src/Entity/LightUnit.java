@@ -14,6 +14,8 @@ public class LightUnit extends Entity{
 
     protected boolean isSelected = false;  // Track if the unit is selected
     protected boolean isMoving = false;  // Track if the unit is moving
+    protected boolean isAttacking = false; // Track whether the unit is Attacking
+    private boolean zKeyReleased = true; // To track if Z key has been released
 
     protected MainHand mainHand = null; // Unit's main hand weapon
     protected OffHand offHand = null; // Unit's offhand weapon
@@ -40,14 +42,28 @@ public class LightUnit extends Entity{
     }
 
     // Method to deselect the currently selected player unit and reset its position
-    public void UnselectPlayerUnit() {
-        if (keyH.isZPressed()) {
-            // Only proceed if a unit is selected, is marked as selected, and is currently moving
-            if (gp.selectedUnit != null && isSelected && isMoving) {
+    public void cancelAction() {
+        if (keyH.isZPressed() && zKeyReleased) {
+            zKeyReleased = false; // Mark that Z key was pressed
+
+            // Cancel battle simulation for player
+            if (gp.selectedUnit != null && isSelected && isAttacking && !isMoving) {
+                isMoving = true; // Player can move again
+                isAttacking = false; // Reset the attacking flag
+                gp.playSE(6);
+            }
+
+            // Cancel player movement and unselect player
+            else if (gp.selectedUnit != null && isSelected && isMoving && !isAttacking) {
                 resetPosition(); // Return player to starting position
                 gp.selectedUnit = null; // Deselect the player
                 gp.playSE(6);
             }
+        }
+
+        // Reset the Z key release state when the key is no longer pressed
+        if (!keyH.isZPressed()) {
+            zKeyReleased = true;
         }
     }
 
@@ -65,7 +81,7 @@ public class LightUnit extends Entity{
     /* Calculate all valid tiles the unit can move to within its movement range with the use of Breadth-First-Search (BFS)
     BFS is well-suited for this scenario because explores all possible moves level by level, which means it considers
     all closer tiles before moving on to further ones. This is useful in grid-based games where movement range is limited */
-    public List<int[]> calculateValidMoves() {
+    public List<int[]> calculateValidMovement() {
         List<int[]> validMoves = new ArrayList<>();
 
         /* Use a queue for breadth-first search (BFS) to explore tiles within the movement range
@@ -107,10 +123,65 @@ public class LightUnit extends Entity{
         return validMoves; // Return the list of all valid move tiles
     }
 
+    // Method to find all the enemies in the unit's attack range based on its current position
+    public List<int[]> getEnemiesWithinRange() {
+        // List to store the positions of enemies that are within attack range
+        List<int[]> enemiesInRange = new ArrayList<>();
+
+        // Determine the weapon range (the maximum distance at which the unit can attack)
+        int weaponRange = 0;
+        if (physical && equippedWeapon != null) {
+            weaponRange = equippedWeapon.getRange();  // Get range from equipped weapon
+        }
+        if (magical) {
+            // magic range to be implemented
+        }
+
+        // Iterate over all possible tiles within the maximum attack range
+        for (int dCol = -weaponRange; dCol <= weaponRange; dCol++) {
+            for (int dRow = -weaponRange; dRow <= weaponRange; dRow++) {
+                // Calculate Manhattan distance for the current offset (dCol, dRow)
+                int manhattanDistance = Math.abs(dCol) + Math.abs(dRow);
+
+                // Check if this tile is within the valid attack range (Manhattan distance between 1 and weaponRange)
+                if (manhattanDistance >= 1 && manhattanDistance <= weaponRange) {
+                    // Calculate the actual column and row of the attack tile
+                    int attackCol = col + dCol;
+                    int attackRow = row + dRow;
+
+                    // Ensure the attack tile is within the bounds of the game map
+                    if (gp.cChecker.isWithinMap(attackCol, attackRow)) {
+                        // Check if there is an enemy on the current tile
+                        if (!gp.cChecker.noEnemyOnTile(attackCol, attackRow)) {
+                            // Add the position of the enemy to the list
+                            enemiesInRange.add(new int[]{attackCol, attackRow});
+                        }
+                    }
+                }
+            }
+        }
+
+        // Return the list of enemies' positions within range
+        return enemiesInRange;
+    }
+
+    // Method to choose which enemy to attack
+    public void chooseTarget() {
+        List<int[]> enemiesInRange = new ArrayList<>(); // To store the tiles with enemies
+        enemiesInRange = getEnemiesWithinRange();
+
+        if (keyH.isXPressed()) {
+            if (!enemiesInRange.isEmpty()) {
+                isMoving = false;
+                isAttacking = true;
+            }
+        }
+    }
+
     @Override
     public void move() {
         // Check if the unit is not in a waiting state, is selected, and is allowed to move
-        if (gp.selectedUnit != null && !wait && isSelected && isMoving) {
+        if (gp.selectedUnit != null && !wait && isSelected && isMoving && !isAttacking) {
             moveDelayCounter++; // Increment the move delay counter
 
             // Check if the delay counter has reached or exceeded the move delay threshold
@@ -118,7 +189,7 @@ public class LightUnit extends Entity{
                 moveDelayCounter = 0; // Reset the move delay counter
 
                 // Calculate all possible valid moves from the current position
-                List<int[]> validMoves = calculateValidMoves();
+                List<int[]> validMoves = calculateValidMovement();
 
                 // Initialize the target position with the current position
                 int targetCol = col;
@@ -193,6 +264,7 @@ public class LightUnit extends Entity{
     @Override
     public void endTurn() {
         isMoving = false;   // Stop the unit's movement
+        isAttacking = false; // Set attacking flag as false
         wait = true;        // Set the unit to a waiting state
         preCol = col;       // Update the previous column to the current column
         preRow = row;       // Update the previous row to the current row
@@ -218,8 +290,9 @@ public class LightUnit extends Entity{
         if (gp.TurnM.getPlayerPhase()) {
             move();
             SelectPlayerUnit();
-            UnselectPlayerUnit();
+            cancelAction();
             endSelectedUnitTurn();
+            chooseTarget();
         }
 
         // Update sprite animation
@@ -240,9 +313,8 @@ public class LightUnit extends Entity{
 
     public boolean getIsSelected () { return isSelected; } // Return whether the unit is selected
 
-    public void setIsSelected (boolean x) { this.isSelected = x; } // Set whether the unit is selected
-
     public boolean getIsMoving () { return isMoving; } // Return whether the unit is moving
 
-    public void setIsMoving(boolean x) { this.isMoving = x; } // Set whether the unit is moving
+    public boolean getIsAttacking () { return isAttacking; } // Return whether the unit is attacking
+
 }

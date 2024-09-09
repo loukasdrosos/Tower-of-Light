@@ -103,18 +103,21 @@ public class ChaosUnit extends Entity {
         return movementRange; // Return the list of all valid move tiles
     }
 
+    // Calculates unit's attack range based on its possible movement
     public List<int[]> calculateAttackRange() {
+        // List to store the positions of tiles within the attack range
         List<int[]> attackRange = new ArrayList<>();
+
+        // Get the list of tiles the unit can move to
         List<int[]> movementRange = calculateMovementRange();
 
-        // Directions for the 4 cardinal directions: up, down, left, right
-        int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        // Determine the weapon range (the maximum distance at which the unit can attack)
         int weaponRange = 0;
         if (physical && equippedWeapon != null) {
-            weaponRange = equippedWeapon.getRange();
+            weaponRange = equippedWeapon.getRange(); // Get range from equipped weapon
         }
         if (magical) {
-            // use magic range
+            // magic range
         }
 
         // For each tile in the movement range, calculate the attack range
@@ -122,21 +125,26 @@ public class ChaosUnit extends Entity {
             int moveCol = moveTile[0];
             int moveRow = moveTile[1];
 
-            // For each direction, calculate the attack tiles based on the weapon range
-            for (int[] dir : directions) {
-                for (int i = 1; i <= weaponRange; i++) {
-                    int attackCol = moveCol + dir[0] * i;
-                    int attackRow = moveRow + dir[1] * i;
+            // Calculate all possible attack positions within the Manhattan distance
+            for (int d = 1; d <= weaponRange; d++) {
+                // Loop through all combinations of x and y differences that sum up to d
+                for (int dx = -d; dx <= d; dx++) {
+                    int dy = d - Math.abs(dx); // dy is the remainder to ensure Manhattan distance
+                    // Check both positive and negative dy to cover all diagonals
+                    for (int[] delta : new int[][]{{dx, dy}, {dx, -dy}}) {
+                        int attackCol = moveCol + delta[0];
+                        int attackRow = moveRow + delta[1];
 
-                    // Check if the attack tile is within the map bounds and not already included
-                    if (gp.cChecker.isWithinMap(attackCol, attackRow) && !containsTile(attackRange, attackCol, attackRow)) {
-                        attackRange.add(new int[]{attackCol, attackRow});
+                        // Check if the attack tile is within the map bounds and not already included in the list
+                        if (gp.cChecker.isWithinMap(attackCol, attackRow) && !containsTile(attackRange, attackCol, attackRow)) {
+                            // Add the tile to the attack range list
+                            attackRange.add(new int[]{attackCol, attackRow});
+                        }
                     }
                 }
             }
         }
-
-        return attackRange;
+        return attackRange; // Return the list of tiles within the attack range
     }
 
     // Helper method to check if a list contains a specific tile
