@@ -1,5 +1,8 @@
 package Entity;
 
+import Item.Potion;
+import Item.Trinket;
+import Item.Weapon;
 import main.GamePanel;
 import main.UtilityTool;
 
@@ -7,6 +10,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 
 public class Entity {
 
@@ -58,12 +62,13 @@ public class Entity {
      */
 
     // Unit's Combat stats
-    protected int attack; // Strength or Magic + Weapon’s or Spell's Might
-    protected int hitRate; // Weapon’s Hit rate + [(Skill x 3 + Luck) / 2]
+    protected int might; // Strength or Magic + Weapon’s or Spell's Might
     protected int critical; // Weapon’s Critical + (Skill / 2), critical hits deal damage multiplied by 3
-    protected int effSpeed; // Unit's effective speed = (unit's speed - weapon's weight) - (enemy's speed - enemy weapons' weight)
-                            // if it's > 5 then attacking unit performs a follow-up attack
-    protected int avoid; // (Speed x 3 + Luck) / 2
+    protected int hitRate; // Weapon’s Hit rate + [(Skill x 3 + Luck) / 2]
+    protected int evade; // (Speed x 3 + Luck) / 2
+    protected int effDefense; // Defense + Trinket's Defense
+    protected int effResistance; // Resistance + Trinket's Resistance
+    protected int effSpeed; // Speed + Trinket's Speed
 
     // Unit types, human, orc, tauren, elf or dragon
     // can be mounted (on a horse) or armored, attacks strong against these types deal damage multiplied by 3
@@ -71,6 +76,13 @@ public class Entity {
     protected UnitType type;  // Variable to store the unit type
     protected boolean armored; // Unit's armored status
     protected boolean mounted; // Unit's mounted status
+    protected boolean physical; // Physical unit
+    protected boolean magical; // Magical unit
+
+    protected Weapon equippedWeapon = null; // Unit's equipped weapon, player units can switch between main hand and offhand weapon
+    protected Trinket trinket = null; // Unit's trinket item
+    protected List<Potion> potions = null; // Unit's Potion list
+    protected static final int MAX_POTIONS = 2; // Unit's max potions available
 
     /* BATTLE CALCULATIONS
 
@@ -92,6 +104,49 @@ public class Entity {
     public Entity (GamePanel gp) {
         this.gp = gp;
     }
+
+    public void calculateCombatStats() {
+        if (physical) {
+            might = strength + equippedWeapon.getMight();
+            critical = (skill/2) + equippedWeapon.getCrit();
+            hitRate = (((skill * 3) + luck) / 2) + equippedWeapon.getHit();
+        }
+        if (magical){
+
+        }
+        evade = ((speed * 3) + luck) / 2;
+        if (trinket != null) {
+            effDefense = defense + trinket.getDefense();
+            effResistance = resistance + trinket.getResistance();
+            effSpeed = speed + trinket.getSpeed();
+        }
+        if (trinket == null) {
+            effDefense = defense;
+            effResistance = resistance;
+            effSpeed = speed;
+        }
+    }
+
+    // Stat modifiers for its class
+    public void boostStatsForClasses() {
+        if (type == UnitType.Human) {
+            skill += 3;
+            speed += 2;
+        }
+        if (type == UnitType.Orc) {
+            maxHP += 3;
+            strength += 2;
+        }
+        if (type == UnitType.Tauren) {
+            strength += 3;
+            defense += 2;
+        }
+        if (type == UnitType.Elf) {
+            speed += 3;
+            resistance += 2;
+        }
+    }
+
 
     // Method to update the unit's pixel position based on its current tile position
     public void updatePosition () {
@@ -214,8 +269,6 @@ public class Entity {
 
     public int getLevel() { return level; } // Get the unit's level
 
-    public int getMaxLevel() { return maxLevel; } // Get the unit's max level
-
     public int getExp() { return exp; } // Get the unit's experience points
 
     public int getMaxExp() { return maxExp; } // Get the unit's max experience points
@@ -232,7 +285,7 @@ public class Entity {
 
     public int getSpeed() { return speed; } // Get the unit's speed
 
-    public int getLuck() { return strength; } // Get the unit's luck
+    public int getLuck() { return luck; } // Get the unit's luck
 
     public int getDefense() { return defense; } // Get the unit's defense
 
@@ -244,7 +297,26 @@ public class Entity {
 
     public boolean isMounted() { return mounted; } // Get the unit's mounted status
 
+    public boolean isPhysical() { return physical; } // Get the unit's physical status
+
+    public boolean isMagical() { return magical; } // Get the unit's magical status
+
     public UnitType getType() { return type; } // Get the unit's type
+
+    public int getMight() {return might;} // Get the unit's might
+
+    public int getCritical() {return critical;} // Get the unit's critical
+
+    public int getHitRate() {return hitRate;} // Get the unit's hit rate
+
+    public int getEvade() {return evade; } // Get the unit's evade
+
+    public int getEffDefense() {return effDefense;} // Get the unit's effective defence
+
+    public int getEffResistance() {return effResistance;} // Get the unit's effective resistance
+
+    public int getEffSpeed() {return effSpeed;} // Get the unit's effective speed
+
 }
 
 

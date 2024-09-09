@@ -5,7 +5,7 @@ import main.GamePanel;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-public class Shield extends Item{
+public class Shield extends Trinket{
     public Shield() {
         name = "Shield";
         try {

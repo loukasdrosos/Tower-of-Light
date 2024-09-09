@@ -1,6 +1,5 @@
 package Item;
 
-import main.GamePanel;
 import main.UtilityTool;
 
 import java.awt.*;
@@ -12,8 +11,7 @@ public class Item {
     protected String name;
     protected int col, row;
     protected int x, y;
-    protected int tileSize = 16;
-    protected boolean collision = false;
+    protected int tileSize = 15;
 
     UtilityTool uTool = new UtilityTool();
 
@@ -42,4 +40,6 @@ public class Item {
     public void setCol(int col) { this.col = col; } // Set the item's spawn column
 
     public void setRow(int row) { this.row = row; } // Set the item's spawn row
+
+    public String getName() { return name; }
 }

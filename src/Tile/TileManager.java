@@ -143,7 +143,7 @@ public class TileManager {
     public void getEnemyMovement(Graphics2D g2, ArrayList<ChaosUnit> selectedEnemies) {
         // Get the movement range from the selected unit
         for (ChaosUnit selectedEnemy : selectedEnemies) {
-            List<int[]> movementTiles = selectedEnemy.calculateMovementRange();
+            List<int[]> movementTiles = selectedEnemy.calculateAttackRange();
             // Check each possible move and draw the corresponding tile
             for (int[] move : movementTiles) {
                 int targetCol = move[0];  // Column position of the valid move

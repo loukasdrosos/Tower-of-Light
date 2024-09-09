@@ -2,8 +2,6 @@ package Entity;
 
 import main.GamePanel;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,22 +15,10 @@ public class ChaosUnit extends Entity {
     protected boolean boss;
     protected boolean canMove;
 
-    public ChaosUnit(GamePanel gp, int startCol, int startRow) {
+    public ChaosUnit(GamePanel gp, boolean isBoss, boolean canMove) {
         super(gp);
-        this.col = startCol;   // Initial column position
-        this.row = startRow;    // Initial row position
-        x = getX(col);          // Calculate initial x position based on column
-        y = getY(row);          // Calculate initial y position based on row
-        preCol = col;           // Set previous column to current column
-        preRow = row;           // Set previous row to current row
-        setupStats();
-
-        // Load unit's images for animations
-        try {
-            loadImage();
-        } catch (Exception e) {
-            System.out.println("Exception loadImage, ChaosUnit not loading properly");
-        }
+        this.boss = boss;
+        this.canMove = canMove;
     }
 
     // Method to set up the unit's stats
@@ -116,6 +102,53 @@ public class ChaosUnit extends Entity {
         }
         return movementRange; // Return the list of all valid move tiles
     }
+
+    public List<int[]> calculateAttackRange() {
+        List<int[]> attackRange = new ArrayList<>();
+        List<int[]> movementRange = calculateMovementRange();
+
+        // Directions for the 4 cardinal directions: up, down, left, right
+        int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        int weaponRange = 0;
+        if (physical && equippedWeapon != null) {
+            weaponRange = equippedWeapon.getRange();
+        }
+        if (magical) {
+            // use magic range
+        }
+
+        // For each tile in the movement range, calculate the attack range
+        for (int[] moveTile : movementRange) {
+            int moveCol = moveTile[0];
+            int moveRow = moveTile[1];
+
+            // For each direction, calculate the attack tiles based on the weapon range
+            for (int[] dir : directions) {
+                for (int i = 1; i <= weaponRange; i++) {
+                    int attackCol = moveCol + dir[0] * i;
+                    int attackRow = moveRow + dir[1] * i;
+
+                    // Check if the attack tile is within the map bounds and not already included
+                    if (gp.cChecker.isWithinMap(attackCol, attackRow) && !containsTile(attackRange, attackCol, attackRow)) {
+                        attackRange.add(new int[]{attackCol, attackRow});
+                    }
+                }
+            }
+        }
+
+        return attackRange;
+    }
+
+    // Helper method to check if a list contains a specific tile
+    private boolean containsTile(List<int[]> list, int col, int row) {
+        for (int[] tile : list) {
+            if (tile[0] == col && tile[1] == row) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     @Override
     public void move() {
@@ -228,20 +261,5 @@ public class ChaosUnit extends Entity {
         }
     }
 
-    //Load images for the unit's animations
-    @Override
-    public void loadImage() {
-        up1 = setup("/ChaosUnits/Herald_of_Chaos/Human_Herald_of_Chaos_Up_1");
-        up2 = setup("/ChaosUnits/Herald_of_Chaos/Human_Herald_of_Chaos_Up_2");
-        down1 = setup("/ChaosUnits/Herald_of_Chaos/Human_Herald_of_Chaos_Down_1");
-        down2 = setup("/ChaosUnits/Herald_of_Chaos/Human_Herald_of_Chaos_Down_2");
-        left1 = setup("/ChaosUnits/Herald_of_Chaos/Human_Herald_of_Chaos_Left_1");
-        left2 = setup("/ChaosUnits/Herald_of_Chaos/Human_Herald_of_Chaos_Left_2");
-        right1 = setup("/ChaosUnits/Herald_of_Chaos/Human_Herald_of_Chaos_Right_1");
-        right2 = setup("/ChaosUnits/Herald_of_Chaos/Human_Herald_of_Chaos_Right_2");
-        default1 = setup("/ChaosUnits/Herald_of_Chaos/Human_Herald_of_Chaos_Default_1");
-        default2 = setup("/ChaosUnits/Herald_of_Chaos/Human_Herald_of_Chaos_Default_2");
-        portrait = setupPortrait("/ChaosUnits/Herald_of_Chaos/Human_Herald_of_Chaos_Portrait");
-    }
 }
 

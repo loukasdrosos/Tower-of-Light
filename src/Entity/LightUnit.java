@@ -1,10 +1,9 @@
 package Entity;
 
+import Item.*;
 import main.GamePanel;
 import main.KeyHandler;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
 
@@ -16,60 +15,12 @@ public class LightUnit extends Entity{
     protected boolean isSelected = false;  // Track if the unit is selected
     protected boolean isMoving = false;  // Track if the unit is moving
 
-    public LightUnit (GamePanel gp, KeyHandler keyH, int startCol, int startRow) {
+    protected MainHand mainHand = null; // Unit's main hand weapon
+    protected OffHand offHand = null; // Unit's offhand weapon
+
+    public LightUnit (GamePanel gp, KeyHandler keyH) {
         super(gp);
         this.keyH = keyH;       // Reference to the key handler
-        this.col =  startCol;   // Initial column position
-        this.row = startRow;    // Initial row position
-        x = getX(col);          // Calculate initial x position based on column
-        y = getY(row);          // Calculate initial y position based on row
-        preCol = col;           // Set previous column to current column
-        preRow = row;           // Set previous row to current row
-        setupStats();
-        setupGrowthRates();
-
-        // Load unit's images for animations
-        try { loadImage(); }
-        catch (Exception e){
-            System.out.println("Exception loadImage, LightUnit not loading properly");
-        }
-    }
-
-    // Method to set up the unit's stats
-    @Override
-    public void setupStats() {
-        name = "Alm";
-        className = "Prince";
-        level = 1;
-        exp = 0;
-        maxHP = 20;
-        HP = maxHP;
-        strength = 10;
-        magic = 5;
-        skill = 7;
-        speed = 8;
-        luck = 6;
-        defense = 6;
-        resistance = 4;
-        movement = 3;
-        type = UnitType.Human;
-        armored = false;
-        mounted = false;
-        description = new String[]{"The prince of ", "the kingdom of", "Valentia and the", "one worthy to wield", "the divine blade", "Lightbringer."} ;
-    }
-
-    // Method to set up the player's growth rates
-    @Override
-    public void setupGrowthRates() {
-        HPGrowthRate = 75;
-        strengthGrowthRate = 65;
-        magicGrowthRate = 35;
-        skillGrowthRate = 60;
-        speedGrowthRate = 65;
-        luckGrowthRate = 50;
-        defenseGrowthRate = 45;
-        resistanceGrowthRate = 25;
-        // Total Growth Rates = 420
     }
 
     // Method to select a player unit (LightUnit) based on the cursor's position
@@ -283,22 +234,6 @@ public class LightUnit extends Entity{
             }
             spriteCounter = 0;  // Reset the sprite counter
         }
-    }
-
-    //Load images for the unit's animations
-    @Override
-    public void loadImage() {
-        up1 = setup("/LightUnits/Prince/Human_Prince_Up_1");
-        up2 = setup("/LightUnits/Prince/Human_Prince_Up_2");
-        down1 = setup("/LightUnits/Prince/Human_Prince_Down_1");
-        down2 = setup("/LightUnits/Prince/Human_Prince_Down_2");
-        left1 = setup("/LightUnits/Prince/Human_Prince_Left_1");
-        left2 = setup("/LightUnits/Prince/Human_Prince_Left_2");
-        right1 = setup("/LightUnits/Prince/Human_Prince_Right_1");
-        right2 = setup("/LightUnits/Prince/Human_Prince_Right_2");
-        default1 = setup("/LightUnits/Prince/Human_Prince_Default_1");
-        default2 = setup("/LightUnits/Prince/Human_Prince_Default_2");
-        portrait = setupPortrait("/LightUnits/Prince/Human_Prince_Portrait");
     }
 
     // Getters && Setters

@@ -110,9 +110,10 @@ public class UI {
         g2.drawString("Controls:", 50, 4 * 16);
 
         // Control instructions text
+        g2.setFont(arial_20);
         String[] controlsText = {
                 "↑, ↓, ←, →: Move Cursor and Player Unit",
-                "A: Select Player Unit",
+                "A: Select Player Unit, Display Enemy Attack Range",
                 "W: End Player Unit's Turn",
                 "Z: Cancel",
                 "Q: Toggle between Unit's stats and Unit's inventory",
@@ -124,10 +125,11 @@ public class UI {
         // Draw each control instruction line
         int lineHeight = 40; // Spacing between lines
         for (int i = 0; i < controlsText.length; i++) {
-            g2.drawString(controlsText[i], 50, 4 * 16 + (i + 2) * lineHeight);
+            g2.drawString(controlsText[i], 50, 3 * 16 + (i + 2) * lineHeight);
         }
 
         // "Press Enter to continue" at the bottom of the screen
+        g2.setFont(arial_30);
         g2.drawString("Press Enter to continue", 30 * 16, 50 * 16);
     }
 
@@ -171,64 +173,69 @@ public class UI {
 
     // Draw Light Unit's stats
     public void drawLightUnitStats(LightUnit player) {
-        // Coordinates for text next to the portrait
-        int textX = 52 * 16 + 8 * gp.getTileSize() + 10; // Right side of the portrait
-        int textY = 5 * 16 + 20; // Slightly below the top of the portrait
-        int lineHeight = 20; // Spacing between each line of text
-        int nextLine = 1;
+        // Checks if player is null because if i unselect player i get error
+        if (player != null) {
+            // Coordinates for text next to the portrait
+            int textX = 52 * 16 + 8 * gp.getTileSize() + 10; // Right side of the portrait
+            int textY = 5 * 16 + 20; // Slightly below the top of the portrait
+            int lineHeight = 20; // Spacing between each line of text
+            int nextLine = 1;
 
-        // Set font for text
-        g2.setFont(new Font("Arial", Font.PLAIN, 17));
-        g2.setColor(Color.WHITE);
+            // Set font for text
+            g2.setFont(new Font("Arial", Font.PLAIN, 16));
+            g2.setColor(Color.WHITE);
 
-        // Draw unit's name, class name, and level next to the portrait
-        g2.drawString(player.getName(), textX, textY);
-        g2.drawString(player.getClassName(), textX, textY + nextLine * lineHeight);
-        nextLine++;
-        g2.drawString(String.valueOf(player.getType()), textX, textY + nextLine * lineHeight);
-        nextLine++;
-        if (player.isArmored()) {
-            g2.drawString("Armored", textX, textY + nextLine * lineHeight);
+            // Draw unit's name, class name, and level next to the portrait
+            g2.drawString(player.getName(), textX, textY);
+            g2.drawString(player.getClassName(), textX, textY + nextLine * lineHeight);
             nextLine++;
-        }
-        if (player.isMounted()) {
-            g2.drawString("Mounted", textX , textY + nextLine * lineHeight);
+            g2.drawString(String.valueOf(player.getType()), textX, textY + nextLine * lineHeight);
             nextLine++;
+            if (player.isArmored()) {
+                g2.drawString("Armored", textX, textY + nextLine * lineHeight);
+                nextLine++;
+            }
+            if (player.isMounted()) {
+                g2.drawString("Mounted", textX, textY + nextLine * lineHeight);
+                nextLine++;
+            }
+            g2.drawString("Level: " + player.getLevel(), textX, textY + nextLine * lineHeight);
+            nextLine++;
+            g2.drawString("Exp: " + player.getExp() + " / " + player.getMaxExp(), textX, textY + nextLine * lineHeight);
+
+            // Coordinates for stats below the portrait
+            int statsX = 52 * 16 + 5; // Align with the portrait's X position
+            int statsY = 5 * 16 + 8 * gp.getTileSize() + 20; // Start drawing below the portrait
+
+            // Draw the unit's stats below the portrait
+            g2.drawString("HP: " + player.getHP() + " / " + player.getMaxHP(), statsX, statsY);
+            g2.drawString("Strength: " + player.getStrength(), statsX, statsY + lineHeight);
+            g2.drawString("Magic: " + player.getMagic(), statsX, statsY + 2 * lineHeight);
+            g2.drawString("Skill: " + player.getSkill(), statsX, statsY + 3 * lineHeight);
+            g2.drawString("Speed: " + player.getSpeed(), statsX, statsY + 4 * lineHeight);
+            g2.drawString("Luck: " + player.getLuck(), textX, statsY + lineHeight);
+            g2.drawString("Defense: " + player.getDefense(), textX, statsY + 2 * lineHeight);
+            g2.drawString("Resistance: " + player.getResistance(), textX, statsY + 3 * lineHeight);
+            g2.drawString("Movement: " + player.getMovement(), textX, statsY + 4 * lineHeight);
         }
-        g2.drawString("Level: " + player.getLevel(), textX, textY + nextLine * lineHeight);
-        nextLine++;
-        g2.drawString("Exp: " + player.getExp() + "/" + player.getMaxExp(), textX, textY + nextLine * lineHeight);
-
-        // Coordinates for stats below the portrait
-        int statsX = 52 * 16 + 5; // Align with the portrait's X position
-        int statsY = 5 * 16 + 8 * gp.getTileSize() + 20; // Start drawing below the portrait
-
-        // Draw the unit's stats below the portrait
-        g2.drawString("HP: " + player.getHP() + "/" + player.getMaxHP(), statsX, statsY);
-        g2.drawString("Strength: " + player.getStrength(), statsX, statsY + lineHeight);
-        g2.drawString("Magic: " + player.getMagic(), statsX, statsY + 2 * lineHeight);
-        g2.drawString("Skill: " + player.getSkill(), statsX, statsY + 3 * lineHeight);
-        g2.drawString("Speed: " + player.getSpeed(), statsX, statsY + 4 * lineHeight);
-        g2.drawString("Luck: " + player.getLuck(), statsX, statsY + 5 * lineHeight);
-        g2.drawString("Defense: " + player.getDefense(), statsX, statsY + 6 * lineHeight);
-        g2.drawString("Resistance: " + player.getResistance(), statsX, statsY + 7 * lineHeight);
-        g2.drawString("Movement: " + player.getMovement(), statsX, statsY + 8 * lineHeight);
     }
 
     public void drawLightUnitDetails (LightUnit player) {
-        int textX = 52 * 16 + 8 * gp.getTileSize() + 4; // Right side of the portrait
-        int textY = 5 * 16 + 20; // Slightly below the top of the portrait
-        int lineHeight = 20; // Spacing between each line of text
+        // Checks if player is null because if i unselect player i get error
+        if (player != null) {
+            int textX = 52 * 16 + 8 * gp.getTileSize() + 4; // Right side of the portrait
+            int textY = 5 * 16 + 20; // Slightly below the top of the portrait
+            int lineHeight = 20; // Spacing between each line of text
 
-        // Set font for text
-        g2.setFont(new Font("Arial", Font.PLAIN, 13));
-        g2.setColor(Color.WHITE);
+            // Set font for text
+            g2.setFont(new Font("Arial", Font.PLAIN, 13));
+            g2.setColor(Color.WHITE);
 
-        // Draw unit's description line by line
-        for (String line : player.getDescription()) {
-            g2.drawString(line, textX, textY);
-            textY += lineHeight;
-        }
+            // Draw unit's description line by line
+            for (String line : player.getDescription()) {
+                g2.drawString(line, textX, textY);
+                textY += lineHeight;
+            }
 
         /*
         // Draw unit's weapons and their stats/descriptions
@@ -252,8 +259,37 @@ public class UI {
             textY += lineHeight;
         }
 
+
          */
+        }
     }
+
+    public void drawLightUnitCombatStats(LightUnit player) {
+        // Checks if player is null because if i unselect player i get error
+        if (player != null) {
+            // Coordinates for combat stats text
+            int lineHeight = 20; // Spacing between each line of text
+            int textX = 52 * 16 + 8 * gp.getTileSize() + 10;
+
+            // Set font for text
+            g2.setFont(new Font("Arial", Font.PLAIN, 16));
+            g2.setColor(Color.WHITE);
+
+            // Coordinates for combat stats below the portrait
+            int combatStatsX = 52 * 16 + 5; // Align with the portrait's X position
+            int combatStatsY = 5 * 16 + 8 * gp.getTileSize() + 140; // Start drawing below the portrait
+
+            // Draw the unit's combat stats below the portrait
+            g2.drawString("Might: " + player.getMight(), combatStatsX, combatStatsY);
+            g2.drawString("Crit Rate: " + player.getCritical(), textX, combatStatsY);
+            g2.drawString("Hit Rate: " + player.getHitRate(), combatStatsX, combatStatsY + lineHeight);
+            g2.drawString("Evade: " + player.getEvade(), textX, combatStatsY + lineHeight);
+            g2.drawString("Eff.Def.: " + player.getEffDefense(), combatStatsX, combatStatsY + 2 * lineHeight);
+            g2.drawString("Eff.Res.: " + player.getEffResistance(), textX, combatStatsY + 2 * lineHeight);
+            g2.drawString("Eff.Speed: " + player.getEffSpeed(), combatStatsX, combatStatsY + 3 * lineHeight);
+        }
+    }
+
 
     // Method to draw the Light Unit's information
     public void drawLightUnitInfo() {
@@ -264,6 +300,7 @@ public class UI {
                         drawLightUnitPortrait(unit);
                         if (gp.keyH.isQPressed()) {
                             drawLightUnitStats(unit);
+                            drawLightUnitCombatStats(unit);
                         } else {
                             drawLightUnitDetails(unit);
                         }
@@ -273,6 +310,7 @@ public class UI {
                 drawLightUnitPortrait(gp.selectedUnit);
                 if (gp.keyH.isQPressed()) {
                     drawLightUnitStats(gp.selectedUnit);
+                    drawLightUnitCombatStats(gp.selectedUnit);
                 } else {
                     drawLightUnitDetails(gp.selectedUnit);
                 }
@@ -327,7 +365,7 @@ public class UI {
         int nextLine = 1;
 
         // Set font for text
-        g2.setFont(new Font("Arial", Font.PLAIN, 17));
+        g2.setFont(new Font("Arial", Font.PLAIN, 16));
         g2.setColor(Color.WHITE);
 
         // Draw unit's name, class name, and level next to the portrait
@@ -351,19 +389,42 @@ public class UI {
         int statsY = 5 * 16 + 8 * gp.getTileSize() + 20; // Start drawing below the portrait
 
         // Draw the unit's stats below the portrait
-        g2.drawString("HP: " + enemy.getHP() + "/" + enemy.getMaxHP(), statsX, statsY);
+        g2.drawString("HP: " + enemy.getHP() + " / " + enemy.getMaxHP(), statsX, statsY);
         g2.drawString("Strength: " + enemy.getStrength(), statsX, statsY + lineHeight);
         g2.drawString("Magic: " + enemy.getMagic(), statsX, statsY + 2 * lineHeight);
         g2.drawString("Skill: " + enemy.getSkill(), statsX, statsY + 3 * lineHeight);
         g2.drawString("Speed: " + enemy.getSpeed(), statsX, statsY + 4 * lineHeight);
-        g2.drawString("Luck: " + enemy.getLuck(), statsX, statsY + 5 * lineHeight);
-        g2.drawString("Defense: " + enemy.getDefense(), statsX, statsY + 6 * lineHeight);
-        g2.drawString("Resistance: " + enemy.getResistance(), statsX, statsY + 7 * lineHeight);
-        g2.drawString("Movement: " + enemy.getMovement(), statsX, statsY + 8 * lineHeight);
+        g2.drawString("Luck: " + enemy.getLuck(), textX + 5, statsY + lineHeight);
+        g2.drawString("Defense: " + enemy.getDefense(), textX + 5, statsY + 2 * lineHeight);
+        g2.drawString("Resistance: " + enemy.getResistance(), textX + 5, statsY + 3 * lineHeight);
+        g2.drawString("Movement: " + enemy.getMovement(), textX + 5, statsY + 4 * lineHeight);
     }
 
-        // Draw Chaos Unit's details
-        public void drawChaosUnitDetails (ChaosUnit enemy) {
+    public void drawChaosUnitCombatStats(ChaosUnit enemy) {
+        // Coordinates for combat stats text
+        int lineHeight = 20; // Spacing between each line of text
+        int textX = 69 * 16 + 7 * gp.getTileSize() + 14;
+
+        // Set font for text
+        g2.setFont(new Font("Arial", Font.PLAIN, 16));
+        g2.setColor(Color.WHITE);
+
+        // Coordinates for combat stats below the portrait
+        int combatStatsX = 69 * 16 - 5; // Align with the portrait's X position
+        int combatStatsY = 5 * 16 + 8 * gp.getTileSize() + 140; // Start drawing below the portrait
+
+        // Draw the unit's combat stats below the portrait
+        g2.drawString("Might: " + enemy.getMight(), combatStatsX, combatStatsY);
+        g2.drawString("Crit Rate: " + enemy.getCritical(), textX, combatStatsY);
+        g2.drawString("Hit Rate: " + enemy.getHitRate(), combatStatsX, combatStatsY + lineHeight);
+        g2.drawString("Evade: " + enemy.getEvade(), textX, combatStatsY + lineHeight);
+        g2.drawString("Eff.Def.: " + enemy.getEffDefense(), combatStatsX, combatStatsY + 2 * lineHeight);
+        g2.drawString("Eff.Res.: " + enemy.getEffResistance(), textX, combatStatsY + 2 * lineHeight);
+        g2.drawString("Eff.Speed: " + enemy.getEffSpeed(), combatStatsX, combatStatsY + 3 * lineHeight);
+    }
+
+    // Draw Chaos Unit's details
+    public void drawChaosUnitDetails (ChaosUnit enemy) {
         int textX = 69 * 16 + 7 * gp.getTileSize() + 9; // Right side of the portrait
         int textY = 5 * 16 + 20; // Slightly below the top of the portrait
         int lineHeight = 20; // Spacing between each line of text
@@ -413,6 +474,7 @@ public class UI {
                         drawChaosUnitPortrait(enemy);
                         if (gp.keyH.isQPressed()) {
                             drawChaosUnitStats(enemy);
+                            drawChaosUnitCombatStats(enemy);
                         } else {
                             drawChaosUnitDetails(enemy);
                         }
