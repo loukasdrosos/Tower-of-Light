@@ -79,6 +79,12 @@ public class KeyHandler implements KeyListener {
             if (code == KeyEvent.VK_SHIFT) {
                 ShiftPressed = true;
             }
+            if (code == KeyEvent.VK_1) {
+                gp.ui.scrollLog(-1);  // Scroll up Game Log
+            }
+            if (code == KeyEvent.VK_2) {
+                gp.ui.scrollLog(1);  // Scroll down Game Log
+            }
             if (code == KeyEvent.VK_P) {
                 gp.playSE(6);
                 gp.gameState = gp.controlsState;

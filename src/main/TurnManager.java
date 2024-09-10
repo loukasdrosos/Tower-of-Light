@@ -118,8 +118,14 @@ public class TurnManager {
             if (gp.selectedUnit == null) {
                 // End the turn for all player units
                 for (LightUnit player : gp.simLightUnits) {
+                    if (!player.getWait() && player.getHP() < player.getMaxHP()) {
+                        player.healEndTurn();
+                    }
                     player.endTurn();
                 }
+            }
+            else {
+                gp.ui.addLogMessage("Can only end Player Phase when no unit is selected.");
             }
         }
 

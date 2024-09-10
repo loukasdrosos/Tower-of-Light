@@ -19,7 +19,6 @@ public class Cursor {
     private int spriteNum = 1; // Determines which sprite image to display
 
     // Variables that control cursor movement
-    private String direction = "none"; // Direction of cursor movement
     private boolean moving = false; // Indicates if the cursor is currently moving
     private int moveDelayCounter = 0; // Counts frames to manage movement delay
     private int moveDelayThreshold = 5; // Threshold to control the speed of cursor movement
@@ -83,21 +82,6 @@ public class Cursor {
         }
     }
 
-    // Loads the cursor sprite image
-    public void loadImage() {
-        try{
-            sprite = ImageIO.read(getClass().getResourceAsStream("/Cursor/Cursor.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Updates the cursor's position based on its current column and row
-    public void updatePosition() {
-        x = getX(col);
-        y = getY(row);
-    }
-
     // Updates the cursor's state and position based on input and game state
     public void update() {
         // Check if it's the player's turn
@@ -119,65 +103,47 @@ public class Cursor {
                 if (moveDelayCounter >= moveDelayThreshold) {
                     // Determine if any cursor movement key is pressed
                     if (keyH.isUpPressed() && !moving) {
-                        direction = "up";
+                        moveUp();
                         moving = true;
                     } else if (keyH.isDownPressed() && !moving) {
-                        direction = "down";
+                        moveDown();
                         moving = true;
                     } else if (keyH.isLeftPressed() && !moving) {
-                        direction = "left";
+                        moveLeft();
                         moving = true;
                     } else if (keyH.isRightPressed() && !moving) {
-                        direction = "right";
+                        moveRight();
                         moving = true;
                     } else if (!keyH.isUpPressed() && !keyH.isDownPressed() &&
                             !keyH.isLeftPressed() && !keyH.isRightPressed()) {
                         // If no key is pressed, stop movement
                         moving = false;
-                        direction = "none";
                     }
 
-                    // Move cursor by a full tile (16 pixels) in the direction
-                    if (moving) {
-                        switch (direction) {
-                            case "up":
-                                moveUp();
-                                break;
-                            case "down":
-                                moveDown();
-                                break;
-                            case "left":
-                                moveLeft();
-                                break;
-                            case "right":
-                                moveRight();
-                                break;
-                        }
+                    // Ensure the cursor stays centered on the tile
+                    updatePosition();
 
-                        // Ensure the cursor stays centered on the tile
-                        updatePosition();
-
-                        // Reset the moving flag if the key is released or tile movement is complete
-                        if ((!keyH.isUpPressed() && direction.equals("up")) ||
-                                (!keyH.isDownPressed() && direction.equals("down")) ||
-                                (!keyH.isLeftPressed() && direction.equals("left")) ||
-                                (!keyH.isRightPressed() && direction.equals("right"))) {
-                            moving = false;
-                            direction = "none";
-                        }
-
-                        // Reset the delay counter after moving
-                        moveDelayCounter = 0;
+                    // Reset the moving flag if the key is released or tile movement is complete
+                    if (!keyH.isUpPressed() || !keyH.isDownPressed() || !keyH.isLeftPressed() || !keyH.isRightPressed()) {
+                        moving = false;
                     }
+
+                    // Reset the delay counter after moving
+                    moveDelayCounter = 0;
                 }
             }
 
-            // Update cursor position if a selected unit is moving
+            // Update cursor position if a player unit is selected
             if (gp.selectedUnit != null && gp.selectedUnit.getIsSelected()) {
+                // Update cursor's position based on player unit's movement
                 if (gp.selectedUnit.getIsMoving()) {
                     col = gp.selectedUnit.getCol();
                     row = gp.selectedUnit.getRow();
                     updatePosition();
+                }
+                // Update cursor's position based on enemies in selected player unit's range
+                if (gp.selectedUnit.getIsAttacking()) {
+
                 }
             }
 
@@ -244,6 +210,20 @@ public class Cursor {
         }
     }
 
+    // Updates the cursor's position based on its current column and row
+    public void updatePosition() {
+        x = getX(col);
+        y = getY(row);
+    }
+
+    // Loads the cursor sprite image
+    public void loadImage() {
+        try{
+            sprite = ImageIO.read(getClass().getResourceAsStream("/Cursor/Cursor.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     // Draws the cursor on the screen
     public void draw (Graphics2D g2) {

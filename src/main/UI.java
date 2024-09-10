@@ -5,6 +5,8 @@ import Entity.LightUnit;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UI {
 
@@ -24,6 +26,11 @@ public class UI {
     int turnRectWidth = 150;   // Width of the rectangle
     int turnRectHeight = 50;   // Height of the rectangle
 
+    private List<String> logMessages = new ArrayList<>(); // List to hold all log messages
+    private int scrollPosition = 0; // Current scroll position
+    private static final int maxVisibleMessages = 11; // Max number of visible messages in Game Log
+    private static final int messageHeight = 20; // Height of each message line for Game Log
+
     public UI(GamePanel gp) {
         this.gp = gp;
 
@@ -31,7 +38,42 @@ public class UI {
         arial_20 = new Font("Arial", Font.PLAIN, 20);
     }
 
+    // CONTROLS STATE UI
+
+    public void drawControls() {
+        // Title "Controls" at the top
+        g2.drawString("Controls:", 50, 4 * 16);
+
+        // Control instructions text
+        g2.setFont(arial_20);
+        String[] controlsText = {
+                "↑, ↓, ←, →: Move cursor and selected player unit",
+                "A: Select player unit, display enemy attack range",
+                "X: Attack with equipped weapon",
+                "W: End player unit's turn",
+                "Z: Cancel action",
+                "Q: Toggle between unit's stats and unit's inventory",
+                "Shift: Switch between player units",
+                "E: End player phase",
+                "1, 2: Log screen up and down",
+                "P: View controls screen"
+        };
+
+        // Draw each control instruction line
+        int lineHeight = 40; // Spacing between lines
+        for (int i = 0; i < controlsText.length; i++) {
+            g2.drawString(controlsText[i], 50, 3 * 16 + (i + 2) * lineHeight);
+        }
+
+        // "Press Enter to continue" at the bottom of the screen
+        g2.setFont(arial_30);
+        g2.drawString("Press Enter to continue", 30 * 16, 50 * 16);
+    }
+
+    // PLAYSTATE UI
+
     // TURN AND PHASE UI
+
     // Draw Turn counter and phases
     public void drawTurns() {
         // Draw the turn counter
@@ -62,8 +104,9 @@ public class UI {
         }
     }
 
-    // LOG UI
-    // Draw Log Window
+    // GAME LOG UI
+
+    // Draw Game Log Window
     public void drawLogScreen() {
         int x = 52 * 16;
         int y = 37 * 16;
@@ -71,9 +114,52 @@ public class UI {
         int height = 15 * 16;
         g2.setColor(new Color(0, 0, 0, 150)); // Semi-transparent black
         g2.fillRoundRect(x, y, width, height, 25, 25);
+
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.PLAIN, 16));
+
+        int textY = y + messageHeight; // Initial Y position for text
+
+        // Render the visible messages
+        for (int i = scrollPosition; i < scrollPosition + maxVisibleMessages && i < logMessages.size(); i++) {
+            g2.drawString(logMessages.get(i), x + 10, textY);
+            textY += messageHeight;
+        }
+
+        // Draw scrollbar
+        drawScrollbar(g2, x + width - 20, y, height);
     }
 
+    // Method to add a message to the log
+    public void addLogMessage(String message) {
+        logMessages.add(message);
+        scrollPosition = Math.max(0, logMessages.size() - maxVisibleMessages); // Auto-scroll to the bottom
+    }
+
+    // Method to scroll the log window
+    public void scrollLog(int direction) {
+        scrollPosition += direction;
+        scrollPosition = Math.max(0, Math.min(scrollPosition, logMessages.size() - maxVisibleMessages));
+    }
+
+    // Draw a simple scrollbar
+    private void drawScrollbar(Graphics2D g2, int x, int y, int height) {
+        int totalMessages = logMessages.size();
+        int visibleMessages = Math.min(maxVisibleMessages, totalMessages);
+        if (totalMessages <= visibleMessages) {
+            return;
+        }
+
+        int scrollbarHeight = (int) ((double) visibleMessages / totalMessages * height);
+        int scrollbarY = y + (int) ((double) scrollPosition / totalMessages * height);
+
+        g2.setColor(Color.GRAY);
+        g2.fillRect(x, scrollbarY, 10, scrollbarHeight);
+    }
+
+
     // BEACONS OF LIGHT UI
+
     public void drawBeaconOfLightTurns() {
         int x = 52 * 16;
         int y = 3 * 16;
@@ -102,35 +188,6 @@ public class UI {
      //   else if (numberofBeaconsUsed = 3) {
       //  g2.drawString("Defeat the boss and exit the floor", 53 * gp.getTileSize(), 4 * gp.getTileSize() + 5);
         //    }
-    }
-
-    // CONTROLS SCREEN UI
-    public void drawControls() {
-        // Title "Controls" at the top
-        g2.drawString("Controls:", 50, 4 * 16);
-
-        // Control instructions text
-        g2.setFont(arial_20);
-        String[] controlsText = {
-                "↑, ↓, ←, →: Move Cursor and Player Unit",
-                "A: Select Player Unit, Display Enemy Attack Range",
-                "W: End Player Unit's Turn",
-                "Z: Cancel",
-                "Q: Toggle between Unit's stats and Unit's inventory",
-                "Shift: Switch between Player Units",
-                "E: End Player Phase",
-                "P: View Controls Screen"
-        };
-
-        // Draw each control instruction line
-        int lineHeight = 40; // Spacing between lines
-        for (int i = 0; i < controlsText.length; i++) {
-            g2.drawString(controlsText[i], 50, 3 * 16 + (i + 2) * lineHeight);
-        }
-
-        // "Press Enter to continue" at the bottom of the screen
-        g2.setFont(arial_30);
-        g2.drawString("Press Enter to continue", 30 * 16, 50 * 16);
     }
 
     // LIGHT UNIT UI
@@ -466,18 +523,15 @@ public class UI {
 
     // Method to draw the Light Unit's information
     public void drawChaosUnitInfo() {
-
         if (gp.TurnM.getPlayerPhase()) {
-            if (gp.selectedUnit == null) {
-                for (ChaosUnit enemy : gp.simChaosUnits) {
-                    if (gp.cursor.getCol() == enemy.getCol() && gp.cursor.getRow() == enemy.getRow()) {
-                        drawChaosUnitPortrait(enemy);
-                        if (gp.keyH.isQPressed()) {
-                            drawChaosUnitStats(enemy);
-                            drawChaosUnitCombatStats(enemy);
-                        } else {
-                            drawChaosUnitDetails(enemy);
-                        }
+            for (ChaosUnit enemy : gp.simChaosUnits) {
+                if (gp.cursor.getCol() == enemy.getCol() && gp.cursor.getRow() == enemy.getRow()) {
+                    drawChaosUnitPortrait(enemy);
+                    if (gp.keyH.isQPressed()) {
+                        drawChaosUnitStats(enemy);
+                        drawChaosUnitCombatStats(enemy);
+                    } else {
+                        drawChaosUnitDetails(enemy);
                     }
                 }
             }

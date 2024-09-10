@@ -137,7 +137,7 @@ public class TileManager {
     public void drawEnemiesInRange(Graphics2D g2) {
         if (gp.selectedUnit != null && gp.selectedUnit.getIsSelected() && !gp.selectedUnit.getWait() && gp.selectedUnit.getIsAttacking()) {
             List<int[]> enemiesInRange = new ArrayList<>(); // To store the tiles with enemies
-            enemiesInRange = gp.selectedUnit.getEnemiesWithinRange();
+            enemiesInRange = gp.selectedUnit.getTilesWithEnemiesInRange();
 
             for (int[] move : enemiesInRange) {
                 int targetCol = move[0];  // Column position of an enemy in range

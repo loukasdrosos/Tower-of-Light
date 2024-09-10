@@ -21,28 +21,6 @@ public class ChaosUnit extends Entity {
         this.canMove = canMove;
     }
 
-    // Method to set up the unit's stats
-    @Override
-    public void setupStats() {
-        name = "Celica";
-        className = "Herald of Chaos";
-        level = 1;
-        maxHP = 20;
-        HP = maxHP;
-        strength = 10;
-        magic = 5;
-        skill = 7;
-        speed = 8;
-        luck = 6;
-        defense = 6;
-        resistance = 4;
-        movement = 3;
-        type = UnitType.Human;
-        armored = false;
-        mounted = false;
-        description = new String[]{"Princess of Valentia", "and Alm's wife.", "Controlled by the", "Chaos God, she has", "become the Herald", "of Chaos."};
-    }
-
     // Method to start the unit's turn (called at the beginning of its turn)
     @Override
     public void startTurn() {

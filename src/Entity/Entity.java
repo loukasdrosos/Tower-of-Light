@@ -81,8 +81,8 @@ public class Entity {
 
     protected Weapon equippedWeapon = null; // Unit's equipped weapon, player units can switch between main hand and offhand weapon
     protected Trinket trinket = null; // Unit's trinket item
-    protected List<Potion> potions = null; // Unit's Potion list
-    protected static final int MAX_POTIONS = 2; // Unit's max potions available
+    protected Potion potionSlot1 = null; // Unit's 1st Potion slot
+    protected Potion potionSlot2 = null; // Unit's 2nd Potion slot
 
     /* BATTLE CALCULATIONS
 

@@ -24,10 +24,10 @@ public class Sound {
         soundEffectURL[1] = getClass().getResource("/Sound_Effects/Player_Phase.wav");
         soundEffectURL[2] = getClass().getResource("/Sound_Effects/Enemy_Phase.wav");
         soundEffectURL[3] = getClass().getResource("/Sound_Effects/Game_Start.wav");
-        soundEffectURL[4] = getClass().getResource("/Sound_Effects/UnitWalking.wav");
+        soundEffectURL[4] = getClass().getResource("/Sound_Effects/Unit_Walking.wav");
         soundEffectURL[5] = getClass().getResource("/Sound_Effects/Select_Player.wav");
         soundEffectURL[6] = getClass().getResource("/Sound_Effects/Cancel_Button.wav");
-        soundEffectURL[7] = getClass().getResource("/Sound_Effects/ArmorUnitWalking.wav");
+        soundEffectURL[7] = getClass().getResource("/Sound_Effects/Armored_Walking.wav");
         soundEffectURL[8] = getClass().getResource("/Sound_Effects/Mounted_Walking.wav");
         soundEffectURL[9] = getClass().getResource("/Sound_Effects/Opening_Theme.wav");
     }

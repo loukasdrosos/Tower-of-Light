@@ -16,6 +16,9 @@ public class LightUnit extends Entity{
     protected boolean isMoving = false;  // Track if the unit is moving
     protected boolean isAttacking = false; // Track whether the unit is Attacking
     private boolean zKeyReleased = true; // To track if Z key has been released
+    private boolean xKeyReleased = true; // To track if X key has been released
+    private boolean wKeyReleased = true; // To track if W key has been released
+    private boolean aKeyReleased = true; // To track if a key has been released
 
     protected MainHand mainHand = null; // Unit's main hand weapon
     protected OffHand offHand = null; // Unit's offhand weapon
@@ -25,19 +28,31 @@ public class LightUnit extends Entity{
         this.keyH = keyH;       // Reference to the key handler
     }
 
+    // PLAYER UNIT'S ACTIONS
+
     // Method to select a player unit (LightUnit) based on the cursor's position
     public void SelectPlayerUnit() {
-        if (keyH.isAPressed()) {
+        if (keyH.isAPressed() && aKeyReleased) {
+            aKeyReleased = false; // Mark that A key was pressed
             // Check if a player is currently selected
             if (gp.selectedUnit == null) {
                 // Check if the cursor's position matches the position of this player unit (LightUnit)
-                if (gp.cursor.getCol() == this.col && gp.cursor.getRow() == this.row && !this.wait) {
-                    gp.selectedUnit = this; // Select player unit
-                    isSelected = true; //Activate the selected player unit
-                    isMoving = true; // Allow player to move
-                    gp.playSE(5);
+                if (gp.cursor.getCol() == col && gp.cursor.getRow() == row) {
+                    if (!wait) {
+                        gp.selectedUnit = this; // Select player unit
+                        isSelected = true; //Activate the selected player unit
+                        isMoving = true; // Allow player to move
+                        gp.playSE(5);
+                    }
+                    else {
+                        gp.ui.addLogMessage("Unit has ended its turn.");
+                    }
                 }
             }
+        }
+        // Reset the A key release state when the key is no longer pressed
+        if (!keyH.isAPressed()) {
+            aKeyReleased = true;
         }
     }
 
@@ -46,7 +61,7 @@ public class LightUnit extends Entity{
         if (keyH.isZPressed() && zKeyReleased) {
             zKeyReleased = false; // Mark that Z key was pressed
 
-            // Cancel battle simulation for player
+            // Cancel battle forecast for player
             if (gp.selectedUnit != null && isSelected && isAttacking && !isMoving) {
                 isMoving = true; // Player can move again
                 isAttacking = false; // Reset the attacking flag
@@ -69,111 +84,62 @@ public class LightUnit extends Entity{
 
     // Method to end the turn of the currently selected player unit
     public void endSelectedUnitTurn() {
-        if (keyH.isWPressed()) {
+        if (keyH.isWPressed() && wKeyReleased) {
+            wKeyReleased = false; // Mark that W key was pressed
             // Only proceed if a unit is selected, is marked as selected, and is currently moving
-            if (gp.selectedUnit != null && isSelected && !wait && isMoving && gp.cChecker.noPlayerOnTile(col, row)) {
-                endTurn(); // End player's turn
-                gp.selectedUnit = null; // Deselect the player
-            }
-        }
-    }
-
-    /* Calculate all valid tiles the unit can move to within its movement range with the use of Breadth-First-Search (BFS)
-    BFS is well-suited for this scenario because explores all possible moves level by level, which means it considers
-    all closer tiles before moving on to further ones. This is useful in grid-based games where movement range is limited */
-    public List<int[]> calculateValidMovement() {
-        List<int[]> validMoves = new ArrayList<>();
-
-        /* Use a queue for breadth-first search (BFS) to explore tiles within the movement range
-        This queue will hold the tiles to be explored, with each tile being represented by its column, row,
-        and the distance from the starting position */
-        Queue<int[]> queue = new LinkedList<>();
-        queue.add(new int[]{preCol, preRow, 0}); // Start from the current position with 0 distance traveled
-
-        // Track visited tiles to prevent revisiting the same tile
-        boolean[][] visited = new boolean[gp.getMaxMapCol()][gp.getMaxMapRow()];
-        visited[preCol][preRow] = true; // Mark the starting position as visited
-
-        // Continue exploring tiles until there are no more to explore
-        while (!queue.isEmpty()) {
-            int[] current = queue.poll(); // Get the current tile from the front of the queue
-            int currentCol = current[0];
-            int currentRow = current[1];
-            int currentDistance = current[2];
-
-            // Add the current tile as a valid move option
-            validMoves.add(new int[]{currentCol, currentRow});
-
-            // Checks all possible movement directions (up, down, left, right) from the current tile
-            int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-            for (int[] dir : directions) {
-                int newCol = currentCol + dir[0];
-                int newRow = currentRow + dir[1];
-                int newDistance = currentDistance + 1;
-
-                // Check if the new tile is within the map bounds, not visited, within movement range, not wall and not occupied by an enemy unit
-                if (gp.cChecker.isWithinMap(newCol, newRow) && !visited[newCol][newRow] &&
-                        newDistance <= movement && gp.cChecker.NonCollisionTile(newCol, newRow) && gp.cChecker.noEnemyOnTile(newCol, newRow)) {
-                    // If the tile is valid, add it to the queue to be explored
-                    queue.add(new int[]{newCol, newRow, newDistance});
-                    visited[newCol][newRow] = true; // Mark the tile as visited
+            if (gp.selectedUnit != null && isSelected && !wait && isMoving) {
+                if (gp.cChecker.noPlayerOnTile(col, row)) {
+                    // If HP < max HP and units doesn't take any action , it heals some HP
+                    if (HP < maxHP) {
+                        healEndTurn();
+                    }
+                    endTurn(); // End player's turn
+                    gp.selectedUnit = null; // Deselect the player
+                }
+                else {
+                    gp.ui.addLogMessage("Unit can't end its turn while on another unit's tile.");
                 }
             }
         }
-        return validMoves; // Return the list of all valid move tiles
+        // Reset the wKeyReleased state when the key is no longer pressed
+        if (!keyH.isWPressed()) {
+            wKeyReleased = true;
+        }
     }
 
-    // Method to find all the enemies in the unit's attack range based on its current position
-    public List<int[]> getEnemiesWithinRange() {
-        // List to store the positions of enemies that are within attack range
-        List<int[]> enemiesInRange = new ArrayList<>();
+    // Method to choose which enemy to attack with physical attacks
+    public void chooseTarget() {
+        if (gp.selectedUnit != null) {
+            if (isSelected && physical) {
+                List<int[]> enemiesInRange = getTilesWithEnemiesInRange();  // To store the tiles with enemies
 
-        // Determine the weapon range (the maximum distance at which the unit can attack)
-        int weaponRange = 0;
-        if (physical && equippedWeapon != null) {
-            weaponRange = equippedWeapon.getRange();  // Get range from equipped weapon
-        }
-        if (magical) {
-            // magic range to be implemented
-        }
-
-        // Iterate over all possible tiles within the maximum attack range
-        for (int dCol = -weaponRange; dCol <= weaponRange; dCol++) {
-            for (int dRow = -weaponRange; dRow <= weaponRange; dRow++) {
-                // Calculate Manhattan distance for the current offset (dCol, dRow)
-                int manhattanDistance = Math.abs(dCol) + Math.abs(dRow);
-
-                // Check if this tile is within the valid attack range (Manhattan distance between 1 and weaponRange)
-                if (manhattanDistance >= 1 && manhattanDistance <= weaponRange) {
-                    // Calculate the actual column and row of the attack tile
-                    int attackCol = col + dCol;
-                    int attackRow = row + dRow;
-
-                    // Ensure the attack tile is within the bounds of the game map
-                    if (gp.cChecker.isWithinMap(attackCol, attackRow)) {
-                        // Check if there is an enemy on the current tile
-                        if (!gp.cChecker.noEnemyOnTile(attackCol, attackRow)) {
-                            // Add the position of the enemy to the list
-                            enemiesInRange.add(new int[]{attackCol, attackRow});
+                if (keyH.isXPressed() && xKeyReleased) {
+                    xKeyReleased = false; // Mark that X key was pressed
+                    if (gp.cChecker.noPlayerOnTile(col, row)) {
+                        if (!enemiesInRange.isEmpty()) {
+                            isMoving = false;
+                            isAttacking = true;
+                        } else if (enemiesInRange.isEmpty()) {
+                            gp.ui.addLogMessage("No enemy in unit's range.");
                         }
                     }
+                    else if (!gp.cChecker.noPlayerOnTile(col, row)) {
+                        gp.ui.addLogMessage("Unit can't attack while on another unit's tile.");
+                    }
                 }
-            }
-        }
-
-        // Return the list of enemies' positions within range
-        return enemiesInRange;
-    }
-
-    // Method to choose which enemy to attack
-    public void chooseTarget() {
-        List<int[]> enemiesInRange = new ArrayList<>(); // To store the tiles with enemies
-        enemiesInRange = getEnemiesWithinRange();
-
-        if (keyH.isXPressed()) {
-            if (!enemiesInRange.isEmpty()) {
-                isMoving = false;
-                isAttacking = true;
+                // Reset the X key release state when the key is no longer pressed
+                if (!keyH.isXPressed()) {
+                    xKeyReleased = true;
+                }
+            } else if (isSelected && magical && !physical) {
+                if (keyH.isXPressed() && xKeyReleased) {
+                    xKeyReleased = false; // Mark that X key was pressed
+                    gp.ui.addLogMessage("Unit can only use spells.");
+                }
+                // Reset the X key release state when the key is no longer pressed
+                if (!keyH.isXPressed()) {
+                    xKeyReleased = true;
+                }
             }
         }
     }
@@ -283,6 +249,14 @@ public class LightUnit extends Entity{
         isSelected = false;   // Deselect the unit
     }
 
+    public void healEndTurn() {
+        HP += (maxHP * 5) / 100;
+        gp.ui.addLogMessage(name + " recovered some health.");
+        if (HP > maxHP) {
+            HP = maxHP;
+        }
+    }
+
     // Method to update the unit's state, called every frame
     @Override
     public void update() {
@@ -307,6 +281,93 @@ public class LightUnit extends Entity{
             }
             spriteCounter = 0;  // Reset the sprite counter
         }
+    }
+
+    /* Calculate all valid tiles the unit can move to within its movement range with the use of Breadth-First-Search (BFS)
+    BFS is well-suited for this scenario because explores all possible moves level by level, which means it considers
+    all closer tiles before moving on to further ones. This is useful in grid-based games where movement range is limited */
+    public List<int[]> calculateValidMovement() {
+        List<int[]> validMoves = new ArrayList<>();
+
+        /* Use a queue for breadth-first search (BFS) to explore tiles within the movement range
+        This queue will hold the tiles to be explored, with each tile being represented by its column, row,
+        and the distance from the starting position */
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[]{preCol, preRow, 0}); // Start from the current position with 0 distance traveled
+
+        // Track visited tiles to prevent revisiting the same tile
+        boolean[][] visited = new boolean[gp.getMaxMapCol()][gp.getMaxMapRow()];
+        visited[preCol][preRow] = true; // Mark the starting position as visited
+
+        // Continue exploring tiles until there are no more to explore
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll(); // Get the current tile from the front of the queue
+            int currentCol = current[0];
+            int currentRow = current[1];
+            int currentDistance = current[2];
+
+            // Add the current tile as a valid move option
+            validMoves.add(new int[]{currentCol, currentRow});
+
+            // Checks all possible movement directions (up, down, left, right) from the current tile
+            int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+            for (int[] dir : directions) {
+                int newCol = currentCol + dir[0];
+                int newRow = currentRow + dir[1];
+                int newDistance = currentDistance + 1;
+
+                // Check if the new tile is within the map bounds, not visited, within movement range, not wall and not occupied by an enemy unit
+                if (gp.cChecker.isWithinMap(newCol, newRow) && !visited[newCol][newRow] &&
+                        newDistance <= movement && gp.cChecker.NonCollisionTile(newCol, newRow) && gp.cChecker.noEnemyOnTile(newCol, newRow)) {
+                    // If the tile is valid, add it to the queue to be explored
+                    queue.add(new int[]{newCol, newRow, newDistance});
+                    visited[newCol][newRow] = true; // Mark the tile as visited
+                }
+            }
+        }
+        return validMoves; // Return the list of all valid move tiles
+    }
+
+    // Method to find all tiles with enemies in the unit's attack range based on its current position
+    public List<int[]> getTilesWithEnemiesInRange() {
+        // List to store the positions of enemies that are within attack range
+        List<int[]> tilesWithEnemiesInRange = new ArrayList<>();
+
+        // Determine the weapon range (the maximum distance at which the unit can attack)
+        int weaponRange = 0;
+        if (physical && equippedWeapon != null) {
+            weaponRange = equippedWeapon.getRange();  // Get range from equipped weapon
+        }
+        if (magical) {
+            // magic range to be implemented
+        }
+
+        // Iterate over all possible tiles within the maximum attack range
+        for (int dCol = -weaponRange; dCol <= weaponRange; dCol++) {
+            for (int dRow = -weaponRange; dRow <= weaponRange; dRow++) {
+                // Calculate Manhattan distance for the current offset (dCol, dRow)
+                int manhattanDistance = Math.abs(dCol) + Math.abs(dRow);
+
+                // Check if this tile is within the valid attack range (Manhattan distance between 1 and weaponRange)
+                if (manhattanDistance >= 1 && manhattanDistance <= weaponRange) {
+                    // Calculate the actual column and row of the attack tile
+                    int attackCol = col + dCol;
+                    int attackRow = row + dRow;
+
+                    // Ensure the attack tile is within the bounds of the game map
+                    if (gp.cChecker.isWithinMap(attackCol, attackRow)) {
+                        // Check if there is an enemy on the current tile
+                        if (!gp.cChecker.noEnemyOnTile(attackCol, attackRow)) {
+                            // Add the position of the enemy to the list
+                            tilesWithEnemiesInRange.add(new int[]{attackCol, attackRow});
+                        }
+                    }
+                }
+            }
+        }
+
+        // Return the list of enemies' positions within range
+        return tilesWithEnemiesInRange;
     }
 
     // Getters && Setters
