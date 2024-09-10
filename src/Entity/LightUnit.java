@@ -111,7 +111,7 @@ public class LightUnit extends Entity{
     public void chooseTarget() {
         if (gp.selectedUnit != null) {
             if (isSelected && physical) {
-                List<int[]> enemiesInRange = getTilesWithEnemiesInRange();  // To store the tiles with enemies
+                List<ChaosUnit> enemiesInRange = getEnemiesInRange();  // To store the tiles with enemies
 
                 if (keyH.isXPressed() && xKeyReleased) {
                     xKeyReleased = false; // Mark that X key was pressed
@@ -328,12 +328,12 @@ public class LightUnit extends Entity{
         return validMoves; // Return the list of all valid move tiles
     }
 
-    // Method to find all tiles with enemies in the unit's attack range based on its current position
+    // Method to find all tiles with enemies in this unit's attack range based on its current position
     public List<int[]> getTilesWithEnemiesInRange() {
         // List to store the positions of enemies that are within attack range
         List<int[]> tilesWithEnemiesInRange = new ArrayList<>();
 
-        // Determine the weapon range (the maximum distance at which the unit can attack)
+        // Determine the attack range (the maximum distance at which the unit can attack)
         int weaponRange = 0;
         if (physical && equippedWeapon != null) {
             weaponRange = equippedWeapon.getRange();  // Get range from equipped weapon
@@ -369,6 +369,33 @@ public class LightUnit extends Entity{
         // Return the list of enemies' positions within range
         return tilesWithEnemiesInRange;
     }
+
+    // Method to find the actual enemy units in this unit's attack range based on this unit's attack range
+    public List<ChaosUnit> getEnemiesInRange() {
+        // List to store the enemy units that are within attack range
+        List<ChaosUnit> enemiesInRange = new ArrayList<>();
+
+        // Get the positions of tiles with enemies within the attack range
+        List<int[]> tilesWithEnemiesInRange = getTilesWithEnemiesInRange();
+
+        // Iterate over the list of tiles to find and collect the enemy units
+        for (int[] tile : tilesWithEnemiesInRange) {
+            int attackCol = tile[0];
+            int attackRow = tile[1];
+
+            // Retrieve the enemy unit on the current tile
+            ChaosUnit enemyUnit = gp.cChecker.getEnemyOnTile(attackCol, attackRow);
+
+            // If an enemy unit is found, add it to the list
+            if (enemyUnit != null) {
+                enemiesInRange.add(enemyUnit);
+            }
+        }
+
+        // Return the list of enemy units within range
+        return enemiesInRange;
+    }
+
 
     // Getters && Setters
 

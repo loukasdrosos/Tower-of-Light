@@ -1,5 +1,6 @@
 package main;
 
+import Entity.ChaosUnit;
 import Entity.LightUnit;
 
 import javax.imageio.ImageIO;
@@ -24,6 +25,8 @@ public class Cursor {
     private int moveDelayThreshold = 5; // Threshold to control the speed of cursor movement
 
     private boolean shiftPressed = false; // Track if shift has been handled in this update
+    private int enemyIndex = 0;
+
 
     GamePanel gp;
     private KeyHandler keyH;
@@ -91,11 +94,6 @@ public class Cursor {
 
                 moveAroundPlayers(); // Traverse through light units
 
-                // Reset shiftPressed if Shift key is released
-                if (!keyH.isShiftPressed()) {
-                    shiftPressed = false;
-                }
-
                 // Increment the delay counter
                 moveDelayCounter++;
 
@@ -105,19 +103,18 @@ public class Cursor {
                     if (keyH.isUpPressed() && !moving) {
                         moveUp();
                         moving = true;
-                    } else if (keyH.isDownPressed() && !moving) {
+                    }
+                    else if (keyH.isDownPressed() && !moving) {
                         moveDown();
                         moving = true;
-                    } else if (keyH.isLeftPressed() && !moving) {
+                    }
+                    else if (keyH.isLeftPressed() && !moving) {
                         moveLeft();
                         moving = true;
-                    } else if (keyH.isRightPressed() && !moving) {
+                    }
+                    else if (keyH.isRightPressed() && !moving) {
                         moveRight();
                         moving = true;
-                    } else if (!keyH.isUpPressed() && !keyH.isDownPressed() &&
-                            !keyH.isLeftPressed() && !keyH.isRightPressed()) {
-                        // If no key is pressed, stop movement
-                        moving = false;
                     }
 
                     // Ensure the cursor stays centered on the tile
@@ -143,7 +140,40 @@ public class Cursor {
                 }
                 // Update cursor's position based on enemies in selected player unit's range
                 if (gp.selectedUnit.getIsAttacking()) {
+                    List<ChaosUnit> enemiesInRange = gp.selectedUnit.getEnemiesInRange();
+                    // Increment the delay counter
+                    moveDelayCounter++;
 
+                    // Only move the cursor when the delay counter reaches the threshold
+                    if (moveDelayCounter >= moveDelayThreshold + 3) {
+                        if (keyH.isRightPressed() && !moving) {
+                            if (enemyIndex < enemiesInRange.size() - 1) {
+                                enemyIndex++;  // Move to the next enemy
+                            } else {
+                                enemyIndex = 0;  // Wrap around to the first enemy
+                            }
+                            moving = true;
+                        } else if (keyH.isLeftPressed() && !moving) {
+                            if (enemyIndex > 0) {
+                                enemyIndex--;  // Move to the previous enemy
+                            } else {
+                                enemyIndex = enemiesInRange.size() - 1;  // Wrap around to the last enemy
+                            }
+                            moving = true;
+                        }
+
+                        col = enemiesInRange.get(enemyIndex).getCol();
+                        row = enemiesInRange.get(enemyIndex).getRow();
+                        updatePosition();
+
+                        // Reset the moving flag if the key is released
+                        if (!keyH.isLeftPressed() || !keyH.isRightPressed()) {
+                            moving = false;
+                        }
+
+                        // Reset the delay counter after moving
+                        moveDelayCounter = 0;
+                    }
                 }
             }
 
@@ -207,6 +237,10 @@ public class Cursor {
             updatePosition();      // Update cursor position
             shiftPressed = true;  // Mark Shift key as handled
             gp.playSE(6);
+        }
+        // Reset shiftPressed if Shift key is released
+        if (!keyH.isShiftPressed()) {
+            shiftPressed = false;
         }
     }
 

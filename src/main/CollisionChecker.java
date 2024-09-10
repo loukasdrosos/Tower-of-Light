@@ -29,6 +29,20 @@ public class CollisionChecker {
         return true;
     }
 
+    // Method to check if there is an enemy unit on the specified tile
+    public ChaosUnit getEnemyOnTile(int col, int row) {
+        // Iterate over all enemy units in the game
+        for (ChaosUnit enemy : gp.simChaosUnits) {
+            // Check if the enemy's position matches the specified tile
+            if (enemy.getCol() == col && enemy.getRow() == row) {
+                return enemy; // Return the enemy unit found on the tile
+            }
+        }
+        // Return null if no enemy is found on the tile
+        return null;
+    }
+
+
     // Method to check if there is no player unit on the target tile
     public boolean noPlayerOnTile (int targetCol, int targetRow) {
         for (LightUnit player : gp.simLightUnits) {
