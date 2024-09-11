@@ -19,12 +19,12 @@ public class Dracoshield extends Trinket{
     @Override
     public void setupStats() {
         name = "Dracoshield";
-        strength = 10;
+        strength = 0;
         magic = 0;
         skill = 0;
-        speed = -20;
+        speed = -2;
         defense = 2;
-        resistance = 20;
+        resistance = 2;
         vision = 0;
     }
 }
