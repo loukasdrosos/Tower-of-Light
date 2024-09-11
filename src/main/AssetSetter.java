@@ -10,6 +10,7 @@ public class AssetSetter {
     GamePanel gp;
     KeyHandler keyH;
     Lightbringer Lightbringer = new Lightbringer();
+    Dracoshield Dracoshield = new Dracoshield();
 
     public AssetSetter(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
@@ -18,14 +19,14 @@ public class AssetSetter {
 
     // Initialize player units and set their starting positions
     public void setLightUnits() {
-        gp.simLightUnits.add(new Prince(gp, keyH, 30, 14, Lightbringer));
-        gp.simLightUnits.add(new Prince(gp, keyH, 31, 14, Lightbringer));
+        gp.simLightUnits.add(new Prince(gp, keyH, 30, 14, Lightbringer, Dracoshield));
+        gp.simLightUnits.add(new Prince(gp, keyH, 31, 14, Lightbringer, null));
     }
 
     // Initialize enemy units and set their starting positions
     public void setChaosUnits() {
-        gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 32, 15, Lightbringer));
-        gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 32, 13, Lightbringer));
+        gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 32, 15, Lightbringer, null));
+        gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 32, 13, Lightbringer, Dracoshield));
     }
 
     // Copy units from one list to another

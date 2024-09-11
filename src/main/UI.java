@@ -260,20 +260,90 @@ public class UI {
             nextLine++;
             g2.drawString("Exp: " + player.getExp() + " / " + player.getMaxExp(), textX, textY + nextLine * lineHeight);
 
+            // Set font for text
+            g2.setFont(new Font("Arial", Font.PLAIN, 15));
+
             // Coordinates for stats below the portrait
             int statsX = 52 * 16 + 5; // Align with the portrait's X position
+            int statsX2 = textX + 10; // Right side stats
             int statsY = 5 * 16 + 8 * gp.getTileSize() + 20; // Start drawing below the portrait
 
             // Draw the unit's stats below the portrait
             g2.drawString("HP: " + player.getHP() + " / " + player.getMaxHP(), statsX, statsY);
-            g2.drawString("Strength: " + player.getStrength(), statsX, statsY + lineHeight);
-            g2.drawString("Magic: " + player.getMagic(), statsX, statsY + 2 * lineHeight);
-            g2.drawString("Skill: " + player.getSkill(), statsX, statsY + 3 * lineHeight);
-            g2.drawString("Speed: " + player.getSpeed(), statsX, statsY + 4 * lineHeight);
-            g2.drawString("Luck: " + player.getLuck(), textX, statsY + lineHeight);
-            g2.drawString("Defense: " + player.getDefense(), textX, statsY + 2 * lineHeight);
-            g2.drawString("Resistance: " + player.getResistance(), textX, statsY + 3 * lineHeight);
-            g2.drawString("Movement: " + player.getMovement(), textX, statsY + 4 * lineHeight);
+
+            g2.drawString("Movement: " + player.getMovement(), statsX2, statsY);
+
+            if (player.getBonusStrength() == 0){
+                g2.drawString("Strength: " + player.getStrength(), statsX, statsY + lineHeight);
+            }
+            else if (player.getBonusStrength() > 0){
+                g2.drawString("Strength: " + player.getStrength() + " + " + player.getBonusStrength(), statsX, statsY + lineHeight);
+            }
+            else if (player.getBonusStrength() < 0){
+                g2.drawString("Strength: " + player.getStrength() + " - " + Math.abs(player.getBonusStrength()), statsX, statsY + lineHeight);
+            }
+
+            if (player.getBonusSkill() == 0){
+                g2.drawString("Skill: " + player.getSkill(), statsX2, statsY + lineHeight);
+            }
+            else if (player.getBonusSkill() > 0){
+                g2.drawString("Skill: " + player.getSkill() + " + " + player.getBonusSkill(), statsX2, statsY + lineHeight);
+            }
+            else if (player.getBonusSkill() < 0){
+                g2.drawString("Skill: " + player.getSkill() + " - " + Math.abs(player.getBonusSkill()), statsX2, statsY + lineHeight);
+            }
+
+            if (player.getBonusMagic() == 0){
+                g2.drawString("Magic: " + player.getMagic(), statsX, statsY + 2 * lineHeight);
+            }
+            else if (player.getBonusMagic() > 0){
+                g2.drawString("Magic: " + player.getMagic() + " + " + player.getBonusMagic(), statsX, statsY + 2 * lineHeight);
+            }
+            else if (player.getBonusMagic() < 0){
+                g2.drawString("Magic: " + player.getMagic() + " - " + Math.abs(player.getBonusMagic()), statsX, statsY + 2 * lineHeight);
+            }
+
+            if (player.getBonusSpeed() == 0){
+                g2.drawString("Speed: " + player.getSpeed(), statsX2, statsY + 2 * lineHeight);
+            }
+            else if (player.getBonusSpeed() > 0){
+                g2.drawString("Speed: " + player.getSpeed() + " + " + player.getBonusSpeed(), statsX2, statsY + 2 * lineHeight);
+            }
+            else if (player.getBonusSpeed() < 0){
+                g2.drawString("Speed: " + player.getSpeed() + " - " + Math.abs(player.getBonusSpeed()), statsX2, statsY + 2 * lineHeight);
+            }
+
+            if (player.getBonusDefense() == 0){
+                g2.drawString("Defense: " + player.getDefense(), statsX, statsY + 3 * lineHeight);
+            }
+            else if (player.getBonusDefense() > 0){
+                g2.drawString("Defense: " + player.getDefense() + " + " + player.getBonusDefense(), statsX, statsY + 3 * lineHeight);
+            }
+            else if (player.getBonusDefense() < 0){
+                g2.drawString("Defense: " + player.getDefense() + " - " + Math.abs(player.getBonusDefense()), statsX, statsY + 3 * lineHeight);
+            }
+
+            g2.drawString("Luck: " + player.getLuck(), statsX2, statsY + 3 * lineHeight);
+
+            if (player.getBonusResistance() == 0){
+                g2.drawString("Resistance: " + player.getResistance(), statsX, statsY + 4 * lineHeight);
+            }
+            else if (player.getBonusResistance() > 0){
+                g2.drawString("Resistance: " + player.getResistance() + " + " + player.getBonusResistance(), statsX, statsY + 4 * lineHeight);
+            }
+            else if (player.getBonusResistance() < 0){
+                g2.drawString("Resistance: " + player.getResistance() + " - " + Math.abs(player.getBonusResistance()), statsX, statsY + 4 * lineHeight);
+            }
+
+            if (player.getBonusVision() == 0){
+                g2.drawString("Vision: " + player.getVision(), statsX2, statsY + 4 * lineHeight);
+            }
+            else if (player.getBonusVision() > 0){
+                g2.drawString("Vision: " + player.getVision() + " + " + player.getBonusVision(), statsX2, statsY + 4 * lineHeight );
+            }
+            else if (player.getBonusVision() < 0){
+                g2.drawString("Vision: " + player.getVision() + " - " + Math.abs(player.getBonusVision()), statsX2, statsY + 4 * lineHeight );
+            }
         }
     }
 
@@ -341,9 +411,6 @@ public class UI {
             g2.drawString("Crit Rate: " + player.getCritical(), textX, combatStatsY);
             g2.drawString("Hit Rate: " + player.getHitRate(), combatStatsX, combatStatsY + lineHeight);
             g2.drawString("Evade: " + player.getEvade(), textX, combatStatsY + lineHeight);
-            g2.drawString("Eff.Def.: " + player.getEffDefense(), combatStatsX, combatStatsY + 2 * lineHeight);
-            g2.drawString("Eff.Res.: " + player.getEffResistance(), textX, combatStatsY + 2 * lineHeight);
-            g2.drawString("Eff.Speed: " + player.getEffSpeed(), combatStatsX, combatStatsY + 3 * lineHeight);
         }
     }
 
@@ -419,14 +486,17 @@ public class UI {
         int textX = 69 * 16 + 7 * gp.getTileSize() + 9; // Right side of the portrait
         int textY = 5 * 16 + 20; // Slightly below the top of the portrait
         int lineHeight = 20; // Spacing between each line of text
-        int nextLine = 1;
+        int nextLine = 0;
 
         // Set font for text
         g2.setFont(new Font("Arial", Font.PLAIN, 16));
         g2.setColor(Color.WHITE);
 
         // Draw unit's name, class name, and level next to the portrait
-        g2.drawString(enemy.getName(), textX, textY);
+        if (enemy.getName() != null) {
+            g2.drawString(enemy.getName(), textX, textY + nextLine * lineHeight);
+            nextLine++;
+        }
         g2.drawString(enemy.getClassName(), textX, textY + nextLine * lineHeight);
         nextLine++;
         g2.drawString(String.valueOf(enemy.getType()), textX, textY + nextLine * lineHeight);
@@ -443,18 +513,88 @@ public class UI {
 
         // Coordinates for stats below the portrait
         int statsX = 69 * 16 - 5; // Align with the portrait's X position
+        int statsX2 = textX + 10; // Right side stats
         int statsY = 5 * 16 + 8 * gp.getTileSize() + 20; // Start drawing below the portrait
+
+        // Set font for text
+        g2.setFont(new Font("Arial", Font.PLAIN, 15));
 
         // Draw the unit's stats below the portrait
         g2.drawString("HP: " + enemy.getHP() + " / " + enemy.getMaxHP(), statsX, statsY);
-        g2.drawString("Strength: " + enemy.getStrength(), statsX, statsY + lineHeight);
-        g2.drawString("Magic: " + enemy.getMagic(), statsX, statsY + 2 * lineHeight);
-        g2.drawString("Skill: " + enemy.getSkill(), statsX, statsY + 3 * lineHeight);
-        g2.drawString("Speed: " + enemy.getSpeed(), statsX, statsY + 4 * lineHeight);
-        g2.drawString("Luck: " + enemy.getLuck(), textX + 5, statsY + lineHeight);
-        g2.drawString("Defense: " + enemy.getDefense(), textX + 5, statsY + 2 * lineHeight);
-        g2.drawString("Resistance: " + enemy.getResistance(), textX + 5, statsY + 3 * lineHeight);
-        g2.drawString("Movement: " + enemy.getMovement(), textX + 5, statsY + 4 * lineHeight);
+
+        g2.drawString("Movement: " + enemy.getMovement(), statsX2, statsY);
+
+        if (enemy.getBonusStrength() == 0){
+            g2.drawString("Strength: " + enemy.getStrength(), statsX, statsY + lineHeight);
+        }
+        else if (enemy.getBonusStrength() > 0){
+            g2.drawString("Strength: " + enemy.getStrength() + " + " + enemy.getBonusStrength(), statsX, statsY + lineHeight);
+        }
+        else if (enemy.getBonusStrength() < 0){
+            g2.drawString("Strength: " + enemy.getStrength() + " - " + Math.abs(enemy.getBonusStrength()), statsX, statsY + lineHeight);
+        }
+
+        if (enemy.getBonusSkill() == 0){
+            g2.drawString("Skill: " + enemy.getSkill(), statsX2, statsY + lineHeight);
+        }
+        else if (enemy.getBonusSkill() > 0){
+            g2.drawString("Skill: " + enemy.getSkill() + " + " + enemy.getBonusSkill(), statsX2, statsY + lineHeight);
+        }
+        else if (enemy.getBonusSkill() < 0){
+            g2.drawString("Skill: " + enemy.getSkill() + " - " + Math.abs(enemy.getBonusSkill()), statsX2, statsY + lineHeight);
+        }
+
+        if (enemy.getBonusMagic() == 0){
+            g2.drawString("Magic: " + enemy.getMagic(), statsX, statsY + 2 * lineHeight);
+        }
+        else if (enemy.getBonusMagic() > 0){
+            g2.drawString("Magic: " + enemy.getMagic() + " + " + enemy.getBonusMagic(), statsX, statsY + 2 * lineHeight);
+        }
+        else if (enemy.getBonusMagic() < 0){
+            g2.drawString("Magic: " + enemy.getMagic() + " - " + Math.abs(enemy.getBonusMagic()), statsX, statsY + 2 * lineHeight);
+        }
+
+        if (enemy.getBonusSpeed() == 0){
+            g2.drawString("Speed: " + enemy.getSpeed(), statsX2, statsY + 2 * lineHeight);
+        }
+        else if (enemy.getBonusSpeed() > 0){
+            g2.drawString("Speed: " + enemy.getSpeed() + " + " + enemy.getBonusSpeed(), statsX2, statsY + 2 * lineHeight);
+        }
+        else if (enemy.getBonusSpeed() < 0){
+            g2.drawString("Speed: " + enemy.getSpeed() + " - " + Math.abs(enemy.getBonusSpeed()), statsX2, statsY + 2 * lineHeight);
+        }
+
+        if (enemy.getBonusDefense() == 0){
+            g2.drawString("Defense: " + enemy.getDefense(), statsX, statsY + 3 * lineHeight);
+        }
+        else if (enemy.getBonusDefense() > 0){
+            g2.drawString("Defense: " + enemy.getDefense() + " + " + enemy.getBonusDefense(), statsX, statsY + 3 * lineHeight);
+        }
+        else if (enemy.getBonusDefense() < 0){
+            g2.drawString("Defense: " + enemy.getDefense() + " - " + Math.abs(enemy.getBonusDefense()), statsX, statsY + 3 * lineHeight);
+        }
+
+        g2.drawString("Luck: " + enemy.getLuck(), statsX2, statsY + 3 * lineHeight);
+
+        if (enemy.getBonusResistance() == 0){
+            g2.drawString("Resistance: " + enemy.getResistance(), statsX, statsY + 4 * lineHeight);
+        }
+        else if (enemy.getBonusResistance() > 0){
+            g2.drawString("Resistance: " + enemy.getResistance() + " + " + enemy.getBonusResistance(), statsX, statsY + 4 * lineHeight);
+        }
+        else if (enemy.getBonusResistance() < 0){
+            g2.drawString("Resistance: " + enemy.getResistance() + " - " + Math.abs(enemy.getBonusResistance()), statsX, statsY + 4 * lineHeight);
+        }
+
+        if (enemy.getBonusVision() == 0){
+            g2.drawString("Vision: " + enemy.getVision(), statsX2, statsY + 4 * lineHeight);
+        }
+        else if (enemy.getBonusVision() > 0){
+            g2.drawString("Vision: " + enemy.getVision() + " + " + enemy.getBonusVision(), statsX2, statsY + 4 * lineHeight );
+        }
+        else if (enemy.getBonusVision() < 0){
+            g2.drawString("Vision: " + enemy.getVision() + " - " + Math.abs(enemy.getBonusVision()), statsX2, statsY + 4 * lineHeight );
+        }
     }
 
     public void drawChaosUnitCombatStats(ChaosUnit enemy) {
@@ -475,9 +615,6 @@ public class UI {
         g2.drawString("Crit Rate: " + enemy.getCritical(), textX, combatStatsY);
         g2.drawString("Hit Rate: " + enemy.getHitRate(), combatStatsX, combatStatsY + lineHeight);
         g2.drawString("Evade: " + enemy.getEvade(), textX, combatStatsY + lineHeight);
-        g2.drawString("Eff.Def.: " + enemy.getEffDefense(), combatStatsX, combatStatsY + 2 * lineHeight);
-        g2.drawString("Eff.Res.: " + enemy.getEffResistance(), textX, combatStatsY + 2 * lineHeight);
-        g2.drawString("Eff.Speed: " + enemy.getEffSpeed(), combatStatsX, combatStatsY + 3 * lineHeight);
     }
 
     // Draw Chaos Unit's details

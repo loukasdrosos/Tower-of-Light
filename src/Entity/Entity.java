@@ -10,7 +10,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.List;
 
 public class Entity {
 
@@ -45,6 +44,7 @@ public class Entity {
     protected int defense; // Unit's defense against physical attacks
     protected int resistance; // Unit's defence against magic attacks
     protected int movement; // The number of tiles the unit can move
+    protected int vision; // The number of tiles the unit can see
 
     // Unit Growth Rates (chance of stat increasing by 1 when unit levels up), only for player units
     protected int HPGrowthRate;
@@ -62,13 +62,27 @@ public class Entity {
      */
 
     // Unit's Combat stats
-    protected int might; // Strength or Magic + Weapon’s or Spell's Might
-    protected int critical; // Weapon’s Critical + (Skill / 2), critical hits deal damage multiplied by 3
-    protected int hitRate; // Weapon’s Hit rate + [(Skill x 3 + Luck) / 2]
-    protected int evade; // (Speed x 3 + Luck) / 2
+    protected int bonusStrength; // Trinket's Strength
+    protected int bonusMagic; // Trinket's Magic
+    protected int bonusSkill; // Trinket's Skill
+    protected int bonusSpeed; // Trinket's Speed
+    protected int bonusDefense; // Trinket's Defense
+    protected int bonusResistance; // Trinket's Resistance
+    protected int bonusVision; //  Trinket's Vision
+
+    protected int effStrength; // Strength + Trinket's Strength
+    protected int effMagic; // Magic + Trinket's Magic
+    protected int effSkill; // Skill + Trinket's Skill
+    protected int effSpeed; // Speed + Trinket's Speed
     protected int effDefense; // Defense + Trinket's Defense
     protected int effResistance; // Resistance + Trinket's Resistance
-    protected int effSpeed; // Speed + Trinket's Speed
+    protected int effVision; // Vision + Trinket's Vision
+
+    protected int might; // eff.Strength or eff.Magic + Weapon’s or Spell's Might
+    protected int critical; // Weapon’s Critical + (eff.Skill / 2), critical hits deal damage multiplied by 3
+    protected int hitRate; // Weapon’s Hit rate + [(eff.Skill x 3 + Luck) / 2]
+    protected int evade; // (eff.Speed x 3 + Luck) / 2
+
 
     // Unit types, human, orc, tauren, elf or dragon
     // can be mounted (on a horse) or armored, attacks strong against these types deal damage multiplied by 3
@@ -86,7 +100,7 @@ public class Entity {
 
     /* BATTLE CALCULATIONS
 
-     Attack (damage)= Attack – Enemy’s Defence or Resistance
+     Attack (damage)= Might – Enemy’s eff.Defence or eff.Resistance
      Hit rate = (Hit rate  – Enemy’s Avoid) [%]
      Critical rate = (Critical  – Enemy’s Luck) [%]
      Level difference (LD) 	= enemy’s Level – player’s Level
@@ -106,25 +120,43 @@ public class Entity {
     }
 
     public void calculateCombatStats() {
-        if (physical) {
-            might = strength + equippedWeapon.getMight();
-            critical = (skill/2) + equippedWeapon.getCrit();
-            hitRate = (((skill * 3) + luck) / 2) + equippedWeapon.getHit();
-        }
-        if (magical){
-
-        }
-        evade = ((speed * 3) + luck) / 2;
         if (trinket != null) {
-            effDefense = defense + trinket.getDefense();
-            effResistance = resistance + trinket.getResistance();
-            effSpeed = speed + trinket.getSpeed();
+            bonusStrength = trinket.getStrength();
+            bonusMagic = trinket.getMagic();
+            bonusSkill = trinket.getSkill();
+            bonusSpeed = trinket.getSpeed();
+            bonusDefense =  trinket.getDefense();
+            bonusResistance = trinket.getResistance();
+            bonusVision = trinket.getVision();
         }
         if (trinket == null) {
-            effDefense = defense;
-            effResistance = resistance;
-            effSpeed = speed;
+            bonusStrength = 0;
+            bonusMagic = 0;
+            bonusSkill = 0;
+            bonusSpeed = 0;
+            bonusDefense = 0;
+            bonusResistance = 0;
+            bonusVision = 0;
         }
+        effStrength = strength + bonusStrength;
+        effMagic = magic + bonusMagic;
+        effSkill = skill + bonusSkill;
+        effSpeed = speed + bonusSpeed;
+        effDefense = defense + bonusDefense;
+        effResistance = resistance + bonusResistance;
+        effVision = vision + bonusVision;
+
+        if (physical) {
+            might = effStrength + equippedWeapon.getMight();
+            critical = (effSkill/2) + equippedWeapon.getCrit();
+            hitRate = (((effSkill * 3) + luck) / 2) + equippedWeapon.getHit();
+        }
+        if (magical){
+            might = effMagic + equippedWeapon.getMight();
+            critical = (effSkill/2) + equippedWeapon.getCrit();
+            hitRate = (((effSkill * 3) + luck) / 2) + equippedWeapon.getHit();
+        }
+        evade = ((effSpeed * 3) + luck) / 2;
     }
 
     // Stat modifiers for its class
@@ -132,18 +164,34 @@ public class Entity {
         if (type == UnitType.Human) {
             skill += 3;
             speed += 2;
+            maxHP -= 2;
+            if (maxHP < 0){
+                maxHP = 0;
+            }
         }
         if (type == UnitType.Orc) {
             maxHP += 3;
             strength += 2;
+            skill -= 2;
+            if (skill < 0){
+                skill = 0;
+            }
         }
         if (type == UnitType.Tauren) {
             strength += 3;
             defense += 2;
+            resistance -= 2;
+            if (resistance < 0){
+                resistance = 0;
+            }
         }
         if (type == UnitType.Elf) {
             speed += 3;
             resistance += 2;
+            strength -= 2;
+            if (strength < 0){
+                strength = 0;
+            }
         }
     }
 
@@ -293,6 +341,8 @@ public class Entity {
 
     public int getMovement() { return movement; } // Get the unit's movement
 
+    public int getVision() { return vision; } // Get the unit's vision
+
     public boolean isArmored() { return armored; } // Get the unit's armored status
 
     public boolean isMounted() { return mounted; } // Get the unit's mounted status
@@ -311,11 +361,33 @@ public class Entity {
 
     public int getEvade() {return evade; } // Get the unit's evade
 
+    public int getEffStrength() {return effStrength;} // Get the unit's effective strength
+
+    public int getEffMagic() {return effMagic;} // Get the unit's effective magic
+
+    public int getEffSkill() {return effSkill;} // Get the unit's effective skill
+
+    public int getEffSpeed() {return effSpeed;} // Get the unit's effective speed
+
     public int getEffDefense() {return effDefense;} // Get the unit's effective defence
 
     public int getEffResistance() {return effResistance;} // Get the unit's effective resistance
 
-    public int getEffSpeed() {return effSpeed;} // Get the unit's effective speed
+    public int getEffVision() {return effVision;} // Get the unit's effective vision
+
+    public int getBonusStrength() {return bonusStrength;} // Get the unit's bonus strength
+
+    public int getBonusMagic() {return bonusMagic;} // Get the unit's bonus magic
+
+    public int getBonusSkill() {return bonusSkill;} // Get the unit's bonus skill
+
+    public int getBonusSpeed() {return bonusSpeed;} // Get the unit's bonus speed
+
+    public int getBonusDefense() {return bonusDefense;} // Get the unit's bonus defence
+
+    public int getBonusResistance() {return bonusResistance;} // Get the unit's bonus resistance
+
+    public int getBonusVision() {return bonusVision;} // Get the unit's bonus vision
 
 }
 

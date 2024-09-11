@@ -21,6 +21,9 @@ public class Item {
         y = getY(row);
     }
 
+    // Placeholder method to set up the main weapon's stats
+    public void setupStats() {   }
+
     public void draw(Graphics2D g2) {
         g2.drawImage(image, x, y, tileSize, tileSize, null);
     }

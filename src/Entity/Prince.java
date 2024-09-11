@@ -6,7 +6,7 @@ import main.KeyHandler;
 
 public class Prince extends LightUnit{
 
-    public Prince (GamePanel gp, KeyHandler keyH, int startCol, int startRow, MainHand mainhand) {
+    public Prince (GamePanel gp, KeyHandler keyH, int startCol, int startRow, MainHand mainhand, Trinket trinket) {
         super(gp, keyH);
         this.col =  startCol;   // Initial column position
         this.row = startRow;    // Initial row position
@@ -18,8 +18,8 @@ public class Prince extends LightUnit{
         setupGrowthRates();
         this.mainHand = mainhand;
         equippedWeapon = this.mainHand;
+        this.trinket = trinket;
         calculateCombatStats();
-
         // Load unit's images for animations
         try { loadImage(); }
         catch (Exception e){
@@ -41,8 +41,9 @@ public class Prince extends LightUnit{
         speed = 8;
         luck = 0;
         defense = 8;
-        resistance = 3;
+        resistance = 30;
         movement = 3;
+        vision = 5;
         type = UnitType.Human;
         boostStatsForClasses();
         HP = maxHP;

@@ -1,11 +1,12 @@
 package Entity;
 
+import Item.Trinket;
 import Item.Weapon;
 import main.GamePanel;
 
 public class HeraldOfChaos extends ChaosUnit{
 
-    public HeraldOfChaos(GamePanel gp, boolean isBoss, boolean canMove, int startCol, int startRow, Weapon weapon) {
+    public HeraldOfChaos(GamePanel gp, boolean isBoss, boolean canMove, int startCol, int startRow, Weapon weapon, Trinket trinket) {
         super(gp, isBoss, canMove);
         this.col = startCol;   // Initial column position
         this.row = startRow;    // Initial row position
@@ -15,8 +16,8 @@ public class HeraldOfChaos extends ChaosUnit{
         preRow = row;           // Set previous row to current row
         setupStats();
         equippedWeapon = weapon;
+        this.trinket = trinket;
         calculateCombatStats();
-
         // Load unit's images for animations
         try {
             loadImage();
