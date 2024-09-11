@@ -38,10 +38,10 @@ public class Prince extends LightUnit{
         strength = 10;
         magic = 3;
         skill = 7;
-        speed = 8;
+        speed = 10;
         luck = 0;
         defense = 8;
-        resistance = 30;
+        resistance = 3;
         movement = 3;
         vision = 5;
         type = UnitType.Human;

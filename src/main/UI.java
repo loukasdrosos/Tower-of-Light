@@ -190,6 +190,135 @@ public class UI {
         //    }
     }
 
+    // COMBAT FORECAST UI
+
+    public void drawCombatForecast() {
+        int x = 52 * 16;
+        int y = 37 * 16;
+        int width = 32 * 16;
+        int height = 15 * 16;
+        int padding = 20;
+        int lineHeight = 30;
+
+        // Draw the background rectangle
+        g2.setColor(Color.BLACK);
+        g2.fillRoundRect(x, y, width, height, 25, 25);
+
+        // Set the color and font for the text
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.PLAIN, 18));
+
+        // Get enemy to attack
+        ChaosUnit enemy = gp.cChecker.getEnemyOnTile(gp.cursor.getCol(), gp.cursor.getRow());
+
+        // Calculate positions for player and enemy stats
+        int playerX = x + padding;
+        int enemyX = x + width / 2 + padding;
+        int textY = y + padding;
+        String playerWeaponName = null;
+        int playerAttack = 0;
+        int playerHitRate = 0;
+        int playerCrit = 0;
+        String enemyWeaponName = null;
+        int enemyAttack = 0;
+        int enemyHitRate = 0;
+        int enemyCrit = 0;
+
+        if (enemy != null) {
+
+            if (gp.selectedUnit.isPhysical()) {
+                playerWeaponName = gp.selectedUnit.equippedWeapon.getName();
+                playerAttack = gp.selectedUnit.getMight() - enemy.getEffDefense();
+            } else if (gp.selectedUnit.isMagical()) {
+                playerWeaponName = gp.selectedUnit.equippedWeapon.getName();
+                playerAttack = gp.selectedUnit.getMight() - enemy.getEffResistance();
+            }
+            if (playerAttack < 0) {
+                playerAttack = 0;
+            }
+
+            playerHitRate = gp.selectedUnit.getHitRate() - enemy.getEvade();
+            if (playerHitRate > 100) {
+                playerHitRate = 100;
+            } else if (playerHitRate < 0) {
+                playerHitRate = 0;
+            }
+
+            playerCrit = gp.selectedUnit.getCritical() - enemy.getLuck();
+            if (playerCrit > 100) {
+                playerCrit = 100;
+            } else if (playerCrit < 0) {
+                playerCrit = 0;
+            }
+
+            if (enemy.isPhysical()) {
+                enemyWeaponName = enemy.equippedWeapon.getName();
+                enemyAttack = enemy.getMight() - gp.selectedUnit.getEffDefense();
+            } else if (enemy.isMagical()) {
+                enemyWeaponName = enemy.equippedWeapon.getName();
+                enemyAttack = enemy.getMight() - gp.selectedUnit.getEffResistance();
+            }
+            if (enemyAttack < 0) {
+                enemyAttack = 0;
+            }
+
+            enemyHitRate = enemy.getHitRate() - gp.selectedUnit.getEvade();
+            if (enemyHitRate > 100) {
+                enemyHitRate = 100;
+            } else if (enemyHitRate < 0) {
+                enemyHitRate = 0;
+            }
+
+            enemyCrit = enemy.getCritical() - gp.selectedUnit.getLuck();
+            if (enemyCrit > 100) {
+                enemyCrit = 100;
+            } else if (enemyCrit < 0) {
+                enemyCrit = 0;
+            }
+
+            // Draw player's stats on the left side
+            g2.drawString(gp.selectedUnit.getName(), playerX, textY);
+            textY += lineHeight;
+            g2.drawString(playerWeaponName, playerX, textY);
+            textY += lineHeight;
+            if (gp.selectedUnit.getEffSpeed() >= enemy.getEffSpeed() + 5) {
+                g2.drawString("Attack: " + playerAttack + " x 2", playerX, textY);
+            } else {
+                g2.drawString("Attack: " + playerAttack, playerX, textY);
+            }
+            textY += lineHeight;
+            g2.drawString("Crit: " + playerCrit + "%", playerX, textY);
+            textY += lineHeight;
+            g2.drawString("Hit: " + playerHitRate + "%", playerX, textY);
+
+            // Draw enemy's stats on the right side
+            textY = y + padding; // Reset textY for the enemy's stats
+            if (enemy.getName() != null) {
+                g2.drawString(enemy.getName(), enemyX, textY);
+            } else if (enemy.getName() == null) {
+                g2.drawString(enemy.getClassName(), enemyX, textY);
+            }
+            textY += lineHeight;
+            g2.drawString(enemyWeaponName, enemyX, textY);
+            textY += lineHeight;
+            g2.drawString("Attack: " + enemyAttack, enemyX, textY);
+            textY += lineHeight;
+            g2.drawString("Crit: " + enemyCrit + "%", enemyX, textY);
+            textY += lineHeight;
+            g2.drawString("Hit: " + enemyHitRate + "%", enemyX, textY);
+
+            // Draw horizontal lines to separate each stat
+            for (int i = 1; i <= 6; i++) { // 6 stats (including player/enemy names and weapon names)
+                int lineY = y + padding + i * lineHeight - lineHeight / 2;
+                g2.drawLine(x + padding, lineY, x + width - padding, lineY);
+            }
+
+            // Draw vertical line between player and enemy stats
+            int verticalLineX = x + width / 2;
+            g2.drawLine(verticalLineX, y + padding, verticalLineX, y + height - padding);
+        }
+    }
+
     // LIGHT UNIT UI
 
     // Draw Light Unit Window
@@ -437,6 +566,9 @@ public class UI {
                     drawLightUnitCombatStats(gp.selectedUnit);
                 } else {
                     drawLightUnitDetails(gp.selectedUnit);
+                }
+                if (gp.selectedUnit.getIsSelected() && !gp.selectedUnit.getIsMoving() && gp.selectedUnit.getIsAttacking()) {
+                    drawCombatForecast();
                 }
             }
         }

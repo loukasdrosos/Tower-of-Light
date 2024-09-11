@@ -93,10 +93,10 @@ public class Entity {
     protected boolean physical; // Physical unit
     protected boolean magical; // Magical unit
 
-    protected Weapon equippedWeapon = null; // Unit's equipped weapon, player units can switch between main hand and offhand weapon
-    protected Trinket trinket = null; // Unit's trinket item
-    protected Potion potionSlot1 = null; // Unit's 1st Potion slot
-    protected Potion potionSlot2 = null; // Unit's 2nd Potion slot
+    public Weapon equippedWeapon = null; // Unit's equipped weapon, player units can switch between main hand and offhand weapon
+    public Trinket trinket = null; // Unit's trinket item
+    public Potion potionSlot1 = null; // Unit's 1st Potion slot
+    public Potion potionSlot2 = null; // Unit's 2nd Potion slot
 
     /* BATTLE CALCULATIONS
 
