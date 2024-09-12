@@ -10,6 +10,7 @@ public class AssetSetter {
     GamePanel gp;
     KeyHandler keyH;
     Lightbringer Lightbringer = new Lightbringer();
+    Ragnell Ragnell = new Ragnell();
     Dracoshield Dracoshield = new Dracoshield();
 
     public AssetSetter(GamePanel gp, KeyHandler keyH) {
@@ -26,7 +27,7 @@ public class AssetSetter {
     // Initialize enemy units and set their starting positions
     public void setChaosUnits() {
         gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 32, 15, Lightbringer, null));
-        gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 32, 13, Lightbringer, Dracoshield));
+        gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 32, 13, Ragnell, Dracoshield));
     }
 
     // Copy units from one list to another

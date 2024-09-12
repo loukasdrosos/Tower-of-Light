@@ -226,12 +226,11 @@ public class UI {
         int enemyCrit = 0;
 
         if (enemy != null) {
+           // List<int[]> enemyRange = enemy.calculateStaticAttackRange();
             List<int[]> enemyRange = enemy.calculateStaticAttackRange();
             for (int[] tile : enemyRange) {
                 if (tile[0] == gp.selectedUnit.getCol() && tile[1] == gp.selectedUnit.getRow()) {
                     inRange = true;
-                } else {
-                    inRange = false;
                 }
             }
 

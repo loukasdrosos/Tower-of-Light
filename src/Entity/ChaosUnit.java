@@ -134,8 +134,8 @@ public class ChaosUnit extends Entity {
         List<int[]> staticAttackRange = new ArrayList<>();
 
         // Get the ChaosUnit's current position
-        int chaosCol = this.getCol();
-        int chaosRow = this.getRow();
+        int chaosCol = col;
+        int chaosRow = row;
 
         // Determine the weapon range (the maximum distance at which the ChaosUnit can attack)
         int weaponRange = 0;
