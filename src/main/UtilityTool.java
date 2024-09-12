@@ -2,6 +2,7 @@ package main;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 public class UtilityTool {
 
@@ -13,5 +14,15 @@ public class UtilityTool {
         g2.dispose();
 
         return scaledImage;
+    }
+
+    // Helper method to check if a list contains a specific tile
+    public boolean containsTile(List<int[]> list, int col, int row) {
+        for (int[] tile : list) {
+            if (tile[0] == col && tile[1] == row) {
+                return true;
+            }
+        }
+        return false;
     }
 }

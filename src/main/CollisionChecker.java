@@ -42,6 +42,19 @@ public class CollisionChecker {
         return null;
     }
 
+    // Method to check if there is a player unit on the specified tile
+    public LightUnit getPlayerOnTile(int col, int row) {
+        // Iterate over all player units in the game
+        for (LightUnit player : gp.simLightUnits) {
+            // Check if the player's position matches the specified tile
+            if (player.getCol() == col && player.getRow() == row) {
+                return player; // Return the player unit found on the tile
+            }
+        }
+        // Return null if no player is found on the tile
+        return null;
+    }
+
 
     // Method to check if there is no player unit on the target tile
     public boolean noPlayerOnTile (int targetCol, int targetRow) {

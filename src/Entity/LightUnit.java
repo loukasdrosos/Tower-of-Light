@@ -109,40 +109,29 @@ public class LightUnit extends Entity{
 
     // Method to choose which enemy to attack with physical attacks
     public void chooseTarget() {
-        if (gp.selectedUnit != null) {
-            if (isSelected && physical) {
-                List<ChaosUnit> enemiesInRange = getEnemiesInRange();  // To store the tiles with enemies
+        if (gp.selectedUnit != null && isSelected) {
+            List<ChaosUnit> enemiesInRange = getEnemiesInRange();  // To store the tiles with enemies
 
-                if (keyH.isXPressed() && xKeyReleased) {
-                    xKeyReleased = false; // Mark that X key was pressed
-                    if (gp.cChecker.noPlayerOnTile(col, row)) {
-                        if (!enemiesInRange.isEmpty()) {
-                            isMoving = false;
-                            isAttacking = true;
-                        } else if (enemiesInRange.isEmpty()) {
-                            gp.ui.addLogMessage("No enemy in unit's range.");
-                        }
+            if (keyH.isXPressed() && xKeyReleased) {
+                xKeyReleased = false; // Mark that X key was pressed
+                if (gp.cChecker.noPlayerOnTile(col, row)) {
+                    if (!enemiesInRange.isEmpty()) {
+                        isMoving = false;
+                        isAttacking = true;
+                    } else if (enemiesInRange.isEmpty()) {
+                        gp.ui.addLogMessage("No enemy in unit's range.");
                     }
-                    else if (!gp.cChecker.noPlayerOnTile(col, row)) {
-                        gp.ui.addLogMessage("Unit can't attack while on another unit's tile.");
-                    }
+                } else if (!gp.cChecker.noPlayerOnTile(col, row)) {
+                    gp.ui.addLogMessage("Unit can't attack while on another unit's tile.");
                 }
-                // Reset the X key release state when the key is no longer pressed
-                if (!keyH.isXPressed()) {
-                    xKeyReleased = true;
-                }
-            } else if (isSelected && magical && !physical) {
-                if (keyH.isXPressed() && xKeyReleased) {
-                    xKeyReleased = false; // Mark that X key was pressed
-                    gp.ui.addLogMessage("Unit can only use spells.");
-                }
-                // Reset the X key release state when the key is no longer pressed
-                if (!keyH.isXPressed()) {
-                    xKeyReleased = true;
-                }
+            }
+            // Reset the X key release state when the key is no longer pressed
+            if (!keyH.isXPressed()) {
+                xKeyReleased = true;
             }
         }
     }
+
 
     @Override
     public void move() {
@@ -208,11 +197,11 @@ public class LightUnit extends Entity{
                     updatePosition(); // Update pixel position based on the new tile position
 
                     // Play the movement sound effect only if the position has changed
-                    if (mounted) {
+                    if (unitType == UnitType.Mounted) {
                         gp.playSE(8);
-                    } else if (armored) {
+                    } else if (unitType == UnitType.Armored) {
                         gp.playSE(7);
-                    } else {
+                    } else if (unitType == UnitType.Infantry){
                         gp.playSE(4);
                     }
                 }
@@ -268,6 +257,9 @@ public class LightUnit extends Entity{
             endSelectedUnitTurn();
             chooseTarget();
         }
+
+        // Update unit's main hand weapon if possible (only for LightBringer)
+        mainHand.update();
 
         // Update sprite animation
         spriteCounter++;
@@ -335,10 +327,10 @@ public class LightUnit extends Entity{
 
         // Determine the attack range (the maximum distance at which the unit can attack)
         int weaponRange = 0;
-        if (physical && equippedWeapon != null) {
+        if (attackType == AttackType.Physical && equippedWeapon != null) {
             weaponRange = equippedWeapon.getRange();  // Get range from equipped weapon
         }
-        if (magical) {
+        if (attackType == AttackType.Magical) {
             // magic range to be implemented
         }
 

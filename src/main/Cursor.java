@@ -146,25 +146,39 @@ public class Cursor {
 
                     // Only move the cursor when the delay counter reaches the threshold
                     if (moveDelayCounter >= moveDelayThreshold + 3) {
-                        if (keyH.isRightPressed() && !moving) {
-                            if (enemyIndex < enemiesInRange.size() - 1) {
-                                enemyIndex++;  // Move to the next enemy
-                            } else {
-                                enemyIndex = 0;  // Wrap around to the first enemy
+                        // Check if there's only one enemy in range
+                        if (enemiesInRange.size() == 1) {
+                            // Directly update cursor position to the only enemy's position
+                            col = enemiesInRange.get(0).getCol();
+                            row = enemiesInRange.get(0).getRow();
+                            updatePosition();
+                        }
+                        // If more than one enemy, allow for movement between them
+                        if (enemiesInRange.size() > 1) {
+                            if (keyH.isRightPressed() && !moving) {
+                                if (enemyIndex < enemiesInRange.size() - 1) {
+                                    enemyIndex++;  // Move to the next enemy
+                                } else {
+                                    enemyIndex = 0;  // Wrap around to the first enemy
+                                }
+                                moving = true;
+                            } else if (keyH.isLeftPressed() && !moving) {
+                                if (enemyIndex > 0) {
+                                    enemyIndex--;  // Move to the previous enemy
+                                } else {
+                                    enemyIndex = enemiesInRange.size() - 1;  // Wrap around to the last enemy
+                                }
+                                moving = true;
                             }
-                            moving = true;
-                        } else if (keyH.isLeftPressed() && !moving) {
-                            if (enemyIndex > 0) {
-                                enemyIndex--;  // Move to the previous enemy
-                            } else {
-                                enemyIndex = enemiesInRange.size() - 1;  // Wrap around to the last enemy
-                            }
-                            moving = true;
                         }
 
-                        col = enemiesInRange.get(enemyIndex).getCol();
-                        row = enemiesInRange.get(enemyIndex).getRow();
-                        updatePosition();
+                        // Safeguard to ensure enemyIndex is within valid bounds
+                        if (enemyIndex >= 0 && enemyIndex < enemiesInRange.size()) {
+                            // Update cursor position to the enemy's position
+                            col = enemiesInRange.get(enemyIndex).getCol();
+                            row = enemiesInRange.get(enemyIndex).getRow();
+                            updatePosition();
+                        }
 
                         // Reset the moving flag if the key is released
                         if (!keyH.isLeftPressed() || !keyH.isRightPressed()) {

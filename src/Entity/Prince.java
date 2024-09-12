@@ -44,13 +44,11 @@ public class Prince extends LightUnit{
         resistance = 3;
         movement = 3;
         vision = 5;
-        type = UnitType.Human;
+        race = UnitRace.Human;
+        unitType = UnitType.Infantry;
+        attackType = AttackType.Physical;
         boostStatsForClasses();
         HP = maxHP;
-        armored = false;
-        mounted = false;
-        physical = true;
-        magical = false;
         description = new String[]{"The prince of ", "the kingdom of", "Valentia and the", "one worthy to wield", "the divine blade", "Lightbringer."} ;
     }
 

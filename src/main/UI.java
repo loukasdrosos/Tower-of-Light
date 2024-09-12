@@ -1,6 +1,7 @@
 package main;
 
 import Entity.ChaosUnit;
+import Entity.Entity;
 import Entity.LightUnit;
 
 import java.awt.*;
@@ -49,7 +50,7 @@ public class UI {
         String[] controlsText = {
                 "↑, ↓, ←, →: Move cursor and selected player unit",
                 "A: Select player unit, display enemy attack range",
-                "X: Attack with equipped weapon",
+                "X: Attack",
                 "W: End player unit's turn",
                 "Z: Cancel action",
                 "Q: Toggle between unit's stats and unit's inventory",
@@ -157,7 +158,6 @@ public class UI {
         g2.fillRect(x, scrollbarY, 10, scrollbarHeight);
     }
 
-
     // BEACONS OF LIGHT UI
 
     public void drawBeaconOfLightTurns() {
@@ -199,6 +199,7 @@ public class UI {
         int height = 15 * 16;
         int padding = 20;
         int lineHeight = 30;
+        boolean inRange = false; // Boolean that tracks if selected unit is in range of selected enemy unit
 
         // Draw the background rectangle
         g2.setColor(Color.BLACK);
@@ -212,8 +213,8 @@ public class UI {
         ChaosUnit enemy = gp.cChecker.getEnemyOnTile(gp.cursor.getCol(), gp.cursor.getRow());
 
         // Calculate positions for player and enemy stats
-        int playerX = x + padding;
-        int enemyX = x + width / 2 + padding;
+        int playerX = x + padding + 50;
+        int enemyX = x + width / 2 + padding + 50;
         int textY = y + padding;
         String playerWeaponName = null;
         int playerAttack = 0;
@@ -225,11 +226,20 @@ public class UI {
         int enemyCrit = 0;
 
         if (enemy != null) {
+            List<int[]> enemyRange = enemy.calculateStaticAttackRange();
+            for (int[] tile : enemyRange) {
+                if (tile[0] == gp.selectedUnit.getCol() && tile[1] == gp.selectedUnit.getRow()) {
+                    inRange = true;
+                } else {
+                    inRange = false;
+                }
+            }
 
-            if (gp.selectedUnit.isPhysical()) {
+            // Calculate and draw player's stats on the left side
+            if (gp.selectedUnit.getAttackType() == Entity.AttackType.Physical) {
                 playerWeaponName = gp.selectedUnit.equippedWeapon.getName();
                 playerAttack = gp.selectedUnit.getMight() - enemy.getEffDefense();
-            } else if (gp.selectedUnit.isMagical()) {
+            } else if (gp.selectedUnit.getAttackType() == Entity.AttackType.Magical) {
                 playerWeaponName = gp.selectedUnit.equippedWeapon.getName();
                 playerAttack = gp.selectedUnit.getMight() - enemy.getEffResistance();
             }
@@ -251,10 +261,25 @@ public class UI {
                 playerCrit = 0;
             }
 
-            if (enemy.isPhysical()) {
+            g2.drawString(gp.selectedUnit.getName(), playerX, textY + 5);
+            textY += lineHeight;
+            g2.drawString(playerWeaponName, playerX, textY + 5);
+            textY += lineHeight;
+            if (gp.selectedUnit.getEffSpeed() >= enemy.getEffSpeed() + 5) {
+                g2.drawString("Attack: " + playerAttack + " x 2", playerX, textY + 5);
+            } else {
+                g2.drawString("Attack: " + playerAttack, playerX, textY + 5);
+            }
+            textY += lineHeight;
+            g2.drawString("Crit: " + playerCrit + "%", playerX, textY + 5);
+            textY += lineHeight;
+            g2.drawString("Hit: " + playerHitRate + "%", playerX, textY + 5);
+
+            // Calculate and draw enemy's stats on the right side
+            if (enemy.getAttackType() == Entity.AttackType.Physical) {
                 enemyWeaponName = enemy.equippedWeapon.getName();
                 enemyAttack = enemy.getMight() - gp.selectedUnit.getEffDefense();
-            } else if (enemy.isMagical()) {
+            } else if (enemy.getAttackType() == Entity.AttackType.Magical) {
                 enemyWeaponName = enemy.equippedWeapon.getName();
                 enemyAttack = enemy.getMight() - gp.selectedUnit.getEffResistance();
             }
@@ -276,48 +301,49 @@ public class UI {
                 enemyCrit = 0;
             }
 
-            // Draw player's stats on the left side
-            g2.drawString(gp.selectedUnit.getName(), playerX, textY);
-            textY += lineHeight;
-            g2.drawString(playerWeaponName, playerX, textY);
-            textY += lineHeight;
-            if (gp.selectedUnit.getEffSpeed() >= enemy.getEffSpeed() + 5) {
-                g2.drawString("Attack: " + playerAttack + " x 2", playerX, textY);
-            } else {
-                g2.drawString("Attack: " + playerAttack, playerX, textY);
-            }
-            textY += lineHeight;
-            g2.drawString("Crit: " + playerCrit + "%", playerX, textY);
-            textY += lineHeight;
-            g2.drawString("Hit: " + playerHitRate + "%", playerX, textY);
-
-            // Draw enemy's stats on the right side
             textY = y + padding; // Reset textY for the enemy's stats
             if (enemy.getName() != null) {
-                g2.drawString(enemy.getName(), enemyX, textY);
+                g2.drawString(enemy.getName(), enemyX, textY + 5);
             } else if (enemy.getName() == null) {
-                g2.drawString(enemy.getClassName(), enemyX, textY);
+                g2.drawString(enemy.getClassName(), enemyX, textY + 5);
             }
             textY += lineHeight;
-            g2.drawString(enemyWeaponName, enemyX, textY);
+            g2.drawString(enemyWeaponName, enemyX, textY + 5);
             textY += lineHeight;
-            g2.drawString("Attack: " + enemyAttack, enemyX, textY);
-            textY += lineHeight;
-            g2.drawString("Crit: " + enemyCrit + "%", enemyX, textY);
-            textY += lineHeight;
-            g2.drawString("Hit: " + enemyHitRate + "%", enemyX, textY);
+            if (inRange) {
+                g2.drawString("Attack: " + enemyAttack, enemyX, textY + 5);
+                textY += lineHeight;
+                g2.drawString("Crit: " + enemyCrit + "%", enemyX, textY + 5);
+                textY += lineHeight;
+                g2.drawString("Hit: " + enemyHitRate + "%", enemyX, textY + 5);
+            } else if (!inRange) {
+                g2.drawString("Attack: --", enemyX, textY + 5);
+                textY += lineHeight;
+                g2.drawString("Crit: --", enemyX, textY + 5);
+                textY += lineHeight;
+                g2.drawString("Hit: --", enemyX, textY + 5);
+            }
 
-            // Draw horizontal lines to separate each stat
-            for (int i = 1; i <= 6; i++) { // 6 stats (including player/enemy names and weapon names)
+            // Draw horizontal lines to separate each stat (skip the last line)
+            for (int i = 1; i <= 5; i++) { // 5 lines for separating stats
                 int lineY = y + padding + i * lineHeight - lineHeight / 2;
                 g2.drawLine(x + padding, lineY, x + width - padding, lineY);
             }
 
             // Draw vertical line between player and enemy stats
             int verticalLineX = x + width / 2;
-            g2.drawLine(verticalLineX, y + padding, verticalLineX, y + height - padding);
+            g2.drawLine(verticalLineX, y + padding - 10, verticalLineX, y + height - padding - 70);
+
+            // Draw control instructions
+            int bottomTextY = y + height - padding;
+            g2.drawString("Press Z to cancel", x + padding, bottomTextY);
+            bottomTextY -= 20;
+            g2.drawString("Press ← or → to switch enemies", x + padding, bottomTextY);
+            bottomTextY -= 20;
+            g2.drawString("Press SPACE to attack", x + padding, bottomTextY);
         }
     }
+
 
     // LIGHT UNIT UI
 
@@ -375,13 +401,13 @@ public class UI {
             g2.drawString(player.getName(), textX, textY);
             g2.drawString(player.getClassName(), textX, textY + nextLine * lineHeight);
             nextLine++;
-            g2.drawString(String.valueOf(player.getType()), textX, textY + nextLine * lineHeight);
+            g2.drawString(String.valueOf(player.getRace()), textX, textY + nextLine * lineHeight);
             nextLine++;
-            if (player.isArmored()) {
+            if (player.getUnitType() == Entity.UnitType.Armored) {
                 g2.drawString("Armored", textX, textY + nextLine * lineHeight);
                 nextLine++;
             }
-            if (player.isMounted()) {
+            if (player.getUnitType() == Entity.UnitType.Mounted) {
                 g2.drawString("Mounted", textX, textY + nextLine * lineHeight);
                 nextLine++;
             }
@@ -548,15 +574,14 @@ public class UI {
     public void drawLightUnitInfo() {
         if (gp.TurnM.getPlayerPhase()) {
             if (gp.selectedUnit == null) {
-                for (LightUnit unit : gp.simLightUnits) {
-                    if (gp.cursor.getCol() == unit.getCol() && gp.cursor.getRow() == unit.getRow()) {
-                        drawLightUnitPortrait(unit);
-                        if (gp.keyH.isQPressed()) {
-                            drawLightUnitStats(unit);
-                            drawLightUnitCombatStats(unit);
-                        } else {
-                            drawLightUnitDetails(unit);
-                        }
+                LightUnit player = gp.cChecker.getPlayerOnTile(gp.cursor.getCol(), gp.cursor.getRow());
+                if (player != null) {
+                    drawLightUnitPortrait(player);
+                    if (gp.keyH.isQPressed()) {
+                        drawLightUnitStats(player);
+                        drawLightUnitCombatStats(player);
+                    } else {
+                        drawLightUnitDetails(player);
                     }
                 }
             } else if (gp.selectedUnit != null) {
@@ -567,7 +592,7 @@ public class UI {
                 } else {
                     drawLightUnitDetails(gp.selectedUnit);
                 }
-                if (gp.selectedUnit.getIsSelected() && !gp.selectedUnit.getIsMoving() && gp.selectedUnit.getIsAttacking()) {
+                if (gp. selectedUnit != null && gp.selectedUnit.getIsSelected() && !gp.selectedUnit.getIsMoving() && gp.selectedUnit.getIsAttacking()) {
                     drawCombatForecast();
                 }
             }
@@ -631,13 +656,13 @@ public class UI {
         }
         g2.drawString(enemy.getClassName(), textX, textY + nextLine * lineHeight);
         nextLine++;
-        g2.drawString(String.valueOf(enemy.getType()), textX, textY + nextLine * lineHeight);
+        g2.drawString(String.valueOf(enemy.getRace()), textX, textY + nextLine * lineHeight);
         nextLine++;
-        if (enemy.isArmored()) {
+        if (enemy.getUnitType() == Entity.UnitType.Armored) {
             g2.drawString("Armored", textX, textY + nextLine * lineHeight);
             nextLine++;
         }
-        if (enemy.isMounted()) {
+        if (enemy.getUnitType() == Entity.UnitType.Mounted) {
             g2.drawString("Mounted", textX, textY + nextLine * lineHeight);
             nextLine++;
         }
@@ -793,19 +818,20 @@ public class UI {
     // Method to draw the Light Unit's information
     public void drawChaosUnitInfo() {
         if (gp.TurnM.getPlayerPhase()) {
-            for (ChaosUnit enemy : gp.simChaosUnits) {
-                if (gp.cursor.getCol() == enemy.getCol() && gp.cursor.getRow() == enemy.getRow()) {
-                    drawChaosUnitPortrait(enemy);
-                    if (gp.keyH.isQPressed()) {
-                        drawChaosUnitStats(enemy);
-                        drawChaosUnitCombatStats(enemy);
-                    } else {
-                        drawChaosUnitDetails(enemy);
-                    }
+            ChaosUnit enemy = gp.cChecker.getEnemyOnTile(gp.cursor.getCol(), gp.cursor.getRow());
+            if (enemy != null) {
+                drawChaosUnitPortrait(enemy);
+                if (gp.keyH.isQPressed()) {
+                    drawChaosUnitStats(enemy);
+                    drawChaosUnitCombatStats(enemy);
+                } else {
+                    drawChaosUnitDetails(enemy);
                 }
             }
         }
     }
+
+
 
     // BATTLE UI
 

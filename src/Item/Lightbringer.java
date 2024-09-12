@@ -1,5 +1,7 @@
 package Item;
 
+import Entity.Entity;
+
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
@@ -23,6 +25,30 @@ public class Lightbringer extends MainHand {
         might = 10;
         hit = 100;
         crit = 5;
-        range = 1;
+        range = 3;
+        speed = 0;
+        defence = 0;
+        resistance = 0;
+        vision = 1;
+        removable = false;
+        effectiveRace = null;
+        effectiveType = null;
     }
+
+    /*
+    @Override
+    public void update() {
+            might = 10 + 2 * number of Beacon of Lights;
+
+        if (number of beacon of lights < 3) {
+            range = 1;
+        }
+
+        if (number of beacon of lights == 3) {
+            range = 3;
+        }
+    }
+
+     */
+
 }

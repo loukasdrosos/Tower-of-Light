@@ -41,13 +41,14 @@ public class HeraldOfChaos extends ChaosUnit{
         defense = 6;
         resistance = 4;
         movement = 3;
-        type = UnitType.Human;
+        if (!canMove) {
+            movement = 0;
+        }
+        race = UnitRace.Human;
+        unitType = UnitType.Infantry;
+        attackType = AttackType.Physical;
         boostStatsForClasses();
         HP = maxHP;
-        armored = false;
-        mounted = false;
-        physical = true;
-        magical = false;
         description = new String[]{"Princess of Valentia", "and Alm's wife.", "Controlled by the", "Chaos God, she has", "become the Herald", "of Chaos."};
     }
 

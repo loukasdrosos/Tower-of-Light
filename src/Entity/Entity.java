@@ -86,12 +86,13 @@ public class Entity {
 
     // Unit types, human, orc, tauren, elf or dragon
     // can be mounted (on a horse) or armored, attacks strong against these types deal damage multiplied by 3
-    protected enum UnitType {Human, Orc, Tauren, Elf, Dragon}
-    protected UnitType type;  // Variable to store the unit type
-    protected boolean armored; // Unit's armored status
-    protected boolean mounted; // Unit's mounted status
-    protected boolean physical; // Physical unit
-    protected boolean magical; // Magical unit
+    public enum UnitRace {Human, Orc, Tauren, Elf, Dragon}
+    protected UnitRace race;  // Variable to store the unit type
+    protected boolean healer; // Unit's healer status
+    public enum AttackType {Physical, Magical}
+    protected AttackType attackType; // Variable to store the unit's attack type
+    public enum UnitType {Infantry, Armored, Mounted}
+    protected UnitType unitType;
 
     public Weapon equippedWeapon = null; // Unit's equipped weapon, player units can switch between main hand and offhand weapon
     public Trinket trinket = null; // Unit's trinket item
@@ -120,15 +121,6 @@ public class Entity {
     }
 
     public void calculateCombatStats() {
-        if (trinket != null) {
-            bonusStrength = trinket.getStrength();
-            bonusMagic = trinket.getMagic();
-            bonusSkill = trinket.getSkill();
-            bonusSpeed = trinket.getSpeed();
-            bonusDefense =  trinket.getDefense();
-            bonusResistance = trinket.getResistance();
-            bonusVision = trinket.getVision();
-        }
         if (trinket == null) {
             bonusStrength = 0;
             bonusMagic = 0;
@@ -138,6 +130,22 @@ public class Entity {
             bonusResistance = 0;
             bonusVision = 0;
         }
+        if (trinket != null) {
+            bonusStrength = trinket.getStrength();
+            bonusMagic = trinket.getMagic();
+            bonusSkill = trinket.getSkill();
+            bonusSpeed = trinket.getSpeed();
+            bonusDefense =  trinket.getDefense();
+            bonusResistance = trinket.getResistance();
+            bonusVision = trinket.getVision();
+        }
+        if (attackType == AttackType.Physical) {
+            bonusSpeed += equippedWeapon.getSpeed();
+            bonusDefense += equippedWeapon.getDefense();
+            bonusResistance += equippedWeapon.getResistance();
+            bonusVision += equippedWeapon.getVision();
+        }
+
         effStrength = strength + bonusStrength;
         effMagic = magic + bonusMagic;
         effSkill = skill + bonusSkill;
@@ -146,12 +154,12 @@ public class Entity {
         effResistance = resistance + bonusResistance;
         effVision = vision + bonusVision;
 
-        if (physical) {
+        if (attackType == AttackType.Physical) {
             might = effStrength + equippedWeapon.getMight();
             critical = (effSkill/2) + equippedWeapon.getCrit();
             hitRate = (((effSkill * 3) + luck) / 2) + equippedWeapon.getHit();
         }
-        if (magical){
+        if (attackType == AttackType.Magical){
             might = effMagic + equippedWeapon.getMight();
             critical = (effSkill/2) + equippedWeapon.getCrit();
             hitRate = (((effSkill * 3) + luck) / 2) + equippedWeapon.getHit();
@@ -161,7 +169,7 @@ public class Entity {
 
     // Stat modifiers for its class
     public void boostStatsForClasses() {
-        if (type == UnitType.Human) {
+        if (race == UnitRace.Human) {
             skill += 3;
             speed += 2;
             maxHP -= 2;
@@ -169,7 +177,7 @@ public class Entity {
                 maxHP = 0;
             }
         }
-        if (type == UnitType.Orc) {
+        if (race == UnitRace.Orc) {
             maxHP += 3;
             strength += 2;
             skill -= 2;
@@ -177,7 +185,7 @@ public class Entity {
                 skill = 0;
             }
         }
-        if (type == UnitType.Tauren) {
+        if (race == UnitRace.Tauren) {
             strength += 3;
             defense += 2;
             resistance -= 2;
@@ -185,12 +193,22 @@ public class Entity {
                 resistance = 0;
             }
         }
-        if (type == UnitType.Elf) {
+        if (race == UnitRace.Elf) {
             speed += 3;
             resistance += 2;
             strength -= 2;
             if (strength < 0){
                 strength = 0;
+            }
+        }
+        if (race == UnitRace.Dragon) {
+            strength += 2;
+            magic += 2;
+            defense += 2;
+            resistance += 2;
+            speed -= 4;
+            if (speed < 0){
+                speed = 0;
             }
         }
     }
@@ -343,15 +361,13 @@ public class Entity {
 
     public int getVision() { return vision; } // Get the unit's vision
 
-    public boolean isArmored() { return armored; } // Get the unit's armored status
+    public boolean isHealer() { return healer; } // Get the unit's healer status
 
-    public boolean isMounted() { return mounted; } // Get the unit's mounted status
+    public AttackType getAttackType() { return attackType; } // Get the unit's attack type
 
-    public boolean isPhysical() { return physical; } // Get the unit's physical status
+    public UnitRace getRace() { return race; } // Get the unit's race
 
-    public boolean isMagical() { return magical; } // Get the unit's magical status
-
-    public UnitType getType() { return type; } // Get the unit's type
+    public UnitType getUnitType() { return unitType; } // Get the unit's type
 
     public int getMight() {return might;} // Get the unit's might
 
