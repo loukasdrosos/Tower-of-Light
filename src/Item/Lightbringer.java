@@ -23,7 +23,7 @@ public class Lightbringer extends MainHand {
         might = 10;
         hit = 100;
         crit = 5;
-        range = 1;
+        range = 3;
         speed = 0;
         defence = 0;
         resistance = 0;
