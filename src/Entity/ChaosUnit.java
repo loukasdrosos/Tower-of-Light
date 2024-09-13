@@ -37,6 +37,19 @@ public class ChaosUnit extends Entity {
         direction = "none";  // Reset the movement direction
     }
 
+    @Override
+    public void Defeated() {
+        if (HP <= 0) {
+            if (name != null) {
+                gp.ui.addLogMessage(name + " is defeated.");
+            }
+            else {
+                gp.ui.addLogMessage(String.valueOf(getRace()) + className + " is defeated.");
+            }
+            gp.simChaosUnits.remove(this);
+        }
+    }
+
     /* Calculate all valid tiles the unit can move to within its movement range with the use of Breadth-First-Search (BFS)
     BFS is well-suited for this scenario because explores all possible moves level by level, which means it considers
     all closer tiles before moving on to further ones. This is useful in grid-based games where movement range is limited */
@@ -127,49 +140,7 @@ public class ChaosUnit extends Entity {
         return attackRange; // Return the list of tiles within the attack range
     }
 
-    // Calculates the attack range based only on the ChaosUnit's current position and weapon range
-    public List<int[]> calculateStaticAttackRange() {
-        UtilityTool uTool = new UtilityTool();
-        // List to store the positions of tiles within the attack range
-        List<int[]> staticAttackRange = new ArrayList<>();
-
-        // Get the ChaosUnit's current position
-        int chaosCol = col;
-        int chaosRow = row;
-
-        // Determine the weapon range (the maximum distance at which the ChaosUnit can attack)
-        int weaponRange = 0;
-        if (attackType == AttackType.Physical && equippedWeapon != null) {
-            weaponRange = equippedWeapon.getRange(); // Get range from equipped weapon
-        }
-        if (attackType == AttackType.Magical) {
-            // magic range logic (if applicable)
-        }
-
-        // Calculate all possible attack positions within the weapon range based on Manhattan distance
-        for (int d = 1; d <= weaponRange; d++) {
-            // Loop through all combinations of x and y differences that sum up to d
-            for (int dx = -d; dx <= d; dx++) {
-                int dy = d - Math.abs(dx); // dy is the remainder to ensure Manhattan distance
-                // Check both positive and negative dy to cover all diagonals
-                for (int[] delta : new int[][]{{dx, dy}, {dx, -dy}}) {
-                    int attackCol = chaosCol + delta[0];
-                    int attackRow = chaosRow + delta[1];
-
-                    // Check if the attack tile is within the map bounds and not already included in the list
-                    if (gp.cChecker.isWithinMap(attackCol, attackRow) && !uTool.containsTile(staticAttackRange, attackCol, attackRow)) {
-                        // Add the tile to the attack range list
-                        staticAttackRange.add(new int[]{attackCol, attackRow});
-                    }
-                }
-            }
-        }
-        return staticAttackRange; // Return the list of tiles within the attack range
-    }
-
-
-    @Override
-    public void move() {
+    public void takeAction() {
         // If enemy phase
         if (!gp.TurnM.getPlayerPhase()) {
             // If the unit is allowed to move
@@ -178,7 +149,6 @@ public class ChaosUnit extends Entity {
             }
         }
     }
-
 
 /*
     //WRONG MOVEMENT METHOD

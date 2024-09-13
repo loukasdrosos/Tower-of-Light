@@ -10,6 +10,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Entity {
 
@@ -38,7 +40,7 @@ public class Entity {
     protected int maxHP; // Unit's Max Health Points
     protected int strength; // Unit's strentgh, used for physical attack damage
     protected int magic; // Unit's magic, used for magic attack damage
-    protected int skill; // // Unit's skill, used for accuracy, critical hit rate, and skill activation
+    protected int skill; // // Unit's skill, used for accuracy, critical hit rate, and skill activation if skills are implemented
     protected int speed; // // Unit's speed if unit's speed is 5 points higher than the opponent’s, attacking unit performs a follow-up attack
     protected int luck; // Unit's luck, used to calculate hit, avoid, and to dodge critical hits, and skill activation
     protected int defense; // Unit's defense against physical attacks
@@ -213,11 +215,50 @@ public class Entity {
         }
     }
 
-
     // Method to update the unit's pixel position based on its current tile position
     public void updatePosition () {
         x = getX(col);
         y = getY(row);
+    }
+
+    public void takeDamage(int damage) {
+        HP -= damage;
+    }
+
+    // Calculates the attack range based only on the unit's current position and weapon range
+    public java.util.List<int[]> calculateStaticAttackRange() {
+        UtilityTool uTool = new UtilityTool();
+        // List to store the positions of tiles within the attack range
+        List<int[]> staticAttackRange = new ArrayList<>();
+
+        // Determine the weapon range (the maximum distance at which the ChaosUnit can attack)
+        int attackRange = 0;
+        if (attackType == AttackType.Physical && equippedWeapon != null) {
+            attackRange = equippedWeapon.getRange(); // Get range from equipped weapon
+        }
+        if (attackType == AttackType.Magical) {
+            // magic range logic (if applicable)
+        }
+
+        // Calculate all possible attack positions within the weapon range based on Manhattan distance
+        for (int d = 1; d <= attackRange; d++) {
+            // Loop through all combinations of x and y differences that sum up to d
+            for (int dx = -d; dx <= d; dx++) {
+                int dy = d - Math.abs(dx); // dy is the remainder to ensure Manhattan distance
+                // Check both positive and negative dy to cover all diagonals
+                for (int[] delta : new int[][]{{dx, dy}, {dx, -dy}}) {
+                    int attackCol = col + delta[0];
+                    int attackRow = row + delta[1];
+
+                    // Check if the attack tile is within the map bounds and not already included in the list
+                    if (gp.cChecker.isWithinMap(attackCol, attackRow) && !uTool.containsTile(staticAttackRange, attackCol, attackRow)) {
+                        // Add the tile to the attack range list
+                        staticAttackRange.add(new int[]{attackCol, attackRow});
+                    }
+                }
+            }
+        }
+        return staticAttackRange; // Return the list of tiles within the attack range
     }
 
     public BufferedImage setup (String imagePath) {
@@ -313,6 +354,8 @@ public class Entity {
 
     public void setupGrowthRates() {   }  // Placeholder method to set up the player growth rates
 
+    public void Defeated() {    }  // Placeholder method for unit's death
+
     // Getter methods
 
     public int getX(int col) { return col * gp.getTileSize(); } // Calculate x position in pixels based on column
@@ -334,6 +377,8 @@ public class Entity {
     public String[] getDescription() { return description; } // Get the unit's description
 
     public int getLevel() { return level; } // Get the unit's level
+
+    public int getMaxLevel() { return maxLevel; } // Get the unit's max level
 
     public int getExp() { return exp; } // Get the unit's experience points
 

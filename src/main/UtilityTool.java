@@ -3,6 +3,7 @@ package main;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.Random;
 
 public class UtilityTool {
 
@@ -25,4 +26,12 @@ public class UtilityTool {
         }
         return false;
     }
+
+    // Generates a random number between 1 and 100
+    public int getRandomNumber() {
+        Random rand = new Random();
+        // Generate a random number between min and max
+        return rand.nextInt(100) + 1;
+    }
+
 }

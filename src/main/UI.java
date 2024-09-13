@@ -226,18 +226,22 @@ public class UI {
         int enemyCrit = 0;
 
         if (enemy != null) {
-           // List<int[]> enemyRange = enemy.calculateStaticAttackRange();
+            UtilityTool uTool = new UtilityTool();
             List<int[]> enemyRange = enemy.calculateStaticAttackRange();
-            for (int[] tile : enemyRange) {
-                if (tile[0] == gp.selectedUnit.getCol() && tile[1] == gp.selectedUnit.getRow()) {
-                    inRange = true;
-                }
-            }
+
+            // Check if player unit is in enemy unit's range
+            inRange = uTool.containsTile(enemyRange, gp.selectedUnit.getCol(), gp.selectedUnit.getRow());
 
             // Calculate and draw player's stats on the left side
             if (gp.selectedUnit.getAttackType() == Entity.AttackType.Physical) {
                 playerWeaponName = gp.selectedUnit.equippedWeapon.getName();
                 playerAttack = gp.selectedUnit.getMight() - enemy.getEffDefense();
+                if (gp.selectedUnit.equippedWeapon.getEffectiveRace() == enemy.getRace() ) {
+                    playerAttack = 3 * gp.selectedUnit.equippedWeapon.getMight() + gp.selectedUnit.getEffStrength() - enemy.getEffDefense();
+                }
+                if (gp.selectedUnit.equippedWeapon.getEffectiveType() == enemy.getUnitType() ) {
+                    playerAttack = 3 * gp.selectedUnit.equippedWeapon.getMight() + gp.selectedUnit.getEffStrength() - enemy.getEffDefense();
+                }
             } else if (gp.selectedUnit.getAttackType() == Entity.AttackType.Magical) {
                 playerWeaponName = gp.selectedUnit.equippedWeapon.getName();
                 playerAttack = gp.selectedUnit.getMight() - enemy.getEffResistance();
@@ -278,6 +282,12 @@ public class UI {
             if (enemy.getAttackType() == Entity.AttackType.Physical) {
                 enemyWeaponName = enemy.equippedWeapon.getName();
                 enemyAttack = enemy.getMight() - gp.selectedUnit.getEffDefense();
+                if (enemy.equippedWeapon.getEffectiveRace() == gp.selectedUnit.getRace() ) {
+                    enemyAttack = 3 * enemy.equippedWeapon.getMight() + enemy.getEffStrength() - gp.selectedUnit.getEffDefense();
+                }
+                if (enemy.equippedWeapon.getEffectiveType() == gp.selectedUnit.getUnitType() ) {
+                    enemyAttack = 3 * enemy.equippedWeapon.getMight() + enemy.getEffStrength() - gp.selectedUnit.getEffDefense();
+                }
             } else if (enemy.getAttackType() == Entity.AttackType.Magical) {
                 enemyWeaponName = enemy.equippedWeapon.getName();
                 enemyAttack = enemy.getMight() - gp.selectedUnit.getEffResistance();
@@ -412,7 +422,12 @@ public class UI {
             }
             g2.drawString("Level: " + player.getLevel(), textX, textY + nextLine * lineHeight);
             nextLine++;
-            g2.drawString("Exp: " + player.getExp() + " / " + player.getMaxExp(), textX, textY + nextLine * lineHeight);
+            if (player.getLevel() < player.getMaxLevel()) {
+                g2.drawString("Exp: " + player.getExp() + " / " + player.getMaxExp(), textX, textY + nextLine * lineHeight);
+            }
+            else {
+                g2.drawString("--", textX, textY + nextLine * lineHeight);
+            }
 
             // Set font for text
             g2.setFont(new Font("Arial", Font.PLAIN, 15));

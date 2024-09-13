@@ -3,6 +3,7 @@ package Entity;
 import Item.*;
 import main.GamePanel;
 import main.KeyHandler;
+import main.UtilityTool;
 
 import java.util.*;
 import java.util.List;
@@ -118,13 +119,25 @@ public class LightUnit extends Entity{
                     if (!enemiesInRange.isEmpty()) {
                         isMoving = false;
                         isAttacking = true;
-                    } else if (enemiesInRange.isEmpty()) {
+                    }
+                    else if (enemiesInRange.isEmpty()) {
                         gp.ui.addLogMessage("No enemy in unit's range.");
                     }
-                } else if (!gp.cChecker.noPlayerOnTile(col, row)) {
+                }
+                else if (!gp.cChecker.noPlayerOnTile(col, row)) {
                     gp.ui.addLogMessage("Unit can't attack while on another unit's tile.");
                 }
             }
+
+            // Process SPACE key press for attacking if already in attack mode
+            if (isAttacking && keyH.isSpacePressed()) {
+                gp.battleSim.battlePlayerPhase(this, gp.cChecker.getEnemyOnTile(gp.cursor.getCol(), gp.cursor.getRow()));
+                endTurn();
+                if (gp.selectedUnit != null && gp.selectedUnit == this) {
+                    gp.selectedUnit = null;
+                }
+            }
+
             // Reset the X key release state when the key is no longer pressed
             if (!keyH.isXPressed()) {
                 xKeyReleased = true;
@@ -243,6 +256,90 @@ public class LightUnit extends Entity{
         gp.ui.addLogMessage(name + " recovered some health.");
         if (HP > maxHP) {
             HP = maxHP;
+        }
+    }
+
+    @Override
+    public void Defeated() {
+        if (HP <= 0) {
+            gp.ui.addLogMessage(name + " is defeated.");
+            if (gp.selectedUnit != null && gp.selectedUnit == this) {
+                gp.selectedUnit = null;
+            }
+            gp.simLightUnits.remove(this);
+        }
+    }
+
+    public void gainExperience(int gainedExperience) {
+        exp += gainedExperience;
+        if (exp >= 100) {
+            levelUp();
+        }
+    }
+
+    public void levelUp() {
+        if (level < maxLevel) {
+            level++;
+            gp.ui.addLogMessage("");
+            gp.ui.addLogMessage(name + " reached level " + level);
+        }
+        exp -= 100;
+        calculateLevelUpStats();
+        calculateCombatStats();
+        if (exp >= 100) {
+            levelUp();
+        }
+    }
+
+    public void calculateLevelUpStats() {
+        UtilityTool uTool = new UtilityTool();
+
+        // HP increase
+        if (uTool.getRandomNumber() <= HPGrowthRate) {
+            maxHP += 1;
+            gp.ui.addLogMessage("HP increased by 1");
+        }
+
+        // Strength increase
+        if (uTool.getRandomNumber() <= strengthGrowthRate) {
+            strength += 1;
+            gp.ui.addLogMessage("Strength increased by 1");
+        }
+
+        // Magic increase
+        if (uTool.getRandomNumber() <= magicGrowthRate) {
+            magic += 1;
+            gp.ui.addLogMessage("Magic increased by 1");
+        }
+
+        // Skill increase
+        if (uTool.getRandomNumber() <= skillGrowthRate) {
+            skill += 1;
+            gp.ui.addLogMessage("Skill increased by 1");
+        }
+
+        // Speed increase
+        if (uTool.getRandomNumber() <= speedGrowthRate) {
+            speed += 1;
+            gp.ui.addLogMessage("Speed increased by 1");
+        }
+
+        // Luck increase
+        if (uTool.getRandomNumber() <= luckGrowthRate) {
+            luck += 1;
+            gp.ui.addLogMessage("Luck increased by 1");
+        }
+
+        // Defense increase
+        if (uTool.getRandomNumber() <= defenseGrowthRate) {
+            defense += 1;
+            gp.ui.addLogMessage("Defense increased by 1");
+        }
+
+        // Resistance increase
+        if (uTool.getRandomNumber() <= resistanceGrowthRate) {
+            resistance += 1;
+            gp.ui.addLogMessage("Resistance increased by 1");
         }
     }
 

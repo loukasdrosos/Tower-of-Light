@@ -89,7 +89,7 @@ public class TurnManager {
                     }
                 }
                 else {
-                    currentEnemy.move(); // Only move if the unit hasn't finished its turn
+                    currentEnemy.takeAction(); // Only take action if the unit hasn't finished its turn
                 }
             } else {
                 // All Chaos units have finished their turns, switch back to player phase

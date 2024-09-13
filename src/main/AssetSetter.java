@@ -20,8 +20,8 @@ public class AssetSetter {
 
     // Initialize player units and set their starting positions
     public void setLightUnits() {
-        gp.simLightUnits.add(new Prince(gp, keyH, 30, 14, Lightbringer, Dracoshield));
-        gp.simLightUnits.add(new Prince(gp, keyH, 31, 14, Lightbringer, null));
+        gp.simLightUnits.add(new Prince(gp, keyH, "Alm", Entity.UnitRace.Human, 30, 14, Lightbringer, Dracoshield));
+        gp.simLightUnits.add(new Prince(gp, keyH, "Alm", Entity.UnitRace.Human, 31, 15, Lightbringer, null));
     }
 
     // Initialize enemy units and set their starting positions

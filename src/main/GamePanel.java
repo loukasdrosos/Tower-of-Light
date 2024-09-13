@@ -46,6 +46,7 @@ public class GamePanel extends JPanel implements Runnable{
     public TurnManager TurnM = new TurnManager(this, keyH);
     public UI ui = new UI(this);
     public AssetSetter aSetter = new AssetSetter(this, keyH);
+    public BattleSimulator battleSim = new BattleSimulator(this);
 
     // GAME STATE
     public int gameState;

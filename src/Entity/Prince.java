@@ -6,7 +6,7 @@ import main.KeyHandler;
 
 public class Prince extends LightUnit{
 
-    public Prince (GamePanel gp, KeyHandler keyH, int startCol, int startRow, MainHand mainhand, Trinket trinket) {
+    public Prince (GamePanel gp, KeyHandler keyH, String name, UnitRace race, int startCol, int startRow, MainHand mainhand, Trinket trinket) {
         super(gp, keyH);
         this.col =  startCol;   // Initial column position
         this.row = startRow;    // Initial row position
@@ -14,6 +14,8 @@ public class Prince extends LightUnit{
         y = getY(row);          // Calculate initial y position based on row
         preCol = col;           // Set previous column to current column
         preRow = row;           // Set previous row to current row
+        this.name = name;
+        this.race = race;
         setupStats();
         setupGrowthRates();
         this.mainHand = mainhand;
@@ -30,21 +32,22 @@ public class Prince extends LightUnit{
     // Method to set up the unit's stats
     @Override
     public void setupStats() {
-        name = "Alm";
         className = "Prince";
         level = 1;
+        if (level > maxLevel) {
+            level = maxLevel;
+        }
         exp = 0;
         maxHP = 23;
         strength = 10;
         magic = 3;
         skill = 7;
-        speed = 10;
+        speed = 20;
         luck = 0;
         defense = 8;
         resistance = 3;
         movement = 3;
-        vision = 5;
-        race = UnitRace.Human;
+        vision = 6;
         unitType = UnitType.Infantry;
         attackType = AttackType.Physical;
         boostStatsForClasses();

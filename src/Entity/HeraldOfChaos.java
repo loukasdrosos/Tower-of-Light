@@ -31,7 +31,10 @@ public class HeraldOfChaos extends ChaosUnit{
     public void setupStats() {
         name = "Celica";
         className = "Herald of Chaos";
-        level = 1;
+        level = 15;
+        if (level > maxLevel) {
+            level = maxLevel;
+        }
         maxHP = 30;
         strength = 8;
         magic = 5;
