@@ -3,6 +3,8 @@ package Entity;
 import Item.Potion;
 import Item.Trinket;
 import Item.Weapon;
+import Spells.AttackSpell;
+import Spells.HealingSpell;
 import main.GamePanel;
 import main.UtilityTool;
 
@@ -100,6 +102,8 @@ public class Entity {
     public Trinket trinket = null; // Unit's trinket item
     public Potion potionSlot1 = null; // Unit's 1st Potion slot
     public Potion potionSlot2 = null; // Unit's 2nd Potion slot
+    public AttackSpell attackSpell = null;
+    public HealingSpell healingSpell = null;
 
     /* BATTLE CALCULATIONS
 
@@ -162,9 +166,9 @@ public class Entity {
             hitRate = (((effSkill * 3) + luck) / 2) + equippedWeapon.getHit();
         }
         if (attackType == AttackType.Magical){
-            might = effMagic + equippedWeapon.getMight();
-            critical = (effSkill/2) + equippedWeapon.getCrit();
-            hitRate = (((effSkill * 3) + luck) / 2) + equippedWeapon.getHit();
+            might = effMagic + attackSpell.getMight();
+            critical = (effSkill/2) + attackSpell.getCrit();
+            hitRate = (((effSkill * 3) + luck) / 2) + attackSpell.getHit();
         }
         evade = ((effSpeed * 3) + luck) / 2;
     }
@@ -237,7 +241,7 @@ public class Entity {
             attackRange = equippedWeapon.getRange(); // Get range from equipped weapon
         }
         if (attackType == AttackType.Magical) {
-            // magic range logic (if applicable)
+            attackRange = attackSpell.getRange(); // Get range from equipped attack spell
         }
 
         // Calculate all possible attack positions within the weapon range based on Manhattan distance

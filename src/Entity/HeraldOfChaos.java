@@ -14,10 +14,9 @@ public class HeraldOfChaos extends ChaosUnit{
         y = getY(row);          // Calculate initial y position based on row
         preCol = col;           // Set previous column to current column
         preRow = row;           // Set previous row to current row
-        setupStats();
         equippedWeapon = weapon;
         this.trinket = trinket;
-        calculateCombatStats();
+        setupStats();
         // Load unit's images for animations
         try {
             loadImage();
@@ -31,7 +30,7 @@ public class HeraldOfChaos extends ChaosUnit{
     public void setupStats() {
         name = "Celica";
         className = "Herald of Chaos";
-        level = 15;
+        level = 20;
         if (level > maxLevel) {
             level = maxLevel;
         }
@@ -52,6 +51,7 @@ public class HeraldOfChaos extends ChaosUnit{
         attackType = AttackType.Physical;
         boostStatsForClasses();
         HP = maxHP;
+        calculateCombatStats();
         description = new String[]{"Princess of Valentia", "and Alm's wife.", "Controlled by the", "Chaos God, she has", "become the Herald", "of Chaos."};
     }
 

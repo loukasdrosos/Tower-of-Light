@@ -243,7 +243,7 @@ public class UI {
                     playerAttack = 3 * gp.selectedUnit.equippedWeapon.getMight() + gp.selectedUnit.getEffStrength() - enemy.getEffDefense();
                 }
             } else if (gp.selectedUnit.getAttackType() == Entity.AttackType.Magical) {
-                playerWeaponName = gp.selectedUnit.equippedWeapon.getName();
+                playerWeaponName = gp.selectedUnit.attackSpell.getName();
                 playerAttack = gp.selectedUnit.getMight() - enemy.getEffResistance();
             }
             if (playerAttack < 0) {
@@ -289,7 +289,7 @@ public class UI {
                     enemyAttack = 3 * enemy.equippedWeapon.getMight() + enemy.getEffStrength() - gp.selectedUnit.getEffDefense();
                 }
             } else if (enemy.getAttackType() == Entity.AttackType.Magical) {
-                enemyWeaponName = enemy.equippedWeapon.getName();
+                enemyWeaponName = enemy.attackSpell.getName();
                 enemyAttack = enemy.getMight() - gp.selectedUnit.getEffResistance();
             }
             if (enemyAttack < 0) {
@@ -755,16 +755,6 @@ public class UI {
         }
         else if (enemy.getBonusResistance() < 0){
             g2.drawString("Resistance: " + enemy.getResistance() + " - " + Math.abs(enemy.getBonusResistance()), statsX, statsY + 4 * lineHeight);
-        }
-
-        if (enemy.getBonusVision() == 0){
-            g2.drawString("Vision: " + enemy.getVision(), statsX2, statsY + 4 * lineHeight);
-        }
-        else if (enemy.getBonusVision() > 0){
-            g2.drawString("Vision: " + enemy.getVision() + " + " + enemy.getBonusVision(), statsX2, statsY + 4 * lineHeight );
-        }
-        else if (enemy.getBonusVision() < 0){
-            g2.drawString("Vision: " + enemy.getVision() + " - " + Math.abs(enemy.getBonusVision()), statsX2, statsY + 4 * lineHeight );
         }
     }
 

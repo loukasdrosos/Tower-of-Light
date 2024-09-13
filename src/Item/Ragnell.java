@@ -26,7 +26,7 @@ public class Ragnell extends MainHand {
         speed = 0;
         defence = 0;
         resistance = 0;
-        vision = 1;
+        vision = 0;
         removable = false;
         effectiveRace = null;
         effectiveType = null;

@@ -46,7 +46,7 @@ public class LightUnit extends Entity{
                         gp.playSE(5);
                     }
                     else {
-                        gp.ui.addLogMessage("Unit has ended its turn.");
+                        gp.ui.addLogMessage("Unit has ended its turn");
                     }
                 }
             }
@@ -98,7 +98,7 @@ public class LightUnit extends Entity{
                     gp.selectedUnit = null; // Deselect the player
                 }
                 else {
-                    gp.ui.addLogMessage("Unit can't end its turn while on another unit's tile.");
+                    gp.ui.addLogMessage("Unit can't end its turn while on another unit's tile");
                 }
             }
         }
@@ -121,11 +121,11 @@ public class LightUnit extends Entity{
                         isAttacking = true;
                     }
                     else if (enemiesInRange.isEmpty()) {
-                        gp.ui.addLogMessage("No enemy in unit's range.");
+                        gp.ui.addLogMessage("No enemy in unit's range");
                     }
                 }
                 else if (!gp.cChecker.noPlayerOnTile(col, row)) {
-                    gp.ui.addLogMessage("Unit can't attack while on another unit's tile.");
+                    gp.ui.addLogMessage("Unit can't attack while on another unit's tile");
                 }
             }
 
@@ -356,7 +356,9 @@ public class LightUnit extends Entity{
         }
 
         // Update unit's main hand weapon if possible (only for LightBringer)
-        mainHand.update();
+        if (mainHand != null) {
+            mainHand.update();
+        }
 
         // Update sprite animation
         spriteCounter++;
@@ -428,7 +430,7 @@ public class LightUnit extends Entity{
             weaponRange = equippedWeapon.getRange();  // Get range from equipped weapon
         }
         if (attackType == AttackType.Magical) {
-            // magic range to be implemented
+            weaponRange = attackSpell.getRange(); // Get range from equipped attack spell
         }
 
         // Iterate over all possible tiles within the maximum attack range

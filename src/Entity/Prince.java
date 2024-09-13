@@ -1,6 +1,8 @@
 package Entity;
 
 import Item.*;
+import Spells.AttackSpell;
+import Spells.Thoron;
 import main.GamePanel;
 import main.KeyHandler;
 
@@ -16,12 +18,11 @@ public class Prince extends LightUnit{
         preRow = row;           // Set previous row to current row
         this.name = name;
         this.race = race;
-        setupStats();
         setupGrowthRates();
         this.mainHand = mainhand;
         equippedWeapon = this.mainHand;
         this.trinket = trinket;
-        calculateCombatStats();
+        setupStats();
         // Load unit's images for animations
         try { loadImage(); }
         catch (Exception e){
@@ -42,7 +43,7 @@ public class Prince extends LightUnit{
         strength = 10;
         magic = 3;
         skill = 7;
-        speed = 20;
+        speed = 10;
         luck = 0;
         defense = 8;
         resistance = 3;
@@ -52,6 +53,7 @@ public class Prince extends LightUnit{
         attackType = AttackType.Physical;
         boostStatsForClasses();
         HP = maxHP;
+        calculateCombatStats();
         description = new String[]{"The prince of ", "the kingdom of", "Valentia and the", "one worthy to wield", "the divine blade", "Lightbringer."} ;
     }
 

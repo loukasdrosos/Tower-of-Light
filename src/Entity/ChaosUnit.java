@@ -41,10 +41,10 @@ public class ChaosUnit extends Entity {
     public void Defeated() {
         if (HP <= 0) {
             if (name != null) {
-                gp.ui.addLogMessage(name + " is defeated.");
+                gp.ui.addLogMessage(name + " is defeated");
             }
             else {
-                gp.ui.addLogMessage(String.valueOf(getRace()) + className + " is defeated.");
+                gp.ui.addLogMessage(String.valueOf(getRace()) + className + " is defeated");
             }
             gp.simChaosUnits.remove(this);
         }
@@ -110,7 +110,7 @@ public class ChaosUnit extends Entity {
             weaponRange = equippedWeapon.getRange(); // Get range from equipped weapon
         }
         if (attackType == AttackType.Magical) {
-            // magic range
+            weaponRange = attackSpell.getRange(); // Get range from equipped attack spell
         }
 
         // For each tile in the movement range, calculate the attack range
