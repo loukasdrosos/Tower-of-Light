@@ -1,14 +1,13 @@
 package Entity;
 
-import Item.*;
-import Spells.AttackSpell;
-import Spells.Thoron;
+import Item.Trinket;
+import Spells.*;
 import main.GamePanel;
 import main.KeyHandler;
 
-public class Prince extends LightUnit{
+public class Sage extends LightUnit{
 
-    public Prince (GamePanel gp, KeyHandler keyH, String name, UnitRace race, int startCol, int startRow, MainHand mainhand, Trinket trinket) {
+    public Sage (GamePanel gp, KeyHandler keyH, String name, UnitRace race, int startCol, int startRow, Trinket trinket) {
         super(gp, keyH);
         this.col =  startCol;   // Initial column position
         this.row = startRow;    // Initial row position
@@ -19,8 +18,6 @@ public class Prince extends LightUnit{
         this.name = name;
         this.race = race;
         setupGrowthRates();
-        this.mainHand = mainhand;
-        equippedWeapon = this.mainHand;
         this.trinket = trinket;
         setupStats();
         // Load unit's images for animations
@@ -33,26 +30,27 @@ public class Prince extends LightUnit{
     // Method to set up the unit's stats
     @Override
     public void setupStats() {
-        className = "Prince";
-        deathQuote = "Damn!! Just a bit more…";
-        finalMapQuote = "It's over Grima! Your chan of tragedies ends here";
+        AttackSpell Thunder = new Thunder();
+        className = "Sage";
+        deathQuote = "I am sorry everyone, i failed you";
         level = 1;
         if (level > maxLevel) {
             level = maxLevel;
         }
         exp = 0;
-        maxHP = 23;
-        strength = 10;
-        magic = 0;
+        maxHP = 20;
+        strength = 0;
+        magic = 7;
         skill = 5;
-        speed = 9;
+        speed = 7;
         luck = 0;
-        defense = 10;
-        resistance = 3;
+        defense = 4;
+        resistance = 5;
         movement = 3;
-        vision = 5;
+        vision = 6;
         unitType = UnitType.Infantry;
-        attackType = AttackType.Physical;
+        attackType = AttackType.Magical;
+        attackSpell = Thunder;
         boostStatsForClasses();
         HP = maxHP;
         calculateCombatStats();
@@ -63,13 +61,14 @@ public class Prince extends LightUnit{
     @Override
     public void setupGrowthRates() {
         HPGrowthRate = 85;
-        strengthGrowthRate = 60;
-        magicGrowthRate = 0;
-        skillGrowthRate = 60;
-        speedGrowthRate = 70;
-        luckGrowthRate = 70;
-        defenseGrowthRate = 45;
-        resistanceGrowthRate = 25;
+        strengthGrowthRate = 0;
+        magicGrowthRate = 55;
+        skillGrowthRate = 50;
+        speedGrowthRate = 50;
+        luckGrowthRate = 65;
+        defenseGrowthRate = 35;
+        resistanceGrowthRate = 45;
+        // Total Growth Rates = 440
     }
 
     //Load images for the unit's animations
@@ -86,20 +85,5 @@ public class Prince extends LightUnit{
         default1 = setup("/LightUnits/Prince/Human_Prince_Default_1");
         default2 = setup("/LightUnits/Prince/Human_Prince_Default_2");
         portrait = setupPortrait("/LightUnits/Prince/Human_Prince_Portrait");
-    }
-
-    @Override
-    public void Defeated() {
-        if (HP <= 0) {
-            if (deathQuote != null) {
-                gp.ui.addLogMessage(name + ": " + deathQuote);
-            }
-            gp.ui.addLogMessage(name + " is defeated");
-            if (gp.selectedUnit != null && gp.selectedUnit == this) {
-                gp.selectedUnit = null;
-            }
-            gp.simLightUnits.remove(this);
-       //     gp.gameState = gp.gameOverState;
-        }
     }
 }

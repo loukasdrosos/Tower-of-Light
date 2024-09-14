@@ -41,6 +41,9 @@ public class ChaosUnit extends Entity {
     public void Defeated() {
         if (HP <= 0) {
             if (name != null) {
+                if (deathQuote != null) {
+                    gp.ui.addLogMessage(name + ": " + deathQuote);
+                }
                 gp.ui.addLogMessage(name + " is defeated");
             }
             else {

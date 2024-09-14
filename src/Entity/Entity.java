@@ -24,6 +24,7 @@ public class Entity {
     protected BufferedImage default1, default2, up1, up2, down1, down2, left1, left2, right1, right2, portrait; // BufferedImages for different animation frames and directions
     protected int spriteCounter = 0;  // Counter to control sprite animation timing
     protected int spriteNum = 1;      // Variable to track which sprite frame to display
+    protected int dyingCounter = 0; // Counter for unit's dying animation
 
     // Movement-related variables
     protected String direction = "none"; // Direction the unit is currently moving in
@@ -34,6 +35,8 @@ public class Entity {
     protected String name; // Unit's name
     protected String className; // Unit's class
     protected String[] description; // Information about the unit
+    protected String deathQuote;
+    protected String finalMapQuote;
     protected int level; // Unit's level
     protected int maxLevel = 20; // Unit's max level it can reach
     protected int exp; // Unit's experience points
@@ -92,7 +95,6 @@ public class Entity {
     // can be mounted (on a horse) or armored, attacks strong against these types deal damage multiplied by 3
     public enum UnitRace {Human, Orc, Tauren, Elf, Dragon}
     protected UnitRace race;  // Variable to store the unit type
-    protected boolean healer; // Unit's healer status
     public enum AttackType {Physical, Magical}
     protected AttackType attackType; // Variable to store the unit's attack type
     public enum UnitType {Infantry, Armored, Mounted}
@@ -339,6 +341,7 @@ public class Entity {
                     image = default2;
                 }
         }
+
         // Draw the selected image at the unit's position, scaled to the tile size
         g2.drawImage(image, x, y, null);
     }
@@ -411,8 +414,6 @@ public class Entity {
 
     public int getVision() { return vision; } // Get the unit's vision
 
-    public boolean isHealer() { return healer; } // Get the unit's healer status
-
     public AttackType getAttackType() { return attackType; } // Get the unit's attack type
 
     public UnitRace getRace() { return race; } // Get the unit's race
@@ -455,19 +456,13 @@ public class Entity {
 
     public int getBonusVision() {return bonusVision;} // Get the unit's bonus vision
 
-    public void setX (int x) {
-        this.x = x;
-    }
+    public void setX (int x) { this.x = x; }
 
-    public void setY (int y) {
-        this.y = y;
-    }
+    public void setY (int y) { this.y = y; }
 
     public String getDirection() {return direction;}
 
-    public void setDirection (String direction) {
-        this.direction = direction;
-    }
+    public void setDirection (String direction) { this.direction = direction; }
 
 }
 

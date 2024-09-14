@@ -262,6 +262,9 @@ public class LightUnit extends Entity{
     @Override
     public void Defeated() {
         if (HP <= 0) {
+            if (deathQuote != null) {
+                gp.ui.addLogMessage(name + ": " + deathQuote);
+            }
             gp.ui.addLogMessage(name + " is defeated.");
             if (gp.selectedUnit != null && gp.selectedUnit == this) {
                 gp.selectedUnit = null;
