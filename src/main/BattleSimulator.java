@@ -16,6 +16,9 @@ public class BattleSimulator {
     private int floatingTextY;
     private int duration = 0;
 
+    private int originalX;
+    private int originalY;
+
     private boolean battleInProgress = false;
 
     public BattleSimulator(GamePanel gp) {
@@ -63,7 +66,10 @@ public class BattleSimulator {
                             gp.playSE(16);
                         }
                     }
+                    faceTarget(player, enemy);
+                    dashForward(player);
                     getDamage(String.valueOf(damagePlayer), enemy.getX(), enemy.getY() - 2);
+                    dashBack(player);
                     enemy.takeDamage(damagePlayer);
                     if (enemy.getName() != null) {
                         gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + enemy.getName());
@@ -77,7 +83,10 @@ public class BattleSimulator {
                     }
                 } else {
                     playerMissed = true;
+                    faceTarget(player, enemy);
+                    dashForward(player);
                     getDamage("MISS", enemy.getX() - 2, enemy.getY() - 2);
+                    dashBack(player);
                     gp.playSE(17);
                     gp.ui.addLogMessage(player.getName() + " missed");
                 }
@@ -117,7 +126,10 @@ public class BattleSimulator {
                                     gp.playSE(16);
                                 }
                             }
+                            faceTarget(enemy, player);
+                            dashForward(enemy);
                             getDamage(String.valueOf(damageEnemy), player.getX(), player.getY() - 2);
+                            dashBack(enemy);
                             player.takeDamage(damageEnemy);
                             gp.ui.addLogMessage(player.getName() + " took " + damageEnemy + " damage");
 
@@ -126,7 +138,10 @@ public class BattleSimulator {
                                 player.Defeated();
                             }
                         } else {
+                            faceTarget(enemy, player);
+                            dashForward(enemy);
                             getDamage("MISS", player.getX() - 2, player.getY() - 2);
+                            dashBack(enemy);
                             gp.playSE(17);
                             if (enemy.getName() != null) {
                                 gp.ui.addLogMessage(enemy.getName() + " missed the counterattack");
@@ -162,7 +177,10 @@ public class BattleSimulator {
                                     gp.playSE(16);
                                 }
                             }
+                            faceTarget(player, enemy);
+                            dashForward(player);
                             getDamage(String.valueOf(damagePlayer), enemy.getX(), enemy.getY() - 2);
+                            dashBack(player);
                             enemy.takeDamage(damagePlayer);
                             if (enemy.getName() != null) {
                                 gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + enemy.getName());
@@ -176,7 +194,10 @@ public class BattleSimulator {
                             }
                         } else {
                             playerMissed = true;
+                            faceTarget(player, enemy);
+                            dashForward(player);
                             getDamage("MISS", enemy.getX() - 2, enemy.getY() - 2);
+                            dashBack(player);
                             gp.playSE(17);
                             gp.ui.addLogMessage(player.getName() + " missed");
                         }
@@ -216,7 +237,10 @@ public class BattleSimulator {
                                         gp.playSE(16);
                                     }
                                 }
+                                faceTarget(enemy, player);
+                                dashForward(enemy);
                                 getDamage(String.valueOf(damageEnemy), player.getX(), player.getY() - 2);
+                                dashBack(enemy);
                                 player.takeDamage(damageEnemy);
                                 gp.ui.addLogMessage(player.getName() + " took " + damageEnemy + " damage");
 
@@ -225,7 +249,10 @@ public class BattleSimulator {
                                     player.Defeated();
                                 }
                             } else {
+                                faceTarget(enemy, player);
+                                dashForward(enemy);
                                 getDamage("MISS", player.getX() - 2, player.getY() - 2);
+                                dashBack(enemy);
                                 gp.playSE(17);
                                 if (enemy.getName() != null) {
                                     gp.ui.addLogMessage(enemy.getName() + " missed the counterattack");
@@ -295,6 +322,10 @@ public class BattleSimulator {
                             gp.playSE(16);
                         }
                     }
+                    faceTarget(enemy, player);
+                    dashForward(enemy);
+                    getDamage(String.valueOf(damageEnemy), player.getX(), player.getY() - 2);
+                    dashBack(enemy);
                     player.takeDamage(damageEnemy);
                     gp.ui.addLogMessage(player.getName() + " took " + damageEnemy + " damage");
 
@@ -303,6 +334,10 @@ public class BattleSimulator {
                         player.Defeated();
                     }
                 } else {
+                    faceTarget(enemy, player);
+                    dashForward(enemy);
+                    getDamage("MISS", player.getX() - 2, player.getY() - 2);
+                    dashBack(enemy);
                     gp.playSE(17);
                     if (enemy.getName() != null) {
                         gp.ui.addLogMessage(enemy.getName() + " missed");
@@ -343,6 +378,10 @@ public class BattleSimulator {
                                     gp.playSE(16);
                                 }
                             }
+                            faceTarget(player, enemy);
+                            dashForward(player);
+                            getDamage(String.valueOf(damagePlayer), enemy.getX(), enemy.getY() - 2);
+                            dashBack(player);
                             enemy.takeDamage(damagePlayer);
                             if (enemy.getName() != null) {
                                 gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + enemy.getName());
@@ -356,6 +395,10 @@ public class BattleSimulator {
                             }
                         } else {
                             playerMissed = true;
+                            faceTarget(player, enemy);
+                            dashForward(player);
+                            getDamage("MISS", enemy.getX() - 2, enemy.getY() - 2);
+                            dashBack(player);
                             gp.playSE(17);
                             gp.ui.addLogMessage(player.getName() + " missed the counterattack");
                         }
@@ -384,6 +427,10 @@ public class BattleSimulator {
                                     gp.playSE(16);
                                 }
                             }
+                            faceTarget(enemy, player);
+                            dashForward(enemy);
+                            getDamage(String.valueOf(damageEnemy), player.getX(), player.getY() - 2);
+                            dashBack(enemy);
                             player.takeDamage(damageEnemy);
                             gp.ui.addLogMessage(player.getName() + " took " + damageEnemy + " damage");
 
@@ -393,6 +440,10 @@ public class BattleSimulator {
                             }
                         } else {
                             gp.playSE(17);
+                            faceTarget(enemy, player);
+                            dashForward(enemy);
+                            getDamage("MISS", player.getX() - 2, player.getY() - 2);
+                            dashBack(enemy);
                             if (enemy.getName() != null) {
                                 gp.ui.addLogMessage(enemy.getName() + " missed");
                             } else if (enemy.getName() == null) {
@@ -434,6 +485,10 @@ public class BattleSimulator {
                                         gp.playSE(16);
                                     }
                                 }
+                                faceTarget(player, enemy);
+                                dashForward(player);
+                                getDamage(String.valueOf(damagePlayer), enemy.getX(), enemy.getY() - 2);
+                                dashBack(player);
                                 enemy.takeDamage(damagePlayer);
                                 if (enemy.getName() != null) {
                                     gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + enemy.getName());
@@ -447,6 +502,10 @@ public class BattleSimulator {
                                 }
                             } else {
                                 playerMissed = true;
+                                faceTarget(player, enemy);
+                                dashForward(player);
+                                getDamage("MISS", enemy.getX() - 2, enemy.getY() - 2);
+                                dashBack(player);
                                 gp.playSE(17);
                                 gp.ui.addLogMessage(player.getName() + " missed the counterattack");
                             }
@@ -474,6 +533,56 @@ public class BattleSimulator {
         }).start();
     }
 
+    public void faceTarget(Entity attacker, Entity defender) {
+        if (defender.getX() > attacker.getX()) {
+            attacker.setDirection("right");
+        } else if (defender.getX() < attacker.getX()) {
+            attacker.setDirection("left");
+        } else if (defender.getY() > attacker.getY()) {
+            attacker.setDirection("down");
+        } else if (defender.getY() < attacker.getY()) {
+            attacker.setDirection("up");
+        }
+    }
+
+    public void dashForward(Entity attacker) {
+        int moveDistance = gp.getTileSize() / 2; // Half a tile size
+
+        // Store the original position before moving
+        originalX = attacker.getX();
+        originalY = attacker.getY();
+
+        // Dash towards the enemy
+        if (attacker.getDirection().equals("right")) {
+            attacker.setX(attacker.getX() + moveDistance);
+        } else if (attacker.getDirection().equals("left")) {
+            attacker.setX(attacker.getX() - moveDistance);
+        } else if (attacker.getDirection().equals("down")) {
+            attacker.setY(attacker.getY() + moveDistance);
+        } else if (attacker.getDirection().equals("up")) {
+            attacker.setY(attacker.getY() - moveDistance);
+        }
+
+        // Delay to allow the player to reach the target position
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void dashBack(Entity attacker) {
+        attacker.setX(originalX);
+        attacker.setY(originalY);
+        attacker.setDirection("none");
+
+        // Delay to allow the player to return to the original position
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     // Method to calculate damage
     public int calculateDamage(Entity attacker, Entity defender) {

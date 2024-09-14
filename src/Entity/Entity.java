@@ -265,6 +265,7 @@ public class Entity {
         return staticAttackRange; // Return the list of tiles within the attack range
     }
 
+
     public BufferedImage setup (String imagePath) {
         UtilityTool uTool = new UtilityTool();
         BufferedImage image = null;
@@ -453,6 +454,20 @@ public class Entity {
     public int getBonusResistance() {return bonusResistance;} // Get the unit's bonus resistance
 
     public int getBonusVision() {return bonusVision;} // Get the unit's bonus vision
+
+    public void setX (int x) {
+        this.x = x;
+    }
+
+    public void setY (int y) {
+        this.y = y;
+    }
+
+    public String getDirection() {return direction;}
+
+    public void setDirection (String direction) {
+        this.direction = direction;
+    }
 
 }
 
