@@ -13,86 +13,44 @@ public class BattleSimulator {
     }
 
     public void battlePlayerPhase(LightUnit player, ChaosUnit enemy) {
-        UtilityTool uTool = new UtilityTool();
-        boolean playerDefeated = false;
-        boolean enemyDefeated = false;
+        new Thread(() -> {
+            try {
+                Thread.sleep(500);  // Half a second delay before player attacks
 
-        int damagePlayer = calculateDamage(player, enemy);
-        int hitPlayer = calculateHitChance(player, enemy);
-        int critPlayer = calculateCriticalChance(player, enemy);
+                UtilityTool uTool = new UtilityTool();
+                boolean playerDefeated = false;
+                boolean enemyDefeated = false;
+                boolean playerMissed = false;
 
-        int damageEnemy = 0;
-        int hitEnemy = 0;
-        int critEnemy = 0;
+                int damagePlayer = calculateDamage(player, enemy);
+                int hitPlayer = calculateHitChance(player, enemy);
+                int critPlayer = calculateCriticalChance(player, enemy);
 
-        // Player attacks if hit is successful
-        if (uTool.getRandomNumber() <= hitPlayer) {
-            gp.ui.addLogMessage("");
-            // Critical hit check
-            if (uTool.getRandomNumber() <= critPlayer) {
-                damagePlayer *= 3; // Critical hits deal triple damage
-                gp.ui.addLogMessage("It's a critical hit");
-            }
-            enemy.takeDamage(damagePlayer);
-            if (enemy.getName() != null) {
-                gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + enemy.getName());
-            } else if (enemy.getName() == null) {
-                gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + String.valueOf(enemy.getRace()) + enemy.getClassName());
-            }
+                int damageEnemy = 0;
+                int hitEnemy = 0;
+                int critEnemy = 0;
 
-            if (enemy.getHP() <= 0) {
-                enemyDefeated = true; // Enemy killed
-                enemy.Defeated();
-            }
-        } else {
-            gp.ui.addLogMessage(player.getName() + " missed");
-        }
-
-        // Enemy counterattacks if still alive and player is in its range
-        if (!enemyDefeated && enemy.getHP() > 0) {
-            List<int[]> enemyRange = enemy.calculateStaticAttackRange();
-
-            // Check if player unit is in enemy unit's range
-            boolean inRange = uTool.containsTile(enemyRange, player.getCol(), player.getRow());
-            // If player is in enemy's range
-            if (inRange) {
-                damageEnemy = calculateDamage(enemy, player);
-                hitEnemy = calculateHitChance(enemy, player);
-                critEnemy = calculateCriticalChance(enemy, player);
-
-                if (uTool.getRandomNumber() <= hitEnemy) {
-                    // Critical hit check
-                    if (uTool.getRandomNumber() <= critEnemy) {
-                        damageEnemy *= 3; // Critical hits deal triple damage
-                        gp.ui.addLogMessage("It's a critical hit");
-                    }
-                    player.takeDamage(damageEnemy);
-                    gp.ui.addLogMessage(player.getName() + " took " + damageEnemy + " damage");
-
-                    if (player.getHP() <= 0) {
-                        playerDefeated = true; // Player unit killed
-                        player.Defeated();
-                    }
-                } else {
-                    if (enemy.getName() != null) {
-                        gp.ui.addLogMessage(enemy.getName() + " missed the counterattack");
-                    } else if (enemy.getName() == null) {
-                        gp.ui.addLogMessage(String.valueOf(enemy.getRace()) + enemy.getClassName() + " missed the counterattack");
-                    }
-                }
-            }
-        }
-
-        // Check if player can double attack
-        if (!playerDefeated && player.getHP() > 0) {
-            if (!enemyDefeated && player.getEffSpeed() - enemy.getEffSpeed() >= 5 && enemy.getHP() > 0) {
                 // Player attacks if hit is successful
                 if (uTool.getRandomNumber() <= hitPlayer) {
+                    gp.ui.addLogMessage("");
                     // Critical hit check
                     if (uTool.getRandomNumber() <= critPlayer) {
                         damagePlayer *= 3; // Critical hits deal triple damage
+                        if (damagePlayer > 0) {
+                            gp.playSE(15);
+                        }
+                        else {
+                            gp.playSE(16);
+                        }
                         gp.ui.addLogMessage("It's a critical hit");
                     }
+                    else {
+                        if (damagePlayer > 0) {
+                            gp.playSE(14);
+                        }
+                        else {
+                            gp.playSE(16);
+                        }                    }
                     enemy.takeDamage(damagePlayer);
                     if (enemy.getName() != null) {
                         gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + enemy.getName());
@@ -104,137 +62,208 @@ public class BattleSimulator {
                         enemyDefeated = true; // Enemy killed
                         enemy.Defeated();
                     }
-                }
-                else {
+                } else {
+                    playerMissed = true;
+                    gp.playSE(17);
                     gp.ui.addLogMessage(player.getName() + " missed");
                 }
-            }
-        }
 
-        // Check if enemy can double attack
-        if (!enemyDefeated && enemy.getHP() > 0) {
-            if (!playerDefeated && enemy.getEffSpeed() - player.getEffSpeed() >= 5 && player.getHP() > 0) {
-                List<int[]> enemyRange = enemy.calculateStaticAttackRange();
+                // Delay before enemy counterattack
+                Thread.sleep(500);
 
-                // Check if player unit is in enemy unit's range
-                boolean inRange = uTool.containsTile(enemyRange, player.getCol(), player.getRow());
-                // If player is in enemy's range
-                if (inRange) {
-                    damageEnemy = calculateDamage(enemy, player);
-                    hitEnemy = calculateHitChance(enemy, player);
-                    critEnemy = calculateCriticalChance(enemy, player);
+                // Enemy counterattacks if still alive and player is in its range
+                if (!enemyDefeated && enemy.getHP() > 0) {
+                    List<int[]> enemyRange = enemy.calculateStaticAttackRange();
 
-                    if (uTool.getRandomNumber() <= hitEnemy) {
-                        // Critical hit check
-                        if (uTool.getRandomNumber() <= critEnemy) {
-                            damageEnemy *= 3; // Critical hits deal triple damage
-                            gp.ui.addLogMessage("It's a critical hit");
-                        }
-                        player.takeDamage(damageEnemy);
-                        gp.ui.addLogMessage(player.getName() + " took " + damageEnemy + " damage");
+                    // Check if player unit is in enemy unit's range
+                    boolean inRange = uTool.containsTile(enemyRange, player.getCol(), player.getRow());
+                    // If player is in enemy's range
+                    if (inRange) {
+                        damageEnemy = calculateDamage(enemy, player);
+                        hitEnemy = calculateHitChance(enemy, player);
+                        critEnemy = calculateCriticalChance(enemy, player);
 
-                        if (player.getHP() <= 0) {
-                            playerDefeated = true; // Player unit killed
-                            player.Defeated();
-                        }
-                    } else {
-                        if (enemy.getName() != null) {
-                            gp.ui.addLogMessage(enemy.getName() + " missed the counterattack");
-                        } else if (enemy.getName() == null) {
-                            gp.ui.addLogMessage(String.valueOf(enemy.getRace()) + enemy.getClassName() + " missed the counterattack");
+                        if (uTool.getRandomNumber() <= hitEnemy) {
+                            // Critical hit check
+                            if (uTool.getRandomNumber() <= critEnemy) {
+                                damageEnemy *= 3; // Critical hits deal triple damage
+                                if (damageEnemy > 0) {
+                                    gp.playSE(15);
+                                }
+                                else {
+                                    gp.playSE(16);
+                                }
+                                gp.ui.addLogMessage("It's a critical hit");
+                            }
+                            else {
+                                if (damageEnemy > 0) {
+                                    gp.playSE(14);
+                                }
+                                else {
+                                    gp.playSE(16);
+                                }
+                            }
+                            player.takeDamage(damageEnemy);
+                            gp.ui.addLogMessage(player.getName() + " took " + damageEnemy + " damage");
+
+                            if (player.getHP() <= 0) {
+                                playerDefeated = true; // Player unit killed
+                                player.Defeated();
+                            }
+                        } else {
+                            gp.playSE(17);
+                            if (enemy.getName() != null) {
+                                gp.ui.addLogMessage(enemy.getName() + " missed the counterattack");
+                            } else if (enemy.getName() == null) {
+                                gp.ui.addLogMessage(String.valueOf(enemy.getRace()) + enemy.getClassName() + " missed the counterattack");
+                            }
                         }
                     }
                 }
-            }
-        }
 
-        // Experience calculation for player unit
-        if (!playerDefeated && damagePlayer > 0) {
-            int experienceGained = calculateExperience(player, enemy, enemyDefeated, damagePlayer);
-            player.gainExperience(experienceGained);
-        }
+                // Check if player can double attack
+                if (!playerDefeated && player.getHP() > 0) {
+                    if (!enemyDefeated && player.getEffSpeed() - enemy.getEffSpeed() >= 5 && enemy.getHP() > 0) {
+                        playerMissed = false;
+                        Thread.sleep(500);
+                        // Player attacks if hit is successful
+                        if (uTool.getRandomNumber() <= hitPlayer) {
+                            // Critical hit check
+                            if (uTool.getRandomNumber() <= critPlayer) {
+                                damagePlayer *= 3; // Critical hits deal triple damage
+                                if (damagePlayer > 0) {
+                                    gp.playSE(15);
+                                }
+                                else {
+                                    gp.playSE(16);
+                                }
+                                gp.ui.addLogMessage("It's a critical hit");
+                            } else {
+                                if (damagePlayer > 0) {
+                                    gp.playSE(14);
+                                }
+                                else {
+                                    gp.playSE(16);
+                                }
+                            }
+                            enemy.takeDamage(damagePlayer);
+                            if (enemy.getName() != null) {
+                                gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + enemy.getName());
+                            } else if (enemy.getName() == null) {
+                                gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + String.valueOf(enemy.getRace()) + enemy.getClassName());
+                            }
+
+                            if (enemy.getHP() <= 0) {
+                                enemyDefeated = true; // Enemy killed
+                                enemy.Defeated();
+                            }
+                        } else {
+                            playerMissed = true;
+                            gp.playSE(17);
+                            gp.ui.addLogMessage(player.getName() + " missed");
+                        }
+                    }
+                }
+
+                // Check if enemy can double attack
+                if (!enemyDefeated && enemy.getHP() > 0) {
+                    if (!playerDefeated && enemy.getEffSpeed() - player.getEffSpeed() >= 5 && player.getHP() > 0) {
+                        Thread.sleep(500);
+                        List<int[]> enemyRange = enemy.calculateStaticAttackRange();
+
+                        // Check if player unit is in enemy unit's range
+                        boolean inRange = uTool.containsTile(enemyRange, player.getCol(), player.getRow());
+                        // If player is in enemy's range
+                        if (inRange) {
+                            damageEnemy = calculateDamage(enemy, player);
+                            hitEnemy = calculateHitChance(enemy, player);
+                            critEnemy = calculateCriticalChance(enemy, player);
+
+                            if (uTool.getRandomNumber() <= hitEnemy) {
+                                // Critical hit check
+                                if (uTool.getRandomNumber() <= critEnemy) {
+                                    damageEnemy *= 3; // Critical hits deal triple damage
+                                    if (damageEnemy > 0) {
+                                        gp.playSE(15);
+                                    }
+                                    else {
+                                        gp.playSE(16);
+                                    }
+                                    gp.ui.addLogMessage("It's a critical hit");
+                                } else {
+                                    if (damageEnemy > 0) {
+                                        gp.playSE(14);
+                                    }
+                                    else {
+                                        gp.playSE(16);
+                                    }
+                                }
+                                player.takeDamage(damageEnemy);
+                                gp.ui.addLogMessage(player.getName() + " took " + damageEnemy + " damage");
+
+                                if (player.getHP() <= 0) {
+                                    playerDefeated = true; // Player unit killed
+                                    player.Defeated();
+                                }
+                            } else {
+                                gp.playSE(17);
+                                if (enemy.getName() != null) {
+                                    gp.ui.addLogMessage(enemy.getName() + " missed the counterattack");
+                                } else if (enemy.getName() == null) {
+                                    gp.ui.addLogMessage(String.valueOf(enemy.getRace()) + enemy.getClassName() + " missed the counterattack");
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Experience calculation for player unit
+                if (!playerDefeated && !playerMissed && damagePlayer > 0) {
+                    int experienceGained = calculateExperience(player, enemy, enemyDefeated, damagePlayer);
+                    player.gainExperience(experienceGained);
+                }
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     public void battleEnemyPhase(LightUnit player, ChaosUnit enemy) {
-        UtilityTool uTool = new UtilityTool();
-        boolean playerDefeated = false;
-        boolean enemyDefeated = false;
+        new Thread(() -> {
+            try {
+                Thread.sleep(500);  // Half a second delay before player attacks
+                UtilityTool uTool = new UtilityTool();
+                boolean playerDefeated = false;
+                boolean enemyDefeated = false;
+                boolean playerMissed = false;
 
-        int damageEnemy = calculateDamage(enemy, player);
-        int hitEnemy = calculateHitChance(enemy, player);
-        int critEnemy = calculateCriticalChance(enemy, player);
+                int damageEnemy = calculateDamage(enemy, player);
+                int hitEnemy = calculateHitChance(enemy, player);
+                int critEnemy = calculateCriticalChance(enemy, player);
 
-        int damagePlayer = 0;
-        int hitPlayer = 0;
-        int critPlayer = 0;
+                int damagePlayer = 0;
+                int hitPlayer = 0;
+                int critPlayer = 0;
 
-        // Enemy attacks if hit is successful
-        if (uTool.getRandomNumber() <= hitEnemy) {
-            gp.ui.addLogMessage("");
-            // Critical hit check
-            if (uTool.getRandomNumber() <= critEnemy) {
-                damageEnemy *= 3; // Critical hits deal triple damage
-                gp.ui.addLogMessage("It's a critical hit");
-            }
-            player.takeDamage(damageEnemy);
-            gp.ui.addLogMessage(player.getName() + " took " + damageEnemy + " damage");
-
-            if (player.getHP() <= 0) {
-                playerDefeated = true; // Enemy killed
-                player.Defeated();
-            }
-        } else {
-            if (enemy.getName() != null) {
-                gp.ui.addLogMessage(enemy.getName() + " missed");
-            } else if (enemy.getName() == null) {
-                gp.ui.addLogMessage(String.valueOf(enemy.getRace()) + enemy.getClassName() + " missed");
-            }
-        }
-
-        // Player counterattacks if still alive and enemy is in its range
-        if (!playerDefeated && player.getHP() > 0) {
-            List<int[]> playerRange = player.calculateStaticAttackRange();
-
-            // Check if player unit is in enemy unit's range
-            boolean inRange = uTool.containsTile(playerRange, enemy.getCol(), enemy.getRow());
-            // If player is in enemy's range
-            if (inRange) {
-                damagePlayer = calculateDamage(player, enemy);
-                hitPlayer = calculateHitChance(player, enemy);
-                critPlayer = calculateCriticalChance(player, enemy);
-
-                if (uTool.getRandomNumber() <= hitPlayer) {
-                    // Critical hit check
-                    if (uTool.getRandomNumber() <= critPlayer) {
-                        damagePlayer *= 3; // Critical hits deal triple damage
-                        gp.ui.addLogMessage("It's a critical hit");
-                    }
-                    enemy.takeDamage(damagePlayer);
-                    if (enemy.getName() != null) {
-                        gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + enemy.getName());
-                    } else if (enemy.getName() == null) {
-                        gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + String.valueOf(enemy.getRace()) + enemy.getClassName());
-                    }
-
-                    if (enemy.getHP() <= 0) {
-                        enemyDefeated = true; // Player unit killed
-                        enemy.Defeated();
-                    }
-                } else {
-                    gp.ui.addLogMessage(player.getName() + " missed the counterattack");
-                }
-            }
-        }
-
-        // Check if enemy can double attack
-        if (!enemyDefeated && enemy.getHP() > 0) {
-            if (!playerDefeated && enemy.getEffSpeed() - player.getEffSpeed() >= 5 && player.getHP() > 0) {
-                // Player attacks if hit is successful
+                // Enemy attacks if hit is successful
                 if (uTool.getRandomNumber() <= hitEnemy) {
+                    gp.ui.addLogMessage("");
                     // Critical hit check
                     if (uTool.getRandomNumber() <= critEnemy) {
                         damageEnemy *= 3; // Critical hits deal triple damage
+                        if (damageEnemy > 0) {
+                            gp.playSE(15);
+                        } else {
+                            gp.playSE(16);
+                        }
                         gp.ui.addLogMessage("It's a critical hit");
+                    } else {
+                        if (damageEnemy > 0) {
+                            gp.playSE(14);
+                        } else {
+                            gp.playSE(16);
+                        }
                     }
                     player.takeDamage(damageEnemy);
                     gp.ui.addLogMessage(player.getName() + " took " + damageEnemy + " damage");
@@ -243,59 +272,167 @@ public class BattleSimulator {
                         playerDefeated = true; // Enemy killed
                         player.Defeated();
                     }
-                }
-                else {
+                } else {
+                    gp.playSE(17);
                     if (enemy.getName() != null) {
                         gp.ui.addLogMessage(enemy.getName() + " missed");
                     } else if (enemy.getName() == null) {
                         gp.ui.addLogMessage(String.valueOf(enemy.getRace()) + enemy.getClassName() + " missed");
                     }
                 }
-            }
-        }
 
-        // Check if player can double attack
-        if (!playerDefeated && player.getHP() > 0) {
-            if (!enemyDefeated && player.getEffSpeed() - enemy.getEffSpeed() >= 5 && enemy.getHP() > 0) {
-                List<int[]> playerRange = player.calculateStaticAttackRange();
+                // Delay before player counterattack
+                Thread.sleep(500);
 
-                // Check if player unit is in enemy unit's range
-                boolean inRange = uTool.containsTile(playerRange, enemy.getCol(), enemy.getRow());
-                // If player is in enemy's range
-                if (inRange) {
-                    damagePlayer = calculateDamage(player, enemy);
-                    hitPlayer = calculateHitChance(player, enemy);
-                    critPlayer = calculateCriticalChance(player, enemy);
+                // Player counterattacks if still alive and enemy is in its range
+                if (!playerDefeated && player.getHP() > 0) {
+                    List<int[]> playerRange = player.calculateStaticAttackRange();
 
-                    if (uTool.getRandomNumber() <= hitPlayer) {
-                        // Critical hit check
-                        if (uTool.getRandomNumber() <= critPlayer) {
-                            damagePlayer *= 3; // Critical hits deal triple damage
-                            gp.ui.addLogMessage("It's a critical hit");
+                    // Check if player unit is in enemy unit's range
+                    boolean inRange = uTool.containsTile(playerRange, enemy.getCol(), enemy.getRow());
+                    // If player is in enemy's range
+                    if (inRange) {
+                        damagePlayer = calculateDamage(player, enemy);
+                        hitPlayer = calculateHitChance(player, enemy);
+                        critPlayer = calculateCriticalChance(player, enemy);
+
+                        if (uTool.getRandomNumber() <= hitPlayer) {
+                            // Critical hit check
+                            if (uTool.getRandomNumber() <= critPlayer) {
+                                damagePlayer *= 3; // Critical hits deal triple damage
+                                if (damagePlayer > 0) {
+                                    gp.playSE(15);
+                                } else {
+                                    gp.playSE(16);
+                                }
+                                gp.ui.addLogMessage("It's a critical hit");
+                            } else {
+                                if (damagePlayer > 0) {
+                                    gp.playSE(14);
+                                } else {
+                                    gp.playSE(16);
+                                }
+                            }
+                            enemy.takeDamage(damagePlayer);
+                            if (enemy.getName() != null) {
+                                gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + enemy.getName());
+                            } else if (enemy.getName() == null) {
+                                gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + String.valueOf(enemy.getRace()) + enemy.getClassName());
+                            }
+
+                            if (enemy.getHP() <= 0) {
+                                enemyDefeated = true; // Player unit killed
+                                enemy.Defeated();
+                            }
+                        } else {
+                            playerMissed = true;
+                            gp.playSE(17);
+                            gp.ui.addLogMessage(player.getName() + " missed the counterattack");
                         }
-                        enemy.takeDamage(damagePlayer);
-                        if (enemy.getName() != null) {
-                            gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + enemy.getName());
-                        } else if (enemy.getName() == null) {
-                            gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + String.valueOf(enemy.getRace()) + enemy.getClassName());
-                        }
-
-                        if (enemy.getHP() <= 0) {
-                            enemyDefeated = true; // Player unit killed
-                            enemy.Defeated();
-                        }
-                    } else {
-                        gp.ui.addLogMessage(player.getName() + " missed the counterattack");
                     }
                 }
-            }
-        }
 
-        // Experience calculation for player unit
-        if (!playerDefeated && damagePlayer > 0) {
-            int experienceGained = calculateExperience(player, enemy, enemyDefeated, damagePlayer);
-            player.gainExperience(experienceGained);
-        }
+                // Check if enemy can double attack
+                if (!enemyDefeated && enemy.getHP() > 0) {
+                    if (!playerDefeated && enemy.getEffSpeed() - player.getEffSpeed() >= 5 && player.getHP() > 0) {
+                        Thread.sleep(500);
+                        // Player attacks if hit is successful
+                        if (uTool.getRandomNumber() <= hitEnemy) {
+                            // Critical hit check
+                            if (uTool.getRandomNumber() <= critEnemy) {
+                                damageEnemy *= 3; // Critical hits deal triple damage
+                                if (damageEnemy > 0) {
+                                    gp.playSE(15);
+                                } else {
+                                    gp.playSE(16);
+                                }
+                                gp.ui.addLogMessage("It's a critical hit");
+                            } else {
+                                if (damageEnemy > 0) {
+                                    gp.playSE(14);
+                                } else {
+                                    gp.playSE(16);
+                                }
+                            }
+                            player.takeDamage(damageEnemy);
+                            gp.ui.addLogMessage(player.getName() + " took " + damageEnemy + " damage");
+
+                            if (player.getHP() <= 0) {
+                                playerDefeated = true; // Enemy killed
+                                player.Defeated();
+                            }
+                        } else {
+                            gp.playSE(17);
+                            if (enemy.getName() != null) {
+                                gp.ui.addLogMessage(enemy.getName() + " missed");
+                            } else if (enemy.getName() == null) {
+                                gp.ui.addLogMessage(String.valueOf(enemy.getRace()) + enemy.getClassName() + " missed");
+                            }
+                        }
+                    }
+                }
+
+                // Check if player can double attack
+                if (!playerDefeated && player.getHP() > 0) {
+                    if (!enemyDefeated && player.getEffSpeed() - enemy.getEffSpeed() >= 5 && enemy.getHP() > 0) {
+                        Thread.sleep(500);
+                        List<int[]> playerRange = player.calculateStaticAttackRange();
+
+                        // Check if player unit is in enemy unit's range
+                        boolean inRange = uTool.containsTile(playerRange, enemy.getCol(), enemy.getRow());
+                        // If player is in enemy's range
+                        if (inRange) {
+                            playerMissed = false;
+                            damagePlayer = calculateDamage(player, enemy);
+                            hitPlayer = calculateHitChance(player, enemy);
+                            critPlayer = calculateCriticalChance(player, enemy);
+
+                            if (uTool.getRandomNumber() <= hitPlayer) {
+                                // Critical hit check
+                                if (uTool.getRandomNumber() <= critPlayer) {
+                                    damagePlayer *= 3; // Critical hits deal triple damage
+                                    if (damagePlayer > 0) {
+                                        gp.playSE(15);
+                                    } else {
+                                        gp.playSE(16);
+                                    }
+                                    gp.ui.addLogMessage("It's a critical hit");
+                                } else {
+                                    if (damagePlayer > 0) {
+                                        gp.playSE(14);
+                                    } else {
+                                        gp.playSE(16);
+                                    }
+                                }
+                                enemy.takeDamage(damagePlayer);
+                                if (enemy.getName() != null) {
+                                    gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + enemy.getName());
+                                } else if (enemy.getName() == null) {
+                                    gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + String.valueOf(enemy.getRace()) + enemy.getClassName());
+                                }
+
+                                if (enemy.getHP() <= 0) {
+                                    enemyDefeated = true; // Player unit killed
+                                    enemy.Defeated();
+                                }
+                            } else {
+                                playerMissed = true;
+                                gp.playSE(17);
+                                gp.ui.addLogMessage(player.getName() + " missed the counterattack");
+                            }
+                        }
+                    }
+                }
+
+                // Experience calculation for player unit
+                if (!playerDefeated && !playerMissed && damagePlayer > 0) {
+                    int experienceGained = calculateExperience(player, enemy, enemyDefeated, damagePlayer);
+                    player.gainExperience(experienceGained);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
 

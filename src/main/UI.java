@@ -225,7 +225,7 @@ public class UI {
         int enemyHitRate = 0;
         int enemyCrit = 0;
 
-        if (enemy != null) {
+        if (enemy != null && gp.selectedUnit != null) {
             UtilityTool uTool = new UtilityTool();
             List<int[]> enemyRange = enemy.calculateStaticAttackRange();
 

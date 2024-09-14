@@ -30,6 +30,14 @@ public class Sound {
         soundEffectURL[7] = getClass().getResource("/Sound_Effects/Armored_Walking.wav");
         soundEffectURL[8] = getClass().getResource("/Sound_Effects/Mounted_Walking.wav");
         soundEffectURL[9] = getClass().getResource("/Sound_Effects/Opening_Theme.wav");
+        soundEffectURL[10] = getClass().getResource("/Sound_Effects/Level_Up.wav");
+        soundEffectURL[11] = getClass().getResource("/Sound_Effects/Stat_Point_+1.wav");
+        soundEffectURL[12] = getClass().getResource("/Sound_Effects/Potion_Use.wav");
+        soundEffectURL[13] = getClass().getResource("/Sound_Effects/Healing_Spell.wav");
+        soundEffectURL[14] = getClass().getResource("/Sound_Effects/Attack.wav");
+        soundEffectURL[15] = getClass().getResource("/Sound_Effects/Critical_Attack.wav");
+        soundEffectURL[16] = getClass().getResource("/Sound_Effects/No_Damage.wav");
+        soundEffectURL[17] = getClass().getResource("/Sound_Effects/Miss.wav");
     }
 
 

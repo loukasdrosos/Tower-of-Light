@@ -42,8 +42,8 @@ public class Entity {
     protected int maxHP; // Unit's Max Health Points
     protected int strength; // Unit's strentgh, used for physical attack damage
     protected int magic; // Unit's magic, used for magic attack damage
-    protected int skill; // // Unit's skill, used for accuracy, critical hit rate, and skill activation if skills are implemented
-    protected int speed; // // Unit's speed if unit's speed is 5 points higher than the opponent’s, attacking unit performs a follow-up attack
+    protected int skill; // // Unit's skill, used for accuracy and critical hit rate
+    protected int speed; // // Unit's speed
     protected int luck; // Unit's luck, used to calculate hit, avoid, and to dodge critical hits, and skill activation
     protected int defense; // Unit's defense against physical attacks
     protected int resistance; // Unit's defence against magic attacks
@@ -69,18 +69,18 @@ public class Entity {
     protected int bonusStrength; // Trinket's Strength
     protected int bonusMagic; // Trinket's Magic
     protected int bonusSkill; // Trinket's Skill
-    protected int bonusSpeed; // Trinket's Speed
-    protected int bonusDefense; // Trinket's Defense
-    protected int bonusResistance; // Trinket's Resistance
-    protected int bonusVision; //  Trinket's Vision
+    protected int bonusSpeed; // Trinket's Speed + Weapon’s Speed
+    protected int bonusDefense; // Trinket's Defense + Weapon’s Defense
+    protected int bonusResistance; // Trinket's Resistance + Weapon’s Resistance
+    protected int bonusVision; //  Trinket's Vision + Weapon’s Vision
 
-    protected int effStrength; // Strength + Trinket's Strength
-    protected int effMagic; // Magic + Trinket's Magic
-    protected int effSkill; // Skill + Trinket's Skill
-    protected int effSpeed; // Speed + Trinket's Speed
-    protected int effDefense; // Defense + Trinket's Defense
-    protected int effResistance; // Resistance + Trinket's Resistance
-    protected int effVision; // Vision + Trinket's Vision
+    protected int effStrength; // Strength + bonus Strength
+    protected int effMagic; // Magic + bonus Magic
+    protected int effSkill; // Skill + bonus Skill
+    protected int effSpeed; // Speed + bonus Speed, if effSpeed is bigger than enemy's effSpeed by 5, unit performs a second attack
+    protected int effDefense; // Defense + bonus Defense
+    protected int effResistance; // Resistance + bonus Resistance
+    protected int effVision; // Vision + bonus Vision
 
     protected int might; // eff.Strength or eff.Magic + Weapon’s or Spell's Might
     protected int critical; // Weapon’s Critical + (eff.Skill / 2), critical hits deal damage multiplied by 3

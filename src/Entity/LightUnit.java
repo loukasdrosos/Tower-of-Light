@@ -280,8 +280,6 @@ public class LightUnit extends Entity{
     public void levelUp() {
         if (level < maxLevel) {
             level++;
-            gp.ui.addLogMessage("");
-            gp.ui.addLogMessage(name + " reached level " + level);
         }
         exp -= 100;
         calculateLevelUpStats();
@@ -293,54 +291,111 @@ public class LightUnit extends Entity{
 
     public void calculateLevelUpStats() {
         UtilityTool uTool = new UtilityTool();
+        List<Runnable> tasks = new ArrayList<>();
+        int delay = 600;  // 600 ms delay between each message and sound effect
+
+        tasks.add(() -> {
+            gp.ui.addLogMessage("");
+            gp.playSE(10);
+            gp.ui.addLogMessage(name + " reached level " + level);
+        });
 
         // HP increase
         if (uTool.getRandomNumber() <= HPGrowthRate) {
-            maxHP += 1;
-            gp.ui.addLogMessage("HP increased by 1");
+            tasks.add(() -> {
+                maxHP += 1;
+                gp.playSE(11);
+                gp.ui.addLogMessage("HP increased by 1");
+            });
         }
 
         // Strength increase
         if (uTool.getRandomNumber() <= strengthGrowthRate) {
-            strength += 1;
-            gp.ui.addLogMessage("Strength increased by 1");
+            tasks.add(() -> {
+                strength += 1;
+                gp.playSE(11);
+                gp.ui.addLogMessage("Strength increased by 1");
+            });
         }
 
         // Magic increase
         if (uTool.getRandomNumber() <= magicGrowthRate) {
-            magic += 1;
-            gp.ui.addLogMessage("Magic increased by 1");
+            tasks.add(() -> {
+                magic += 1;
+                gp.playSE(11);
+                gp.ui.addLogMessage("Magic increased by 1");
+            });
         }
 
         // Skill increase
         if (uTool.getRandomNumber() <= skillGrowthRate) {
-            skill += 1;
-            gp.ui.addLogMessage("Skill increased by 1");
+            tasks.add(() -> {
+                skill += 1;
+                gp.playSE(11);
+                gp.ui.addLogMessage("Skill increased by 1");
+            });
         }
 
         // Speed increase
         if (uTool.getRandomNumber() <= speedGrowthRate) {
-            speed += 1;
-            gp.ui.addLogMessage("Speed increased by 1");
+            tasks.add(() -> {
+                speed += 1;
+                gp.playSE(11);
+                gp.ui.addLogMessage("Speed increased by 1");
+            });
         }
 
         // Luck increase
         if (uTool.getRandomNumber() <= luckGrowthRate) {
-            luck += 1;
-            gp.ui.addLogMessage("Luck increased by 1");
+            tasks.add(() -> {
+                luck += 1;
+                gp.playSE(11);
+                gp.ui.addLogMessage("Luck increased by 1");
+            });
         }
 
         // Defense increase
         if (uTool.getRandomNumber() <= defenseGrowthRate) {
-            defense += 1;
-            gp.ui.addLogMessage("Defense increased by 1");
+            tasks.add(() -> {
+                defense += 1;
+                gp.playSE(11);
+                gp.ui.addLogMessage("Defense increased by 1");
+            });
         }
 
         // Resistance increase
         if (uTool.getRandomNumber() <= resistanceGrowthRate) {
-            resistance += 1;
-            gp.ui.addLogMessage("Resistance increased by 1");
+            tasks.add(() -> {
+                resistance += 1;
+                gp.playSE(11);
+                gp.ui.addLogMessage("Resistance increased by 1");
+            });
         }
+
+        // Execute the tasks one by one with a delay
+        executeWithDelay(tasks, delay);
+    }
+
+    private void executeWithDelay(List<Runnable> tasks, int delay) {
+        Timer timer = new Timer();
+
+        for (int i = 0; i < tasks.size(); i++) {
+            int taskIndex = i;
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    tasks.get(taskIndex).run();
+                }
+            }, delay * i);
+        }
+
+        // Cancel the timer after all tasks have been executed
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                timer.cancel();
+            }
+        }, delay * tasks.size());
     }
 
     // Method to update the unit's state, called every frame

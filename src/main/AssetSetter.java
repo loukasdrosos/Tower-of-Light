@@ -26,7 +26,9 @@ public class AssetSetter {
 
     // Initialize enemy units and set their starting positions
     public void setChaosUnits() {
-        gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 32, 15, Lightbringer, null));
+        gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 30, 15, Lightbringer, null));
+        gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 30, 13, Ragnell, null));
+        gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 30, 12, Ragnell, null));
         gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 32, 13, Ragnell, Dracoshield));
     }
 
