@@ -2,17 +2,28 @@ package main;
 
 import Entity.*;
 
+import java.awt.*;
 import java.util.List;
 
 public class BattleSimulator {
 
     GamePanel gp;
+    Graphics2D g2;
+    Font arial_15;
+
+    private String floatingText;
+    private int floatingTextX;
+    private int floatingTextY;
+    private int duration = 0;
+
+    private boolean battleInProgress = false;
 
     public BattleSimulator(GamePanel gp) {
         this.gp = gp;
     }
 
     public void battlePlayerPhase(LightUnit player, ChaosUnit enemy) {
+        battleInProgress = true;
         new Thread(() -> {
             try {
                 Thread.sleep(500);  // Half a second delay before player attacks
@@ -50,7 +61,9 @@ public class BattleSimulator {
                         }
                         else {
                             gp.playSE(16);
-                        }                    }
+                        }
+                    }
+                    getDamage(String.valueOf(damagePlayer), enemy.getX(), enemy.getY() - 2);
                     enemy.takeDamage(damagePlayer);
                     if (enemy.getName() != null) {
                         gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + enemy.getName());
@@ -64,6 +77,7 @@ public class BattleSimulator {
                     }
                 } else {
                     playerMissed = true;
+                    getDamage("MISS", enemy.getX() - 2, enemy.getY() - 2);
                     gp.playSE(17);
                     gp.ui.addLogMessage(player.getName() + " missed");
                 }
@@ -103,6 +117,7 @@ public class BattleSimulator {
                                     gp.playSE(16);
                                 }
                             }
+                            getDamage(String.valueOf(damageEnemy), player.getX(), player.getY() - 2);
                             player.takeDamage(damageEnemy);
                             gp.ui.addLogMessage(player.getName() + " took " + damageEnemy + " damage");
 
@@ -111,6 +126,7 @@ public class BattleSimulator {
                                 player.Defeated();
                             }
                         } else {
+                            getDamage("MISS", player.getX() - 2, player.getY() - 2);
                             gp.playSE(17);
                             if (enemy.getName() != null) {
                                 gp.ui.addLogMessage(enemy.getName() + " missed the counterattack");
@@ -146,6 +162,7 @@ public class BattleSimulator {
                                     gp.playSE(16);
                                 }
                             }
+                            getDamage(String.valueOf(damagePlayer), enemy.getX(), enemy.getY() - 2);
                             enemy.takeDamage(damagePlayer);
                             if (enemy.getName() != null) {
                                 gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + enemy.getName());
@@ -159,6 +176,7 @@ public class BattleSimulator {
                             }
                         } else {
                             playerMissed = true;
+                            getDamage("MISS", enemy.getX() - 2, enemy.getY() - 2);
                             gp.playSE(17);
                             gp.ui.addLogMessage(player.getName() + " missed");
                         }
@@ -198,6 +216,7 @@ public class BattleSimulator {
                                         gp.playSE(16);
                                     }
                                 }
+                                getDamage(String.valueOf(damageEnemy), player.getX(), player.getY() - 2);
                                 player.takeDamage(damageEnemy);
                                 gp.ui.addLogMessage(player.getName() + " took " + damageEnemy + " damage");
 
@@ -206,6 +225,7 @@ public class BattleSimulator {
                                     player.Defeated();
                                 }
                             } else {
+                                getDamage("MISS", player.getX() - 2, player.getY() - 2);
                                 gp.playSE(17);
                                 if (enemy.getName() != null) {
                                     gp.ui.addLogMessage(enemy.getName() + " missed the counterattack");
@@ -219,9 +239,18 @@ public class BattleSimulator {
 
                 // Experience calculation for player unit
                 if (!playerDefeated && !playerMissed && damagePlayer > 0) {
+                    boolean delay = false;
                     int experienceGained = calculateExperience(player, enemy, enemyDefeated, damagePlayer);
+                    if (player.getExp() + experienceGained >= 100) {
+                        delay = true;
+                    }
                     player.gainExperience(experienceGained);
+                    if (delay) {
+                        Thread.sleep(2000);
+                    }
                 }
+
+                battleInProgress = false; // Mark battle as finished
             }
             catch (InterruptedException e) {
                 e.printStackTrace();
@@ -230,6 +259,7 @@ public class BattleSimulator {
     }
 
     public void battleEnemyPhase(LightUnit player, ChaosUnit enemy) {
+        battleInProgress = true;
         new Thread(() -> {
             try {
                 Thread.sleep(500);  // Half a second delay before player attacks
@@ -426,9 +456,18 @@ public class BattleSimulator {
 
                 // Experience calculation for player unit
                 if (!playerDefeated && !playerMissed && damagePlayer > 0) {
+                    boolean delay = false;
                     int experienceGained = calculateExperience(player, enemy, enemyDefeated, damagePlayer);
+                    if (player.getExp() + experienceGained >= 100) {
+                        delay = true;
+                    }
                     player.gainExperience(experienceGained);
+                    if (delay) {
+                        Thread.sleep(2000);
+                    }
                 }
+
+                battleInProgress = false; // Mark battle as finished
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -508,6 +547,39 @@ public class BattleSimulator {
         return experienceGained;
     }
 
+    public boolean isBattleInProgress() {
+        return battleInProgress;
+    }
+
+    // DAMAGE ON SCREEN UI
+
+    public void displayDamage() {
+        if (floatingText != null && duration > 0) {
+            g2.setColor(Color.WHITE);
+            g2.setFont(arial_15);
+            g2.drawString(floatingText, floatingTextX, floatingTextY);
+
+            // Decrease the floating text duration
+            duration--;
+        }
+
+        if (duration == 0)
+            floatingText = null;
+    }
+
+    // To render the damage at a specific location
+    public void getDamage(String text, int x, int y) {
+        floatingText = text;
+        floatingTextX = x;
+        floatingTextY = y;
+        duration = 30;
+    }
+
+    public void draw(Graphics2D g2) {
+        this.g2 = g2;
+
+        displayDamage();
+    }
 }
 
 

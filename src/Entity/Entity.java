@@ -221,8 +221,8 @@ public class Entity {
 
     // Method to update the unit's pixel position based on its current tile position
     public void updatePosition () {
-        x = getX(col);
-        y = getY(row);
+        x = getX();
+        y = getY();
     }
 
     public void takeDamage(int damage) {
@@ -362,9 +362,9 @@ public class Entity {
 
     // Getter methods
 
-    public int getX(int col) { return col * gp.getTileSize(); } // Calculate x position in pixels based on column
+    public int getX() { return col * gp.getTileSize(); } // Calculate x position in pixels based on column
 
-    public int getY(int row) { return row * gp.getTileSize(); } // Calculate y position in pixels based on row
+    public int getY() { return row * gp.getTileSize(); } // Calculate y position in pixels based on row
 
     public int getCol() { return col; } // Get the unit's current column
 

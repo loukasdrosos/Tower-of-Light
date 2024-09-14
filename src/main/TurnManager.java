@@ -24,7 +24,7 @@ public class TurnManager {
     public void manageTurns() {
         if (playerPhase) {
             // Player's turn phase
-            if (!turnCompleted) {
+            if (!turnCompleted && !gp.battleSim.isBattleInProgress()) {
                 turnCounter++; // Increment the turn counter
                 turnCompleted = true; // Mark the turn as completed to avoid multiple increments
                 gp.playSE(1);  // Play sound effect for player phase start
@@ -47,7 +47,7 @@ public class TurnManager {
             }
 
             // If all player units have finished, switch to the enemy phase
-            if (allPlayersWait) {
+            if (allPlayersWait && !gp.battleSim.isBattleInProgress()) {
                 playerPhase = false; // Switch to enemy phase
                 turnCompleted = false; // Reset turn completion flag
                 currentEnemyUnitIndex = 0; // Reset the enemy unit index
@@ -65,7 +65,7 @@ public class TurnManager {
         }
         else {
             // Enemy's turn phase
-            if (!turnCompleted) {
+            if (!turnCompleted && !gp.battleSim.isBattleInProgress()) {
                 turnCompleted = true; // Ensure we only print once per switch
             }
 

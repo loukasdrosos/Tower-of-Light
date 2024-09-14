@@ -12,8 +12,8 @@ public class Prince extends LightUnit{
         super(gp, keyH);
         this.col =  startCol;   // Initial column position
         this.row = startRow;    // Initial row position
-        x = getX(col);          // Calculate initial x position based on column
-        y = getY(row);          // Calculate initial y position based on row
+        x = getX();          // Calculate initial x position based on column
+        y = getY();          // Calculate initial y position based on row
         preCol = col;           // Set previous column to current column
         preRow = row;           // Set previous row to current row
         this.name = name;

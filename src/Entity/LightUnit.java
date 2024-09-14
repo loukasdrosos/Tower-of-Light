@@ -245,8 +245,8 @@ public class LightUnit extends Entity{
         isMoving = false;     // Stop the unit's movement
         col = preCol;   // Revert to the previous column
         row = preRow;   // Revert to the previous row
-        x = getX(col);  // Update the x position in pixels
-        y = getY(row);  // Update the y position in pixels
+        x = getX();  // Update the x position in pixels
+        y = getY();  // Update the y position in pixels
         direction = "none"; // Reset the direction
         isSelected = false;   // Deselect the unit
     }
@@ -292,12 +292,13 @@ public class LightUnit extends Entity{
     public void calculateLevelUpStats() {
         UtilityTool uTool = new UtilityTool();
         List<Runnable> tasks = new ArrayList<>();
-        int delay = 600;  // 600 ms delay between each message and sound effect
+        int delay = 300;  //300 ms delay between each message and sound effect
+
+        gp.ui.addLogMessage("");
+        gp.playSE(10);
+        gp.ui.addLogMessage(name + " reached level " + level);
 
         tasks.add(() -> {
-            gp.ui.addLogMessage("");
-            gp.playSE(10);
-            gp.ui.addLogMessage(name + " reached level " + level);
         });
 
         // HP increase

@@ -193,6 +193,9 @@ public class GamePanel extends JPanel implements Runnable{
 
             // Draw the cursor
             cursor.draw(g2);
+
+            // Draw battle damage in map
+            battleSim.draw(g2);
         }
 
         // DEBUG
