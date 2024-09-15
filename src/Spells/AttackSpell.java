@@ -12,13 +12,13 @@ public class AttackSpell {
 
     // Getters
 
-    public int getMight() { return might; } // Get the weapon's might
+    public int getMight() { return might; } // Get the spell's might
 
-    public int getHit() { return hit; } // Get the weapon's hit rate
+    public int getHit() { return hit; } // Get the spell's hit rate
 
-    public int getCrit() { return crit; } // Get the weapon's crit chance
+    public int getCrit() { return crit; } // Get the spell's crit chance
 
-    public int getRange() { return range; } // Get the weapon's attack range
+    public int getRange() { return range; } // Get the spell's attack range
 
     public String getName() { return name; }
 

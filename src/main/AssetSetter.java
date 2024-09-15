@@ -9,9 +9,6 @@ public class AssetSetter {
 
     GamePanel gp;
     KeyHandler keyH;
-    Lightbringer Lightbringer = new Lightbringer();
-    Ragnell Ragnell = new Ragnell();
-    Dracoshield Dracoshield = new Dracoshield();
 
     public AssetSetter(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
@@ -20,16 +17,16 @@ public class AssetSetter {
 
     // Initialize player units and set their starting positions
     public void setLightUnits() {
-        gp.simLightUnits.add(new Prince(gp, keyH, "Alm", Entity.UnitRace.Human, 30, 14, Lightbringer, Dracoshield));
-        gp.simLightUnits.add(new Prince(gp, keyH, "Alm", Entity.UnitRace.Human, 31, 15, Lightbringer, null));
+        gp.simLightUnits.add(new Prince(gp, keyH, "Alm", Entity.UnitRace.Human, 30, 14, new Lightbringer(), new Dracoshield()));
+        gp.simLightUnits.add(new Prince(gp, keyH, "Alm", Entity.UnitRace.Human, 31, 15, new Lightbringer(), null));
     }
 
     // Initialize enemy units and set their starting positions
     public void setChaosUnits() {
-        gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 30, 15, Lightbringer, null));
-        gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 30, 13, Ragnell, null));
-        gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 30, 12, Ragnell, null));
-        gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 32, 13, Ragnell, Dracoshield));
+        gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 30, 15, new Lightbringer(), null));
+        gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 30, 13, new Ragnell(), null));
+        gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 30, 12, new Ragnell(), null));
+        gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 32, 13, new Ragnell(), new Dracoshield()));
     }
 
     // Copy units from one list to another

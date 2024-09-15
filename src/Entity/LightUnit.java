@@ -286,6 +286,9 @@ public class LightUnit extends Entity{
         }
         exp -= 100;
         calculateLevelUpStats();
+        if (attackType == AttackType.Magical) {
+            checkLevelUpSpells();
+        }
         calculateCombatStats();
         if (exp >= 100) {
             levelUp();

@@ -26,7 +26,7 @@ public class Cursor {
 
     private boolean shiftPressed = false; // Track if shift has been handled in this update
     private int enemyIndex = 0;
-
+    private boolean cursorStart = false; // Boolean to fix bug that doesn't move the cursor from player unit when multiple enemies in range
 
     GamePanel gp;
     private KeyHandler keyH;
@@ -125,6 +125,8 @@ public class Cursor {
                         moving = false;
                     }
 
+                    cursorStart = false; // Reset the boolean flag
+
                     // Reset the delay counter after moving
                     moveDelayCounter = 0;
                 }
@@ -146,6 +148,7 @@ public class Cursor {
 
                     // Only move the cursor when the delay counter reaches the threshold
                     if (moveDelayCounter >= moveDelayThreshold + 3) {
+
                         // Check if there's only one enemy in range
                         if (enemiesInRange.size() == 1) {
                             // Directly update cursor position to the only enemy's position
@@ -153,8 +156,19 @@ public class Cursor {
                             row = enemiesInRange.get(0).getRow();
                             updatePosition();
                         }
+
+                        // Check if there are any enemies in range
+                        if (enemiesInRange.size() > 1 && !cursorStart) {
+                            // Automatically move the cursor to the first enemy when X is pressed
+                            enemyIndex = 0;
+                            col = enemiesInRange.get(enemyIndex).getCol();
+                            row = enemiesInRange.get(enemyIndex).getRow();
+                            updatePosition();  // Move the cursor to the first enemy
+                            cursorStart = true;
+                        }
+
                         // If more than one enemy, allow for movement between them
-                        if (enemiesInRange.size() > 1) {
+                        if (enemiesInRange.size() > 1 && cursorStart) {
                             if (keyH.isRightPressed() && !moving) {
                                 if (enemyIndex < enemiesInRange.size() - 1) {
                                     enemyIndex++;  // Move to the next enemy

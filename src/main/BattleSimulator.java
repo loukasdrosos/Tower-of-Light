@@ -10,6 +10,7 @@ public class BattleSimulator {
     GamePanel gp;
     Graphics2D g2;
     Font arial_15;
+    int delay = 200; // Delay in milliseconds before each attack
 
     private String floatingText;
     private int floatingTextX;
@@ -29,7 +30,7 @@ public class BattleSimulator {
         battleInProgress = true;
         new Thread(() -> {
             try {
-                Thread.sleep(500);  // Half a second delay before player attacks
+                Thread.sleep(delay);  // Half a second delay before player attacks
 
                 UtilityTool uTool = new UtilityTool();
                 boolean playerDefeated = false;
@@ -92,7 +93,7 @@ public class BattleSimulator {
                 }
 
                 // Delay before enemy counterattack
-                Thread.sleep(500);
+                Thread.sleep(delay);
 
                 // Enemy counterattacks if still alive and player is in its range
                 if (!enemyDefeated && enemy.getHP() > 0) {
@@ -156,7 +157,7 @@ public class BattleSimulator {
                 if (!playerDefeated && player.getHP() > 0) {
                     if (!enemyDefeated && player.getEffSpeed() - enemy.getEffSpeed() >= 5 && enemy.getHP() > 0) {
                         playerMissed = false;
-                        Thread.sleep(500);
+                        Thread.sleep(delay);
                         // Player attacks if hit is successful
                         if (uTool.getRandomNumber() <= hitPlayer) {
                             // Critical hit check
@@ -207,7 +208,7 @@ public class BattleSimulator {
                 // Check if enemy can double attack
                 if (!enemyDefeated && enemy.getHP() > 0) {
                     if (!playerDefeated && enemy.getEffSpeed() - player.getEffSpeed() >= 5 && player.getHP() > 0) {
-                        Thread.sleep(500);
+                        Thread.sleep(delay);
                         List<int[]> enemyRange = enemy.calculateStaticAttackRange();
 
                         // Check if player unit is in enemy unit's range
@@ -289,7 +290,7 @@ public class BattleSimulator {
         battleInProgress = true;
         new Thread(() -> {
             try {
-                Thread.sleep(500);  // Half a second delay before player attacks
+                Thread.sleep(delay);  // Half a second delay before player attacks
                 UtilityTool uTool = new UtilityTool();
                 boolean playerDefeated = false;
                 boolean enemyDefeated = false;
@@ -347,7 +348,7 @@ public class BattleSimulator {
                 }
 
                 // Delay before player counterattack
-                Thread.sleep(500);
+                Thread.sleep(delay);
 
                 // Player counterattacks if still alive and enemy is in its range
                 if (!playerDefeated && player.getHP() > 0) {
@@ -408,7 +409,7 @@ public class BattleSimulator {
                 // Check if enemy can double attack
                 if (!enemyDefeated && enemy.getHP() > 0) {
                     if (!playerDefeated && enemy.getEffSpeed() - player.getEffSpeed() >= 5 && player.getHP() > 0) {
-                        Thread.sleep(500);
+                        Thread.sleep(delay);
                         // Player attacks if hit is successful
                         if (uTool.getRandomNumber() <= hitEnemy) {
                             // Critical hit check
@@ -456,7 +457,7 @@ public class BattleSimulator {
                 // Check if player can double attack
                 if (!playerDefeated && player.getHP() > 0) {
                     if (!enemyDefeated && player.getEffSpeed() - enemy.getEffSpeed() >= 5 && enemy.getHP() > 0) {
-                        Thread.sleep(500);
+                        Thread.sleep(delay);
                         List<int[]> playerRange = player.calculateStaticAttackRange();
 
                         // Check if player unit is in enemy unit's range

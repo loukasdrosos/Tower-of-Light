@@ -35,7 +35,7 @@ public class Prince extends LightUnit{
     public void setupStats() {
         className = "Prince";
         deathQuote = "Damn!! Just a bit more…";
-        finalMapQuote = "It's over Grima! Your chan of tragedies ends here";
+        finalMapQuote = "It's over Grima! Your chain of tragedies ends here";
         level = 1;
         if (level > maxLevel) {
             level = maxLevel;
@@ -63,12 +63,12 @@ public class Prince extends LightUnit{
     @Override
     public void setupGrowthRates() {
         HPGrowthRate = 85;
-        strengthGrowthRate = 60;
+        strengthGrowthRate = 65;
         magicGrowthRate = 0;
         skillGrowthRate = 60;
-        speedGrowthRate = 70;
+        speedGrowthRate = 65;
         luckGrowthRate = 70;
-        defenseGrowthRate = 45;
+        defenseGrowthRate = 55;
         resistanceGrowthRate = 25;
     }
 

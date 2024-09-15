@@ -30,9 +30,9 @@ public class Sage extends LightUnit{
     // Method to set up the unit's stats
     @Override
     public void setupStats() {
-        AttackSpell Thunder = new Thunder();
         className = "Sage";
-        deathQuote = "I am sorry everyone, i failed you";
+        deathQuote = "I am sorry Alm...";
+        finalMapQuote = " I'll never accept a god so horrible";
         level = 1;
         if (level > maxLevel) {
             level = maxLevel;
@@ -41,7 +41,7 @@ public class Sage extends LightUnit{
         maxHP = 20;
         strength = 0;
         magic = 7;
-        skill = 5;
+        skill = 3;
         speed = 7;
         luck = 0;
         defense = 4;
@@ -50,25 +50,48 @@ public class Sage extends LightUnit{
         vision = 6;
         unitType = UnitType.Infantry;
         attackType = AttackType.Magical;
-        attackSpell = Thunder;
+        attackSpell = new Thunder();
         boostStatsForClasses();
         HP = maxHP;
         calculateCombatStats();
-        description = new String[]{"The prince of ", "the kingdom of", "Valentia and the", "one worthy to wield", "the divine blade", "Lightbringer."} ;
+        description = new String[]{"An expert in ", "magic and Alm's", "childhood friend,", "following him ", "wherever he goes."} ;
+    }
+
+    @Override
+    public void checkLevelUpSpells() {
+        if (level == 4) {
+            healingSpell = new Heal();
+            gp.ui.addLogMessage(name + " learned " + healingSpell.getName());
+        }
+        if (level == 9) {
+            attackSpell = new Sagittae();
+            gp.ui.addLogMessage(name + " learned " + attackSpell.getName());
+        }
+        if (level == 12) {
+            healingSpell = new Recover();
+            gp.ui.addLogMessage(name + " learned " + healingSpell.getName());
+        }
+        if (level == 18) {
+            attackSpell = new Forseti();
+            gp.ui.addLogMessage(name + " learned " + attackSpell.getName());
+        }
+        if (level == 20){
+            healingSpell = new Physic();
+            gp.ui.addLogMessage(name + " learned " + healingSpell.getName());
+        }
     }
 
     // Method to set up the player's growth rates
     @Override
     public void setupGrowthRates() {
-        HPGrowthRate = 85;
+        HPGrowthRate = 70;
         strengthGrowthRate = 0;
-        magicGrowthRate = 55;
-        skillGrowthRate = 50;
-        speedGrowthRate = 50;
-        luckGrowthRate = 65;
+        magicGrowthRate = 75;
+        skillGrowthRate = 60;
+        speedGrowthRate = 55;
+        luckGrowthRate = 55;
         defenseGrowthRate = 35;
-        resistanceGrowthRate = 45;
-        // Total Growth Rates = 440
+        resistanceGrowthRate = 65;
     }
 
     //Load images for the unit's animations

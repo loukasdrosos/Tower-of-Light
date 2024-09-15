@@ -38,7 +38,7 @@ public class Entity {
     protected String deathQuote;
     protected String finalMapQuote;
     protected int level; // Unit's level
-    protected int maxLevel = 20; // Unit's max level it can reach
+    protected int maxLevel = 25; // Unit's max level it can reach
     protected int exp; // Unit's experience points
     protected int maxExp = 100;
     protected int HP; // Unit's current Health Points
@@ -363,6 +363,8 @@ public class Entity {
     public void setupGrowthRates() {   }  // Placeholder method to set up the player growth rates
 
     public void Defeated() {    }  // Placeholder method for unit's death
+
+    public void checkLevelUpSpells() {   } // Placeholder method that gives magic units new spells based on level up
 
     // Getter methods
 
