@@ -3,11 +3,11 @@ package Item;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-public class Mercurius extends MainHand{
-    public Mercurius() {
+public class SteelAxe extends MainHand{
+    public SteelAxe() {
         setupStats();
         try {
-            image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Mercurius.png")));
+            image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Steel_Axe.png")));
             uTool.scaleImage(image, tileSize, tileSize);
         } catch (IOException e) {
             e.printStackTrace();
@@ -17,11 +17,11 @@ public class Mercurius extends MainHand{
     // Method to set up the weapon's stats
     @Override
     public void setupStats() {
-        name = "Mercurius";
-        description = "A sword only for the best warriors";
-        might = 15;
+        name = "Steel Axe";
+        description = "An axe made of steel";
+        might = 11;
         randomizeMight();
-        hit = 80;
+        hit = 70;
         randomizeHit();
         crit = 0;
         range = 1;

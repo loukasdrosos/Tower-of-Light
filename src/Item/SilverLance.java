@@ -3,11 +3,11 @@ package Item;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-public class Falchion extends MainHand{
-    public Falchion() {
+public class SilverLance extends MainHand{
+    public SilverLance() {
         setupStats();
         try {
-            image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Falchion.png")));
+            image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Silver_Lance.png")));
             uTool.scaleImage(image, tileSize, tileSize);
         } catch (IOException e) {
             e.printStackTrace();
@@ -17,13 +17,13 @@ public class Falchion extends MainHand{
     // Method to set up the weapon's stats
     @Override
     public void setupStats() {
-        name = "Falchion";
-        description = "A sword made to inflict deadly wounds";
-        might = 7;
+        name = "Silver Lance";
+        description = "An exceptional lance of rare metals";
+        might = 13;
         randomizeMight();
-        hit = 90;
+        hit = 75;
         randomizeHit();
-        crit = 30;
+        crit = 0;
         range = 1;
         speed = 0;
         defense = 0;

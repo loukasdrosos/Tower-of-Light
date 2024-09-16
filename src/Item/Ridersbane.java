@@ -1,13 +1,15 @@
 package Item;
 
+import Entity.Entity;
+
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-public class Mercurius extends MainHand{
-    public Mercurius() {
+public class Ridersbane extends OffHand{
+    public Ridersbane() {
         setupStats();
         try {
-            image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Mercurius.png")));
+            image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Ridersbane.png")));
             uTool.scaleImage(image, tileSize, tileSize);
         } catch (IOException e) {
             e.printStackTrace();
@@ -17,11 +19,11 @@ public class Mercurius extends MainHand{
     // Method to set up the weapon's stats
     @Override
     public void setupStats() {
-        name = "Mercurius";
-        description = "A sword only for the best warriors";
-        might = 15;
+        name = "Ridersbane";
+        description = "Effective: Mounted. A lance designed for foes on horseback";
+        might = 9;
         randomizeMight();
-        hit = 80;
+        hit = 70;
         randomizeHit();
         crit = 0;
         range = 1;
@@ -31,6 +33,6 @@ public class Mercurius extends MainHand{
         vision = 0;
         removable = true;
         effectiveRace = null;
-        effectiveType = null;
+        effectiveType = Entity.UnitType.Mounted;
     }
 }

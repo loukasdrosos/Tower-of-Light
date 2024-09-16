@@ -3,11 +3,11 @@ package Item;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-public class Dracoshield extends Trinket{
-    public Dracoshield() {
+public class HexlockShield extends Trinket{
+    public HexlockShield() {
         setupStats();
         try {
-            image = ImageIO.read((getClass().getResourceAsStream("/Shields/Dracoshield.png")));
+            image = ImageIO.read((getClass().getResourceAsStream("/Shields/Hexlock_Shield.png")));
             uTool.scaleImage(image, tileSize, tileSize);
         }
         catch (IOException e){
@@ -18,14 +18,14 @@ public class Dracoshield extends Trinket{
     // Method to set up the weapon's stats
     @Override
     public void setupStats() {
-        name = "Dracoshield";
-        description = "Def. +10, Res. +10, Speed -10. A shield as strong as a dragon";
+        name = "Hexlock Shield";
+        description = "Res. +7, Speed -4. A shield that can defend against all magic";
         strength = 0;
         magic = 0;
         skill = 0;
-        speed = -10;
-        defense = 10;
-        resistance = 10;
+        speed = -4;
+        defense = 0;
+        resistance = 7;
         vision = 0;
     }
 }

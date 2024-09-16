@@ -3,11 +3,11 @@ package Item;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-public class Mercurius extends MainHand{
-    public Mercurius() {
+public class SlimLance extends OffHand{
+    public SlimLance() {
         setupStats();
         try {
-            image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Mercurius.png")));
+            image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Slim_Lance.png")));
             uTool.scaleImage(image, tileSize, tileSize);
         } catch (IOException e) {
             e.printStackTrace();
@@ -17,16 +17,16 @@ public class Mercurius extends MainHand{
     // Method to set up the weapon's stats
     @Override
     public void setupStats() {
-        name = "Mercurius";
-        description = "A sword only for the best warriors";
-        might = 15;
+        name = "Slim Lance";
+        description = "Speed +5, Defense -3. A light, unusually accurate lance";
+        might = 5;
         randomizeMight();
-        hit = 80;
+        hit = 95;
         randomizeHit();
         crit = 0;
         range = 1;
-        speed = 0;
-        defense = 0;
+        speed = +5;
+        defense = -3;
         resistance = 0;
         vision = 0;
         removable = true;

@@ -1,13 +1,15 @@
 package Item;
 
+import Entity.Entity;
+
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-public class Mercurius extends MainHand{
-    public Mercurius() {
+public class EdgeOfChaos extends MainHand{
+    public EdgeOfChaos() {
         setupStats();
         try {
-            image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Mercurius.png")));
+            image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Edge_of_Chaos.png")));
             uTool.scaleImage(image, tileSize, tileSize);
         } catch (IOException e) {
             e.printStackTrace();
@@ -17,14 +19,12 @@ public class Mercurius extends MainHand{
     // Method to set up the weapon's stats
     @Override
     public void setupStats() {
-        name = "Mercurius";
-        description = "A sword only for the best warriors";
-        might = 15;
-        randomizeMight();
-        hit = 80;
-        randomizeHit();
-        crit = 0;
-        range = 1;
+        name = "Edge of Chaos";
+        description = "A dark sword equivalent to Lightbringer";
+        might = 18;
+        hit = 90;
+        crit = 10;
+        range = 3;
         speed = 0;
         defense = 0;
         resistance = 0;

@@ -1,17 +1,16 @@
 package Item;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
-
 public class Potion extends Item{
-    public Potion() {
-        name = "Potion";
-        try {
-            image = ImageIO.read((getClass().getResourceAsStream("/Potions/Elixir.png")));
-            uTool.scaleImage(image, tileSize, tileSize);
-        }
-        catch (IOException e){
-            e.printStackTrace();
+    protected int heal;
+    protected int uses;
+
+    public int getHeal() { return heal; } // Get the potion's healing value
+
+    public int getUses() { return uses; } // Get the potion's uses
+
+    public void usePotion() {
+        if (uses > 0) {
+            uses--;
         }
     }
 }

@@ -3,11 +3,11 @@ package Item;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-public class Mercurius extends MainHand{
-    public Mercurius() {
+public class HexlockSpear extends OffHand{
+    public HexlockSpear() {
         setupStats();
         try {
-            image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Mercurius.png")));
+            image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Hexlock_Spear.png")));
             uTool.scaleImage(image, tileSize, tileSize);
         } catch (IOException e) {
             e.printStackTrace();
@@ -17,9 +17,9 @@ public class Mercurius extends MainHand{
     // Method to set up the weapon's stats
     @Override
     public void setupStats() {
-        name = "Mercurius";
-        description = "A sword only for the best warriors";
-        might = 15;
+        name = "Hexlock Spear";
+        description = "Resistance +8. A spear destined to pierce a mage's heart";
+        might = 3;
         randomizeMight();
         hit = 80;
         randomizeHit();
@@ -27,7 +27,7 @@ public class Mercurius extends MainHand{
         range = 1;
         speed = 0;
         defense = 0;
-        resistance = 0;
+        resistance = +8;
         vision = 0;
         removable = true;
         effectiveRace = null;
