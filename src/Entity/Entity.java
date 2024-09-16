@@ -155,11 +155,29 @@ public class Entity {
         }
 
         effStrength = strength + bonusStrength;
+        if (effStrength < 0) {
+            effStrength = 0;
+        }
         effMagic = magic + bonusMagic;
+        if (effMagic < 0) {
+            effMagic = 0;
+        }
         effSkill = skill + bonusSkill;
+        if (effSkill < 0) {
+            effSkill = 0;
+        }
         effSpeed = speed + bonusSpeed;
+        if (effSpeed < 0) {
+            effSpeed = 0;
+        }
         effDefense = defense + bonusDefense;
+        if (effDefense < 0) {
+            effDefense = 0;
+        }
         effResistance = resistance + bonusResistance;
+        if (effResistance < 0) {
+            effResistance = 0;
+        }
         effVision = vision + bonusVision;
 
         if (attackType == AttackType.Physical) {

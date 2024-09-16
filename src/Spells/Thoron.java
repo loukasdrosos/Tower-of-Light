@@ -1,21 +1,19 @@
 package Spells;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
-
 public class Thoron extends AttackSpell {
 
     public Thoron() {
         setupStats();
     }
 
-    // Method to set up the weapon's stats
+    // Method to set up the spell's stats
     @Override
     public void setupStats() {
         name = "Thoron";
-        might = 10;
-        hit = 100;
-        crit = 5;
-        range = 3;
+        might = 14;
+        hit = 80;
+        crit = 10;
+        range = 4;
+        description = "The most powerful of lightning magic";
     }
 }

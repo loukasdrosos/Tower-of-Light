@@ -9,6 +9,7 @@ public class Item {
 
     protected BufferedImage image;
     protected String name;
+    protected String description;
     protected int col, row;
     protected int x, y;
     protected int tileSize = 15;
@@ -33,6 +34,8 @@ public class Item {
     public int getX(int col) {
         return col * tileSize;
     } // Calculate x position in pixels based on column
+
+    public String getDescription() { return description; } // Get the item's description
 
     public int getY(int row) { return row * tileSize; } // Calculate y position in pixels based on row
 

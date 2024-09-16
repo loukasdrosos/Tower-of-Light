@@ -20,10 +20,11 @@ public class Lightbringer extends MainHand {
     @Override
     public void setupStats() {
         name = "Lightbringer";
-        might = 10;
-        hit = 100;
-        crit = 5;
-        range = 3;
+        description = "A sword created by the God of Light";
+        might = 9;
+        hit = 85;
+        crit = 0;
+        range = 1;
         speed = 0;
         defence = 0;
         resistance = 0;
@@ -36,7 +37,11 @@ public class Lightbringer extends MainHand {
     /*
     @Override
     public void update() {
-            might = 10 + 2 * number of Beacon of Lights;
+            might = 9 + 3 * number of Beacon of Lights;
+
+        if (number of beacon of lights > 0 && number of beacon of lights < 3) {
+            crit = 5;
+        }
 
         if (number of beacon of lights < 3) {
             range = 1;
@@ -44,6 +49,8 @@ public class Lightbringer extends MainHand {
 
         if (number of beacon of lights == 3) {
             range = 3;
+            crit = 10;
+            hit = 90;
         }
     }
 

@@ -50,7 +50,7 @@ public class Prince extends LightUnit{
         defense = 10;
         resistance = 3;
         movement = 3;
-        vision = 5;
+        vision = 6;
         unitType = UnitType.Infantry;
         attackType = AttackType.Physical;
         boostStatsForClasses();

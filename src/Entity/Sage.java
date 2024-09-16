@@ -41,7 +41,7 @@ public class Sage extends LightUnit{
         maxHP = 20;
         strength = 0;
         magic = 7;
-        skill = 3;
+        skill = 5;
         speed = 7;
         luck = 0;
         defense = 4;
@@ -97,16 +97,16 @@ public class Sage extends LightUnit{
     //Load images for the unit's animations
     @Override
     public void loadImage() {
-        up1 = setup("/LightUnits/Prince/Human_Prince_Up_1");
-        up2 = setup("/LightUnits/Prince/Human_Prince_Up_2");
-        down1 = setup("/LightUnits/Prince/Human_Prince_Down_1");
-        down2 = setup("/LightUnits/Prince/Human_Prince_Down_2");
-        left1 = setup("/LightUnits/Prince/Human_Prince_Left_1");
-        left2 = setup("/LightUnits/Prince/Human_Prince_Left_2");
-        right1 = setup("/LightUnits/Prince/Human_Prince_Right_1");
-        right2 = setup("/LightUnits/Prince/Human_Prince_Right_2");
-        default1 = setup("/LightUnits/Prince/Human_Prince_Default_1");
-        default2 = setup("/LightUnits/Prince/Human_Prince_Default_2");
-        portrait = setupPortrait("/LightUnits/Prince/Human_Prince_Portrait");
+        up1 = setup("/LightUnits/Sage/Elf_Sage_Up_1");
+        up2 = setup("/LightUnits/Sage/Elf_Sage_Up_2");
+        down1 = setup("/LightUnits/Sage/Elf_Sage_Down_1");
+        down2 = setup("/LightUnits/Sage/Elf_Sage_Down_2");
+        left1 = setup("/LightUnits/Sage/Elf_Sage_Left_1");
+        left2 = setup("/LightUnits/Sage/Elf_Sage_Left_2");
+        right1 = setup("/LightUnits/Sage/Elf_Sage_Right_1");
+        right2 = setup("/LightUnits/Sage/Elf_Sage_Right_2");
+        default1 = setup("/LightUnits/Sage/Elf_Sage_Default_1");
+        default2 = setup("/LightUnits/Sage/Elf_Sage_Default_2");
+        portrait = setupPortrait("/LightUnits/Sage/Elf_Sage_Portrait");
     }
 }
