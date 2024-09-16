@@ -3,11 +3,11 @@ package Item;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-public class Falchion extends MainHand{
-    public Falchion() {
+public class Mercurius extends MainHand{
+    public Mercurius() {
         setupStats();
         try {
-            image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Falchion.png")));
+            image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Mercurius.png")));
             uTool.scaleImage(image, tileSize, tileSize);
         } catch (IOException e) {
             e.printStackTrace();
@@ -17,7 +17,7 @@ public class Falchion extends MainHand{
     // Method to set up the weapon's stats
     @Override
     public void setupStats() {
-        name = "Falchion";
+        name = "Mercurius";
         description = "A sword made to inflict deadly wounds";
         might = 7;
         randomizeMight();
