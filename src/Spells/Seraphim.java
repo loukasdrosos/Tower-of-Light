@@ -13,6 +13,6 @@ public class Seraphim extends AttackSpell{
         hit = 80;
         crit = 0;
         range = 2;
-        description = "Strong light magic";
+        description = "Advanced light magic";
     }
 }

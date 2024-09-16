@@ -13,6 +13,6 @@ public class Fimbulvetr extends AttackSpell{
         hit = 85;
         crit = 5;
         range = 3;
-        description = "Strong fire magic";
+        description = "Advanced fire magic";
     }
 }

@@ -13,6 +13,6 @@ public class Miasma extends AttackSpell{
         hit = 85;
         crit = 5;
         range = 3;
-        description = "Common dark magic";
+        description = "Advanced dark magic";
     }
 }

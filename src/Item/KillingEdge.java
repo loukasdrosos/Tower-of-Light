@@ -3,12 +3,11 @@ package Item;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-public class Ragnell extends MainHand {
-
-    public Ragnell() {
+public class KillingEdge extends MainHand{
+    public KillingEdge() {
         setupStats();
         try {
-            image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Ragnell.png")));
+            image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Killing_Edge.png")));
             uTool.scaleImage(image, tileSize, tileSize);
         } catch (IOException e) {
             e.printStackTrace();
@@ -18,17 +17,19 @@ public class Ragnell extends MainHand {
     // Method to set up the weapon's stats
     @Override
     public void setupStats() {
-        name = "Ragnell";
-        description = "Ike only. A legendary sword able to attack at range";
-        might = 13;
-        hit = 75;
-        crit = 0;
-        range = 2;
+        name = "Killing Edge";
+        description = "A sword made to inflict deadly wounds";
+        might = 7;
+        randomizeMight();
+        hit = 90;
+        randomizeHit();
+        crit = 30;
+        range = 1;
         speed = 0;
         defense = 0;
         resistance = 0;
         vision = 0;
-        removable = false;
+        removable = true;
         effectiveRace = null;
         effectiveType = null;
     }

@@ -13,6 +13,6 @@ public class Thunder extends AttackSpell{
         hit = 85;
         crit = 5;
         range = 3;
-        description = "Magic used to attack with lightning";
+        description = "Common lightning magic";
     }
 }

@@ -14,6 +14,6 @@ public class Fire extends AttackSpell{
         hit = 90;
         crit = 0;
         range = 2;
-        description = "Magic used to attack with flames";
+        description = "Common fire magic";
     }
 }

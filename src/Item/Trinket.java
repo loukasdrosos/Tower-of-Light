@@ -6,7 +6,7 @@ public class Trinket extends Item{
     protected int magic; // Bonus magic the item offers
     protected int skill; // Bonus skill the item offers
     protected int speed; // Bonus speed the item offers
-    protected int defense; // Bonus defence the item offers
+    protected int defense; // Bonus defense the item offers
     protected int resistance; // Bonus resistance the item offers
     protected int vision; // Bonus vision the item offers
 

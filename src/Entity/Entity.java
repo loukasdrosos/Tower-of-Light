@@ -49,7 +49,7 @@ public class Entity {
     protected int speed; // // Unit's speed
     protected int luck; // Unit's luck, used to calculate hit, avoid, and to dodge critical hits, and skill activation
     protected int defense; // Unit's defense against physical attacks
-    protected int resistance; // Unit's defence against magic attacks
+    protected int resistance; // Unit's resistance against magic attacks
     protected int movement; // The number of tiles the unit can move
     protected int vision; // The number of tiles the unit can see
 
@@ -456,7 +456,7 @@ public class Entity {
 
     public int getEffSpeed() {return effSpeed;} // Get the unit's effective speed
 
-    public int getEffDefense() {return effDefense;} // Get the unit's effective defence
+    public int getEffDefense() {return effDefense;} // Get the unit's effective defense
 
     public int getEffResistance() {return effResistance;} // Get the unit's effective resistance
 
@@ -470,7 +470,7 @@ public class Entity {
 
     public int getBonusSpeed() {return bonusSpeed;} // Get the unit's bonus speed
 
-    public int getBonusDefense() {return bonusDefense;} // Get the unit's bonus defence
+    public int getBonusDefense() {return bonusDefense;} // Get the unit's bonus defense
 
     public int getBonusResistance() {return bonusResistance;} // Get the unit's bonus resistance
 

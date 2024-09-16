@@ -1,6 +1,7 @@
 package Item;
 
 import Entity.Entity;
+import main.UtilityTool;
 
 public class Weapon extends Item{
     protected int might;
@@ -8,12 +9,44 @@ public class Weapon extends Item{
     protected int crit;
     protected int range;
     protected int speed;
-    protected int defence;
+    protected int defense;
     protected int resistance;
     protected int vision;
     protected boolean removable;
     protected Entity.UnitRace effectiveRace;
     protected Entity.UnitType effectiveType;
+
+    public void randomizeMight() {
+        UtilityTool uTool = new UtilityTool();
+        int randomNumber = uTool.getRandomNumber();
+
+        // 50% chance for normal might
+
+        // 25% chance for lower might
+        if (randomNumber <= 25) {
+            might -=2;
+        }
+        // 25% chance for higher might
+        else if (randomNumber > 25 && randomNumber <= 50) {
+            might += 2;
+        }
+    }
+
+    public void randomizeHit() {
+        UtilityTool uTool = new UtilityTool();
+        int randomNumber = uTool.getRandomNumber();
+
+        // 50% chance for normal hit
+
+        // 25% chance for lower hit
+        if (randomNumber <= 25) {
+            hit -=5;
+        }
+        // 25% chance for higher hit
+        else if (randomNumber > 25 && randomNumber <= 50) {
+            hit += 5;
+        }
+    }
 
     // Placeholder method for Lightbringer
     public void update() {}
@@ -30,7 +63,7 @@ public class Weapon extends Item{
 
     public int getSpeed() { return speed; } // Get the weapon's speed bonus
 
-    public int getDefense() { return defence; } // Get the weapon's defense bonus
+    public int getDefense() { return defense; } // Get the weapon's defense bonus
 
     public int getResistance() { return resistance; } // Get the weapon's resistance bonus
 

@@ -13,6 +13,6 @@ public class Valflame extends AttackSpell{
         hit = 80;
         crit = 5;
         range = 3;
-        description = "Powerful fire magic";
+        description = "Truly mighty fire magic";
     }
 }
