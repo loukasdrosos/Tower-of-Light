@@ -567,8 +567,8 @@ public class UI {
                     nextLine++;
                     g2.setFont(new Font("Arial", Font.PLAIN, 14));
                     g2.drawString("Might: " + mainhand.getMight() + "  Hit: " + mainhand.getHit() + "  Crit: " + mainhand.getCrit() + "  Range: " + mainhand.getRange(), statsX, statsY + nextLine * lineHeight);
-                    nextLine++;
                     if (mainhand.getDescription() != null) {
+                        nextLine++;
                         g2.drawString(mainhand.getDescription(), statsX, statsY + nextLine * lineHeight);
                     }
                 }
@@ -584,8 +584,8 @@ public class UI {
                     nextLine++;
                     g2.setFont(new Font("Arial", Font.PLAIN, 14));
                     g2.drawString("Might: " + offhand.getMight() + "  Hit: " + offhand.getHit() + "  Crit: " + offhand.getCrit() + "  Range: " + offhand.getRange(), statsX, statsY + nextLine * lineHeight);
-                    nextLine++;
                     if (offhand.getDescription() != null) {
+                        nextLine++;
                         g2.drawString(offhand.getDescription(), statsX, statsY + nextLine * lineHeight);
                     }
                 }

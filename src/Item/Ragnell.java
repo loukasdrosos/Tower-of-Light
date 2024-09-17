@@ -19,16 +19,15 @@ public class Ragnell extends MainHand {
     @Override
     public void setupStats() {
         name = "Ragnell";
-        description = "Ike only";
         might = 13;
         hit = 75;
         crit = 0;
-        range = 2;
+        range = 1;
         speed = 0;
         defense = 0;
         resistance = 0;
         vision = 0;
-        removable = false;
+        removable = true;
         effectiveRace = null;
         effectiveType = null;
     }

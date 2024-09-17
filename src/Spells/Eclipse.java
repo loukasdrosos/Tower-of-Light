@@ -1,7 +1,7 @@
 package Spells;
 
-public class Eclispe extends AttackSpell{
-    public Eclispe() {
+public class Eclipse extends AttackSpell{
+    public Eclipse() {
         setupStats();
     }
 

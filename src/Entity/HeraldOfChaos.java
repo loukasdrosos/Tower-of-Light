@@ -1,21 +1,24 @@
 package Entity;
 
+import Item.DemonRing;
+import Item.EdgeOfChaos;
 import Item.Trinket;
 import Item.Weapon;
 import main.GamePanel;
 
 public class HeraldOfChaos extends ChaosUnit{
 
-    public HeraldOfChaos(GamePanel gp, boolean isBoss, boolean canMove, int startCol, int startRow, Weapon weapon, Trinket trinket) {
-        super(gp, isBoss, canMove);
+    public HeraldOfChaos(GamePanel gp, boolean isBoss, boolean canMove, int startCol, int startRow) {
+        super(gp, canMove);
         this.col = startCol;   // Initial column position
         this.row = startRow;    // Initial row position
         x = getX();          // Calculate initial x position based on column
         y = getY();          // Calculate initial y position based on row
         preCol = col;           // Set previous column to current column
         preRow = row;           // Set previous row to current row
-        equippedWeapon = weapon;
-        this.trinket = trinket;
+        equippedWeapon = new EdgeOfChaos();
+        trinket =  new DemonRing();
+        boss = isBoss;
         setupStats();
         // Load unit's images for animations
         try {
@@ -34,14 +37,14 @@ public class HeraldOfChaos extends ChaosUnit{
         if (level > maxLevel) {
             level = maxLevel;
         }
-        maxHP = 30;
-        strength = 8;
-        magic = 5;
-        skill = 7;
-        speed = 8;
+        maxHP = 40;
+        strength = 25;
+        magic = 28;
+        skill = 25;
+        speed = 27;
         luck = 0;
-        defense = 6;
-        resistance = 4;
+        defense = 24;
+        resistance = 30;
         movement = 3;
         if (!canMove) {
             movement = 0;

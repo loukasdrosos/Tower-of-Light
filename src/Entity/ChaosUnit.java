@@ -16,9 +16,8 @@ public class ChaosUnit extends Entity {
     protected boolean boss;
     protected boolean canMove;
 
-    public ChaosUnit(GamePanel gp, boolean isBoss, boolean canMove) {
+    public ChaosUnit(GamePanel gp, boolean canMove) {
         super(gp);
-        this.boss = boss;
         this.canMove = canMove;
     }
 
@@ -235,6 +234,39 @@ public class ChaosUnit extends Entity {
     }
 
  */
+
+    public void setStats() {
+        if (!boss && level > 1){
+            UtilityTool uTool = new UtilityTool();
+
+            for (int i = 1; i < level; i++) {
+                if (uTool.getRandomNumber() <= HPGrowthRate) {
+                    maxHP += 1;
+                }
+                if (uTool.getRandomNumber() <= strengthGrowthRate) {
+                    strength += 1;
+                }
+                if (uTool.getRandomNumber() <= magicGrowthRate) {
+                    magic += 1;
+                }
+                if (uTool.getRandomNumber() <= skillGrowthRate) {
+                    skill += 1;
+                }
+                if (uTool.getRandomNumber() <= speedGrowthRate) {
+                    speed += 1;
+                }
+                if (uTool.getRandomNumber() <= luckGrowthRate) {
+                    luck += 1;
+                }
+                if (uTool.getRandomNumber() <= defenseGrowthRate) {
+                    defense += 1;
+                }
+                if (uTool.getRandomNumber() <= resistanceGrowthRate) {
+                    resistance += 1;
+                }
+            }
+        }
+    }
 
     // Method to update the unit's state (called every frame)
     @Override

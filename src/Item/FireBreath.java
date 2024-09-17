@@ -1,5 +1,7 @@
 package Item;
 
+import Entity.Entity;
+
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
@@ -18,6 +20,7 @@ public class FireBreath extends MainHand{
     @Override
     public void setupStats() {
         name = "Fire Breath";
+        description = "Effective: Armored";
         might = 12;
         hit = 0;
         crit = 0;
@@ -28,6 +31,6 @@ public class FireBreath extends MainHand{
         vision = 0;
         removable = true;
         effectiveRace = null;
-        effectiveType = null;
+        effectiveType = Entity.UnitType.Armored;
     }
 }

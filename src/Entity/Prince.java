@@ -6,7 +6,7 @@ import main.KeyHandler;
 
 public class Prince extends LightUnit{
 
-    public Prince (GamePanel gp, KeyHandler keyH, String name, UnitRace race, int startCol, int startRow, MainHand mainhand, Trinket trinket, Potion potion) {
+    public Prince (GamePanel gp, KeyHandler keyH, String name, UnitRace race, int startCol, int startRow) {
         super(gp, keyH);
         this.col =  startCol;   // Initial column position
         this.row = startRow;    // Initial row position
@@ -17,11 +17,10 @@ public class Prince extends LightUnit{
         this.name = name;
         this.race = race;
         setupGrowthRates();
-        this.mainHand = mainhand;
+        mainHand = new Lightbringer();
         equippedWeapon = this.mainHand;
-        this.offHand = new Armorslayer();
-        this.trinket = trinket;
-        this.potion = potion;
+        trinket = new RoyalShield();
+        potion = new Vulnerary();
         setupStats();
         // Load unit's images for animations
         try { loadImage(); }
@@ -47,7 +46,7 @@ public class Prince extends LightUnit{
         skill = 5;
         speed = 9;
         luck = 0;
-        defense = 10;
+        defense = 8;
         resistance = 3;
         movement = 3;
         vision = 6;
@@ -63,13 +62,13 @@ public class Prince extends LightUnit{
     // Method to set up the player's growth rates
     @Override
     public void setupGrowthRates() {
-        HPGrowthRate = 85;
+        HPGrowthRate = 80;
         strengthGrowthRate = 65;
         magicGrowthRate = 0;
         skillGrowthRate = 60;
         speedGrowthRate = 65;
         luckGrowthRate = 70;
-        defenseGrowthRate = 55;
+        defenseGrowthRate = 60;
         resistanceGrowthRate = 25;
     }
 

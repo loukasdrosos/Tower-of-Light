@@ -6,7 +6,7 @@ import main.GamePanel;
 import main.KeyHandler;
 
 public class Cleric extends LightUnit{
-    public Cleric (GamePanel gp, KeyHandler keyH, String name, UnitRace race, int startCol, int startRow, Trinket trinket, Potion potion) {
+    public Cleric (GamePanel gp, KeyHandler keyH, String name, UnitRace race, int startCol, int startRow) {
         super(gp, keyH);
         this.col =  startCol;   // Initial column position
         this.row = startRow;    // Initial row position
@@ -17,8 +17,7 @@ public class Cleric extends LightUnit{
         this.name = name;
         this.race = race;
         setupGrowthRates();
-        this.trinket = trinket;
-        this.potion = potion;
+        potion = new Vulnerary();
         setupStats();
         // Load unit's images for animations
         try { loadImage(); }
@@ -56,7 +55,7 @@ public class Cleric extends LightUnit{
         HP = maxHP;
         calculateCombatStats();
         BeaconOfLight = true;
-        description = new String[]{"A follower of ", "the God of Light", "turned dark due ,", "to the uprise ", "of the Chaos army."} ;
+        description = new String[]{"A follower of ", "the God of Light", "turned dark due", "to the uprise ", "of the Chaos army."} ;
     }
 
     @Override

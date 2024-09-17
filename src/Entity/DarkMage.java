@@ -1,13 +1,12 @@
 package Entity;
 
-import Item.Potion;
-import Item.Trinket;
+import Item.*;
 import Spells.*;
 import main.GamePanel;
 import main.KeyHandler;
 
 public class DarkMage extends LightUnit{
-    public DarkMage (GamePanel gp, KeyHandler keyH, String name, UnitRace race, int startCol, int startRow, Trinket trinket, Potion potion) {
+    public DarkMage (GamePanel gp, KeyHandler keyH, String name, UnitRace race, int startCol, int startRow) {
         super(gp, keyH);
         this.col =  startCol;   // Initial column position
         this.row = startRow;    // Initial row position
@@ -18,8 +17,8 @@ public class DarkMage extends LightUnit{
         this.name = name;
         this.race = race;
         setupGrowthRates();
-        this.trinket = trinket;
-        this.potion = potion;
+        trinket = new SilverShield();
+        potion = new Concoction();
         setupStats();
         // Load unit's images for animations
         try { loadImage(); }
@@ -32,82 +31,79 @@ public class DarkMage extends LightUnit{
     @Override
     public void setupStats() {
         className = "Dark Mage";
-        deathQuote = "I am sorry Alm...";
-        finalMapQuote = " I'll never accept a god so horrible";
-        level = 1;
+        deathQuote = "Tsk, my bad...";
+        finalMapQuote = "Who needs gods when you're as strong as me";
+        level = 10;
         if (level > maxLevel) {
             level = maxLevel;
         }
         exp = 0;
-        maxHP = 20;
+        maxHP = 30;
         strength = 0;
-        magic = 7;
-        skill = 5;
-        speed = 7;
-        luck = 0;
-        defense = 4;
-        resistance = 5;
+        magic = 15;
+        skill = 10;
+        speed = 8;
+        luck = 3;
+        defense = 11;
+        resistance = 13;
         movement = 3;
         vision = 6;
         unitType = UnitType.Infantry;
         attackType = AttackType.Magical;
-        attackSpell = new Thunder();
+        attackSpell = new Miasma();
+        healingSpell = new Heal();
         boostStatsForClasses();
         HP = maxHP;
         calculateCombatStats();
-        description = new String[]{"An expert in ", "magic and Alm's", "childhood friend,", "following him ", "wherever he goes."} ;
+        description = new String[]{"An expert in", "dark magic who", "wants to be the,", "strongest sorcerer", "in the world."} ;
     }
 
     @Override
     public void checkLevelUpSpells() {
-        if (level == 4) {
-            healingSpell = new Heal();
-            gp.ui.addLogMessage(name + " learned " + healingSpell.getName());
-        }
-        if (level == 9) {
-            attackSpell = new Sagittae();
-            gp.ui.addLogMessage(name + " learned " + attackSpell.getName());
-        }
-        if (level == 12) {
+        if (level == 13){
             healingSpell = new Recover();
             gp.ui.addLogMessage(name + " learned " + healingSpell.getName());
         }
-        if (level == 18) {
-            attackSpell = new Forseti();
+        if (level == 15) {
+            attackSpell = new Nosferatu();
             gp.ui.addLogMessage(name + " learned " + attackSpell.getName());
         }
-        if (level == 20){
+        if (level == 18) {
             healingSpell = new Physic();
             gp.ui.addLogMessage(name + " learned " + healingSpell.getName());
+        }
+        if (level == 20) {
+            attackSpell = new Goetia();
+            gp.ui.addLogMessage(name + " learned " + attackSpell.getName());
         }
     }
 
     // Method to set up the player's growth rates
     @Override
     public void setupGrowthRates() {
-        HPGrowthRate = 70;
+        HPGrowthRate = 90;
         strengthGrowthRate = 0;
-        magicGrowthRate = 75;
+        magicGrowthRate = 60;
         skillGrowthRate = 60;
-        speedGrowthRate = 60;
-        luckGrowthRate = 55;
-        defenseGrowthRate = 35;
-        resistanceGrowthRate = 55;
+        speedGrowthRate = 55;
+        luckGrowthRate = 40;
+        defenseGrowthRate = 50;
+        resistanceGrowthRate = 50;
     }
 
     //Load images for the unit's animations
     @Override
     public void loadImage() {
-        up1 = setup("/LightUnits/Sage/Elf_Sage_Up_1");
-        up2 = setup("/LightUnits/Sage/Elf_Sage_Up_2");
-        down1 = setup("/LightUnits/Sage/Elf_Sage_Down_1");
-        down2 = setup("/LightUnits/Sage/Elf_Sage_Down_2");
-        left1 = setup("/LightUnits/Sage/Elf_Sage_Left_1");
-        left2 = setup("/LightUnits/Sage/Elf_Sage_Left_2");
-        right1 = setup("/LightUnits/Sage/Elf_Sage_Right_1");
-        right2 = setup("/LightUnits/Sage/Elf_Sage_Right_2");
-        default1 = setup("/LightUnits/Sage/Elf_Sage_Default_1");
-        default2 = setup("/LightUnits/Sage/Elf_Sage_Default_2");
-        portrait = setupPortrait("/LightUnits/Sage/Elf_Sage_Portrait");
+        up1 = setup("/LightUnits/Dark_Mage/Orc_Dark_Mage_Up_1");
+        up2 = setup("/LightUnits/Dark_Mage/Orc_Dark_Mage_Up_2");
+        down1 = setup("/LightUnits/Dark_Mage/Orc_Dark_Mage_Down_1");
+        down2 = setup("/LightUnits/Dark_Mage/Orc_Dark_Mage_Down_2");
+        left1 = setup("/LightUnits/Dark_Mage/Orc_Dark_Mage_Left_1");
+        left2 = setup("/LightUnits/Dark_Mage/Orc_Dark_Mage_Left_2");
+        right1 = setup("/LightUnits/Dark_Mage/Orc_Dark_Mage_Right_1");
+        right2 = setup("/LightUnits/Dark_Mage/Orc_Dark_Mage_Right_2");
+        default1 = setup("/LightUnits/Dark_Mage/Orc_Dark_Mage_Default_1");
+        default2 = setup("/LightUnits/Dark_Mage/Orc_Dark_Mage_Default_2");
+        portrait = setupPortrait("/LightUnits/Dark_Mage/Orc_Dark_Mage_Portrait");
     }
 }
