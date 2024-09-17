@@ -11,6 +11,5 @@ public class Physic extends HealingSpell{
         name = "Physic";
         heal = 20;
         range = 5;
-        description = "Healing magic with wide range";
     }
 }

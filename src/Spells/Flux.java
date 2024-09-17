@@ -13,6 +13,5 @@ public class Flux extends AttackSpell{
         hit = 90;
         crit = 0;
         range = 2;
-        description = "Common dark magic";
     }
 }

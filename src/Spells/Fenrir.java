@@ -13,6 +13,5 @@ public class Fenrir extends AttackSpell{
         hit = 70;
         crit = 0;
         range = 6;
-        description = "Dark magic with wide range";
     }
 }

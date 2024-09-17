@@ -11,6 +11,5 @@ public class Recover extends HealingSpell{
         name = "Recover";
         heal = 15;
         range = 2;
-        description = "Healing magic with small range";
     }
 }

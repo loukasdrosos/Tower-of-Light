@@ -18,7 +18,6 @@ public class BlightedClaws extends MainHand{
     @Override
     public void setupStats() {
         name = "Blighted Claws";
-        description = "Claws of a Fallen";
         might = 5;
         hit = 80;
         crit = 0;

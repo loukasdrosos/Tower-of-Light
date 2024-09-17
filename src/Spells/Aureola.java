@@ -13,7 +13,6 @@ public class Aureola extends AttackSpell{
         hit = 90;
         crit = 5;
         range = 3;
-        description = "The most powerful of light magic";
     }
 
 }

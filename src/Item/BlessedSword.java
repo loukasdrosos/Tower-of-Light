@@ -18,12 +18,12 @@ public class BlessedSword extends OffHand{
     @Override
     public void setupStats() {
         name = "Blessed Sword";
-        description = "Resistance +4. A sword blessed by the God of Light";
-        might = 7;
+        description = "Resistance +4";
+        might = 5;
         randomizeMight();
         hit = 85;
         randomizeHit();
-        crit = 10;
+        crit = 0;
         range = 1;
         speed = 0;
         defense = 0;

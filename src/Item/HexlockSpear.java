@@ -18,7 +18,7 @@ public class HexlockSpear extends OffHand{
     @Override
     public void setupStats() {
         name = "Hexlock Spear";
-        description = "Resistance +8. A spear destined to pierce a mage's heart";
+        description = "Resistance +8";
         might = 3;
         randomizeMight();
         hit = 80;

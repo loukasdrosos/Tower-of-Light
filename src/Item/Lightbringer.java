@@ -20,7 +20,7 @@ public class Lightbringer extends MainHand {
     @Override
     public void setupStats() {
         name = "Lightbringer";
-        description = "A sword that gets stronger with each Beacon of Light used";
+        description = "Alm only";
         might = 9;
         hit = 85;
         crit = 0;

@@ -18,7 +18,6 @@ public class SteelSword extends MainHand{
     @Override
     public void setupStats() {
         name = "Steel Sword";
-        description = "A sword made of steel";
         might = 8;
         randomizeMight();
         hit = 90;

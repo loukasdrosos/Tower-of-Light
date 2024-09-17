@@ -18,7 +18,6 @@ public class EdgeOfChaos extends MainHand{
     @Override
     public void setupStats() {
         name = "Edge of Chaos";
-        description = "A sword equal to Lightbringer created by the Chaos God";
         might = 18;
         hit = 90;
         crit = 10;

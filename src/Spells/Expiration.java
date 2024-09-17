@@ -13,6 +13,5 @@ public class Expiration extends AttackSpell{
         hit = 85;
         crit = 5;
         range = 3;
-        description = "Dark magic used only by the Chaos God";
     }
 }

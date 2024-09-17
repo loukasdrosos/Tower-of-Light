@@ -18,7 +18,6 @@ public class VeninClaws extends MainHand{
     @Override
     public void setupStats() {
         name = "Venin Claws";
-        description = "Powerful claws of a Fallen";
         might = 9;
         hit = 80;
         crit = 0;

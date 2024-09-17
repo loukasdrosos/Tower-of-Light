@@ -19,11 +19,11 @@ public class SpeedRing extends Trinket{
     @Override
     public void setupStats() {
         name = "Speed Ring";
-        description = "Speed +5. A ring that increases speed";
+        description = "Speed +7";
         strength = 0;
         magic = 0;
         skill = 0;
-        speed = +5;
+        speed = +7;
         defense = 0;
         resistance = 0;
         vision = 0;

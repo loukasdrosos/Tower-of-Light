@@ -534,6 +534,11 @@ public class UI {
             int textX = 52 * 16 + 8 * gp.getTileSize() + 4; // Right side of the portrait
             int textY = 5 * 16 + 20; // Slightly below the top of the portrait
             int lineHeight = 20; // Spacing between each line of text
+            int nextLine = 1;
+
+            // Coordinates for stats below the portrait
+            int statsX = 52 * 16 + 5; // Align with the portrait's X position
+            int statsY = 5 * 16 + 8 * gp.getTileSize() + 20; // Start drawing below the portrait
 
             // Set font for text
             g2.setFont(new Font("Arial", Font.PLAIN, 13));
@@ -545,30 +550,111 @@ public class UI {
                 textY += lineHeight;
             }
 
-        /*
-        // Draw unit's weapons and their stats/descriptions
-        g2.drawString("Weapons:", textX, textY);
-        textY += lineHeight;
-        for (Weapon weapon : weapons) {
-            g2.drawString(weapon.getName() + " (Damage: " + weapon.getDamage() + ", Range: " + weapon.getRange() + ")", textX, textY);
-            textY += lineHeight;
-            g2.drawString("  " + weapon.getDescription(), textX + 20, textY);
-            textY += lineHeight;
-        }
+            g2.setFont(new Font("Arial", Font.PLAIN, 16));
+            lineHeight = 30;
 
-        // Draw unit's skills and their descriptions
-        textY += lineHeight; // Add some space between weapons and skills
-        g2.drawString("Skills:", textX, textY);
-        textY += lineHeight;
-        for (Skill skill : skills) {
-            g2.drawString(skill.getName(), textX, textY);
-            textY += lineHeight;
-            g2.drawString("  " + skill.getDescription(), textX + 20, textY);
-            textY += lineHeight;
-        }
+            // Draw Inventory if Unit is Physical
+            if (player.getAttackType() == Entity.AttackType.Physical) {
+                Weapon mainhand = player.mainHand;
+                Weapon offhand = player.offHand;
 
+                g2.drawString("Mainhand: ", statsX, statsY + nextLine * lineHeight);
 
-         */
+                // Check if the mainhand weapon is null
+                if (mainhand != null) {
+                    g2.drawImage(mainhand.getImage(), statsX + 75, statsY + nextLine * lineHeight - 13, gp.getTileSize(), gp.getTileSize(), null);
+                    g2.drawString(mainhand.getName(), statsX + 95, statsY + nextLine * lineHeight);
+                    nextLine++;
+                    g2.setFont(new Font("Arial", Font.PLAIN, 14));
+                    g2.drawString("Might: " + mainhand.getMight() + "  Hit: " + mainhand.getHit() + "  Crit: " + mainhand.getCrit() + "  Range: " + mainhand.getRange(), statsX, statsY + nextLine * lineHeight);
+                    nextLine++;
+                    if (mainhand.getDescription() != null) {
+                        g2.drawString(mainhand.getDescription(), statsX, statsY + nextLine * lineHeight);
+                    }
+                }
+
+                g2.setFont(new Font("Arial", Font.PLAIN, 16));
+                nextLine++;
+                g2.drawString("Offhand: ", statsX, statsY + nextLine * lineHeight);
+
+                // Check if the offhand weapon is null
+                if (offhand != null) {
+                    g2.drawImage(offhand.getImage(), statsX + 60, statsY + nextLine * lineHeight - 13, gp.getTileSize(), gp.getTileSize(), null);
+                    g2.drawString(offhand.getName(), statsX + 80, statsY + nextLine * lineHeight);
+                    nextLine++;
+                    g2.setFont(new Font("Arial", Font.PLAIN, 14));
+                    g2.drawString("Might: " + offhand.getMight() + "  Hit: " + offhand.getHit() + "  Crit: " + offhand.getCrit() + "  Range: " + offhand.getRange(), statsX, statsY + nextLine * lineHeight);
+                    nextLine++;
+                    if (offhand.getDescription() != null) {
+                        g2.drawString(offhand.getDescription(), statsX, statsY + nextLine * lineHeight);
+                    }
+                }
+            }
+
+            // Draw Spells if Unit is Magical
+            if (player.getAttackType() == Entity.AttackType.Magical) {
+                // Drawing unit's spells
+                AttackSpell attackSpell = player.attackSpell;
+                HealingSpell healingSpell = player.healingSpell;
+
+                g2.setFont(new Font("Arial", Font.PLAIN, 16));
+                g2.drawString("Attack Spell: ", statsX, statsY + nextLine * lineHeight);
+
+                // Check if the attack spell is null
+                if (attackSpell != null) {
+                    g2.drawImage(attackSpellImage, statsX + 85, statsY + nextLine * lineHeight - 13, gp.getTileSize(), gp.getTileSize(), null);
+                    g2.drawString(attackSpell.getName(), statsX + 105, statsY + nextLine * lineHeight);
+                    nextLine++;
+                    g2.setFont(new Font("Arial", Font.PLAIN, 14));
+                    g2.drawString("Might: " + attackSpell.getMight() + "  Hit: " + attackSpell.getHit() + "  Crit: " + attackSpell.getCrit() + "  Range: " + attackSpell.getRange(), statsX, statsY + nextLine * lineHeight);
+                }
+
+                nextLine++;
+                g2.setFont(new Font("Arial", Font.PLAIN, 16));
+                g2.drawString("Healing Spell: ", statsX, statsY + nextLine * lineHeight);
+
+                // Check if the healing spell is null
+                if (healingSpell != null) {
+                    g2.drawImage(healingSpellImage, statsX + 95, statsY + nextLine * lineHeight - 13, gp.getTileSize(), gp.getTileSize(), null);
+                    g2.drawString(healingSpell.getName(), statsX + 115, statsY + nextLine * lineHeight);
+                    nextLine++;
+                    g2.setFont(new Font("Arial", Font.PLAIN, 14));
+                    g2.drawString("Heal: " + healingSpell.getHeal()  + "   Range: " + healingSpell.getRange(), statsX, statsY + nextLine * lineHeight);
+                }
+            }
+
+            Trinket trinket = player.trinket;
+            Potion potion = player.potion;
+
+            nextLine++;
+            g2.setFont(new Font("Arial", Font.PLAIN, 16));
+            g2.drawString("Trinket: ", statsX, statsY + nextLine * lineHeight);
+
+            // Check if the healing spell is null
+            if (trinket != null) {
+                g2.drawImage(trinket.getImage(), statsX + 50, statsY + nextLine * lineHeight - 13, gp.getTileSize(), gp.getTileSize(), null);
+                g2.drawString(trinket.getName(), statsX + 70, statsY + nextLine * lineHeight);
+                nextLine++;
+                g2.setFont(new Font("Arial", Font.PLAIN, 14));
+                if (trinket.getDescription() != null) {
+                    g2.drawString(trinket.getDescription(), statsX, statsY + nextLine * lineHeight);
+                }
+            }
+
+            nextLine++;
+            g2.setFont(new Font("Arial", Font.PLAIN, 16));
+            g2.drawString("Potion: ", statsX, statsY + nextLine * lineHeight);
+
+            // Check if the healing spell is null
+            if (potion != null) {
+                g2.drawImage(potion.getImage(), statsX + 50, statsY + nextLine * lineHeight - 13, gp.getTileSize(), gp.getTileSize(), null);
+                g2.drawString(potion.getName(), statsX + 70, statsY + nextLine * lineHeight);
+                nextLine++;
+                g2.setFont(new Font("Arial", Font.PLAIN, 14));
+                if (potion.getDescription() != null) {
+                    g2.drawString(potion.getDescription(), statsX, statsY + nextLine * lineHeight);
+                }
+            }
         }
     }
 
@@ -912,6 +998,11 @@ public class UI {
         int textX = 69 * 16 + 7 * gp.getTileSize() + 9; // Right side of the portrait
         int textY = 5 * 16 + 20; // Slightly below the top of the portrait
         int lineHeight = 20; // Spacing between each line of text
+        int nextLine = 1;
+
+        // Coordinates for stats below the portrait
+        int statsX = 69 * 16 - 5; // Align with the portrait's X position
+        int statsY = 5 * 16 + 8 * gp.getTileSize() + 20; // Start drawing below the portrait
 
         // Set font for text
         g2.setFont(new Font("Arial", Font.PLAIN, 13));
@@ -923,30 +1014,65 @@ public class UI {
             textY += lineHeight;
         }
 
-        /*
-        // Draw unit's weapons and their stats/descriptions
-        g2.drawString("Weapons:", textX, textY);
-        textY += lineHeight;
-        for (Weapon weapon : weapons) {
-            g2.drawString(weapon.getName() + " (Damage: " + weapon.getDamage() + ", Range: " + weapon.getRange() + ")", textX, textY);
-            textY += lineHeight;
-            g2.drawString("  " + weapon.getDescription(), textX + 20, textY);
-            textY += lineHeight;
+        g2.setFont(new Font("Arial", Font.PLAIN, 16));
+        lineHeight = 30;
+
+        // Draw Inventory if Unit is Physical
+        if (enemy.getAttackType() == Entity.AttackType.Physical) {
+            Weapon equipped  = enemy.equippedWeapon;
+
+            g2.drawString("Equipped: ", statsX, statsY + nextLine * lineHeight);
+
+            // Check if the mainhand weapon is null
+            if (equipped != null) {
+                g2.drawImage(equipped.getImage(), statsX + 75, statsY + nextLine * lineHeight - 13, gp.getTileSize(), gp.getTileSize(), null);
+                g2.drawString(equipped.getName(), statsX + 95, statsY + nextLine * lineHeight);
+                nextLine++;
+                g2.setFont(new Font("Arial", Font.PLAIN, 14));
+                g2.drawString("Might: " + equipped.getMight() + "  Hit: " + equipped.getHit() + "  Crit: " + equipped.getCrit() + "  Range: " + equipped.getRange(), statsX, statsY + nextLine * lineHeight);
+                nextLine++;
+                if (equipped.getDescription() != null) {
+                    g2.drawString(equipped.getDescription(), statsX, statsY + nextLine * lineHeight);
+                }
+            }
         }
 
-        // Draw unit's skills and their descriptions
-        textY += lineHeight; // Add some space between weapons and skills
-        g2.drawString("Skills:", textX, textY);
-        textY += lineHeight;
-        for (Skill skill : skills) {
-            g2.drawString(skill.getName(), textX, textY);
-            textY += lineHeight;
-            g2.drawString("  " + skill.getDescription(), textX + 20, textY);
-            textY += lineHeight;
+        // Draw Spells if Unit is Magical
+        if (enemy.getAttackType() == Entity.AttackType.Magical) {
+            // Drawing unit's spells
+            AttackSpell attackSpell = enemy.attackSpell;
+
+            g2.setFont(new Font("Arial", Font.PLAIN, 16));
+            g2.drawString("Attack Spell: ", statsX, statsY + nextLine * lineHeight);
+
+            // Check if the attack spell is null
+            if (attackSpell != null) {
+                g2.drawImage(attackSpellImage, statsX + 85, statsY + nextLine * lineHeight - 13, gp.getTileSize(), gp.getTileSize(), null);
+                g2.drawString(attackSpell.getName(), statsX + 105, statsY + nextLine * lineHeight);
+                nextLine++;
+                g2.setFont(new Font("Arial", Font.PLAIN, 14));
+                g2.drawString("Might: " + attackSpell.getMight() + "  Hit: " + attackSpell.getHit() + "  Crit: " + attackSpell.getCrit() + "  Range: " + attackSpell.getRange(), statsX, statsY + nextLine * lineHeight);
+            }
         }
 
-         */
+        Trinket trinket = enemy.trinket;
+
+        nextLine++;
+        g2.setFont(new Font("Arial", Font.PLAIN, 16));
+        g2.drawString("Trinket: ", statsX, statsY + nextLine * lineHeight);
+
+        // Check if the healing spell is null
+        if (trinket != null) {
+            g2.drawImage(trinket.getImage(), statsX + 50, statsY + nextLine * lineHeight - 13, gp.getTileSize(), gp.getTileSize(), null);
+            g2.drawString(trinket.getName(), statsX + 70, statsY + nextLine * lineHeight);
+            nextLine++;
+            g2.setFont(new Font("Arial", Font.PLAIN, 14));
+            if (trinket.getDescription() != null) {
+                g2.drawString(trinket.getDescription(), statsX, statsY + nextLine * lineHeight);
+            }
+        }
     }
+
 
     // Method to draw the Light Unit's information
     public void drawChaosUnitInfo() {

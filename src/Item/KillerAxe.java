@@ -18,7 +18,6 @@ public class KillerAxe extends MainHand{
     @Override
     public void setupStats() {
         name = "Killer Axe";
-        description = "An axe made to inflict deadly wounds";
         might = 12;
         randomizeMight();
         hit = 70;

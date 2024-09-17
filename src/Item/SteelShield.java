@@ -19,7 +19,7 @@ public class SteelShield extends Trinket{
     @Override
     public void setupStats() {
         name = "Steel Shield";
-        description = "Def. +4, Speed -2. A shield made of steel";
+        description = "Defense +4, Speed -2";
         strength = 0;
         magic = 0;
         skill = 0;

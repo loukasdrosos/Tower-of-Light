@@ -19,7 +19,7 @@ public class IronShield extends Trinket{
     @Override
     public void setupStats() {
         name = "Iron Shield";
-        description = "Def. +2, Speed -1. A common shield made of iron";
+        description = "Defense +2, Speed -1";
         strength = 0;
         magic = 0;
         skill = 0;

@@ -19,6 +19,7 @@ public class Prince extends LightUnit{
         setupGrowthRates();
         this.mainHand = mainhand;
         equippedWeapon = this.mainHand;
+        this.offHand = new Armorslayer();
         this.trinket = trinket;
         this.potion = potion;
         setupStats();

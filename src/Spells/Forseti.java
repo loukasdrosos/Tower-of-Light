@@ -13,6 +13,5 @@ public class Forseti extends AttackSpell{
         hit = 85;
         crit = 15;
         range = 3;
-        description = "The most powerful of wind magic";
     }
 }

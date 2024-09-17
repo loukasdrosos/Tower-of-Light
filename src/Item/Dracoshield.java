@@ -19,7 +19,7 @@ public class Dracoshield extends Trinket{
     @Override
     public void setupStats() {
         name = "Dracoshield";
-        description = "Def. +10, Res. +10, Speed -10. A shield as strong as a dragon";
+        description = "Def. +10, Res. +10, Speed -10";
         strength = 0;
         magic = 0;
         skill = 0;

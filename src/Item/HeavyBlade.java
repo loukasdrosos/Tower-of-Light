@@ -18,7 +18,7 @@ public class HeavyBlade extends OffHand{
     @Override
     public void setupStats() {
         name = "Heavy Blade";
-        description = "Defense +4, Speed -4. A blade that's difficult to use";
+        description = "Defense +4, Speed -4";
         might = 10;
         randomizeMight();
         hit = 75;

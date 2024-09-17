@@ -13,6 +13,5 @@ public class Nosferatu extends AttackSpell{
         hit = 80;
         crit = 5;
         range = 3;
-        description = "Truly mighty dark magic";
     }
 }

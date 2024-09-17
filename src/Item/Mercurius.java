@@ -18,7 +18,6 @@ public class Mercurius extends MainHand{
     @Override
     public void setupStats() {
         name = "Mercurius";
-        description = "A sword only for the best warriors";
         might = 15;
         randomizeMight();
         hit = 80;

@@ -18,7 +18,6 @@ public class FireBreath extends MainHand{
     @Override
     public void setupStats() {
         name = "Fire Breath";
-        description = "The breath of a fire dragon";
         might = 12;
         hit = 0;
         crit = 0;

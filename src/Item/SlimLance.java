@@ -18,7 +18,7 @@ public class SlimLance extends OffHand{
     @Override
     public void setupStats() {
         name = "Slim Lance";
-        description = "Speed +5, Defense -3. A light, unusually accurate lance";
+        description = "Speed +5, Defense -3";
         might = 5;
         randomizeMight();
         hit = 95;

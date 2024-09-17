@@ -19,7 +19,7 @@ public class SilverShield extends Trinket{
     @Override
     public void setupStats() {
         name = "Silver Shield";
-        description = "Def. +7, Speed -3. An exceptional shield made of rare metals";
+        description = "Defense +7, Speed -3";
         strength = 0;
         magic = 0;
         skill = 0;

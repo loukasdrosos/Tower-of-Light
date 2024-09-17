@@ -18,7 +18,6 @@ public class SteelAxe extends MainHand{
     @Override
     public void setupStats() {
         name = "Steel Axe";
-        description = "An axe made of steel";
         might = 11;
         randomizeMight();
         hit = 70;

@@ -20,7 +20,7 @@ public class Ridersbane extends OffHand{
     @Override
     public void setupStats() {
         name = "Ridersbane";
-        description = "Effective: Mounted. A lance designed for foes on horseback";
+        description = "Effective: Mounted";
         might = 9;
         randomizeMight();
         hit = 70;

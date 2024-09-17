@@ -19,7 +19,7 @@ public class HexlockShield extends Trinket{
     @Override
     public void setupStats() {
         name = "Hexlock Shield";
-        description = "Res. +7, Speed -4. A shield that can defend against all magic";
+        description = "Resistance +7, Speed -4";
         strength = 0;
         magic = 0;
         skill = 0;

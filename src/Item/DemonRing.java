@@ -19,7 +19,7 @@ public class DemonRing extends Trinket{
     @Override
     public void setupStats() {
         name = "Demon Ring";
-        description = "Str. +5, Skill +5, Def. -5, Res. -5. A ring with demon powers";
+        description = "Str. +5, Skill +5, Def. -5, Res. -5";
         strength = 5;
         magic = 0;
         skill = 5;

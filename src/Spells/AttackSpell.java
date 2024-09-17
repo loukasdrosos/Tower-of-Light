@@ -7,7 +7,6 @@ public class AttackSpell {
     protected int hit;
     protected int crit;
     protected int range;
-    protected String description;
 
     // Getters
 
@@ -20,8 +19,6 @@ public class AttackSpell {
     public int getRange() { return range; } // Get the spell's attack range
 
     public String getName() { return name; } // Get the weapon's name
-
-    public String getDescription() { return description; } // Get the weapon's description
 
     // Placeholder method to set up the main weapon's stats
     public void setupStats() {   }

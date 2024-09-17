@@ -11,6 +11,5 @@ public class HolyBlessing extends HealingSpell{
         name = "Holy Blessing";
         heal = 25;
         range = 8;
-        description = "Healing magic granted by the God of Light";
     }
 }

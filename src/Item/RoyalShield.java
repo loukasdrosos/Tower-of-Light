@@ -19,7 +19,7 @@ public class RoyalShield extends Trinket{
     @Override
     public void setupStats() {
         name = "Royal Shield";
-        description = "Def. +3, Res. +3, Speed -3. A shield made for the royal lineage";
+        description = "Def. +3, Res. +3, Speed -3";
         strength = 0;
         magic = 0;
         skill = 0;

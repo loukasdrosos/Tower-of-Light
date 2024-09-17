@@ -18,7 +18,6 @@ public class Gradivus extends MainHand{
     @Override
     public void setupStats() {
         name = "Gradivus";
-        description = "A lance only for the best warriors";
         might = 17;
         randomizeMight();
         hit = 75;

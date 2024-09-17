@@ -18,7 +18,6 @@ public class SilverLance extends MainHand{
     @Override
     public void setupStats() {
         name = "Silver Lance";
-        description = "An exceptional lance of rare metals";
         might = 13;
         randomizeMight();
         hit = 75;

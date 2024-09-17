@@ -20,7 +20,7 @@ public class Hammer extends MainHand{
     @Override
     public void setupStats() {
         name = "Hammer";
-        description = "Effective: Armored. A war hammer made to break heavy armor";
+        description = "Effective: Armored";
         might = 10;
         randomizeMight();
         hit = 60;

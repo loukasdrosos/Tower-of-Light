@@ -19,7 +19,7 @@ public class BlessedRing extends Trinket{
     @Override
     public void setupStats() {
         name = "Blessed Ring";
-        description = "Res. +3. A ring bestowed by the God Of Light";
+        description = "Resistance +3";
         strength = 0;
         magic = 0;
         skill = 0;

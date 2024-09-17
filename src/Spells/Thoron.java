@@ -14,6 +14,5 @@ public class Thoron extends AttackSpell {
         hit = 80;
         crit = 10;
         range = 3;
-        description = "The most powerful of lightning magic";
     }
 }

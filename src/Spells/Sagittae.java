@@ -13,6 +13,5 @@ public class Sagittae extends AttackSpell{
         hit = 80;
         crit = 10;
         range = 3;
-        description = "Advanced wind magic";
     }
 }

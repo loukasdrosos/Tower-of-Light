@@ -18,7 +18,7 @@ public class SlimSword extends OffHand{
     @Override
     public void setupStats() {
         name = "Slim Sword";
-        description = "Speed +5, Defense -3. A light, unusually accurate sword";
+        description = "Speed +5, Defense -3";
         might = 5;
         randomizeMight();
         hit = 100;

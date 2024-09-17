@@ -20,7 +20,7 @@ public class Armorslayer extends OffHand{
     @Override
     public void setupStats() {
         name = "Armorslayer";
-        description = "Effective: Armored. A sword made to penetrate heavy armor";
+        description = "Effective: Armored";
         might = 8;
         randomizeMight();
         hit = 80;

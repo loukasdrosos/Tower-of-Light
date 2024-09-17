@@ -18,7 +18,6 @@ public class KillingEdge extends MainHand{
     @Override
     public void setupStats() {
         name = "Killing Edge";
-        description = "A sword made to inflict deadly wounds";
         might = 7;
         randomizeMight();
         hit = 90;

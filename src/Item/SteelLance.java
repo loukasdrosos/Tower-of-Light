@@ -18,7 +18,6 @@ public class SteelLance extends MainHand{
     @Override
     public void setupStats() {
         name = "Steel Lance";
-        description = "A lance made of steel";
         might = 9;
         randomizeMight();
         hit = 80;

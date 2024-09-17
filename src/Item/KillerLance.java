@@ -18,7 +18,6 @@ public class KillerLance extends MainHand{
     @Override
     public void setupStats() {
         name = "Killer Lance";
-        description = "A lance made to inflict deadly wounds";
         might = 10;
         randomizeMight();
         hit = 80;

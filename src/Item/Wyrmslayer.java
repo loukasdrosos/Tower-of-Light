@@ -20,7 +20,7 @@ public class Wyrmslayer extends OffHand{
     @Override
     public void setupStats() {
         name = "Wyrmslayer";
-        description = "Effective: Dragons. A sword made to penetrate dragon skin";
+        description = "Effective: Dragons";
         might = 8;
         randomizeMight();
         hit = 80;

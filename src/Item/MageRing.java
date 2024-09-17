@@ -19,7 +19,7 @@ public class MageRing extends Trinket{
     @Override
     public void setupStats() {
         name = "Mage Ring";
-        description = "Magic +5. A ring that increases magic";
+        description = "Magic +5";
         strength = 0;
         magic = 5;
         skill = 0;

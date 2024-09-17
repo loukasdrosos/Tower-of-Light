@@ -11,6 +11,5 @@ public class Heal extends HealingSpell{
         name = "Heal";
         heal = 10;
         range = 1;
-        description = "Common healing magic";
     }
 }
