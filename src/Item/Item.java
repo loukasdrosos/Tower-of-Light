@@ -31,6 +31,10 @@ public class Item {
 
     // Getter methods
 
+    public BufferedImage getImage() {
+        return image;
+    }
+
     public int getX(int col) {
         return col * tileSize;
     } // Calculate x position in pixels based on column

@@ -102,10 +102,10 @@ public class Entity {
 
     public Weapon equippedWeapon = null; // Unit's equipped weapon, player units can switch between main hand and offhand weapon
     public Trinket trinket = null; // Unit's trinket item
-    public Potion potionSlot1 = null; // Unit's 1st Potion slot
-    public Potion potionSlot2 = null; // Unit's 2nd Potion slot
+    public Potion potion = null; // Unit's Potion slot
     public AttackSpell attackSpell = null;
     public HealingSpell healingSpell = null;
+    protected Boolean BeaconOfLight = false; // Boolean that checks if the unit can use Beacon of Light
 
     /* BATTLE CALCULATIONS
 
@@ -479,6 +479,8 @@ public class Entity {
     public void setX (int x) { this.x = x; }
 
     public void setY (int y) { this.y = y; }
+
+    public boolean getBeaconOfLight() { return BeaconOfLight; } // Get if the unit can use Beacon of Light
 
     public String getDirection() {return direction;}
 

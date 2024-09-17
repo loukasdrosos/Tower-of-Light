@@ -16,13 +16,14 @@ public class LightUnit extends Entity{
     protected boolean isSelected = false;  // Track if the unit is selected
     protected boolean isMoving = false;  // Track if the unit is moving
     protected boolean isAttacking = false; // Track whether the unit is Attacking
+    protected boolean isHealing = false; // // Track whether the unit is Healing an ally
     private boolean zKeyReleased = true; // To track if Z key has been released
     private boolean xKeyReleased = true; // To track if X key has been released
     private boolean wKeyReleased = true; // To track if W key has been released
     private boolean aKeyReleased = true; // To track if a key has been released
 
-    protected MainHand mainHand = null; // Unit's main hand weapon
-    protected OffHand offHand = null; // Unit's offhand weapon
+    public MainHand mainHand = null; // Unit's main hand weapon
+    public OffHand offHand = null; // Unit's offhand weapon
 
     public LightUnit (GamePanel gp, KeyHandler keyH) {
         super(gp);
@@ -557,5 +558,7 @@ public class LightUnit extends Entity{
     public boolean getIsMoving () { return isMoving; } // Return whether the unit is moving
 
     public boolean getIsAttacking () { return isAttacking; } // Return whether the unit is attacking
+
+    public boolean getIsHealing () { return isHealing; } // Return whether the unit is healing an ally
 
 }

@@ -12,7 +12,7 @@ public class Eclispe extends AttackSpell{
         might = 10;
         hit = 80;
         crit = 5;
-        range = 4;
+        range = 3;
         description = "Dark magic used by Chaos Dragons";
     }
 }

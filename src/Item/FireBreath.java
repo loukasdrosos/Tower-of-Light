@@ -3,11 +3,11 @@ package Item;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-public class EdgeOfChaos extends MainHand{
-    public EdgeOfChaos() {
+public class FireBreath extends MainHand{
+    public FireBreath() {
         setupStats();
         try {
-            image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Edge_of_Chaos.png")));
+            image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Fire_Breath.png")));
             uTool.scaleImage(image, tileSize, tileSize);
         } catch (IOException e) {
             e.printStackTrace();
@@ -17,11 +17,11 @@ public class EdgeOfChaos extends MainHand{
     // Method to set up the weapon's stats
     @Override
     public void setupStats() {
-        name = "Edge of Chaos";
-        description = "A sword equal to Lightbringer created by the Chaos God";
-        might = 18;
-        hit = 90;
-        crit = 10;
+        name = "Fire Breath";
+        description = "The breath of a fire dragon";
+        might = 12;
+        hit = 0;
+        crit = 0;
         range = 3;
         speed = 0;
         defense = 0;

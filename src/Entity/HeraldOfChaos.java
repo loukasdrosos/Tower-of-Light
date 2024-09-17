@@ -30,7 +30,7 @@ public class HeraldOfChaos extends ChaosUnit{
     public void setupStats() {
         name = "Celica";
         className = "Herald of Chaos";
-        level = 20;
+        level = maxLevel;
         if (level > maxLevel) {
             level = maxLevel;
         }

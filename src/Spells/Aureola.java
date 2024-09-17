@@ -9,8 +9,8 @@ public class Aureola extends AttackSpell{
     @Override
     public void setupStats() {
         name = "Aureola";
-        might = 10;
-        hit = 80;
+        might = 11;
+        hit = 90;
         crit = 5;
         range = 3;
         description = "The most powerful of light magic";

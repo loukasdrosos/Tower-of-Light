@@ -9,10 +9,10 @@ public class Goetia extends AttackSpell{
     @Override
     public void setupStats() {
         name = "Goetia";
-        might = 12;
+        might = 13;
         hit = 80;
         crit = 10;
-        range = 4;
+        range = 3;
         description = "The most powerful of dark magic";
     }
 }

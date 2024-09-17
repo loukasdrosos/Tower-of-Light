@@ -17,15 +17,13 @@ public class AssetSetter {
 
     // Initialize player units and set their starting positions
     public void setLightUnits() {
-        gp.simLightUnits.add(new Prince(gp, keyH, "Alm", Entity.UnitRace.Human, 30, 14, new Lightbringer(), new RoyalShield()));
-        gp.simLightUnits.add(new Sage(gp, keyH, "Boey", Entity.UnitRace.Elf, 31, 15, null));
+        gp.simLightUnits.add(new Prince(gp, keyH, "Alm", Entity.UnitRace.Human, 30, 14, new Lightbringer(), new RoyalShield(), new Vulnerary()));
+        gp.simLightUnits.add(new Sage(gp, keyH, "Boey", Entity.UnitRace.Elf, 31, 15, null, null));
+        gp.simLightUnits.add(new Cleric(gp, keyH, "Shade", Entity.UnitRace.Elf, 31, 14, null, null));
     }
 
     // Initialize enemy units and set their starting positions
     public void setChaosUnits() {
-        gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 30, 15, new Lightbringer(), null));
-        gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 30, 13, new SilverSword(), null));
-        gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 30, 12, new EdgeOfChaos(), null));
         gp.simChaosUnits.add(new HeraldOfChaos(gp, false, true, 32, 13, new SteelLance(), new IronShield()));
     }
 

@@ -1,19 +1,18 @@
 package Spells;
 
-public class Thoron extends AttackSpell {
-
-    public Thoron() {
+public class Ragnarok extends AttackSpell{
+    public Ragnarok() {
         setupStats();
     }
 
     // Method to set up the spell's stats
     @Override
     public void setupStats() {
-        name = "Thoron";
-        might = 14;
+        name = "Ragnarok";
+        might = 16;
         hit = 80;
         crit = 10;
         range = 3;
-        description = "The most powerful of lightning magic";
+        description = "The most powerful of fire magic";
     }
 }

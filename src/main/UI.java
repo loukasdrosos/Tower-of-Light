@@ -1,11 +1,15 @@
 package main;
 
-import Entity.ChaosUnit;
-import Entity.Entity;
-import Entity.LightUnit;
+import Entity.*;
+import Item.*;
+import Spells.AttackSpell;
+import Spells.HealingSpell;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +19,8 @@ public class UI {
     Font arial_30;
     Font arial_20;
     Graphics2D g2;
+    BufferedImage attackSpellImage;
+    BufferedImage healingSpellImage;
 
     // Variables to control the phase dipslay
     int phaseRectWidth = 300; // Width of the phase rectangle
@@ -37,6 +43,12 @@ public class UI {
 
         arial_30 = new Font("Arial", Font.PLAIN, 30);
         arial_20 = new Font("Arial", Font.PLAIN, 20);
+        try {
+            attackSpellImage = ImageIO.read(new File("res/Spells/Attack_Spell.png"));
+            healingSpellImage = ImageIO.read(new File("res/Spells/Healing_Spell.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // CONTROLS STATE UI
@@ -566,6 +578,7 @@ public class UI {
             // Coordinates for combat stats text
             int lineHeight = 20; // Spacing between each line of text
             int textX = 52 * 16 + 8 * gp.getTileSize() + 10;
+            int nextLine = 1;
 
             // Set font for text
             g2.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -580,6 +593,81 @@ public class UI {
             g2.drawString("Crit Rate: " + player.getCritical(), textX, combatStatsY);
             g2.drawString("Hit Rate: " + player.getHitRate(), combatStatsX, combatStatsY + lineHeight);
             g2.drawString("Evade: " + player.getEvade(), textX, combatStatsY + lineHeight);
+
+            g2.setFont(new Font("Arial", Font.PLAIN, 16));
+            lineHeight = 30;
+
+            // Draw Inventory if Unit is Physical
+            if (player.getAttackType() == Entity.AttackType.Physical) {
+                // Start rendering weapon and item details
+                nextLine++;
+
+                // Drawing equipped weapon
+                Weapon equippedWeapon = player.equippedWeapon;
+                Weapon mainhand = player.mainHand;
+                Weapon offhand = player.offHand;
+
+                if (equippedWeapon != null) {
+                    g2.drawString("Equipped: ", combatStatsX, combatStatsY + nextLine * lineHeight);
+                    g2.drawImage(equippedWeapon.getImage(), combatStatsX + 75, combatStatsY + nextLine * lineHeight - 13, gp.getTileSize(), gp.getTileSize(), null);
+                    g2.drawString(equippedWeapon.getName(), combatStatsX + 95, combatStatsY + nextLine * lineHeight);
+                }
+
+                // Check if the equipped weapon is the mainhand and there is an offhand weapon
+                if (equippedWeapon == mainhand && offhand != null) {
+                    nextLine++;
+                    g2.drawImage(offhand.getImage(), combatStatsX, combatStatsY + nextLine * lineHeight - 13, gp.getTileSize(), gp.getTileSize(), null);
+                    g2.drawString(offhand.getName(), combatStatsX + 20, combatStatsY + nextLine * lineHeight);
+                }
+                // Check if the equipped weapon is the offhand and there is a mainhand weapon
+                else if (equippedWeapon == offhand && mainhand != null) {
+                    nextLine++;
+                    g2.drawImage(mainhand.getImage(), combatStatsX, combatStatsY + nextLine * lineHeight - 13, gp.getTileSize(), gp.getTileSize(), null);
+                    g2.drawString(mainhand.getName(), combatStatsX + 20, combatStatsY + nextLine * lineHeight);
+                }
+            }
+
+            // Draw Spells if Unit is Magical
+            if (player.getAttackType() == Entity.AttackType.Magical) {
+                // Start rendering weapon and item details
+                nextLine++;
+
+                // Drawing unit's spells
+                AttackSpell attackSpell = player.attackSpell;
+                HealingSpell healingSpell = player.healingSpell;
+
+                if (attackSpell != null) {
+                    g2.drawImage(attackSpellImage, combatStatsX, combatStatsY + nextLine * lineHeight - 13, gp.getTileSize(), gp.getTileSize(), null);
+                    g2.drawString(attackSpell.getName(), combatStatsX + 20, combatStatsY + nextLine * lineHeight);
+                }
+
+                if (healingSpell != null) {
+                    nextLine++;
+                    g2.drawImage(healingSpellImage, combatStatsX, combatStatsY + nextLine * lineHeight - 13, gp.getTileSize(), gp.getTileSize(), null);
+                    g2.drawString(healingSpell.getName(), combatStatsX + 20, combatStatsY + nextLine * lineHeight);
+                }
+            }
+
+            if (player.getBeaconOfLight()){
+                nextLine++;
+                g2.drawImage(healingSpellImage, combatStatsX, combatStatsY + nextLine * lineHeight - 13, gp.getTileSize(), gp.getTileSize(), null);
+                g2.drawString("Beacon Of Light", combatStatsX + 20, combatStatsY + nextLine * lineHeight);
+            }
+
+            Trinket trinket = player.trinket;
+            Potion potion = player.potion;
+
+            if (trinket != null) {
+                nextLine++;
+                g2.drawImage(trinket.getImage(), combatStatsX, combatStatsY + nextLine * lineHeight - 13, gp.getTileSize(), gp.getTileSize(), null);
+                g2.drawString(trinket.getName(), combatStatsX + 20, combatStatsY + nextLine * lineHeight);
+            }
+
+            if (potion != null) {
+                nextLine++;
+                g2.drawImage(potion.getImage(), combatStatsX, combatStatsY + nextLine * lineHeight - 13, gp.getTileSize(), gp.getTileSize(), null);
+                g2.drawString(potion.getName() + "         Uses: " + potion.getUses(), combatStatsX + 20, combatStatsY + nextLine * lineHeight);
+            }
         }
     }
 
@@ -762,6 +850,7 @@ public class UI {
         // Coordinates for combat stats text
         int lineHeight = 20; // Spacing between each line of text
         int textX = 69 * 16 + 7 * gp.getTileSize() + 14;
+        int nextLine = 1;
 
         // Set font for text
         g2.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -776,6 +865,46 @@ public class UI {
         g2.drawString("Crit Rate: " + enemy.getCritical(), textX, combatStatsY);
         g2.drawString("Hit Rate: " + enemy.getHitRate(), combatStatsX, combatStatsY + lineHeight);
         g2.drawString("Evade: " + enemy.getEvade(), textX, combatStatsY + lineHeight);
+
+        g2.setFont(new Font("Arial", Font.PLAIN, 16));
+        lineHeight = 30;
+
+        // Draw Inventory if Unit is Physical
+        if (enemy.getAttackType() == Entity.AttackType.Physical) {
+            // Start rendering weapon and item details
+            nextLine++;
+
+            // Drawing equipped weapon
+            Weapon equippedWeapon = enemy.equippedWeapon;
+
+            if (equippedWeapon != null) {
+                g2.drawString("Equipped: ", combatStatsX, combatStatsY + nextLine * lineHeight);
+                g2.drawImage(equippedWeapon.getImage(), combatStatsX + 75, combatStatsY + nextLine * lineHeight - 13, gp.getTileSize(), gp.getTileSize(), null);
+                g2.drawString(equippedWeapon.getName(), combatStatsX + 95, combatStatsY + nextLine * lineHeight);
+            }
+        }
+
+        // Draw Spells if Unit is Magical
+        if (enemy.getAttackType() == Entity.AttackType.Magical) {
+            // Start rendering weapon and item details
+            nextLine++;
+
+            // Drawing unit's spells
+            AttackSpell attackSpell = enemy.attackSpell;
+
+            if (attackSpell != null) {
+                g2.drawImage(attackSpellImage, combatStatsX, combatStatsY + nextLine * lineHeight - 13, gp.getTileSize(), gp.getTileSize(), null);
+                g2.drawString(attackSpell.getName(), combatStatsX + 20, combatStatsY + nextLine * lineHeight);
+            }
+        }
+
+        Trinket trinket = enemy.trinket;
+
+        if (trinket != null) {
+            nextLine++;
+            g2.drawImage(trinket.getImage(), combatStatsX, combatStatsY + nextLine * lineHeight - 13, gp.getTileSize(), gp.getTileSize(), null);
+            g2.drawString(trinket.getName(), combatStatsX + 20, combatStatsY + nextLine * lineHeight);
+        }
     }
 
     // Draw Chaos Unit's details

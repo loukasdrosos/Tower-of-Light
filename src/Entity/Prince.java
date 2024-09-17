@@ -1,14 +1,12 @@
 package Entity;
 
 import Item.*;
-import Spells.AttackSpell;
-import Spells.Thoron;
 import main.GamePanel;
 import main.KeyHandler;
 
 public class Prince extends LightUnit{
 
-    public Prince (GamePanel gp, KeyHandler keyH, String name, UnitRace race, int startCol, int startRow, MainHand mainhand, Trinket trinket) {
+    public Prince (GamePanel gp, KeyHandler keyH, String name, UnitRace race, int startCol, int startRow, MainHand mainhand, Trinket trinket, Potion potion) {
         super(gp, keyH);
         this.col =  startCol;   // Initial column position
         this.row = startRow;    // Initial row position
@@ -22,6 +20,7 @@ public class Prince extends LightUnit{
         this.mainHand = mainhand;
         equippedWeapon = this.mainHand;
         this.trinket = trinket;
+        this.potion = potion;
         setupStats();
         // Load unit's images for animations
         try { loadImage(); }
@@ -56,6 +55,7 @@ public class Prince extends LightUnit{
         boostStatsForClasses();
         HP = maxHP;
         calculateCombatStats();
+        BeaconOfLight = true;
         description = new String[]{"The prince of ", "the kingdom of", "Valentia and the", "one worthy to wield", "the divine blade", "Lightbringer."} ;
     }
 
