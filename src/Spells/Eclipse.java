@@ -9,7 +9,7 @@ public class Eclipse extends AttackSpell{
     @Override
     public void setupStats() {
         name = "Eclipse";
-        might = 10;
+        might = 13;
         hit = 80;
         crit = 5;
         range = 3;

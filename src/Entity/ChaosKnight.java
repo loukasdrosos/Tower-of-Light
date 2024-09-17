@@ -4,8 +4,8 @@ import Item.*;
 import main.GamePanel;
 import main.UtilityTool;
 
-public class Assassin extends ChaosUnit{
-    public Assassin(GamePanel gp, boolean canMove, int startCol, int startRow) {
+public class ChaosKnight extends ChaosUnit{
+    public ChaosKnight(GamePanel gp, boolean canMove, int startCol, int startRow) {
         super(gp, canMove);
         this.col = startCol;   // Initial column position
         this.row = startRow;    // Initial row position
@@ -25,20 +25,20 @@ public class Assassin extends ChaosUnit{
     // Method to set up the unit's stats
     @Override
     public void setupStats() {
-        className = "Assassin";
-        level = 3;
+        className = "Chaos Knight";
+        level = 6;
         if (level > maxLevel) {
             level = maxLevel;
         }
-        maxHP = 20;
-        strength = 7;
+        maxHP = 25;
+        strength = 9;
         magic = 0;
-        skill = 11;
-        speed = 13;
+        skill = 7;
+        speed = 8;
         luck = 0;
-        defense = 6;
-        resistance = 4;
-        movement = 3;
+        defense = 10;
+        resistance = 6;
+        movement = 4;
         if (!canMove) {
             movement = 0;
         }
@@ -46,25 +46,25 @@ public class Assassin extends ChaosUnit{
         setStats();
         randomizeRace();
         randomizeItems();
-        unitType = UnitType.Infantry;
+        unitType = UnitType.Mounted;
         attackType = AttackType.Physical;
         boostStatsForClasses();
         HP = maxHP;
         calculateCombatStats();
-        description = new String[]{"An expert in", "the art of", "death while", "staying hidden."};
+        description = new String[]{"A soldier and his", "horse resurrected", "to fight for", "the Chaos army."};
     }
 
     // Method to set up the player's growth rates
     @Override
     public void setupGrowthRates() {
-        HPGrowthRate = 80;
+        HPGrowthRate = 85;
         strengthGrowthRate = 45;
         magicGrowthRate = 0;
-        skillGrowthRate = 50;
-        speedGrowthRate = 50;
-        luckGrowthRate = 50;
-        defenseGrowthRate = 30;
-        resistanceGrowthRate = 35;
+        skillGrowthRate = 40;
+        speedGrowthRate = 40;
+        luckGrowthRate = 45;
+        defenseGrowthRate = 40;
+        resistanceGrowthRate = 30;
     }
 
     public void randomizeRace() {
@@ -92,22 +92,22 @@ public class Assassin extends ChaosUnit{
     public void randomizeItems() {
         UtilityTool uTool = new UtilityTool();
 
-        if (level <= 10) {
-            equippedWeapon = new SteelSword();
+        if (level <= 12) {
+            equippedWeapon = new SteelLance();
         }
-        if (level > 10 && level <= 13) {
+        if (level > 12 && level <= 14) {
             int number = uTool.getRandomNumber();
             if (number <= 35){
-                equippedWeapon = new SteelSword();
+                equippedWeapon = new SteelLance();
             }
-            else if (number > 35 && number <= 65) {
-                equippedWeapon = new KillingEdge();
+            else if (number > 35 && number <= 75) {
+                equippedWeapon = new KillerLance();
             }
-            else if (number > 65 && number <= 85) {
-                equippedWeapon = new Armorslayer();
+            else if (number > 75 && number <= 85) {
+                equippedWeapon = new HexlockSpear();
             }
             else if (number > 85 && number <= 100) {
-                equippedWeapon = new HeavyBlade();
+                equippedWeapon = new Ridersbane();
             }
             number = uTool.getRandomNumber();
             if (number <= 25){
@@ -120,51 +120,51 @@ public class Assassin extends ChaosUnit{
                 trinket = new HexlockShield();
             }
         }
-        if (level > 13 && level <= 15) {
+        if (level > 14 && level <= 16) {
             int number = uTool.getRandomNumber();
             if (number <= 35){
-                equippedWeapon = new SilverSword();
+                equippedWeapon = new SilverLance();
             }
             else if (number > 35 && number <= 65) {
-                equippedWeapon = new KillingEdge();
+                equippedWeapon = new KillerLance();
             }
             else if (number > 65 && number <= 85) {
-                equippedWeapon = new Armorslayer();
+                equippedWeapon = new Ridersbane();
             }
             else if (number > 85 && number <= 100) {
-                equippedWeapon = new HeavyBlade();
+                equippedWeapon = new SlimLance();
             }
             number = uTool.getRandomNumber();
             if (number <= 25){
-                trinket = new IronShield();
-            }
-            else if (number > 25 && number <= 50) {
                 trinket = new SteelShield();
             }
-            else if (number > 50 && number <= 60) {
-                trinket = new HexlockShield();
-            }
-        }
-        if (level > 15) {
-            int number = uTool.getRandomNumber();
-            if (number <= 70){
-                equippedWeapon = new SilverSword();
-            }
-            else if (number > 70 && number <= 100) {
-                equippedWeapon = new Mercurius();
-            }
-            number = uTool.getRandomNumber();
-            if (number <= 35){
+            else if (number > 25 && number <= 50) {
                 trinket = new SilverShield();
             }
-            else if (number > 35 && number <= 55) {
-                trinket = new SteelShield();
-            }
-            else if (number > 55 && number <= 65) {
+            else if (number > 50 && number <= 60) {
                 trinket = new HexlockShield();
             }
-            else if (number > 65 && number <= 100) {
+        }
+        if (level > 16) {
+            int number = uTool.getRandomNumber();
+            if (number <= 70){
+                equippedWeapon = new SilverLance();
+            }
+            else if (number > 70 && number <= 100) {
+                equippedWeapon = new Gradivus();
+            }
+            number = uTool.getRandomNumber();
+            if (number <= 45){
+                trinket = new SilverShield();
+            }
+            else if (number > 45 && number <= 55) {
                 trinket = new DemonRing();
+            }
+            else if (number > 55 && number <= 75) {
+                trinket = new HexlockShield();
+            }
+            else if (number > 75 && number <= 100) {
+                trinket = new SpeedRing();
             }
         }
     }
@@ -172,16 +172,16 @@ public class Assassin extends ChaosUnit{
     //Load images for the unit's animations
     @Override
     public void loadImage() {
-        up1 = setup("/ChaosUnits/Assasin/Assasin_Up_1");
-        up2 = setup("/ChaosUnits/Assasin/Assasin_Up_2");
-        down1 = setup("/ChaosUnits/Assasin/Assasin_Down_1");
-        down2 = setup("/ChaosUnits/Assasin/Assasin_Down_2");
-        left1 = setup("/ChaosUnits/Assasin/Assasin_Left_1");
-        left2 = setup("/ChaosUnits/Assasin/Assasin_Left_2");
-        right1 = setup("/ChaosUnits/Assasin/Assasin_Right_1");
-        right2 = setup("/ChaosUnits/Assasin/Assasin_Right_2");
-        default1 = setup("/ChaosUnits/Assasin/Assasin_Default_1");
-        default2 = setup("/ChaosUnits/Assasin/Assasin_Default_2");
-        portrait = setupPortrait("/ChaosUnits/Assasin/Assasin_Portrait");
+        up1 = setup("/ChaosUnits/Chaos_Knight/Chaos_Knight_Up_1");
+        up2 = setup("/ChaosUnits/Chaos_Knight/Chaos_Knight_Up_2");
+        down1 = setup("/ChaosUnits/Chaos_Knight/Chaos_Knight_Down_1");
+        down2 = setup("/ChaosUnits/Chaos_Knight/Chaos_Knight_Down_2");
+        left1 = setup("/ChaosUnits/Chaos_Knight/Chaos_Knight_Left_1");
+        left2 = setup("/ChaosUnits/Chaos_Knight/Chaos_Knight_Left_2");
+        right1 = setup("/ChaosUnits/Chaos_Knight/Chaos_Knight_Right_1");
+        right2 = setup("/ChaosUnits/Chaos_Knight/Chaos_Knight_Right_2");
+        default1 = setup("/ChaosUnits/Chaos_Knight/Chaos_Knight_Default_1");
+        default2 = setup("/ChaosUnits/Chaos_Knight/Chaos_Knight_Default_2");
+        portrait = setupPortrait("/ChaosUnits/Chaos_Knight/Chaos_Knight_Portrait");
     }
 }

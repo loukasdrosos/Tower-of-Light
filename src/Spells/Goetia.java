@@ -9,7 +9,7 @@ public class Goetia extends AttackSpell{
     @Override
     public void setupStats() {
         name = "Goetia";
-        might = 13;
+        might = 15;
         hit = 80;
         crit = 10;
         range = 3;

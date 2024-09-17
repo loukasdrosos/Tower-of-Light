@@ -16,8 +16,6 @@ public class HeraldOfChaos extends ChaosUnit{
         y = getY();          // Calculate initial y position based on row
         preCol = col;           // Set previous column to current column
         preRow = row;           // Set previous row to current row
-        equippedWeapon = new EdgeOfChaos();
-        trinket =  new DemonRing();
         boss = isBoss;
         setupStats();
         // Load unit's images for animations
@@ -37,8 +35,8 @@ public class HeraldOfChaos extends ChaosUnit{
         if (level > maxLevel) {
             level = maxLevel;
         }
-        maxHP = 40;
-        strength = 25;
+        maxHP = 60;
+        strength = 33;
         magic = 28;
         skill = 25;
         speed = 27;
@@ -49,6 +47,8 @@ public class HeraldOfChaos extends ChaosUnit{
         if (!canMove) {
             movement = 0;
         }
+        equippedWeapon = new EdgeOfChaos();
+        trinket =  new DemonRing();
         race = UnitRace.Human;
         unitType = UnitType.Infantry;
         attackType = AttackType.Physical;
