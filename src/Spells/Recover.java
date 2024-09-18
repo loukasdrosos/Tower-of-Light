@@ -11,6 +11,6 @@ public class Recover extends HealingSpell{
         name = "Recover";
         heal = 15;
         range = 2;
-        expEarned = 15;
+        expEarned = 10;
     }
 }

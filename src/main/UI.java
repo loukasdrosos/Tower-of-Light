@@ -66,7 +66,7 @@ public class UI {
                 "C: Change equipped weapon",
                 "D: Use potion",
                 "S: Healing Spell",
-                "B: Use Beacon of Light",
+                "B: Activate Beacon of Light",
                 "V: View items on a tile",
                 "F: Pick up items",
                 "W: End player unit's turn",
@@ -286,7 +286,7 @@ public class UI {
             textY += lineHeight;
             g2.drawString(playerWeaponName, playerX, textY + 5);
             textY += lineHeight;
-            if (gp.selectedUnit.getEffSpeed() >= enemy.getEffSpeed() + 5) {
+            if (gp.selectedUnit.getEffSpeed() - enemy.getEffSpeed() >=  5) {
                 g2.drawString("Attack: " + playerAttack + " x 2", playerX, textY + 5);
             } else {
                 g2.drawString("Attack: " + playerAttack, playerX, textY + 5);
@@ -338,7 +338,11 @@ public class UI {
             g2.drawString(enemyWeaponName, enemyX, textY + 5);
             textY += lineHeight;
             if (inRange) {
-                g2.drawString("Attack: " + enemyAttack, enemyX, textY + 5);
+                if ( enemy.getEffSpeed() - gp.selectedUnit.getEffSpeed() >=  5) {
+                    g2.drawString("Attack: " + enemyAttack + " x 2", enemyX, textY + 5);
+                } else {
+                    g2.drawString("Attack: " + enemyAttack, enemyX, textY + 5);
+                }
                 textY += lineHeight;
                 g2.drawString("Crit: " + enemyCrit + "%", enemyX, textY + 5);
                 textY += lineHeight;

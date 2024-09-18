@@ -11,6 +11,6 @@ public class Physic extends HealingSpell{
         name = "Physic";
         heal = 20;
         range = 5;
-        expEarned = 20;
+        expEarned = 10;
     }
 }
