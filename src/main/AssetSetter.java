@@ -25,8 +25,8 @@ public class AssetSetter {
 //        gp.simLightUnits.add(new Knight(gp, keyH, "Berkut", Entity.UnitRace.Orc, 28, 12));
 //        gp.simLightUnits.add(new Mage(gp, keyH, "Robin", Entity.UnitRace.Human, 27, 15));
 //        gp.simLightUnits.add(new Paladin(gp, keyH, "Valbar", Entity.UnitRace.Tauren, 27, 10));
-//        gp.simLightUnits.add(new Warrior(gp, keyH, "Ike", Entity.UnitRace.Human, 27, 11));
-          gp.simLightUnits.add(new Princess(gp, keyH, "Celica", Entity.UnitRace.Human, 27, 13));
+         gp.simLightUnits.add(new Warrior(gp, keyH, "Ike", Entity.UnitRace.Human, 27, 11));
+ //         gp.simLightUnits.add(new Princess(gp, keyH, "Celica", Entity.UnitRace.Human, 27, 13));
     }
 
     // Initialize enemy units and set their starting positions

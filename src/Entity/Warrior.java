@@ -55,7 +55,7 @@ public class Warrior extends LightUnit{
         boostStatsForClasses();
         HP = maxHP;
         calculateCombatStats();
-        description = new String[]{"A known", "warrior in the", "kingdom. Many call", "him a hero", "for his actions."} ;
+        description = new String[]{"A warrior known for", "his heroic actions.", "Only he can", "wield the mystic", "sword Ragnell."} ;
     }
 
     // Method to set up the player's growth rates

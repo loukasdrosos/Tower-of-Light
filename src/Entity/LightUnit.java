@@ -23,6 +23,7 @@ public class LightUnit extends Entity {
     private boolean aKeyReleased = true; // To track if A key has been released
     private boolean dKeyReleased = true; // To track if D key has been released
     private boolean sKeyReleased = true; // To track if S key has been released
+    private boolean cKeyReleased = true; // To track if C key has been released
 
     public MainHand mainHand = null; // Unit's main hand weapon
     public OffHand offHand = null; // Unit's offhand weapon
@@ -149,6 +150,37 @@ public class LightUnit extends Entity {
             }
         }
     }
+
+    // Physical units switch their equipped weapon
+    public void switchWeapons() {
+        if (gp.selectedUnit != null && isSelected && isMoving) {
+            if (attackType == AttackType.Physical) {
+
+                if (keyH.isCPressed() && cKeyReleased) {
+                    cKeyReleased = false; // Mark that C key was pressed
+
+                    if ((mainHand != null && offHand == null) || (mainHand == null && offHand != null)) {
+                        gp.ui.addLogMessage(name + " has no other weapon");
+                    }
+                    if (mainHand != null && offHand != null) {
+                        if (equippedWeapon == mainHand) {
+                            equippedWeapon = offHand;
+                            calculateCombatStats();
+                        } else if (equippedWeapon == offHand) {
+                            equippedWeapon = mainHand;
+                            calculateCombatStats();
+                        }
+                        gp.ui.addLogMessage(name + " equipped " + equippedWeapon.getName());
+                    }
+                }
+                // Reset the C Key Released state when the key is no longer pressed
+                if (!keyH.isCPressed()) {
+                    cKeyReleased = true;
+                }
+            }
+        }
+    }
+
 
     // Method to choose which ally player to heal with healing spell
     public void healAlly() {
@@ -508,6 +540,7 @@ public class LightUnit extends Entity {
             chooseTarget();
             usePotion();
             healAlly();
+            switchWeapons();
         }
 
         // Update unit's main hand weapon if possible (only for LightBringer)

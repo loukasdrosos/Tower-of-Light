@@ -22,12 +22,12 @@ public class Ragnell extends MainHand {
         might = 13;
         hit = 75;
         crit = 0;
-        range = 1;
+        range = 2;
         speed = 0;
         defense = 0;
         resistance = 0;
         vision = 0;
-        removable = true;
+        removable = false;
         effectiveRace = null;
         effectiveType = null;
     }

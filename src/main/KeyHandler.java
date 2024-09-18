@@ -7,7 +7,7 @@ public class KeyHandler implements KeyListener {
 
     // Flags to track whether specific keys are currently pressed
     private boolean UpPressed, DownPressed, LeftPressed, RightPressed;
-    private boolean APressed, ZPressed, WPressed, EPressed, ShiftPressed, XPressed, DPressed, SPressed, SpacePressed;
+    private boolean APressed, ZPressed, WPressed, EPressed, ShiftPressed, XPressed, DPressed, SPressed, CPressed, SpacePressed;
     private boolean ENTERPressed = false;
     private boolean QPressed = true;
 
@@ -81,6 +81,9 @@ public class KeyHandler implements KeyListener {
             }
             if (code == KeyEvent.VK_S) {
                 SPressed = true;
+            }
+            if (code == KeyEvent.VK_C) {
+                CPressed = true;
             }
             if (code == KeyEvent.VK_SHIFT) {
                 ShiftPressed = true;
@@ -158,6 +161,9 @@ public class KeyHandler implements KeyListener {
             if (code == KeyEvent.VK_S) {
                 SPressed = false;
             }
+            if (code == KeyEvent.VK_C) {
+                CPressed = false;
+            }
             if (code == KeyEvent.VK_SPACE) {
                 SpacePressed = false;
             }
@@ -229,6 +235,10 @@ public class KeyHandler implements KeyListener {
 
     public boolean isSPressed() {
         return SPressed;
+    }
+
+    public boolean isCPressed() {
+        return CPressed;
     }
 }
 

@@ -75,7 +75,7 @@ public class BattleSimulator {
                     if (enemy.getName() != null) {
                         gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + enemy.getName());
                     } else if (enemy.getName() == null) {
-                        gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + String.valueOf(enemy.getRace()) + enemy.getClassName());
+                        gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + String.valueOf(enemy.getRace()) + " " + enemy.getClassName());
                     }
 
                     if (enemy.getHP() <= 0) {
@@ -147,7 +147,7 @@ public class BattleSimulator {
                             if (enemy.getName() != null) {
                                 gp.ui.addLogMessage(enemy.getName() + " missed the counterattack");
                             } else if (enemy.getName() == null) {
-                                gp.ui.addLogMessage(String.valueOf(enemy.getRace()) + enemy.getClassName() + " missed the counterattack");
+                                gp.ui.addLogMessage(String.valueOf(enemy.getRace()) + " " + enemy.getClassName() + " missed the counterattack");
                             }
                         }
                     }
@@ -186,7 +186,7 @@ public class BattleSimulator {
                             if (enemy.getName() != null) {
                                 gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + enemy.getName());
                             } else if (enemy.getName() == null) {
-                                gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + String.valueOf(enemy.getRace()) + enemy.getClassName());
+                                gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + String.valueOf(enemy.getRace()) + " " + enemy.getClassName());
                             }
 
                             if (enemy.getHP() <= 0) {
@@ -258,7 +258,7 @@ public class BattleSimulator {
                                 if (enemy.getName() != null) {
                                     gp.ui.addLogMessage(enemy.getName() + " missed the counterattack");
                                 } else if (enemy.getName() == null) {
-                                    gp.ui.addLogMessage(String.valueOf(enemy.getRace()) + enemy.getClassName() + " missed the counterattack");
+                                    gp.ui.addLogMessage(String.valueOf(enemy.getRace()) + " " + enemy.getClassName() + " missed the counterattack");
                                 }
                             }
                         }
@@ -343,7 +343,7 @@ public class BattleSimulator {
                     if (enemy.getName() != null) {
                         gp.ui.addLogMessage(enemy.getName() + " missed");
                     } else if (enemy.getName() == null) {
-                        gp.ui.addLogMessage(String.valueOf(enemy.getRace()) + enemy.getClassName() + " missed");
+                        gp.ui.addLogMessage(String.valueOf(enemy.getRace()) + " " + enemy.getClassName() + " missed");
                     }
                 }
 
@@ -387,7 +387,7 @@ public class BattleSimulator {
                             if (enemy.getName() != null) {
                                 gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + enemy.getName());
                             } else if (enemy.getName() == null) {
-                                gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + String.valueOf(enemy.getRace()) + enemy.getClassName());
+                                gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + String.valueOf(enemy.getRace()) + " " + enemy.getClassName());
                             }
 
                             if (enemy.getHP() <= 0) {
@@ -448,7 +448,7 @@ public class BattleSimulator {
                             if (enemy.getName() != null) {
                                 gp.ui.addLogMessage(enemy.getName() + " missed");
                             } else if (enemy.getName() == null) {
-                                gp.ui.addLogMessage(String.valueOf(enemy.getRace()) + enemy.getClassName() + " missed");
+                                gp.ui.addLogMessage(String.valueOf(enemy.getRace()) + " " + enemy.getClassName() + " missed");
                             }
                         }
                     }
@@ -494,7 +494,7 @@ public class BattleSimulator {
                                 if (enemy.getName() != null) {
                                     gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + enemy.getName());
                                 } else if (enemy.getName() == null) {
-                                    gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + String.valueOf(enemy.getRace()) + enemy.getClassName());
+                                    gp.ui.addLogMessage(player.getName() + " deals " + damagePlayer + " damage to " + String.valueOf(enemy.getRace()) + " " + enemy.getClassName());
                                 }
 
                                 if (enemy.getHP() <= 0) {
