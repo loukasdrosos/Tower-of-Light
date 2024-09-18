@@ -53,7 +53,7 @@ public class ChaosPaladin extends ChaosUnit{
             skill = 15;
             speed = 12;
             luck = 0;
-            defense = 26;
+            defense = 25;
             resistance = 10;
         }
         randomizeRace();

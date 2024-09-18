@@ -203,6 +203,69 @@ public class Cursor {
                         moveDelayCounter = 0;
                     }
                 }
+                // Update cursor's position based on ally players in selected player unit's healing range
+                if (gp.selectedUnit.getIsHealing()) {
+                    List<LightUnit> playersInRange = gp.selectedUnit.getPlayersInRange();
+                    // Increment the delay counter
+                    moveDelayCounter++;
+
+                    // Only move the cursor when the delay counter reaches the threshold
+                    if (moveDelayCounter >= moveDelayThreshold + 3) {
+
+                        // Check if there's only one ally player in range
+                        if (playersInRange.size() == 1) {
+                            // Directly update cursor position to the only enemy's position
+                            col = playersInRange.get(0).getCol();
+                            row = playersInRange.get(0).getRow();
+                            updatePosition();
+                        }
+
+                        // Check if there are any ally players in range
+                        if (playersInRange.size() > 1 && !cursorStart) {
+                            // Automatically move the cursor to the first ally player when S is pressed
+                            enemyIndex = 0;
+                            col = playersInRange.get(enemyIndex).getCol();
+                            row = playersInRange.get(enemyIndex).getRow();
+                            updatePosition();  // Move the cursor to the first enemy
+                            cursorStart = true;
+                        }
+
+                        // If more than one ally players, allow for movement between them
+                        if (playersInRange.size() > 1 && cursorStart) {
+                            if (keyH.isRightPressed() && !moving) {
+                                if (enemyIndex < playersInRange.size() - 1) {
+                                    enemyIndex++;  // Move to the next enemy
+                                } else {
+                                    enemyIndex = 0;  // Wrap around to the first enemy
+                                }
+                                moving = true;
+                            } else if (keyH.isLeftPressed() && !moving) {
+                                if (enemyIndex > 0) {
+                                    enemyIndex--;  // Move to the previous enemy
+                                } else {
+                                    enemyIndex = playersInRange.size() - 1;  // Wrap around to the last enemy
+                                }
+                                moving = true;
+                            }
+                        }
+
+                        // Safeguard to ensure enemyIndex is within valid bounds
+                        if (enemyIndex >= 0 && enemyIndex < playersInRange.size()) {
+                            // Update cursor position to the enemy's position
+                            col = playersInRange.get(enemyIndex).getCol();
+                            row = playersInRange.get(enemyIndex).getRow();
+                            updatePosition();
+                        }
+
+                        // Reset the moving flag if the key is released
+                        if (!keyH.isLeftPressed() || !keyH.isRightPressed()) {
+                            moving = false;
+                        }
+
+                        // Reset the delay counter after moving
+                        moveDelayCounter = 0;
+                    }
+                }
             }
 
             // Update sprite animation

@@ -26,7 +26,7 @@ public class FallenHero extends ChaosUnit{
     @Override
     public void setupStats() {
         className = "Fallen Hero";
-        level = 3;
+        level = 8;
         if (level > maxLevel) {
             level = maxLevel;
         }

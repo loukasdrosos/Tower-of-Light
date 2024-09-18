@@ -17,7 +17,7 @@ public class Princess extends LightUnit{
         this.name = name;
         this.race = race;
         trinket = new MageRing();
-        potion = new Vulnerary();
+        potion = new Elixir();
         setupStats();
         // Load unit's images for animations
         try { loadImage(); }
@@ -39,7 +39,7 @@ public class Princess extends LightUnit{
         exp = 0;
         maxHP = 40;
         strength = 0;
-        magic = 28;
+        magic = 29;
         skill = 25;
         speed = 27;
         luck = 0;

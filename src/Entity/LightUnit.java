@@ -8,7 +8,7 @@ import main.UtilityTool;
 import java.util.*;
 import java.util.List;
 
-public class LightUnit extends Entity{
+public class LightUnit extends Entity {
     KeyHandler keyH;
 
     protected int moveDelayThreshold = 7; // Number of frames to wait before moving
@@ -20,12 +20,14 @@ public class LightUnit extends Entity{
     private boolean zKeyReleased = true; // To track if Z key has been released
     private boolean xKeyReleased = true; // To track if X key has been released
     private boolean wKeyReleased = true; // To track if W key has been released
-    private boolean aKeyReleased = true; // To track if a key has been released
+    private boolean aKeyReleased = true; // To track if A key has been released
+    private boolean dKeyReleased = true; // To track if D key has been released
+    private boolean sKeyReleased = true; // To track if S key has been released
 
     public MainHand mainHand = null; // Unit's main hand weapon
     public OffHand offHand = null; // Unit's offhand weapon
 
-    public LightUnit (GamePanel gp, KeyHandler keyH) {
+    public LightUnit(GamePanel gp, KeyHandler keyH) {
         super(gp);
         this.keyH = keyH;       // Reference to the key handler
     }
@@ -45,8 +47,7 @@ public class LightUnit extends Entity{
                         isSelected = true; //Activate the selected player unit
                         isMoving = true; // Allow player to move
                         gp.playSE(5);
-                    }
-                    else {
+                    } else {
                         gp.ui.addLogMessage("Unit has ended its turn");
                     }
                 }
@@ -67,6 +68,12 @@ public class LightUnit extends Entity{
             if (gp.selectedUnit != null && isSelected && isAttacking && !isMoving) {
                 isMoving = true; // Player can move again
                 isAttacking = false; // Reset the attacking flag
+                gp.playSE(6);
+            }
+            // Cancel healing action for player
+            else if (gp.selectedUnit != null && isSelected && isHealing && !isMoving) {
+                isMoving = true; // Player can move again
+                isHealing = false; // Reset the healing flag
                 gp.playSE(6);
             }
 
@@ -97,8 +104,7 @@ public class LightUnit extends Entity{
                     }
                     endTurn(); // End player's turn
                     gp.selectedUnit = null; // Deselect the player
-                }
-                else {
+                } else {
                     gp.ui.addLogMessage("Unit can't end its turn while on another unit's tile");
                 }
             }
@@ -120,12 +126,10 @@ public class LightUnit extends Entity{
                     if (!enemiesInRange.isEmpty()) {
                         isMoving = false;
                         isAttacking = true;
-                    }
-                    else if (enemiesInRange.isEmpty()) {
+                    } else if (enemiesInRange.isEmpty()) {
                         gp.ui.addLogMessage("No enemy in unit's range");
                     }
-                }
-                else if (!gp.cChecker.noPlayerOnTile(col, row)) {
+                } else if (!gp.cChecker.noPlayerOnTile(col, row)) {
                     gp.ui.addLogMessage("Unit can't attack while on another unit's tile");
                 }
             }
@@ -146,8 +150,90 @@ public class LightUnit extends Entity{
         }
     }
 
+    // Method to choose which ally player to heal with healing spell
+    public void healAlly() {
+        if (gp.selectedUnit != null && isSelected) {
+            List<LightUnit> playersInRange = getPlayersInRange();  // To store the tiles with players
 
-    @Override
+            if (keyH.isSPressed() && sKeyReleased) {
+                sKeyReleased = false; // Mark that S key was pressed
+                if (healingSpell != null) {
+                    if (gp.cChecker.noPlayerOnTile(col, row)) {
+                        if (!playersInRange.isEmpty()) {
+                            isMoving = false;
+                            isHealing = true;
+                        } else if (playersInRange.isEmpty()) {
+                            gp.ui.addLogMessage("No ally that needs healing in range");
+                        }
+                    } else if (!gp.cChecker.noPlayerOnTile(col, row)) {
+                        gp.ui.addLogMessage("Unit can't heal while on another unit's tile");
+                    }
+                } else {
+                    gp.ui.addLogMessage(name + " can't use healing spells");
+                }
+            }
+
+            // Process SPACE key press for attacking if already in healing mode
+            if (isHealing && keyH.isSpacePressed()) {
+                LightUnit allyPlayer = gp.cChecker.getPlayerOnTile(gp.cursor.getCol(), gp.cursor.getRow());
+                if (allyPlayer != null && allyPlayer != this) {
+                    allyPlayer.healHP(healingSpell.getHeal());
+                    gp.ui.addLogMessage(name + " healed " + allyPlayer.name);
+                }
+                gp.playSE(13);
+                gainExperience(healingSpell.getExpEarned());
+                endTurn();
+                if (gp.selectedUnit != null && gp.selectedUnit == this) {
+                    gp.selectedUnit = null;
+                }
+            }
+
+            // Reset the X key release state when the key is no longer pressed
+            if (!keyH.isSPressed()) {
+                sKeyReleased = true;
+            }
+        }
+    }
+
+    // Inside your Player class or wherever relevant
+    public void usePotion() {
+        if (gp.selectedUnit != null && isSelected && isMoving) {
+
+            if (keyH.isDPressed() && dKeyReleased) {
+                dKeyReleased = false; // Mark that D key was pressed
+                if (potion != null) {
+                    if (HP < maxHP && potion.getUses() > 0) {
+                        healHP(potion.getHeal());
+                        gp.playSE(12);
+                        potion.usePotion();  // Reduce potion uses
+                        gp.ui.addLogMessage(name + " used " + potion.getName());
+                        if (potion.getUses() <= 0) {
+                            potion = null;
+                        }
+                        endTurn();
+                        gp.selectedUnit = null;
+                    } else {
+                        gp.ui.addLogMessage(name + " is at full health");
+                    }
+                } else {
+                    gp.ui.addLogMessage(name + " doesn't have a potion in inventory");
+                }
+            }
+            // Reset the dKeyReleased state when the key is no longer pressed
+            if (!keyH.isDPressed()) {
+                dKeyReleased = true;
+            }
+        }
+    }
+
+    public void healHP(int heal) {
+        HP += heal;
+        if (HP > maxHP) {
+            HP = maxHP;
+        }
+    }
+
+        @Override
     public void move() {
         // Check if the unit is not in a waiting state, is selected, and is allowed to move
         if (gp.selectedUnit != null && !wait && isSelected && isMoving && !isAttacking) {
@@ -234,6 +320,7 @@ public class LightUnit extends Entity{
     public void endTurn() {
         isMoving = false;   // Stop the unit's movement
         isAttacking = false; // Set attacking flag as false
+        isHealing = false; // Set the healing flag as false
         wait = true;        // Set the unit to a waiting state
         preCol = col;       // Update the previous column to the current column
         preRow = row;       // Update the previous row to the current row
@@ -275,9 +362,12 @@ public class LightUnit extends Entity{
     }
 
     public void gainExperience(int gainedExperience) {
-        exp += gainedExperience;
-        if (exp >= 100) {
-            levelUp();
+        if (level < maxLevel) {
+            exp += gainedExperience;
+            gp.ui.addLogMessage(name + " received " + gainedExperience + " exp");
+            if (exp >= 100) {
+                levelUp();
+            }
         }
     }
 
@@ -416,6 +506,8 @@ public class LightUnit extends Entity{
             cancelAction();
             endSelectedUnitTurn();
             chooseTarget();
+            usePotion();
+            healAlly();
         }
 
         // Update unit's main hand weapon if possible (only for LightBringer)
@@ -548,6 +640,71 @@ public class LightUnit extends Entity{
 
         // Return the list of enemy units within range
         return enemiesInRange;
+    }
+
+    // Method to find all tiles with players in this unit's healing range based on its current position
+    public List<int[]> getTilesWithPlayersInRange() {
+        // List to store the positions of enemies that are within attack range
+        List<int[]> tilesWithPlayersInRange = new ArrayList<>();
+
+        // Determine the attack range (the maximum distance at which the unit can attack)
+        int healingRange = 0;
+        if (healingSpell != null) {
+            healingRange = healingSpell.getRange(); // Get range from healing spell
+        }
+
+        // Iterate over all possible tiles within the maximum attack range
+        for (int dCol = -healingRange; dCol <= healingRange; dCol++) {
+            for (int dRow = -healingRange; dRow <= healingRange; dRow++) {
+                // Calculate Manhattan distance for the current offset (dCol, dRow)
+                int manhattanDistance = Math.abs(dCol) + Math.abs(dRow);
+
+                // Check if this tile is within the valid attack range (Manhattan distance between 1 and weaponRange)
+                if (manhattanDistance >= 1 && manhattanDistance <= healingRange) {
+                    // Calculate the actual column and row of the attack tile
+                    int attackCol = col + dCol;
+                    int attackRow = row + dRow;
+
+                    // Ensure the attack tile is within the bounds of the game map
+                    if (gp.cChecker.isWithinMap(attackCol, attackRow)) {
+                        // Check if there is a player on the current tile
+                        if (!gp.cChecker.noPlayerOnTile(attackCol, attackRow)) {
+                            // Add the position of the enemy to the list
+                            tilesWithPlayersInRange.add(new int[]{attackCol, attackRow});
+                        }
+                    }
+                }
+            }
+        }
+
+        // Return the list of enemies' positions within range
+        return tilesWithPlayersInRange;
+    }
+
+    // Method to find the actual player units in this unit's healing range based on this unit's healing range
+    public List<LightUnit> getPlayersInRange() {
+        // List to store the enemy units that are within attack range
+        List<LightUnit> playersInRange = new ArrayList<>();
+
+        // Get the positions of tiles with enemies within the attack range
+        List<int[]> tilesWithPlayersInRange = getTilesWithPlayersInRange();
+
+        // Iterate over the list of tiles to find and collect the enemy units
+        for (int[] tile : tilesWithPlayersInRange) {
+            int attackCol = tile[0];
+            int attackRow = tile[1];
+
+            // Retrieve the enemy unit on the current tile
+            LightUnit playerUnit = gp.cChecker.getPlayerOnTile(attackCol, attackRow);
+
+            // If an ally player unit is found, it's not this player unit, and has HP less than full then add it to the list
+            if (playerUnit != null && playerUnit != this && playerUnit.HP < playerUnit.maxHP) {
+                playersInRange.add(playerUnit);
+            }
+        }
+
+        // Return the list of enemy units within range
+        return playersInRange;
     }
 
 

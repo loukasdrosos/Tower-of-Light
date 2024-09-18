@@ -653,7 +653,6 @@ public class BattleSimulator {
                 experienceGained = Math.max((33 + levelDifference) / 3, 1);
             }
         }
-        gp.ui.addLogMessage(player.getName() + " received " + experienceGained + " exp");
         return experienceGained;
     }
 

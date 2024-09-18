@@ -35,13 +35,13 @@ public class HeraldOfChaos extends ChaosUnit{
         if (level > maxLevel) {
             level = maxLevel;
         }
-        maxHP = 60;
-        strength = 33;
-        magic = 28;
+        maxHP = 70;
+        strength = 30;
+        magic = 29;
         skill = 25;
-        speed = 27;
+        speed = 23;
         luck = 0;
-        defense = 24;
+        defense = 25;
         resistance = 30;
         movement = 3;
         if (!canMove) {

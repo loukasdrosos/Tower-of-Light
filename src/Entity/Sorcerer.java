@@ -32,14 +32,14 @@ public class Sorcerer extends ChaosUnit{
         if (level > maxLevel) {
             level = maxLevel;
         }
-        maxHP = 55;
+        maxHP = 60;
         strength = 0;
-        magic = 30;
-        skill = 20;
-        speed = 22;
+        magic = 32;
+        skill = 25;
+        speed = 20;
         luck = 0;
-        defense = 18;
-        resistance = 22;
+        defense = 16;
+        resistance = 23;
         movement = 3;
         if (!canMove) {
             movement = 0;

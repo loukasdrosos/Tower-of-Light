@@ -33,14 +33,14 @@ public class ChaosGod extends ChaosUnit{
         if (level > maxLevel) {
             level = maxLevel;
         }
-        maxHP = 80;
+        maxHP = 100;
         strength = 0;
         magic = 35;
-        skill = 25;
-        speed = 24;
+        skill = 30;
+        speed = 28;
         luck = 0;
-        defense = 30;
-        resistance = 30;
+        defense = 33;
+        resistance = 33;
         movement = 3;
         if (!canMove) {
             movement = 0;

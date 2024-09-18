@@ -1,5 +1,7 @@
 package Item;
 
+import Entity.Entity;
+
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
@@ -20,7 +22,7 @@ public class Lightbringer extends MainHand {
     @Override
     public void setupStats() {
         name = "Lightbringer";
-        description = "Alm only";
+        description = "Effective: Dragons. Alm only";
         might = 9;
         hit = 85;
         crit = 0;
@@ -30,7 +32,7 @@ public class Lightbringer extends MainHand {
         resistance = 0;
         vision = 1;
         removable = false;
-        effectiveRace = null;
+        effectiveRace = Entity.UnitRace.Dragon;
         effectiveType = null;
     }
 

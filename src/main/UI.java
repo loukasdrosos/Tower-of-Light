@@ -63,6 +63,12 @@ public class UI {
                 "↑, ↓, ←, →: Move cursor and selected player unit",
                 "A: Select player unit, display enemy attack range",
                 "X: Attack",
+                "C: Change equipped weapon",
+                "D: Use potion",
+                "S: Healing Spell",
+                "B: Use Beacon of Light",
+                "V: View items on a tile",
+                "F: Pick up items",
                 "W: End player unit's turn",
                 "Z: Cancel action",
                 "Q: Toggle between unit's stats and unit's inventory",
@@ -365,6 +371,40 @@ public class UI {
         }
     }
 
+    // Healing Foecast
+    public void drawHealingForecast() {
+        int x = 52 * 16;
+        int y = 37 * 16;
+        int width = 32 * 16;
+        int height = 15 * 16;
+
+        // Draw the background rectangle
+        g2.setColor(Color.BLACK);
+        g2.fillRoundRect(x, y, width, height, 25, 25);
+
+        // Set the color and font for the text
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.PLAIN, 18));
+
+        // Get the FontMetrics to calculate string widths
+        FontMetrics fm = g2.getFontMetrics();
+
+        // Define the control instructions
+        String[] instructions = {
+                "Press Z to cancel",
+                "Press ← or → to switch ally",
+                "Press SPACE to heal"
+        };
+
+        // Draw the control instructions centered
+        int bottomTextY = y + height/2 ;
+        for (String text : instructions) {
+            int textWidth = fm.stringWidth(text);  // Get the width of the text
+            int textX = x + (width - textWidth) / 2;  // Center the text horizontally
+            g2.drawString(text, textX, bottomTextY);
+            bottomTextY -= 20;  // Move up for the next line
+        }
+    }
 
     // LIGHT UNIT UI
 
@@ -761,7 +801,7 @@ public class UI {
     // Method to draw the Light Unit's information
     public void drawLightUnitInfo() {
         if (gp.TurnM.getPlayerPhase()) {
-            if (gp.selectedUnit == null) {
+            if (gp.selectedUnit == null || (gp.selectedUnit != null && !gp.selectedUnit.getIsMoving() && gp.selectedUnit.getIsHealing())) {
                 LightUnit player = gp.cChecker.getPlayerOnTile(gp.cursor.getCol(), gp.cursor.getRow());
                 if (player != null) {
                     drawLightUnitPortrait(player);
@@ -770,6 +810,9 @@ public class UI {
                         drawLightUnitCombatStats(player);
                     } else {
                         drawLightUnitDetails(player);
+                    }
+                    if (gp. selectedUnit != null && gp.selectedUnit.getIsSelected() && !gp.selectedUnit.getIsMoving() && gp.selectedUnit.getIsHealing()) {
+                        drawHealingForecast();
                     }
                 }
             } else if (gp.selectedUnit != null) {
@@ -1089,8 +1132,6 @@ public class UI {
             }
         }
     }
-
-
 
     // BATTLE UI
 

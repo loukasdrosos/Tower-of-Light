@@ -138,6 +138,7 @@ public class GamePanel extends JPanel implements Runnable{
     public void update() {
 
         if (gameState == playState) {
+
             // Update each Light Unit in the simulation
             for (Entity lightunit : simLightUnits) {
                 lightunit.update();

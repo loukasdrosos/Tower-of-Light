@@ -133,6 +133,28 @@ public class TileManager {
         }
     }
 
+    // Method to highlight ally players within selected player's healing range
+    public void drawPlayersInRange(Graphics2D g2) {
+        if (gp.selectedUnit != null && gp.selectedUnit.getIsSelected() && !gp.selectedUnit.getWait() && gp.selectedUnit.getIsHealing()) {
+            List<int[]> playersInRange = new ArrayList<>(); // To store the tiles with enemies
+            playersInRange = gp.selectedUnit.getTilesWithPlayersInRange();
+
+            for (int[] move : playersInRange) {
+                int targetCol = move[0];  // Column position of an enemy in range
+                int targetRow = move[1];  // Row position of an enemy in range
+                drawHealingTile(g2, targetCol, targetRow);
+            }
+        }
+    }
+
+    // Method to draw tiles in range of an attack
+    public void drawHealingTile(Graphics2D g2, int col, int row) {
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.35f));
+        g2.setColor(Color.GREEN);  // Set movement color to blue
+        g2.fillRect(col * gp.getTileSize(), row * gp.getTileSize(), gp.getTileSize(), gp.getTileSize());
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+    }
+
     // Method to highlight enemies within player's range
     public void drawEnemiesInRange(Graphics2D g2) {
         if (gp.selectedUnit != null && gp.selectedUnit.getIsSelected() && !gp.selectedUnit.getWait() && gp.selectedUnit.getIsAttacking()) {
@@ -232,6 +254,8 @@ public class TileManager {
         getPlayerMovement(g2);
         // Draw tiles with enemies in range
         drawEnemiesInRange(g2);
+        // Draw tiles with ally players in range
+        drawPlayersInRange(g2);
     }
 
 }
