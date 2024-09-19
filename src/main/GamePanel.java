@@ -27,7 +27,7 @@ public class GamePanel extends JPanel implements Runnable{
     private final int FPS = 60;  // Game runs at 60 frames per second (FPS)
 
     // Title Screen
-    private BufferedImage titleScreenImage, gameOverScreen;
+    private BufferedImage titleScreenImage, gameOverScreenImage;
 
     // UNITS
     public static ArrayList<LightUnit> LightUnits = new ArrayList<>();  // List to store player units (Light Units) (permanent)
@@ -39,7 +39,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     // Key handler and managers for the game
     public KeyHandler keyH = new KeyHandler(this);
-    TileManager tileM = new TileManager (this, keyH);
+    public TileManager tileM = new TileManager (this, keyH);
     public Cursor cursor = new Cursor(this, keyH);
     Thread gameThread;
     public CollisionChecker cChecker = new CollisionChecker(this);
@@ -107,6 +107,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void loadImage() {
         titleScreenImage = setup("/TitleScreen/Title_Screen");
+        gameOverScreenImage = setup("/GameOverScreen/GameOverScreen");
     }
 
     @Override
@@ -160,12 +161,6 @@ public class GamePanel extends JPanel implements Runnable{
         Graphics2D g2 = (Graphics2D) g;
         BufferedImage image = null;
 
-        // DEBUG
-        long drawStart = 0;
-        if (keyH.getCheckDrawTime()) {
-            drawStart = System.nanoTime();
-        }
-
         // Title Screen
         if (gameState == titleState) {
             image = titleScreenImage;
@@ -198,14 +193,9 @@ public class GamePanel extends JPanel implements Runnable{
             // Draw battle damage in map
             battleSim.draw(g2);
         }
-
-        // DEBUG
-        if (keyH.getCheckDrawTime()) {
-            long drawEnd = System.nanoTime();
-            long passed = drawEnd - drawStart;
-            g2.setColor(Color.WHITE);
-            g2.drawString("Draw time: " + passed, 60 * 16, 10 * 16);
-            System.out.println("Draw time; " + passed);
+        else if (gameState == gameOverState) {
+            image = gameOverScreenImage;
+            g2.drawImage(image, 0, 0,null);
         }
 
         g2.dispose(); // Dispose this graphics content

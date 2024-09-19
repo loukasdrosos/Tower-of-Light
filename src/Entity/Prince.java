@@ -4,6 +4,9 @@ import Item.*;
 import main.GamePanel;
 import main.KeyHandler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Prince extends LightUnit{
 
     public Prince (GamePanel gp, KeyHandler keyH, String name, UnitRace race, int startCol, int startRow) {
@@ -91,15 +94,26 @@ public class Prince extends LightUnit{
     @Override
     public void Defeated() {
         if (HP <= 0) {
+            List<Runnable> tasks = new ArrayList<>();
+            int delay = 1000;  //1000 ms delay between each task
+
             if (deathQuote != null) {
-                gp.ui.addLogMessage(name + ": " + deathQuote);
+                tasks.add(() -> {
+                    gp.ui.addLogMessage(name + ": " + deathQuote);
+                    gp.ui.addLogMessage(name + " is defeated");
+                    if (gp.selectedUnit != null && gp.selectedUnit == this) {
+                        gp.selectedUnit = null;
+                    }
+                    gp.simLightUnits.remove(this);
+                });
             }
-            gp.ui.addLogMessage(name + " is defeated");
-            if (gp.selectedUnit != null && gp.selectedUnit == this) {
-                gp.selectedUnit = null;
-            }
-            gp.simLightUnits.remove(this);
-       //     gp.gameState = gp.gameOverState;
+            tasks.add(() -> {
+                gp.playMusic(1);
+                gp.gameState = gp.gameOverState;
+            });
+
+            // Execute the tasks one by one with a delay
+            executeWithDelay(tasks, delay);
         }
     }
 }

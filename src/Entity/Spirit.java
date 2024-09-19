@@ -68,6 +68,7 @@ public class Spirit extends ChaosUnit{
         resistanceGrowthRate = 35;
     }
 
+    @Override
     public void randomizeRace() {
         UtilityTool uTool = new UtilityTool();
         int randomNumber = uTool.getRandomNumber();
@@ -82,6 +83,7 @@ public class Spirit extends ChaosUnit{
         }
     }
 
+    @Override
     public void randomizeItems() {
         UtilityTool uTool = new UtilityTool();
         int number = uTool.getRandomNumber();
@@ -106,6 +108,53 @@ public class Spirit extends ChaosUnit{
              if (number <= 60) {
                 trinket = new MageRing();
             }
+        }
+    }
+
+    @Override
+    public void dropItem() {
+        UtilityTool uTool = new UtilityTool();
+        int number = uTool.getRandomNumber();
+        Item item = new Item();
+
+        if (level <= 12) {
+            if (number <= 20) {
+                item = new Torch();
+            } else if (number > 20 && number <= 40) {
+                item = new BlessedRing();
+            } else if (number > 40 && number <= 50) {
+                item = new SpeedRing();
+            } else if (number > 50 && number <= 70) {
+                item = new Concoction();
+            }
+        }
+        else if (level > 12 && level <= 18) {
+            if (number <= 10) {
+                item = new Torch();
+            } else if (number > 10 && number <= 20) {
+                item = new MageRing();
+            } else if (number > 20 && number <= 30) {
+                item = new BlessedRing();
+            } else if (number > 30 && number <= 50) {
+                item = new SpeedRing();
+            } else if (number > 50 && number <= 70) {
+                item = new Elixir();
+            }
+        }
+        else if (level > 18) {
+            if (number <= 10) {
+                item = new DemonRing();
+            } else if (number > 10 && number <= 30) {
+                item = new MageRing();
+            } else if (number > 30 && number <= 50) {
+                item = new SpeedRing();
+            } else if (number > 50 && number <= 70) {
+                item = new Elixir();
+            }
+        }
+
+        if (item != null) {
+            gp.tileM.addItems(item, col, row);
         }
     }
 

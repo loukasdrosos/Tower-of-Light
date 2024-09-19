@@ -27,7 +27,7 @@ public class Titan extends ChaosUnit{
     @Override
     public void setupStats() {
         className = "Titan";
-        level = 3;
+        level = 2;
         if (level > maxLevel) {
             level = maxLevel;
         }
@@ -79,6 +79,7 @@ public class Titan extends ChaosUnit{
         resistanceGrowthRate = 15;
     }
 
+    @Override
     public void randomizeRace() {
         UtilityTool uTool = new UtilityTool();
         int randomNumber = uTool.getRandomNumber();
@@ -93,6 +94,7 @@ public class Titan extends ChaosUnit{
         }
     }
 
+    @Override
     public void randomizeItems() {
         if (boss) {
             equippedWeapon = new SteelAxe();
@@ -131,6 +133,53 @@ public class Titan extends ChaosUnit{
                     trinket = new IronShield();
                 }
             }
+        }
+    }
+
+    @Override
+    public void dropItem() {
+        Item item = new Item();
+        if (boss) {
+            item = new HexlockShield();
+        }
+        else {
+            UtilityTool uTool = new UtilityTool();
+            int number = uTool.getRandomNumber();
+
+            if (level <= 3) {
+                if (number <= 10) {
+                    item = new IronSword();
+                } else if (number > 10 && number <= 20) {
+                    item = new SlimSword();
+                } else if (number > 20 && number <= 30) {
+                    item = new Vulnerary();
+                } else if (number > 30 && number <= 40) {
+                    item = new IronLance();
+                } else if (number > 40 && number <= 50) {
+                    item = new SlimLance();
+                } else if (number > 50 && number <= 60) {
+                    item = new IronShield();
+                }
+            }
+            if (level > 4) {
+                if (number <= 10) {
+                    item = new SteelSword();
+                } else if (number > 10 && number <= 20) {
+                    item = new SlimSword();
+                } else if (number > 20 && number <= 30) {
+                    item = new Vulnerary();
+                } else if (number > 30 && number <= 40) {
+                    item = new SteelShield();
+                } else if (number > 40 && number <= 50) {
+                    item = new SlimLance();
+                } else if (number > 50 && number <= 60) {
+                    item = new SteelLance();
+                }
+            }
+        }
+
+        if (item != null) {
+            gp.tileM.addItems(item, col, row);
         }
     }
 

@@ -41,13 +41,13 @@ public class Warrior extends LightUnit{
         }
         exp = 0;
         maxHP = 30;
-        strength = 13;
+        strength = 16;
         magic = 0;
         skill = 17;
         speed = 16;
         luck = 5;
-        defense = 11;
-        resistance = 6;
+        defense = 13;
+        resistance = 5;
         movement = 3;
         vision = 6;
         unitType = UnitType.Infantry;

@@ -44,10 +44,10 @@ public class ChaosUnit extends Entity {
                     gp.ui.addLogMessage(name + ": " + deathQuote);
                 }
                 gp.ui.addLogMessage(name + " is defeated");
+            } else {
+                gp.ui.addLogMessage(String.valueOf(getRace()) + " " + className + " is defeated");
             }
-            else {
-                gp.ui.addLogMessage(String.valueOf(getRace())  + " " + className + " is defeated");
-            }
+            dropItem();
             gp.simChaosUnits.remove(this);
         }
     }
@@ -236,7 +236,7 @@ public class ChaosUnit extends Entity {
  */
 
     public void setStats() {
-        if (!boss && level > 1){
+        if (!boss && level > 1) {
             UtilityTool uTool = new UtilityTool();
 
             for (int i = 1; i < level; i++) {
@@ -283,6 +283,15 @@ public class ChaosUnit extends Entity {
             spriteCounter = 0;  // Reset sprite counter
         }
     }
+
+    // Placeholder method for dropping items when defeated
+    public void dropItem() {  }
+
+    // Placeholder method to randomize race
+    public void randomizeRace() {  }
+
+    // Placeholder method to randomize items
+    public void randomizeItems() {}
 
 }
 

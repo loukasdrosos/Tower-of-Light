@@ -506,7 +506,7 @@ public class LightUnit extends Entity {
         executeWithDelay(tasks, delay);
     }
 
-    private void executeWithDelay(List<Runnable> tasks, int delay) {
+    protected void executeWithDelay(List<Runnable> tasks, int delay) {
         Timer timer = new Timer();
 
         for (int i = 0; i < tasks.size(); i++) {

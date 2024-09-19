@@ -3,6 +3,7 @@ package Entity;
 import Item.*;
 import Spells.*;
 import main.GamePanel;
+import main.UtilityTool;
 
 public class Necromancer extends ChaosUnit{
     public Necromancer(GamePanel gp, boolean canMove, int startCol, int startRow) {
@@ -53,6 +54,15 @@ public class Necromancer extends ChaosUnit{
         HP = maxHP;
         calculateCombatStats();
         description = new String[]{"A powerful dark", "mage and a high", "ranking member of", "Grima's clergy."};
+    }
+
+    @Override
+    public void dropItem() {
+        Item item = new SilverShield();
+
+        if (item != null) {
+            gp.tileM.addItems(item, col, row);
+        }
     }
 
     //Load images for the unit's animations

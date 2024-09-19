@@ -1,9 +1,6 @@
 package Entity;
 
-import Item.DemonRing;
-import Item.EdgeOfChaos;
-import Item.Trinket;
-import Item.Weapon;
+import Item.*;
 import main.GamePanel;
 
 public class HeraldOfChaos extends ChaosUnit{
@@ -57,6 +54,16 @@ public class HeraldOfChaos extends ChaosUnit{
         calculateCombatStats();
         description = new String[]{"Princess of Valentia", "and Alm's wife.", "Controlled by the", "Chaos God, she has", "become the Herald", "of Chaos."};
     }
+
+    @Override
+    public void dropItem() {
+        Item item = new EdgeOfChaos();
+
+        if (item != null) {
+            gp.tileM.addItems(item, col, row);
+        }
+    }
+
 
     //Load images for the unit's animations
     @Override

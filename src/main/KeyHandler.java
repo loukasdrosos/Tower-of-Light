@@ -105,15 +105,6 @@ public class KeyHandler implements KeyListener {
                 QPressed = !QPressed; // Toggle between showing stats and details
             }
         }
-
-        // DEBUG
-        if (code == KeyEvent.VK_ALT) {
-            if (!checkDrawTime) {
-                checkDrawTime = true;
-            } else if (checkDrawTime) {
-                checkDrawTime = false;
-            }
-        }
     }
 
     @Override

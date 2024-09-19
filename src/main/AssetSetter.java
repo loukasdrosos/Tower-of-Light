@@ -33,7 +33,7 @@ public class AssetSetter {
     public void setChaosUnits() {
         gp.simChaosUnits.add(new FallenHero(gp, true, 32, 16));
         gp.simChaosUnits.add(new FallenHero(gp, true, 33, 14));
-        gp.simChaosUnits.add(new Sorcerer(gp, true, 34, 15));
+        gp.simChaosUnits.add(new Titan(gp, true, false,34, 15));
     }
 
     // Copy units from one list to another

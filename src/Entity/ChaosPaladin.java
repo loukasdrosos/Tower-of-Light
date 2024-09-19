@@ -79,6 +79,7 @@ public class ChaosPaladin extends ChaosUnit{
         resistanceGrowthRate = 25;
     }
 
+    @Override
     public void randomizeRace() {
         UtilityTool uTool = new UtilityTool();
         int randomNumber = uTool.getRandomNumber();
@@ -101,6 +102,7 @@ public class ChaosPaladin extends ChaosUnit{
         }
     }
 
+    @Override
     public void randomizeItems() {
         if (boss) {
             equippedWeapon = new SilverLance();
@@ -164,6 +166,62 @@ public class ChaosPaladin extends ChaosUnit{
                     trinket = new HexlockShield();
                 }
             }
+        }
+    }
+
+    @Override
+    public void dropItem() {
+        Item item = new Item();
+        if (boss) {
+            item = new Gradivus();
+        }
+        else {
+            UtilityTool uTool = new UtilityTool();
+            int number = uTool.getRandomNumber();
+
+            if (level <= 16) {
+                if (number <= 20) {
+                    item = new KillerLance();
+                } else if (number > 20 && number <= 30) {
+                    item = new SteelShield();
+                } else if (number > 30 && number <= 40) {
+                    item = new Ridersbane();
+                } else if (number > 40 && number <= 50) {
+                    item = new HexlockSpear();
+                } else if (number > 50 && number <= 70) {
+                    item = new Concoction();
+                }
+            }
+            if (level > 16 && level <= 20) {
+                if (number <= 20) {
+                    item = new SilverLance();
+                } else if (number > 20 && number <= 40) {
+                    item = new SilverShield();
+                } else if (number > 40 && number <= 50) {
+                    item = new Ridersbane();
+                } else if (number > 50 && number <= 70) {
+                    item = new Elixir();
+                }
+            }
+            if (level > 20) {
+                if (number <= 5) {
+                    item = new Dracoshield();
+                } else if (number > 5 && number <= 20) {
+                    item = new SilverShield();
+                } else if (number > 20 && number <= 30) {
+                    item = new Ridersbane();
+                } else if (number > 30 && number <= 50) {
+                    item = new SilverLance();
+                } else if (number > 50 && number <= 65) {
+                    item = new Gradivus();
+                } else if (number > 65 && number <= 85) {
+                    item = new Elixir();
+                }
+            }
+        }
+
+        if (item != null) {
+            gp.tileM.addItems(item, col, row);
         }
     }
 

@@ -68,6 +68,7 @@ public class Shaman extends ChaosUnit{
         resistanceGrowthRate = 45;
     }
 
+    @Override
     public void randomizeRace() {
         UtilityTool uTool = new UtilityTool();
         int randomNumber = uTool.getRandomNumber();
@@ -82,6 +83,7 @@ public class Shaman extends ChaosUnit{
         }
     }
 
+    @Override
     public void randomizeItems() {
         UtilityTool uTool = new UtilityTool();
         int number = uTool.getRandomNumber();
@@ -112,6 +114,63 @@ public class Shaman extends ChaosUnit{
             else if (number > 55 && number <= 60) {
                 trinket = new MageRing();
             }
+        }
+    }
+
+    @Override
+    public void dropItem() {
+        UtilityTool uTool = new UtilityTool();
+        int number = uTool.getRandomNumber();
+        Item item = new Item();
+
+        if (level <= 7) {
+            if (number <= 10) {
+                item = new Torch();
+            } else if (number > 10 && number <= 20) {
+                item = new SteelSword();
+            } else if (number > 20 && number <= 30) {
+                item = new Vulnerary();
+            } else if (number > 30 && number <= 40) {
+                item = new SteelLance();
+            } else if (number > 40 && number <= 50) {
+                item = new SlimLance();
+            } else if (number > 50 && number <= 60) {
+                item = new IronShield();
+            }
+        }
+        else if (level > 7 && level <= 12) {
+            if (number <= 10) {
+                item = new SteelShield();
+            } else if (number > 10 && number <= 20) {
+                item = new Torch();
+            } else if (number > 20 && number <= 30) {
+                item = new SteelLance();
+            } else if (number > 30 && number <= 40) {
+                item = new SteelShield();
+            } else if (number > 40 && number <= 50) {
+                item = new SteelSword();
+            } else if (number > 50 && number <= 70) {
+                item = new Concoction();
+            }
+        }
+        else if (level > 12) {
+            if (number <= 10) {
+                item = new Torch();
+            } else if (number > 10 && number <= 20) {
+                item = new BlessedRing();
+            } else if (number > 20 && number <= 30) {
+                item = new MageRing();
+            } else if (number > 30 && number <= 40) {
+                item = new BlessedSword();
+            } else if (number > 40 && number <= 50) {
+                item = new SpeedRing();
+            } else if (number > 50 && number <= 70) {
+                item = new Concoction();
+            }
+        }
+
+        if (item != null) {
+            gp.tileM.addItems(item, col, row);
         }
     }
 

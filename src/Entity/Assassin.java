@@ -67,6 +67,7 @@ public class Assassin extends ChaosUnit{
         resistanceGrowthRate = 35;
     }
 
+    @Override
     public void randomizeRace() {
         UtilityTool uTool = new UtilityTool();
         int randomNumber = uTool.getRandomNumber();
@@ -89,6 +90,7 @@ public class Assassin extends ChaosUnit{
         }
     }
 
+    @Override
     public void randomizeItems() {
         UtilityTool uTool = new UtilityTool();
 
@@ -166,6 +168,65 @@ public class Assassin extends ChaosUnit{
             else if (number > 65 && number <= 100) {
                 trinket = new DemonRing();
             }
+        }
+    }
+
+    @Override
+    public void dropItem() {
+        UtilityTool uTool = new UtilityTool();
+        int number = uTool.getRandomNumber();
+        Item item = new Item();
+
+        if (level <= 11) {
+            if (number <= 10) {
+                item = new BlessedSword();
+            } else if (number > 10 && number <= 20) {
+                item = new Wyrmslayer();
+            } else if (number > 20 && number <= 30) {
+                item = new SteelShield();
+            } else if (number > 30 && number <= 40) {
+                item = new KillerLance();
+            } else if (number > 40 && number <= 50) {
+                item = new KillingEdge();
+            } else if (number > 50 && number <= 70) {
+                item = new Concoction();
+            }
+        }
+        else if (level > 11 && level <= 15) {
+            if (number <= 10) {
+                item = new Armorslayer();
+            } else if (number > 10 && number <= 20) {
+                item = new HeavyBlade();
+            } else if (number > 20 && number <= 30) {
+                item = new Wyrmslayer();
+            } else if (number > 30 && number <= 40) {
+                item = new BlessedSword();
+            } else if (number > 40 && number <= 50) {
+                item = new KillingEdge();
+            } else if (number > 50 && number <= 60) {
+                item = new SteelShield();
+            } else if (number > 60 && number <= 80) {
+                item = new Concoction();
+            }
+        }
+        else if (level > 15) {
+            if (number <= 10) {
+                item = new Armorslayer();
+            } else if (number > 10 && number <= 20) {
+                item = new SilverShield();
+            } else if (number > 20 && number <= 30) {
+                item = new Wyrmslayer();
+            } else if (number > 30 && number <= 50) {
+                item = new SilverSword();
+            } else if (number > 50 && number <= 65) {
+                item = new Mercurius();
+            } else if (number > 65 && number <= 85) {
+                item = new Elixir();
+            }
+        }
+
+        if (item != null) {
+            gp.tileM.addItems(item, col, row);
         }
     }
 

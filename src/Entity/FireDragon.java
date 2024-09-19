@@ -1,7 +1,8 @@
 package Entity;
 
-import Item.FireBreath;
+import Item.*;
 import main.GamePanel;
+import main.UtilityTool;
 
 public class FireDragon extends ChaosUnit{
     public FireDragon(GamePanel gp, boolean canMove, boolean boss, int startCol, int startRow) {
@@ -76,6 +77,55 @@ public class FireDragon extends ChaosUnit{
         luckGrowthRate = 10;
         defenseGrowthRate = 45;
         resistanceGrowthRate = 35;
+    }
+
+    @Override
+    public void dropItem() {
+        Item item = new Item();
+        if (boss) {
+            item = new MageRing();
+        }
+        else {
+            UtilityTool uTool = new UtilityTool();
+            int number = uTool.getRandomNumber();
+
+            if (level <= 20) {
+                if (number <= 20) {
+                    item = new SilverShield();
+                } else if (number > 20 && number <= 30) {
+                    item = new SilverSword();
+                } else if (number > 30 && number <= 40) {
+                    item = new SilverLance();
+                } else if (number > 40 && number <= 50) {
+                    item = new MageRing();
+                } else if (number > 50 && number <= 70) {
+                    item = new Elixir();
+                }
+            }
+            if (level > 20) {
+                if (number <= 10) {
+                    item = new SilverShield();
+                } else if (number > 10 && number <= 15) {
+                    item = new Gradivus();
+                } else if (number > 15 && number <= 20) {
+                    item = new Mercurius();
+                } else if (number > 20 && number <= 30) {
+                    item = new SilverSword();
+                } else if (number > 30 && number <= 40) {
+                    item = new SilverLance();
+                } else if (number > 40 && number <= 50) {
+                    item = new MageRing();
+                } else if (number > 50 && number <= 70) {
+                    item = new Elixir();
+                } else if (number > 70 && number <= 75) {
+                    item = new Dracoshield();
+                }
+            }
+        }
+
+        if (item != null) {
+            gp.tileM.addItems(item, col, row);
+        }
     }
 
     //Load images for the unit's animations

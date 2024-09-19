@@ -18,6 +18,7 @@ public class Sound {
     public Sound() {
         // Load music into the gameMusicURL array
         gameMusicURL[0] = getClass().getResource("/Music/Twilight of the Gods.wav");
+        gameMusicURL[1] = getClass().getResource("/Music/And what if I can't.wav");
 
         // Load sound effects into the soundEffectURL array
         soundEffectURL[0] = getClass().getResource("/Sound_Effects/Cursor_Movement.wav");

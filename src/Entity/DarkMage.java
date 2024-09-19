@@ -42,7 +42,7 @@ public class DarkMage extends LightUnit{
         strength = 0;
         magic = 15;
         skill = 10;
-        speed = 8;
+        speed = 10;
         luck = 3;
         defense = 11;
         resistance = 13;

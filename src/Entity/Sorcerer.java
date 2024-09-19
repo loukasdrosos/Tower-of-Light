@@ -55,6 +55,16 @@ public class Sorcerer extends ChaosUnit{
         description = new String[]{"The right hand", "of Grima who wants", "to rule over", "the new world."};
     }
 
+    @Override
+    public void dropItem() {
+        Item item = new Dracoshield();
+
+        if (item != null) {
+            gp.tileM.addItems(item, col, row);
+        }
+    }
+
+
     //Load images for the unit's animations
     @Override
     public void loadImage() {

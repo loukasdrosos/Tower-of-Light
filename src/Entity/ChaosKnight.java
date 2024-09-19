@@ -67,6 +67,7 @@ public class ChaosKnight extends ChaosUnit{
         resistanceGrowthRate = 30;
     }
 
+    @Override
     public void randomizeRace() {
         UtilityTool uTool = new UtilityTool();
         int randomNumber = uTool.getRandomNumber();
@@ -89,6 +90,7 @@ public class ChaosKnight extends ChaosUnit{
         }
     }
 
+    @Override
     public void randomizeItems() {
         UtilityTool uTool = new UtilityTool();
 
@@ -168,6 +170,66 @@ public class ChaosKnight extends ChaosUnit{
             }
         }
     }
+
+    @Override
+    public void dropItem() {
+        UtilityTool uTool = new UtilityTool();
+        int number = uTool.getRandomNumber();
+        Item item = new Item();
+
+        if (level <= 12) {
+            if (number <= 10) {
+                item = new SteelLance();
+            } else if (number > 10 && number <= 20) {
+                item = new Ridersbane();
+            } else if (number > 20 && number <= 30) {
+                item = new SteelShield();
+            } else if (number > 30 && number <= 40) {
+                item = new KillerLance();
+            } else if (number > 40 && number <= 50) {
+                item = new HexlockSpear();
+            } else if (number > 50 && number <= 70) {
+                item = new Concoction();
+            }
+        }
+        else if (level > 12 && level <= 16) {
+            if (number <= 10) {
+                item = new HexlockShield();
+            } else if (number > 10 && number <= 20) {
+                item = new Ridersbane();
+            } else if (number > 20 && number <= 30) {
+                item = new SteelShield();
+            } else if (number > 30 && number <= 40) {
+                item = new KillerLance();
+            } else if (number > 40 && number <= 50) {
+                item = new HexlockSpear();
+            } else if (number > 50 && number <= 70) {
+                item = new Concoction();
+            } else if (number > 70 && number <= 75) {
+                item = new SilverLance();
+            }
+        }
+        else if (level > 16) {
+            if (number <= 10) {
+                item = new Wyrmslayer();
+            } else if (number > 10 && number <= 20) {
+                item = new SilverShield();
+            } else if (number > 20 && number <= 30) {
+                item = new Ridersbane();
+            } else if (number > 30 && number <= 50) {
+                item = new SilverLance();
+            } else if (number > 50 && number <= 65) {
+                item = new Gradivus();
+            } else if (number > 65 && number <= 85) {
+                item = new Elixir();
+            }
+        }
+
+        if (item != null) {
+            gp.tileM.addItems(item, col, row);
+        }
+    }
+
 
     //Load images for the unit's animations
     @Override

@@ -1,6 +1,7 @@
 package Tile;
 
-import Entity.ChaosUnit;
+import Entity.*;
+import Item.*;
 import main.GamePanel;
 import main.KeyHandler;
 import main.UtilityTool;
@@ -227,7 +228,16 @@ public class TileManager {
         // Draw the map tiles based on the mapTileNum array
         while (col < Max_Col && row < Max_Row) {
             int tileNum = mapTileNum[col][row];
-            g2.drawImage(tile[tileNum].image, x, y, null);
+            Tile currentTile = tile[tileNum];
+            g2.drawImage(currentTile.image, x, y, null); // Draw the tile
+
+            // Check if the tile has items, if so, draw the first item
+            if (currentTile.hasItems()) {
+                Item firstItem = currentTile.getFirstItem();
+                if (firstItem != null) {
+                    g2.drawImage(firstItem.getImage(), x, y, gp.getTileSize() - 1, gp.getTileSize() - 1, null);                }
+            }
+
             col++;
             x += gp.getTileSize();
             if (col == Max_Col) {
@@ -237,6 +247,13 @@ public class TileManager {
                 y += gp.getTileSize();
             }
         }
+    }
+
+    public void addItems(Item item, int tileCol, int tileRow){
+        int tileNum = mapTileNum[tileCol][tileRow];
+        Tile currentTile = tile[tileNum];
+        gp.ui.addLogMessage(item.getName() + " was dropped");
+        currentTile.addItem(item);
     }
 
     // Main method to handle drawing of the map, and enemy and player movement ranges
