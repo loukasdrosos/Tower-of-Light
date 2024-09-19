@@ -24,6 +24,7 @@ public class TileManager {
     private final int Max_Row; // Maximum number of rows in the map
     public int mapTileNum[][]; // 2D array to store the tile numbers of the map
     public Tile[] tile; // Array to hold different types of tiles
+    private List<Item>[][] tileItems; // 2D array to hold item lists for each tile
     private static ArrayList<ChaosUnit> selectedEnemies = new ArrayList<>(); // List of selected enemy units
     private boolean aKeyPressed = false; // Flag to track if the A key was pressed in the last frame
 
@@ -34,6 +35,15 @@ public class TileManager {
         Max_Row = gp.getMaxMapRow(); // Get maximum rows from the game panel
         tile = new Tile[24]; // Initialize the tile array with 14 different types of tiles
         mapTileNum = new int[Max_Col][Max_Row]; // Initialize the map tile number array
+        tileItems = new ArrayList[Max_Col][Max_Row]; // Initialize the item lists for each tile
+
+        // Initialize the item lists for each tile
+        for (int col = 0; col < Max_Col; col++) {
+            for (int row = 0; row < Max_Row; row++) {
+                tileItems[col][row] = new ArrayList<>();
+            }
+        }
+
         loadImage(); // Load tile images
         loadMap("/Maps/Map_1.txt"); // Load the map from a file
     }
@@ -219,6 +229,30 @@ public class TileManager {
        }
     }
 
+    // Method to add an item to a specific tile at (col, row), max inventory size per tile is 20
+    public void addItems(Item item, int col, int row) {
+        if (tileItems[col][row].size() < 20) {
+            tileItems[col][row].add(item);
+            gp.ui.addLogMessage(item.getName() + " was dropped");
+        }
+    }
+
+    // Method to get the first item on a specific tile at (col, row)
+    public Item getFirstItemOnTile(int col, int row) {
+        if (!tileItems[col][row].isEmpty()) {
+            return tileItems[col][row].getFirst(); // Return the first item
+        }
+        return null;
+    }
+
+    // Method to check if a tile at (col, row) has any items
+    public boolean hasItemsOnTile(int col, int row) {
+        if (tileItems[col][row].isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
     // Method to draw the map grid and tiles
     public void drawMap(Graphics2D g2) {
         int col = 0;
@@ -231,11 +265,12 @@ public class TileManager {
             Tile currentTile = tile[tileNum];
             g2.drawImage(currentTile.image, x, y, null); // Draw the tile
 
-            // Check if the tile has items, if so, draw the first item
-            if (currentTile.hasItems()) {
-                Item firstItem = currentTile.getFirstItem();
+            // Check if the tile at this position has items, if so, draw the first item
+            if (hasItemsOnTile(col, row)) {
+                Item firstItem = getFirstItemOnTile(col, row);
                 if (firstItem != null) {
-                    g2.drawImage(firstItem.getImage(), x, y, gp.getTileSize() - 1, gp.getTileSize() - 1, null);                }
+                    g2.drawImage(firstItem.getImage(), x, y, gp.getTileSize() - 1, gp.getTileSize() - 1, null);
+                }
             }
 
             col++;
@@ -247,13 +282,6 @@ public class TileManager {
                 y += gp.getTileSize();
             }
         }
-    }
-
-    public void addItems(Item item, int tileCol, int tileRow){
-        int tileNum = mapTileNum[tileCol][tileRow];
-        Tile currentTile = tile[tileNum];
-        gp.ui.addLogMessage(item.getName() + " was dropped");
-        currentTile.addItem(item);
     }
 
     // Main method to handle drawing of the map, and enemy and player movement ranges

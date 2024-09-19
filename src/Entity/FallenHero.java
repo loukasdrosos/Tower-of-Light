@@ -117,7 +117,7 @@ public class FallenHero extends ChaosUnit{
     public void dropItem() {
         UtilityTool uTool = new UtilityTool();
         int number = uTool.getRandomNumber();
-        Item item = new Item();
+        Item item = null;
 
         if (level <= 3) {
             if (number <= 10) {

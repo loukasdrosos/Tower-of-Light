@@ -175,7 +175,7 @@ public class Assassin extends ChaosUnit{
     public void dropItem() {
         UtilityTool uTool = new UtilityTool();
         int number = uTool.getRandomNumber();
-        Item item = new Item();
+        Item item = null;
 
         if (level <= 11) {
             if (number <= 10) {

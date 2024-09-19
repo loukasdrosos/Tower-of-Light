@@ -171,7 +171,7 @@ public class ChaosPaladin extends ChaosUnit{
 
     @Override
     public void dropItem() {
-        Item item = new Item();
+        Item item = null;
         if (boss) {
             item = new Gradivus();
         }

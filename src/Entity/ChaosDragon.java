@@ -70,8 +70,7 @@ public class ChaosDragon extends ChaosUnit{
 
     @Override
     public void dropItem() {
-        Item item = new Item();
-
+        Item item = null;
         UtilityTool uTool = new UtilityTool();
         int number = uTool.getRandomNumber();
 
