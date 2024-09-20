@@ -81,7 +81,7 @@ public class LightUnit extends Entity {
             }
 
             // Cancel player movement and unselect player if player hasn't picked up an item
-            else if (gp.selectedUnit != null && isSelected && isMoving && !isAttacking && !isHealing) {
+            else if (gp.selectedUnit != null && isSelected && isMoving) {
                 if (movement == movementInitial) {
                     resetPosition(); // Return player to starting position
                     gp.selectedUnit = null; // Deselect the player
@@ -141,8 +141,14 @@ public class LightUnit extends Entity {
                 }
             }
 
+            System.out.println("");
+            System.out.println("isAttacking = " + isAttacking);
+            System.out.println("isMoving = " + isMoving);
+            System.out.println("SPACE PRESSED = " + keyH.isSpacePressed());
+
             // Process SPACE key press for attacking if already in attack mode
             if (isAttacking && keyH.isSpacePressed()) {
+                System.out.println("SPACE IS CLICKED");
                 gp.battleSim.battlePlayerPhase(this, gp.cChecker.getEnemyOnTile(gp.cursor.getCol(), gp.cursor.getRow()));
                 endTurn();
                 if (gp.selectedUnit != null && gp.selectedUnit == this) {
@@ -276,7 +282,7 @@ public class LightUnit extends Entity {
     }
 
     public void pickUpItem() {
-        if (gp.selectedUnit != null && isSelected && !wait) {
+        if (gp.selectedUnit != null && isSelected && !wait && isMoving) {
             Item droppedItem = gp.ui.getSelectedItem();
             int droppedItemIndex = gp.ui.getItemOnSlot();
             if (keyH.isSpacePressed() && spaceKeyReleased) {
@@ -695,7 +701,7 @@ public class LightUnit extends Entity {
                 usePotion();
                 healAlly();
                 switchWeapons();
-            } else {
+            } else if (gp.tileM.isItemWindowOpen()) {
                 pickUpItem();
             }
         }

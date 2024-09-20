@@ -32,7 +32,7 @@ public class AssetSetter {
     // Initialize enemy units and set their starting positions
     public void setChaosUnits() {
         gp.simChaosUnits.add(new FallenHero(gp, true, 32, 16));
-        gp.simChaosUnits.add(new FallenHero(gp, true, 33, 14));
+        gp.simChaosUnits.add(new FallenHero(gp, true, 28, 14));
         gp.simChaosUnits.add(new Titan(gp, true, false,34, 15));
 
         gp.tileM.addItems(new IronSword(), 29, 14);
