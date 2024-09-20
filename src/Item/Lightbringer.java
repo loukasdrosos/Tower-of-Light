@@ -22,6 +22,7 @@ public class Lightbringer extends MainHand {
     @Override
     public void setupStats() {
         name = "Lightbringer";
+        description = "Gets stronger with Beacons of Light";
         might = 9;
         hit = 85;
         crit = 0;
@@ -29,7 +30,7 @@ public class Lightbringer extends MainHand {
         speed = 0;
         defense = 0;
         resistance = 0;
-        vision = 1;
+        vision = 0;
         removable = false;
         effectiveRace = null;
         effectiveType = null;

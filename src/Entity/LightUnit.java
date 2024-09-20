@@ -385,6 +385,7 @@ public class LightUnit extends Entity {
             if (deathQuote != null) {
                 gp.ui.addLogMessage(name + ": " + deathQuote);
             }
+            gp.playSE(18);
             gp.ui.addLogMessage(name + " is defeated.");
             if (gp.selectedUnit != null && gp.selectedUnit == this) {
                 gp.selectedUnit = null;
@@ -533,14 +534,16 @@ public class LightUnit extends Entity {
     public void update() {
         // Allow movement only during the player's phase
         if (gp.TurnM.getPlayerPhase()) {
-            move();
-            SelectPlayerUnit();
-            cancelAction();
-            endSelectedUnitTurn();
-            chooseTarget();
-            usePotion();
-            healAlly();
-            switchWeapons();
+            if (!gp.tileM.isItemWindowOpen()) {
+                move();
+                SelectPlayerUnit();
+                cancelAction();
+                endSelectedUnitTurn();
+                chooseTarget();
+                usePotion();
+                healAlly();
+                switchWeapons();
+            }
         }
 
         // Update unit's main hand weapon if possible (only for LightBringer)

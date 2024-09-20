@@ -85,6 +85,7 @@ public class Princess extends LightUnit{
             if (deathQuote != null) {
                 tasks.add(() -> {
                     gp.ui.addLogMessage(name + ": " + deathQuote);
+                    gp.playSE(18);
                     gp.ui.addLogMessage(name + " is defeated");
                     if (gp.selectedUnit != null && gp.selectedUnit == this) {
                         gp.selectedUnit = null;

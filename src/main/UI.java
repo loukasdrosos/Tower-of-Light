@@ -16,6 +16,7 @@ import java.util.List;
 public class UI {
 
     GamePanel gp;
+    KeyHandler keyH;
     Font arial_30;
     Font arial_20;
     Graphics2D g2;
@@ -38,8 +39,17 @@ public class UI {
     private static final int maxVisibleMessages = 11; // Max number of visible messages in Game Log
     private static final int messageHeight = 20; // Height of each message line for Game Log
 
-    public UI(GamePanel gp) {
+    // Variables that control item cursor movement
+    private boolean vKeyPressed = false; // Flag to track if the V key was pressed in the last frame
+    private int slotCol = 0;
+    private int slotRow = 0;
+    private boolean moving = false; // Indicates if the cursor is currently moving
+    private int moveDelayCounter = 0; // Counts frames to manage movement delay
+    private int moveDelayThreshold = 5; // Threshold to control the speed of cursor movement
+
+    public UI(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
+        this.keyH = keyH;
 
         arial_30 = new Font("Arial", Font.PLAIN, 30);
         arial_20 = new Font("Arial", Font.PLAIN, 20);
@@ -809,7 +819,7 @@ public class UI {
                 LightUnit player = gp.cChecker.getPlayerOnTile(gp.cursor.getCol(), gp.cursor.getRow());
                 if (player != null) {
                     drawLightUnitPortrait(player);
-                    if (gp.keyH.isQPressed()) {
+                    if (keyH.isQPressed()) {
                         drawLightUnitStats(player);
                         drawLightUnitCombatStats(player);
                     } else {
@@ -821,7 +831,7 @@ public class UI {
                 }
             } else if (gp.selectedUnit != null) {
                 drawLightUnitPortrait(gp.selectedUnit);
-                if (gp.keyH.isQPressed()) {
+                if (keyH.isQPressed()) {
                     drawLightUnitStats(gp.selectedUnit);
                     drawLightUnitCombatStats(gp.selectedUnit);
                 } else {
@@ -1127,7 +1137,7 @@ public class UI {
             ChaosUnit enemy = gp.cChecker.getEnemyOnTile(gp.cursor.getCol(), gp.cursor.getRow());
             if (enemy != null) {
                 drawChaosUnitPortrait(enemy);
-                if (gp.keyH.isQPressed()) {
+                if (keyH.isQPressed()) {
                     drawChaosUnitStats(enemy);
                     drawChaosUnitCombatStats(enemy);
                 } else {
@@ -1137,19 +1147,164 @@ public class UI {
         }
     }
 
-    // BATTLE UI
+    // ITEMS UI
+
+    public void drawTileItems() {
+        if (gp.TurnM.getPlayerPhase()) {
+            if (gp.selectedUnit == null) {
+                int frameX = gp.getTileSize() * 16;
+                int frameY = gp.getTileSize() * 13;
+                int frameWidth = gp.getTileSize() * 22;
+                int frameHeight = gp.getTileSize() * 18;
+
+                // Item Slot
+                final int slotXstart = frameX + 20;
+                final int slotYstart = frameY + 20;
+                int slotX = slotXstart;
+                int slotY = slotYstart;
+
+                // Cursor
+                int cursorX = slotXstart + (gp.getTileSize() * slotCol);
+                int cursorY = slotYstart + (gp.getTileSize() * slotRow);
+                int cursorWidth = 3 * gp.getTileSize();
+                int cursorHeight  = 3 * gp.getTileSize();
+
+                // Only toggle the window when the V key is first pressed, not held down
+                if (keyH.isVPressed() && !vKeyPressed) {
+                    vKeyPressed = true;  // Mark the V key as pressed
+                    gp.tileM.setItemWindowOpen(!gp.tileM.isItemWindowOpen()); // Toggle the item window state
+                }
+
+                // Reset the flag when the V key is released
+                if (!keyH.isVPressed()) {
+                    vKeyPressed = false;
+                }
+
+                // Draw the window if it is open
+                if (gp.tileM.isItemWindowOpen()) {
+                    drawSubWindow(g2, frameX, frameY, frameWidth, frameHeight);
+                    // Draw Cursor
+                    g2.setColor(Color.YELLOW);
+                    g2.setStroke(new BasicStroke(3));
+                    g2.drawRect(cursorX, cursorY, cursorWidth, cursorHeight);
+
+                    // Draw Tile's Items
+                    List<Item> tileItems = getItemsAtTile();
+                    for (int i = 0; i < tileItems.size(); i++) {
+                        g2.drawImage(tileItems.get(i).getImage(), slotX, slotY, cursorWidth, cursorHeight, null);
+                        slotX += 4 * gp.getTileSize();
+                        if (i == 4 || i == 9 || i == 14) {
+                            slotX = slotXstart;
+                            slotY += 4 * gp.getTileSize();
+                        }
+                    }
+
+                    // Draw description window
+                    int dFrameX = frameX;
+                    int dFrameY = frameY + frameHeight + 10;
+                    int dFrameWidth = frameWidth;
+                    int dFrameHeight = 8 * gp.getTileSize();
+
+                    // Draw item description
+                    int textX = dFrameX + 20;
+                    int textY = dFrameY + 2 *gp.getTileSize();
+                    int nextLine = 0;
+                    g2.setFont(arial_20);
+
+                    int itemIndex = getItemOnSlot();
+                    if (itemIndex < tileItems.size()) {
+                        drawSubWindow(g2, dFrameX, dFrameY, dFrameWidth, dFrameHeight);
+                        g2.drawString(tileItems.get(itemIndex).getName(), textX, textY);
+                        nextLine++;
+                        if (tileItems.get(itemIndex) instanceof Weapon) {
+                            Weapon weapon = (Weapon) tileItems.get(itemIndex);
+                            g2.drawString("Might: " + weapon.getMight() + "  Hit: " + weapon.getHit() + "  Crit: " + weapon.getCrit() + "  Range: " + weapon.getRange() , textX, textY + nextLine *  2 *gp.getTileSize());
+                            nextLine++;
+                        }
+                        if (tileItems.get(itemIndex).getDescription() != null) {
+                            g2.drawString(tileItems.get(itemIndex).getDescription(), textX, textY + nextLine * 2 * gp.getTileSize());
+                        }
+                    }
+
+                    // Increment the delay counter
+                    moveDelayCounter++;
+
+                    // Only move the cursor when the delay counter reaches the threshold
+                    if (moveDelayCounter >= moveDelayThreshold) {
+                        // Determine if any cursor movement key is pressed
+                        if (keyH.isUpPressed() && !moving) {
+                            if (slotRow != 0) {
+                                slotRow -= 4;
+                                gp.playSE(0);
+                                moving = true;
+                            }
+                        } else if (keyH.isDownPressed() && !moving) {
+                            if (slotRow != 12) {
+                                slotRow += 4;
+                                gp.playSE(0);
+                                moving = true;
+                            }
+                        } else if (keyH.isLeftPressed() && !moving) {
+                            if (slotCol != 0) {
+                                slotCol -= 4;
+                                gp.playSE(0);
+                                moving = true;
+                            }
+                        } else if (keyH.isRightPressed() && !moving) {
+                            if (slotCol != 16) {
+                                slotCol += 4;
+                                gp.playSE(0);
+                                moving = true;
+                            }
+                        }
+
+                        // Reset the moving flag if the key is released or tile movement is complete
+                        if (!keyH.isUpPressed() || !keyH.isDownPressed() || !keyH.isLeftPressed() || !keyH.isRightPressed()) {
+                            moving = false;
+                        }
+
+                        // Reset the delay counter after moving
+                        moveDelayCounter = 0;
+                    }
+                } else {
+                    slotCol = 0;
+                    slotRow = 0;
+                }
+            } else {
+                gp.tileM.setItemWindowOpen(false);
+            }
+        } else {
+            gp.tileM.setItemWindowOpen(false);
+        }
+    }
+
+    public int getItemOnSlot() {
+        int itemIndex = slotCol/4 + (slotRow * 5)/4;
+        return itemIndex;
+    }
+
+    // Method to get items from the tile where the cursor is located
+    public List<Item> getItemsAtTile() {
+        // Get cursor position (assuming you have a way to get the cursor position, col and row)
+        int col = gp.cursor.getCol();
+        int row = gp.cursor.getRow();
+
+        // Use the TileManager's method to get items from the specified tile
+        return gp.tileM.getTileItems(col, row);
+    }
+
+    public void drawSubWindow(Graphics2D g2, int x, int y, int width, int height){
+        g2.setColor(Color.BLACK);
+        g2.fillRoundRect(x, y, width, height, 35, 35);
+
+        g2.setColor(Color.WHITE);
+        g2.setStroke(new BasicStroke(5));
+        g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);
+    }
+
 
     public void draw(Graphics2D g2) {
         this.g2 = g2;
-
-        int col, row;
-        // Draw the map background as black rectangles
-        for (row = 0; row < gp.getMaxMapRow(); row++) {
-            for (col = 0; col < gp.getMaxMapCol(); col++) {
-                g2.setColor(Color.BLACK);
-                g2.fillRect(col * gp.getTileSize(), row * gp.getTileSize(), gp.getTileSize(), gp.getTileSize());
-            }
-        }
 
         g2.setFont(arial_30);
         g2.setColor(Color.WHITE);
@@ -1166,6 +1321,7 @@ public class UI {
             drawBeaconOfLightTurns();
             drawLightUnitInfo();
             drawChaosUnitInfo();
+            drawTileItems();
         }
     }
 }

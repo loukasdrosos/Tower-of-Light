@@ -44,7 +44,7 @@ public class GamePanel extends JPanel implements Runnable{
     Thread gameThread;
     public CollisionChecker cChecker = new CollisionChecker(this);
     public TurnManager TurnM = new TurnManager(this, keyH);
-    public UI ui = new UI(this);
+    public UI ui = new UI(this, keyH);
     public AssetSetter aSetter = new AssetSetter(this, keyH);
     public BattleSimulator battleSim = new BattleSimulator(this);
 
@@ -161,6 +161,15 @@ public class GamePanel extends JPanel implements Runnable{
         Graphics2D g2 = (Graphics2D) g;
         BufferedImage image = null;
 
+        int col, row;
+        // Draw the map background as black rectangles
+        for (row = 0; row < maxMapRow; row++) {
+            for (col = 0; col <maxMapCol; col++) {
+                g2.setColor(Color.BLACK);
+                g2.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
+            }
+        }
+
         // Title Screen
         if (gameState == titleState) {
             image = titleScreenImage;
@@ -171,8 +180,6 @@ public class GamePanel extends JPanel implements Runnable{
             ui.draw(g2);
         }
         else if (gameState == playState) {
-            // UI
-            ui.draw(g2);
 
             // Draw the game map tiles
             tileM.draw(g2);
@@ -192,6 +199,9 @@ public class GamePanel extends JPanel implements Runnable{
 
             // Draw battle damage in map
             battleSim.draw(g2);
+
+            // UI
+            ui.draw(g2);
         }
         else if (gameState == gameOverState) {
             image = gameOverScreenImage;

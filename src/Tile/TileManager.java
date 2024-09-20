@@ -27,6 +27,7 @@ public class TileManager {
     private List<Item>[][] tileItems; // 2D array to hold item lists for each tile
     private static ArrayList<ChaosUnit> selectedEnemies = new ArrayList<>(); // List of selected enemy units
     private boolean aKeyPressed = false; // Flag to track if the A key was pressed in the last frame
+    private boolean itemWindowOpen = false; // Flag to track if the item window is open
 
     public TileManager(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
@@ -205,26 +206,29 @@ public class TileManager {
     // Method to handle which enemies to highlight their range
     public void EnemySelection() {
        if (gp.TurnM.getPlayerPhase() == true) {
-           if (gp.selectedUnit == null && keyH.isAPressed() && !aKeyPressed) {
-               aKeyPressed = true;  // Mark the key as pressed
+           if (!itemWindowOpen) {
+               if (gp.selectedUnit == null && keyH.isAPressed() && !aKeyPressed) {
+                   aKeyPressed = true;  // Mark the key as pressed
 
-               // Check if the cursor's position matches the position of any enemy unit (ChaosUnit)
-               if (gp.selectedUnit == null) {
-                   for (ChaosUnit enemy : gp.simChaosUnits) {
-                       if (gp.cursor.getCol() == enemy.getCol() && gp.cursor.getRow() == enemy.getRow()) {
-                           if (selectedEnemies.contains(enemy)) {
-                               gp.playSE(6);
-                               selectedEnemies.remove(enemy); // Deselect the enemy if it's already selected
-                           } else {
-                               gp.playSE(6);
-                               selectedEnemies.add(enemy); // Select the enemy if it's not already selected
+                   // Check if the cursor's position matches the position of any enemy unit (ChaosUnit)
+                   if (gp.selectedUnit == null) {
+                       for (ChaosUnit enemy : gp.simChaosUnits) {
+                           if (gp.cursor.getCol() == enemy.getCol() && gp.cursor.getRow() == enemy.getRow()) {
+                               if (selectedEnemies.contains(enemy)) {
+                                   gp.playSE(6);
+                                   selectedEnemies.remove(enemy); // Deselect the enemy if it's already selected
+                               } else {
+                                   gp.playSE(6);
+                                   selectedEnemies.add(enemy); // Select the enemy if it's not already selected
+                               }
+                               break; // Exit loop once a match is found
                            }
-                           break; // Exit loop once a match is found
                        }
                    }
+
+               } else if (!keyH.isAPressed()) {
+                   aKeyPressed = false;  // Reset the flag when the key is released
                }
-           } else if (!keyH.isAPressed()) {
-               aKeyPressed = false;  // Reset the flag when the key is released
            }
        }
     }
@@ -253,12 +257,28 @@ public class TileManager {
         return true;
     }
 
+    public List<Item> getTileItems(int col, int row) {
+        return tileItems[col][row];  // Return the list of items at the tile
+    }
+
     // Method to draw the map grid and tiles
     public void drawMap(Graphics2D g2) {
         int col = 0;
         int row = 0;
         int x = 0;
         int y = 0;
+
+        // Draw the map background as black rectangles
+        for (row = 0; row < gp.getMaxMapRow(); row++) {
+            for (col = 0; col < gp.getMaxMapCol(); col++) {
+                g2.setColor(Color.BLACK);
+                g2.fillRect(col * gp.getTileSize(), row * gp.getTileSize(), gp.getTileSize(), gp.getTileSize());
+            }
+        }
+
+        col = 0;
+        row = 0;
+
         // Draw the map tiles based on the mapTileNum array
         while (col < Max_Col && row < Max_Row) {
             int tileNum = mapTileNum[col][row];
@@ -303,4 +323,11 @@ public class TileManager {
         drawPlayersInRange(g2);
     }
 
+    public boolean isItemWindowOpen() {
+        return itemWindowOpen;
+    }
+
+    public void setItemWindowOpen(boolean x) {
+        itemWindowOpen = x;
+    }
 }

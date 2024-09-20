@@ -39,6 +39,8 @@ public class Sound {
         soundEffectURL[15] = getClass().getResource("/Sound_Effects/Critical_Attack.wav");
         soundEffectURL[16] = getClass().getResource("/Sound_Effects/No_Damage.wav");
         soundEffectURL[17] = getClass().getResource("/Sound_Effects/Miss.wav");
+        soundEffectURL[18] = getClass().getResource("/Sound_Effects/Defeated.wav");
+        soundEffectURL[19] = getClass().getResource("/Sound_Effects/BeaconOfLight.wav");
     }
 
 

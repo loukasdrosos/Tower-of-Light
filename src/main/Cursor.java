@@ -92,43 +92,43 @@ public class Cursor {
             // Check if no unit is currently selected
             if (gp.selectedUnit == null) {
 
-                moveAroundPlayers(); // Traverse through light units
+                if (!gp.tileM.isItemWindowOpen()) {
 
-                // Increment the delay counter
-                moveDelayCounter++;
+                    moveAroundPlayers(); // Traverse through light units
 
-                // Only move the cursor when the delay counter reaches the threshold
-                if (moveDelayCounter >= moveDelayThreshold) {
-                    // Determine if any cursor movement key is pressed
-                    if (keyH.isUpPressed() && !moving) {
-                        moveUp();
-                        moving = true;
+                    // Increment the delay counter
+                    moveDelayCounter++;
+
+                    // Only move the cursor when the delay counter reaches the threshold
+                    if (moveDelayCounter >= moveDelayThreshold) {
+                        // Determine if any cursor movement key is pressed
+                        if (keyH.isUpPressed() && !moving) {
+                            moveUp();
+                            moving = true;
+                        } else if (keyH.isDownPressed() && !moving) {
+                            moveDown();
+                            moving = true;
+                        } else if (keyH.isLeftPressed() && !moving) {
+                            moveLeft();
+                            moving = true;
+                        } else if (keyH.isRightPressed() && !moving) {
+                            moveRight();
+                            moving = true;
+                        }
+
+                        // Ensure the cursor stays centered on the tile
+                        updatePosition();
+
+                        // Reset the moving flag if the key is released or tile movement is complete
+                        if (!keyH.isUpPressed() || !keyH.isDownPressed() || !keyH.isLeftPressed() || !keyH.isRightPressed()) {
+                            moving = false;
+                        }
+
+                        cursorStart = false; // Reset the boolean flag
+
+                        // Reset the delay counter after moving
+                        moveDelayCounter = 0;
                     }
-                    else if (keyH.isDownPressed() && !moving) {
-                        moveDown();
-                        moving = true;
-                    }
-                    else if (keyH.isLeftPressed() && !moving) {
-                        moveLeft();
-                        moving = true;
-                    }
-                    else if (keyH.isRightPressed() && !moving) {
-                        moveRight();
-                        moving = true;
-                    }
-
-                    // Ensure the cursor stays centered on the tile
-                    updatePosition();
-
-                    // Reset the moving flag if the key is released or tile movement is complete
-                    if (!keyH.isUpPressed() || !keyH.isDownPressed() || !keyH.isLeftPressed() || !keyH.isRightPressed()) {
-                        moving = false;
-                    }
-
-                    cursorStart = false; // Reset the boolean flag
-
-                    // Reset the delay counter after moving
-                    moveDelayCounter = 0;
                 }
             }
 
