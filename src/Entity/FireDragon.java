@@ -28,6 +28,9 @@ public class FireDragon extends ChaosUnit{
     public void setupStats() {
         className = "Fire Dragon";
         level = 18;
+        if (!canMove && !boss) {
+            level += 2;
+        }
         if (level > maxLevel) {
             level = maxLevel;
         }

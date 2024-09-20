@@ -48,7 +48,8 @@ public class Princess extends LightUnit{
         luck = 0;
         defense = 17;
         resistance = 22;
-        movement = 3;
+        movementInitial = 3;
+        movement = movementInitial;
         vision = 6;
         unitType = UnitType.Infantry;
         attackType = AttackType.Magical;

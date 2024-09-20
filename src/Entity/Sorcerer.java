@@ -40,7 +40,8 @@ public class Sorcerer extends ChaosUnit{
         luck = 0;
         defense = 16;
         resistance = 23;
-        movement = 3;
+        movementInitial = 3;
+        movement = movementInitial;
         if (!canMove) {
             movement = 0;
         }

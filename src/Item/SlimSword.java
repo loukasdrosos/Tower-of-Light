@@ -21,7 +21,7 @@ public class SlimSword extends OffHand{
         description = "Speed +5, Defense -3";
         might = 5;
         randomizeMight();
-        hit = 100;
+        hit = 95;
         crit = 0;
         range = 1;
         speed = +5;

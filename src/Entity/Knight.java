@@ -56,7 +56,8 @@ public class Knight extends LightUnit{
         luck = 0;
         defense = 9;
         resistance = 6;
-        movement = 4;
+        movementInitial = 4;
+        movement = movementInitial;
         vision = 6;
         unitType = UnitType.Mounted;
         attackType = AttackType.Physical;

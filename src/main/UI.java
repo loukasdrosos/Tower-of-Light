@@ -77,8 +77,7 @@ public class UI {
                 "D: Use potion",
                 "S: Healing Spell",
                 "B: Activate Beacon of Light",
-                "V: View items on a tile",
-                "F: Pick up items",
+                "V: View items on the map",
                 "W: End player unit's turn",
                 "Z: Cancel action",
                 "Q: Toggle between unit's stats and unit's inventory",
@@ -506,7 +505,7 @@ public class UI {
             // Draw the unit's stats below the portrait
             g2.drawString("HP: " + player.getHP() + " / " + player.getMaxHP(), statsX, statsY);
 
-            g2.drawString("Movement: " + player.getMovement(), statsX2, statsY);
+            g2.drawString("Movement: " + player.getMovementInitial(), statsX2, statsY);
 
             if (player.getBonusStrength() == 0){
                 g2.drawString("Strength: " + player.getStrength(), statsX, statsY + lineHeight);
@@ -1151,127 +1150,152 @@ public class UI {
 
     public void drawTileItems() {
         if (gp.TurnM.getPlayerPhase()) {
-            if (gp.selectedUnit == null) {
-                int frameX = gp.getTileSize() * 16;
-                int frameY = gp.getTileSize() * 13;
-                int frameWidth = gp.getTileSize() * 22;
-                int frameHeight = gp.getTileSize() * 18;
+            int frameX = gp.getTileSize() * 16;
+            int frameY = gp.getTileSize() * 13;
+            int frameWidth = gp.getTileSize() * 22;
+            int frameHeight = gp.getTileSize() * 18;
 
-                // Item Slot
-                final int slotXstart = frameX + 20;
-                final int slotYstart = frameY + 20;
-                int slotX = slotXstart;
-                int slotY = slotYstart;
+            // Item Slot
+            final int slotXstart = frameX + 20;
+            final int slotYstart = frameY + 20;
+            int slotX = slotXstart;
+            int slotY = slotYstart;
 
-                // Cursor
-                int cursorX = slotXstart + (gp.getTileSize() * slotCol);
-                int cursorY = slotYstart + (gp.getTileSize() * slotRow);
-                int cursorWidth = 3 * gp.getTileSize();
-                int cursorHeight  = 3 * gp.getTileSize();
+            // Cursor
+            int cursorX = slotXstart + (gp.getTileSize() * slotCol);
+            int cursorY = slotYstart + (gp.getTileSize() * slotRow);
+            int cursorWidth = 3 * gp.getTileSize();
+            int cursorHeight = 3 * gp.getTileSize();
 
-                // Only toggle the window when the V key is first pressed, not held down
-                if (keyH.isVPressed() && !vKeyPressed) {
-                    vKeyPressed = true;  // Mark the V key as pressed
+            // Items list
+            List<Item> tileItems = getItemsAtTile();
+
+            // Only toggle the window when the V key is first pressed, not held down
+            if (keyH.isVPressed() && !vKeyPressed) {
+                vKeyPressed = true;  // Mark the V key as pressed
+                if (!tileItems.isEmpty()) {
                     gp.tileM.setItemWindowOpen(!gp.tileM.isItemWindowOpen()); // Toggle the item window state
-                }
-
-                // Reset the flag when the V key is released
-                if (!keyH.isVPressed()) {
-                    vKeyPressed = false;
-                }
-
-                // Draw the window if it is open
-                if (gp.tileM.isItemWindowOpen()) {
-                    drawSubWindow(g2, frameX, frameY, frameWidth, frameHeight);
-                    // Draw Cursor
-                    g2.setColor(Color.YELLOW);
-                    g2.setStroke(new BasicStroke(3));
-                    g2.drawRect(cursorX, cursorY, cursorWidth, cursorHeight);
-
-                    // Draw Tile's Items
-                    List<Item> tileItems = getItemsAtTile();
-                    for (int i = 0; i < tileItems.size(); i++) {
-                        g2.drawImage(tileItems.get(i).getImage(), slotX, slotY, cursorWidth, cursorHeight, null);
-                        slotX += 4 * gp.getTileSize();
-                        if (i == 4 || i == 9 || i == 14) {
-                            slotX = slotXstart;
-                            slotY += 4 * gp.getTileSize();
-                        }
-                    }
-
-                    // Draw description window
-                    int dFrameX = frameX;
-                    int dFrameY = frameY + frameHeight + 10;
-                    int dFrameWidth = frameWidth;
-                    int dFrameHeight = 8 * gp.getTileSize();
-
-                    // Draw item description
-                    int textX = dFrameX + 20;
-                    int textY = dFrameY + 2 *gp.getTileSize();
-                    int nextLine = 0;
-                    g2.setFont(arial_20);
-
-                    int itemIndex = getItemOnSlot();
-                    if (itemIndex < tileItems.size()) {
-                        drawSubWindow(g2, dFrameX, dFrameY, dFrameWidth, dFrameHeight);
-                        g2.drawString(tileItems.get(itemIndex).getName(), textX, textY);
-                        nextLine++;
-                        if (tileItems.get(itemIndex) instanceof Weapon) {
-                            Weapon weapon = (Weapon) tileItems.get(itemIndex);
-                            g2.drawString("Might: " + weapon.getMight() + "  Hit: " + weapon.getHit() + "  Crit: " + weapon.getCrit() + "  Range: " + weapon.getRange() , textX, textY + nextLine *  2 *gp.getTileSize());
-                            nextLine++;
-                        }
-                        if (tileItems.get(itemIndex).getDescription() != null) {
-                            g2.drawString(tileItems.get(itemIndex).getDescription(), textX, textY + nextLine * 2 * gp.getTileSize());
-                        }
-                    }
-
-                    // Increment the delay counter
-                    moveDelayCounter++;
-
-                    // Only move the cursor when the delay counter reaches the threshold
-                    if (moveDelayCounter >= moveDelayThreshold) {
-                        // Determine if any cursor movement key is pressed
-                        if (keyH.isUpPressed() && !moving) {
-                            if (slotRow != 0) {
-                                slotRow -= 4;
-                                gp.playSE(0);
-                                moving = true;
-                            }
-                        } else if (keyH.isDownPressed() && !moving) {
-                            if (slotRow != 12) {
-                                slotRow += 4;
-                                gp.playSE(0);
-                                moving = true;
-                            }
-                        } else if (keyH.isLeftPressed() && !moving) {
-                            if (slotCol != 0) {
-                                slotCol -= 4;
-                                gp.playSE(0);
-                                moving = true;
-                            }
-                        } else if (keyH.isRightPressed() && !moving) {
-                            if (slotCol != 16) {
-                                slotCol += 4;
-                                gp.playSE(0);
-                                moving = true;
-                            }
-                        }
-
-                        // Reset the moving flag if the key is released or tile movement is complete
-                        if (!keyH.isUpPressed() || !keyH.isDownPressed() || !keyH.isLeftPressed() || !keyH.isRightPressed()) {
-                            moving = false;
-                        }
-
-                        // Reset the delay counter after moving
-                        moveDelayCounter = 0;
-                    }
                 } else {
-                    slotCol = 0;
-                    slotRow = 0;
+                    addLogMessage("No items on this tile");
+                }
+            }
+
+            // Reset the flag when the V key is released
+            if (!keyH.isVPressed()) {
+                vKeyPressed = false;
+            }
+
+            // Draw the window if it is open
+            if (gp.tileM.isItemWindowOpen()) {
+                drawSubWindow(g2, frameX, frameY, frameWidth, frameHeight);
+                // Draw Cursor
+                g2.setColor(Color.YELLOW);
+                g2.setStroke(new BasicStroke(3));
+                g2.drawRect(cursorX, cursorY, cursorWidth, cursorHeight);
+
+                // Draw Tile's Items
+                for (int i = 0; i < tileItems.size(); i++) {
+                    g2.drawImage(tileItems.get(i).getImage(), slotX, slotY, cursorWidth, cursorHeight, null);
+                    slotX += 4 * gp.getTileSize();
+                    if (i == 4 || i == 9 || i == 14) {
+                        slotX = slotXstart;
+                        slotY += 4 * gp.getTileSize();
+                    }
+                }
+
+                // Draw description window
+                int dFrameX = frameX;
+                int dFrameY = frameY + frameHeight + 10;
+                int dFrameWidth = frameWidth;
+                int dFrameHeight = 16 * gp.getTileSize();
+
+                // Draw item description
+                int textX = dFrameX + 20;
+                int textY = dFrameY + 2 * gp.getTileSize();
+                int nextLine = 0;
+                g2.setFont(arial_20);
+                drawSubWindow(g2, dFrameX, dFrameY, dFrameWidth, dFrameHeight);
+
+                Item selectedItem = getSelectedItem();
+                if (selectedItem  != null) {
+                    if (selectedItem  instanceof MainHand) {
+                        g2.drawString("Mainhand: " + selectedItem.getName(), textX, textY);
+                        nextLine++;
+                    }
+                    else if (selectedItem instanceof OffHand) {
+                        g2.drawString("Offhand: " + selectedItem.getName(), textX, textY);
+                        nextLine++;
+                    }
+                    else if (selectedItem instanceof Trinket) {
+                        g2.drawString("Trinket: " + selectedItem.getName(), textX, textY);
+                        nextLine++;
+                    }
+                    else if (selectedItem instanceof Potion) {
+                        g2.drawString("Potion: " + selectedItem.getName(), textX, textY);
+                        nextLine++;
+                    }
+                    if (selectedItem instanceof Weapon) {
+                        Weapon weapon = (Weapon) selectedItem;
+                        g2.drawString("Might: " + weapon.getMight() + "  Hit: " + weapon.getHit() + "  Crit: " + weapon.getCrit() + "  Range: " + weapon.getRange(), textX, textY + nextLine * 2 * gp.getTileSize());
+                        nextLine++;
+                    }
+                    if (selectedItem.getDescription() != null) {
+                        g2.drawString(selectedItem.getDescription(), textX, textY + nextLine * 2 * gp.getTileSize());
+                    }
+                }
+
+                nextLine = 4;
+                g2.drawString("Press ↑, ↓, ←, → to switch items", textX, textY + nextLine * 2 * gp.getTileSize());
+                nextLine++;
+                if (gp.selectedUnit != null) {
+                    g2.drawString("Press SPACE to take item", textX, textY + nextLine * 2 * gp.getTileSize());
+                    nextLine++;
+                }
+                g2.drawString("Press V to close item window", textX, textY + nextLine * 2 * gp.getTileSize());
+
+                // Increment the delay counter
+                moveDelayCounter++;
+
+                // Only move the cursor when the delay counter reaches the threshold
+                if (moveDelayCounter >= moveDelayThreshold) {
+                    // Determine if any cursor movement key is pressed
+                    if (keyH.isUpPressed() && !moving) {
+                        if (slotRow != 0) {
+                            slotRow -= 4;
+                            gp.playSE(0);
+                            moving = true;
+                        }
+                    } else if (keyH.isDownPressed() && !moving) {
+                        if (slotRow != 12) {
+                            slotRow += 4;
+                            gp.playSE(0);
+                            moving = true;
+                        }
+                    } else if (keyH.isLeftPressed() && !moving) {
+                        if (slotCol != 0) {
+                            slotCol -= 4;
+                            gp.playSE(0);
+                            moving = true;
+                        }
+                    } else if (keyH.isRightPressed() && !moving) {
+                        if (slotCol != 16) {
+                            slotCol += 4;
+                            gp.playSE(0);
+                            moving = true;
+                        }
+                    }
+
+                    // Reset the moving flag if the key is released or tile movement is complete
+                    if (!keyH.isUpPressed() || !keyH.isDownPressed() || !keyH.isLeftPressed() || !keyH.isRightPressed()) {
+                        moving = false;
+                    }
+
+                    // Reset the delay counter after moving
+                    moveDelayCounter = 0;
                 }
             } else {
-                gp.tileM.setItemWindowOpen(false);
+                slotCol = 0;
+                slotRow = 0;
             }
         } else {
             gp.tileM.setItemWindowOpen(false);
@@ -1282,6 +1306,22 @@ public class UI {
         int itemIndex = slotCol/4 + (slotRow * 5)/4;
         return itemIndex;
     }
+
+    public Item getSelectedItem() {
+        // Get the index of the selected item using slotCol and slotRow
+        int itemIndex = getItemOnSlot();
+
+        // Fetch the list of items at the current tile
+        List<Item> tileItems = getItemsAtTile();
+
+        // Return the selected item if the index is valid
+        if (itemIndex >= 0 && itemIndex < tileItems.size()) {
+            return tileItems.get(itemIndex);
+        } else {
+            return null; // Return null if no valid item is selected
+        }
+    }
+
 
     // Method to get items from the tile where the cursor is located
     public List<Item> getItemsAtTile() {

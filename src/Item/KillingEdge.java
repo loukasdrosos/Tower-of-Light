@@ -18,7 +18,7 @@ public class KillingEdge extends MainHand{
     @Override
     public void setupStats() {
         name = "Killing Edge";
-        might = 7;
+        might = 8;
         randomizeMight();
         hit = 90;
         randomizeHit();

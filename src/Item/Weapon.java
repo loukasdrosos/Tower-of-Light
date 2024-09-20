@@ -69,7 +69,7 @@ public class Weapon extends Item{
 
     public int getVision() { return vision; } // Get the weapon's vision bonus
 
-    protected boolean isRemovable() {return removable;} // Return if the weapon can be dropped or not
+    public boolean isRemovable() {return removable;} // Return if the weapon can be dropped or not
 
     public Entity.UnitRace getEffectiveRace() {return effectiveRace;} // Return the weapon's effectiveness against some unit race
 

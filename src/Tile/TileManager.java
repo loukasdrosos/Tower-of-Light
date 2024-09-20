@@ -241,6 +241,14 @@ public class TileManager {
         }
     }
 
+    public void removeItem(int itemIndex, int col, int row) {
+        tileItems[col][row].remove(itemIndex);
+    }
+
+    public void switchItem(int itemIndex, Item item, int col, int row) {
+        tileItems[col][row].set(itemIndex, item);
+    }
+
     // Method to get the first item on a specific tile at (col, row)
     public Item getFirstItemOnTile(int col, int row) {
         if (!tileItems[col][row].isEmpty()) {

@@ -24,6 +24,8 @@ public class LightUnit extends Entity {
     private boolean dKeyReleased = true; // To track if D key has been released
     private boolean sKeyReleased = true; // To track if S key has been released
     private boolean cKeyReleased = true; // To track if C key has been released
+    private boolean spaceKeyReleased = true; // To track if SPACE key has been released
+
 
     public MainHand mainHand = null; // Unit's main hand weapon
     public OffHand offHand = null; // Unit's offhand weapon
@@ -78,11 +80,15 @@ public class LightUnit extends Entity {
                 gp.playSE(6);
             }
 
-            // Cancel player movement and unselect player
-            else if (gp.selectedUnit != null && isSelected && isMoving && !isAttacking) {
-                resetPosition(); // Return player to starting position
-                gp.selectedUnit = null; // Deselect the player
-                gp.playSE(6);
+            // Cancel player movement and unselect player if player hasn't picked up an item
+            else if (gp.selectedUnit != null && isSelected && isMoving && !isAttacking && !isHealing) {
+                if (movement == movementInitial) {
+                    resetPosition(); // Return player to starting position
+                    gp.selectedUnit = null; // Deselect the player
+                    gp.playSE(6);
+                } else {
+                    gp.ui.addLogMessage("Unit can only take action or end its turn");
+                }
             }
         }
 
@@ -118,7 +124,7 @@ public class LightUnit extends Entity {
 
     // Method to choose which enemy to attack with physical attacks
     public void chooseTarget() {
-        if (gp.selectedUnit != null && isSelected) {
+        if (gp.selectedUnit != null && isSelected && isMoving && !wait) {
             List<ChaosUnit> enemiesInRange = getEnemiesInRange();  // To store the tiles with enemies
 
             if (keyH.isXPressed() && xKeyReleased) {
@@ -153,7 +159,7 @@ public class LightUnit extends Entity {
 
     // Physical units switch their equipped weapon
     public void switchWeapons() {
-        if (gp.selectedUnit != null && isSelected && isMoving) {
+        if (gp.selectedUnit != null && isSelected && isMoving && !wait) {
             if (attackType == AttackType.Physical) {
 
                 if (keyH.isCPressed() && cKeyReleased) {
@@ -184,7 +190,7 @@ public class LightUnit extends Entity {
 
     // Method to choose which ally player to heal with healing spell
     public void healAlly() {
-        if (gp.selectedUnit != null && isSelected) {
+        if (gp.selectedUnit != null && isSelected && isMoving && !wait) {
             List<LightUnit> playersInRange = getPlayersInRange();  // To store the tiles with players
 
             if (keyH.isSPressed() && sKeyReleased) {
@@ -229,23 +235,27 @@ public class LightUnit extends Entity {
 
     // Inside your Player class or wherever relevant
     public void usePotion() {
-        if (gp.selectedUnit != null && isSelected && isMoving) {
+        if (gp.selectedUnit != null && isSelected && isMoving && !wait) {
 
             if (keyH.isDPressed() && dKeyReleased) {
                 dKeyReleased = false; // Mark that D key was pressed
                 if (potion != null) {
-                    if (HP < maxHP && potion.getUses() > 0) {
-                        healHP(potion.getHeal());
-                        gp.playSE(12);
-                        potion.usePotion();  // Reduce potion uses
-                        gp.ui.addLogMessage(name + " used " + potion.getName());
-                        if (potion.getUses() <= 0) {
-                            potion = null;
+                    if (gp.cChecker.noPlayerOnTile(col, row)) {
+                        if (HP < maxHP && potion.getUses() > 0) {
+                            healHP(potion.getHeal());
+                            gp.playSE(12);
+                            potion.usePotion();  // Reduce potion uses
+                            gp.ui.addLogMessage(name + " used " + potion.getName());
+                            if (potion.getUses() <= 0) {
+                                potion = null;
+                            }
+                            endTurn();
+                            gp.selectedUnit = null;
+                        } else {
+                            gp.ui.addLogMessage(name + " is at full health");
                         }
-                        endTurn();
-                        gp.selectedUnit = null;
-                    } else {
-                        gp.ui.addLogMessage(name + " is at full health");
+                    } else if (!gp.cChecker.noPlayerOnTile(col, row)) {
+                        gp.ui.addLogMessage("Unit can't use potion while on another unit's tile");
                     }
                 } else {
                     gp.ui.addLogMessage(name + " doesn't have a potion in inventory");
@@ -265,10 +275,151 @@ public class LightUnit extends Entity {
         }
     }
 
-        @Override
+    public void pickUpItem() {
+        if (gp.selectedUnit != null && isSelected && !wait) {
+            Item droppedItem = gp.ui.getSelectedItem();
+            int droppedItemIndex = gp.ui.getItemOnSlot();
+            if (keyH.isSpacePressed() && spaceKeyReleased) {
+                spaceKeyReleased = false;
+                if (gp.cChecker.noPlayerOnTile(col, row)) {
+                    if (droppedItem != null) {
+
+                        if (attackType == AttackType.Physical) {
+                            if (droppedItem instanceof MainHand) {
+                                MainHand tileWeapon = (MainHand) droppedItem;
+
+                                // Check if the selected unit's main hand slot is null
+                                if (mainHand == null) {
+                                    // Pick up the weapon, remove it from the tile's item list
+                                    mainHand = tileWeapon;
+                                    gp.ui.addLogMessage(name + " picked up " + tileWeapon.getName());
+                                    gp.tileM.removeItem(droppedItemIndex, col, row);
+                                    preCol = col;
+                                    preRow = row;
+                                    movement = 0;
+                                    calculateCombatStats();
+                                }
+                                // If the mainHand slot is not null and the current weapon is removable
+                                else if (mainHand != null && mainHand.isRemovable()) {
+                                    // Swap the weapons between the player and the tile
+                                    if (equippedWeapon == mainHand){
+                                        equippedWeapon = tileWeapon;
+                                    }
+                                    MainHand tempWeapon = mainHand;
+                                    mainHand = tileWeapon;
+                                    gp.ui.addLogMessage(name + " picked up " + tileWeapon.getName());
+                                    gp.tileM.switchItem(droppedItemIndex, tempWeapon, col, row);
+                                    preCol = col;
+                                    preRow = row;
+                                    movement = 0;
+                                    calculateCombatStats();
+                                } else if (!mainHand.isRemovable()) {
+                                    gp.ui.addLogMessage(mainHand.getName() + " is not removable");
+                                }
+                            }
+
+                            if (droppedItem instanceof OffHand) {
+                                OffHand tileWeapon = (OffHand) droppedItem;
+
+                                // Check if the selected unit's offhand slot is null
+                                if (offHand == null) {
+                                    // Pick up the weapon, remove it from the tile's item list
+                                    offHand = tileWeapon;
+                                    gp.ui.addLogMessage(name + " picked up " + tileWeapon.getName());
+                                    gp.tileM.removeItem(droppedItemIndex, col, row);
+                                    preCol = col;
+                                    preRow = row;
+                                    movement = 0;
+                                    calculateCombatStats();
+                                }
+                                // If the mainHand slot is not null and the current weapon is removable
+                                else if (offHand != null && offHand.isRemovable()) {
+                                    // Swap the weapons between the player and the tile
+                                    if (equippedWeapon == offHand){
+                                        equippedWeapon = tileWeapon;
+                                    }
+                                    OffHand tempWeapon = offHand;
+                                    offHand = tileWeapon;
+                                    gp.ui.addLogMessage(name + " picked up " + tileWeapon.getName());
+                                    gp.tileM.switchItem(droppedItemIndex, tempWeapon, col, row);
+                                    preCol = col;
+                                    preRow = row;
+                                    movement = 0;
+                                    calculateCombatStats();
+                                } else if (!offHand.isRemovable()) {
+                                    gp.ui.addLogMessage(offHand.getName() + " is not removable");
+                                }
+                            }
+                        } else if (attackType == AttackType.Magical){
+                            gp.ui.addLogMessage(name + " can't use weapons");
+                        }
+
+                        if (droppedItem instanceof Trinket) {
+                            Trinket tileTrinket = (Trinket) droppedItem;
+
+                            // Check if the selected unit's trinket slot is null
+                            if (trinket == null) {
+                                // Pick up the trinket, remove it from the tile's item list
+                                trinket = tileTrinket;
+                                gp.ui.addLogMessage(name + " picked up " + tileTrinket.getName());
+                                gp.tileM.removeItem(droppedItemIndex, col, row);
+                                preCol = col;
+                                preRow = row;
+                                movement = 0;
+                                calculateCombatStats();
+                            }
+                            // If the trinket slot is not null
+                            else {
+                                // Swap the trinket items between the player and the tile
+                                Trinket tempTrinket = trinket;
+                                trinket = tileTrinket;
+                                gp.ui.addLogMessage(name + " picked up " + tileTrinket.getName());
+                                gp.tileM.switchItem(droppedItemIndex, tempTrinket, col, row);
+                                preCol = col;
+                                preRow = row;
+                                movement = 0;
+                                calculateCombatStats();
+                            }
+                        }
+
+                        if (droppedItem instanceof Potion) {
+                            Potion tilePotion = (Potion) droppedItem;
+
+                            // Check if the selected unit's potion slot is null
+                            if (potion == null) {
+                                // Pick up the trinket, remove it from the tile's item list
+                                potion = tilePotion;
+                                gp.ui.addLogMessage(name + " picked up " + tilePotion.getName());
+                                gp.tileM.removeItem(droppedItemIndex, col, row);
+                                preCol = col;
+                                preRow = row;
+                                movement = 0;
+                                calculateCombatStats();
+                            }
+                            // If the potion slot is not null
+                            else {
+                               gp.ui.addLogMessage("Can only pick up potions if potion slot is empty");
+                            }
+                        }
+
+                    } else {
+                        gp.ui.addLogMessage("No item on this slot");
+                    }
+                } else {
+                    gp.ui.addLogMessage("Can't pick up items when on another unit's tile");
+                }
+            }
+            // Reset the SPACE key release state when the key is no longer pressed
+            if (!keyH.isSpacePressed()) {
+                spaceKeyReleased = true;
+            }
+        }
+    }
+
+    @Override
     public void move() {
         // Check if the unit is not in a waiting state, is selected, and is allowed to move
-        if (gp.selectedUnit != null && !wait && isSelected && isMoving && !isAttacking) {
+        if (gp.selectedUnit != null && !wait && isSelected && isMoving) {
             moveDelayCounter++; // Increment the move delay counter
 
             // Check if the delay counter has reached or exceeded the move delay threshold
@@ -354,6 +505,7 @@ public class LightUnit extends Entity {
         isAttacking = false; // Set attacking flag as false
         isHealing = false; // Set the healing flag as false
         wait = true;        // Set the unit to a waiting state
+        movement = movementInitial; // Reset the unit's available movement
         preCol = col;       // Update the previous column to the current column
         preRow = row;       // Update the previous row to the current row
         direction = "none"; // Reset the direction
@@ -543,6 +695,8 @@ public class LightUnit extends Entity {
                 usePotion();
                 healAlly();
                 switchWeapons();
+            } else {
+                pickUpItem();
             }
         }
 

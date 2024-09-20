@@ -22,10 +22,10 @@ public class AssetSetter {
         gp.simLightUnits.add(new Cleric(gp, keyH, "Shade", Entity.UnitRace.Elf, 31, 14));
 //        gp.simLightUnits.add(new DarkMage(gp, keyH, "Iago", Entity.UnitRace.Orc, 29, 15));
 //        gp.simLightUnits.add(new Knight(gp, keyH, "Rudolf", Entity.UnitRace.Elf, 28, 14));
-//        gp.simLightUnits.add(new Knight(gp, keyH, "Berkut", Entity.UnitRace.Orc, 28, 12));
+        gp.simLightUnits.add(new Knight(gp, keyH, "Berkut", Entity.UnitRace.Orc, 28, 12));
 //        gp.simLightUnits.add(new Mage(gp, keyH, "Robin", Entity.UnitRace.Human, 27, 15));
 //        gp.simLightUnits.add(new Paladin(gp, keyH, "Valbar", Entity.UnitRace.Tauren, 27, 10));
-         gp.simLightUnits.add(new Warrior(gp, keyH, "Ike", Entity.UnitRace.Human, 29, 14));
+//      gp.simLightUnits.add(new Warrior(gp, keyH, "Ike", Entity.UnitRace.Human, 29, 14));
  //         gp.simLightUnits.add(new Princess(gp, keyH, "Celica", Entity.UnitRace.Human, 27, 13));
     }
 

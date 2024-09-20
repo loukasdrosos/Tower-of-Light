@@ -28,6 +28,9 @@ public class Shaman extends ChaosUnit{
     public void setupStats() {
         className = "Shaman";
         level = 3;
+        if (!canMove && !boss) {
+            level += 2;
+        }
         if (level > maxLevel) {
             level = maxLevel;
         }

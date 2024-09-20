@@ -19,9 +19,9 @@ public class SlimLance extends OffHand{
     public void setupStats() {
         name = "Slim Lance";
         description = "Speed +5, Defense -3";
-        might = 5;
+        might = 7;
         randomizeMight();
-        hit = 95;
+        hit = 85;
         randomizeHit();
         crit = 0;
         range = 1;

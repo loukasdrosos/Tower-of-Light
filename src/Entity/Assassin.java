@@ -27,6 +27,9 @@ public class Assassin extends ChaosUnit{
     public void setupStats() {
         className = "Assassin";
         level = 3;
+        if (!canMove && !boss) {
+            level += 2;
+        }
         if (level > maxLevel) {
             level = maxLevel;
         }

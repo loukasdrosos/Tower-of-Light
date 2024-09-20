@@ -26,7 +26,7 @@ public class Gradivus extends MainHand{
         range = 1;
         speed = 0;
         defense = 0;
-        resistance = +8;
+        resistance = 0;
         vision = 0;
         removable = true;
         effectiveRace = null;

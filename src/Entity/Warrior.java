@@ -48,7 +48,8 @@ public class Warrior extends LightUnit{
         luck = 5;
         defense = 13;
         resistance = 5;
-        movement = 3;
+        movementInitial = 3;
+        movement = movementInitial;
         vision = 6;
         unitType = UnitType.Infantry;
         attackType = AttackType.Physical;

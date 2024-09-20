@@ -28,6 +28,9 @@ public class ChaosPaladin extends ChaosUnit{
     public void setupStats() {
         className = "Chaos Paladin";
         level = 15;
+        if (!canMove && !boss) {
+            level += 2;
+        }
         if (level > maxLevel) {
             level = maxLevel;
         }

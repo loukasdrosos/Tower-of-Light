@@ -27,11 +27,14 @@ public class FallenHero extends ChaosUnit{
     public void setupStats() {
         className = "Fallen Hero";
         level = 1;
+        if (!canMove && !boss) {
+            level += 2;
+        }
         if (level > maxLevel) {
             level = maxLevel;
         }
         maxHP = 22;
-        strength = 8;
+        strength = 10;
         magic = 0;
         skill = 4;
         speed = 8;

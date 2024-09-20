@@ -45,7 +45,8 @@ public class Cleric extends LightUnit{
         luck = 0;
         defense = 3;
         resistance = 8;
-        movement = 3;
+        movementInitial = 3;
+        movement = movementInitial;
         vision = 6;
         unitType = UnitType.Infantry;
         attackType = AttackType.Magical;

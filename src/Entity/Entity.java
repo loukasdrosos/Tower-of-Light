@@ -50,7 +50,8 @@ public class Entity {
     protected int luck; // Unit's luck, used to calculate hit, avoid, and to dodge critical hits, and skill activation
     protected int defense; // Unit's defense against physical attacks
     protected int resistance; // Unit's resistance against magic attacks
-    protected int movement; // The number of tiles the unit can move
+    protected int movement; // Actual movement of the unit
+    protected int movementInitial; // The number of tiles the unit can move
     protected int vision; // The number of tiles the unit can see
 
     // Unit Growth Rates (chance of stat increasing by 1 when unit levels up), only for player units
@@ -431,6 +432,8 @@ public class Entity {
     public int getResistance() { return resistance; } // Get the unit's resistance
 
     public int getMovement() { return movement; } // Get the unit's movement
+
+    public int getMovementInitial() { return movementInitial; } // Get the unit's initial movement
 
     public int getVision() { return vision; } // Get the unit's vision
 
