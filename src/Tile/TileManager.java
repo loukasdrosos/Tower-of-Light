@@ -212,7 +212,7 @@ public class TileManager {
 
                    // Check if the cursor's position matches the position of any enemy unit (ChaosUnit)
                    if (gp.selectedUnit == null) {
-                       for (ChaosUnit enemy : gp.simChaosUnits) {
+                       for (ChaosUnit enemy : gp.ChaosUnits) {
                            if (gp.cursor.getCol() == enemy.getCol() && gp.cursor.getRow() == enemy.getRow()) {
                                if (selectedEnemies.contains(enemy)) {
                                    gp.playSE(6);
@@ -243,6 +243,9 @@ public class TileManager {
 
     public void removeItem(int itemIndex, int col, int row) {
         tileItems[col][row].remove(itemIndex);
+        if (tileItems[col][row].isEmpty()) {
+            itemWindowOpen = false;
+        }
     }
 
     public void switchItem(int itemIndex, Item item, int col, int row) {

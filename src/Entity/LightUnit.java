@@ -124,7 +124,7 @@ public class LightUnit extends Entity {
 
     // Method to choose which enemy to attack with physical attacks
     public void chooseTarget() {
-        if (gp.selectedUnit != null && isSelected && isMoving && !wait) {
+        if (gp.selectedUnit != null && isSelected) {
             List<ChaosUnit> enemiesInRange = getEnemiesInRange();  // To store the tiles with enemies
 
             if (keyH.isXPressed() && xKeyReleased) {
@@ -141,36 +141,12 @@ public class LightUnit extends Entity {
                 }
             }
 
-//            System.out.println("");
-//            System.out.println("isAttacking = " + isAttacking);
-//            System.out.println("isMoving = " + isMoving);
-//            System.out.println("SPACE PRESSED = " + keyH.isSpacePressed());
-
-            /*
             // Process SPACE key press for attacking if already in attack mode
             if (isAttacking && keyH.isSpacePressed()) {
-                System.out.println("SPACE IS CLICKED");
                 gp.battleSim.battlePlayerPhase(this, gp.cChecker.getEnemyOnTile(gp.cursor.getCol(), gp.cursor.getRow()));
                 endTurn();
                 if (gp.selectedUnit != null && gp.selectedUnit == this) {
                     gp.selectedUnit = null;
-                }
-            }
-
-             */
-
-            // Process SPACE key press for attacking if already in attack mode
-            if (isAttacking) {
-                System.out.println("Attacking Mode Active");
-                if (keyH.isSpacePressed()) {
-                    System.out.println("Space key detected");
-                    gp.battleSim.battlePlayerPhase(this, gp.cChecker.getEnemyOnTile(gp.cursor.getCol(), gp.cursor.getRow()));
-                    endTurn();
-                    if (gp.selectedUnit != null && gp.selectedUnit == this) {
-                        gp.selectedUnit = null;
-                    }
-                } else {
-                    System.out.println("Space key NOT detected");
                 }
             }
 
@@ -200,6 +176,7 @@ public class LightUnit extends Entity {
                             equippedWeapon = mainHand;
                             calculateCombatStats();
                         }
+                        gp.playSE(20);
                         gp.ui.addLogMessage(name + " equipped " + equippedWeapon.getName());
                     }
                 }
@@ -214,7 +191,7 @@ public class LightUnit extends Entity {
 
     // Method to choose which ally player to heal with healing spell
     public void healAlly() {
-        if (gp.selectedUnit != null && isSelected && isMoving && !wait) {
+        if (gp.selectedUnit != null && isSelected) {
             List<LightUnit> playersInRange = getPlayersInRange();  // To store the tiles with players
 
             if (keyH.isSPressed() && sKeyReleased) {
@@ -299,11 +276,12 @@ public class LightUnit extends Entity {
         }
     }
 
-
     public void pickUpItem() {
         if (gp.selectedUnit != null && isSelected && !wait && isMoving && !isAttacking && !isHealing) {
+
             Item droppedItem = gp.ui.getSelectedItem();
             int droppedItemIndex = gp.ui.getItemOnSlot();
+
             if (keyH.isSpacePressed() && spaceKeyReleased) {
                 spaceKeyReleased = false;
                 if (gp.cChecker.noPlayerOnTile(col, row)) {
@@ -317,6 +295,7 @@ public class LightUnit extends Entity {
                                 if (mainHand == null) {
                                     // Pick up the weapon, remove it from the tile's item list
                                     mainHand = tileWeapon;
+                                    gp.playSE(20);
                                     gp.ui.addLogMessage(name + " picked up " + tileWeapon.getName());
                                     gp.tileM.removeItem(droppedItemIndex, col, row);
                                     preCol = col;
@@ -332,6 +311,7 @@ public class LightUnit extends Entity {
                                     }
                                     MainHand tempWeapon = mainHand;
                                     mainHand = tileWeapon;
+                                    gp.playSE(20);
                                     gp.ui.addLogMessage(name + " picked up " + tileWeapon.getName());
                                     gp.tileM.switchItem(droppedItemIndex, tempWeapon, col, row);
                                     preCol = col;
@@ -350,6 +330,7 @@ public class LightUnit extends Entity {
                                 if (offHand == null) {
                                     // Pick up the weapon, remove it from the tile's item list
                                     offHand = tileWeapon;
+                                    gp.playSE(20);
                                     gp.ui.addLogMessage(name + " picked up " + tileWeapon.getName());
                                     gp.tileM.removeItem(droppedItemIndex, col, row);
                                     preCol = col;
@@ -365,6 +346,7 @@ public class LightUnit extends Entity {
                                     }
                                     OffHand tempWeapon = offHand;
                                     offHand = tileWeapon;
+                                    gp.playSE(20);
                                     gp.ui.addLogMessage(name + " picked up " + tileWeapon.getName());
                                     gp.tileM.switchItem(droppedItemIndex, tempWeapon, col, row);
                                     preCol = col;
@@ -386,6 +368,7 @@ public class LightUnit extends Entity {
                             if (trinket == null) {
                                 // Pick up the trinket, remove it from the tile's item list
                                 trinket = tileTrinket;
+                                gp.playSE(20);
                                 gp.ui.addLogMessage(name + " picked up " + tileTrinket.getName());
                                 gp.tileM.removeItem(droppedItemIndex, col, row);
                                 preCol = col;
@@ -398,6 +381,7 @@ public class LightUnit extends Entity {
                                 // Swap the trinket items between the player and the tile
                                 Trinket tempTrinket = trinket;
                                 trinket = tileTrinket;
+                                gp.playSE(20);
                                 gp.ui.addLogMessage(name + " picked up " + tileTrinket.getName());
                                 gp.tileM.switchItem(droppedItemIndex, tempTrinket, col, row);
                                 preCol = col;
@@ -567,7 +551,7 @@ public class LightUnit extends Entity {
             if (gp.selectedUnit != null && gp.selectedUnit == this) {
                 gp.selectedUnit = null;
             }
-            gp.simLightUnits.remove(this);
+            gp.LightUnits.remove(this);
         }
     }
 
@@ -711,16 +695,19 @@ public class LightUnit extends Entity {
     public void update() {
         // Allow movement only during the player's phase
         if (gp.TurnM.getPlayerPhase()) {
-            move();
-            SelectPlayerUnit();
-            cancelAction();
-            endSelectedUnitTurn();
-            chooseTarget();
-            usePotion();
-            healAlly();
-            switchWeapons();
-    //        pickUpItem();
-
+            if (!gp.tileM.isItemWindowOpen()) {
+                move();
+                SelectPlayerUnit();
+                cancelAction();
+                endSelectedUnitTurn();
+                chooseTarget();
+                usePotion();
+                healAlly();
+                switchWeapons();
+            }
+            else if (gp.tileM.isItemWindowOpen()) {
+                pickUpItem();
+            }
         }
 
         // Update unit's main hand weapon if possible (only for LightBringer)

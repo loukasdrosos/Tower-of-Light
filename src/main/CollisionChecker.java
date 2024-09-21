@@ -21,7 +21,7 @@ public class CollisionChecker {
 
     // Method to check if there is no enemy unit on the target tile
     public boolean noEnemyOnTile(int targetCol, int targetRow) {
-        for (ChaosUnit enemy : gp.simChaosUnits) {
+        for (ChaosUnit enemy : gp.ChaosUnits) {
             if (targetCol == enemy.getCol() && targetRow == enemy.getRow()) {
                 return false;
             }
@@ -32,7 +32,7 @@ public class CollisionChecker {
     // Method to check if there is an enemy unit on the specified tile
     public ChaosUnit getEnemyOnTile(int col, int row) {
         // Iterate over all enemy units in the game
-        for (ChaosUnit enemy : gp.simChaosUnits) {
+        for (ChaosUnit enemy : gp.ChaosUnits) {
             // Check if the enemy's position matches the specified tile
             if (enemy.getCol() == col && enemy.getRow() == row) {
                 return enemy; // Return the enemy unit found on the tile
@@ -45,7 +45,7 @@ public class CollisionChecker {
     // Method to check if there is a player unit on the specified tile
     public LightUnit getPlayerOnTile(int col, int row) {
         // Iterate over all player units in the game
-        for (LightUnit player : gp.simLightUnits) {
+        for (LightUnit player : gp.LightUnits) {
             // Check if the player's position matches the specified tile
             if (player.getCol() == col && player.getRow() == row) {
                 return player; // Return the player unit found on the tile
@@ -58,7 +58,7 @@ public class CollisionChecker {
 
     // Method to check if there is no player unit on the target tile
     public boolean noPlayerOnTile (int targetCol, int targetRow) {
-        for (LightUnit player : gp.simLightUnits) {
+        for (LightUnit player : gp.LightUnits) {
             // If the currently selected unit is not null and is not the player being checked, used for player unit during player phase
             if (gp.selectedUnit!= null && player != gp.selectedUnit) {
                 if (targetCol == player.getCol() && targetRow == player.getRow()) {

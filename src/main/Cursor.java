@@ -281,9 +281,9 @@ public class Cursor {
             }
         } else {
             // If it's not the player's turn, position cursor at the first light unit
-            if (!gp.simLightUnits.isEmpty()) {
-                col = gp.simLightUnits.get(0).getCol();
-                row = gp.simLightUnits.get(0).getRow();
+            if (!gp.LightUnits.isEmpty()) {
+                col = gp.LightUnits.get(0).getCol();
+                row = gp.LightUnits.get(0).getRow();
                 updatePosition();
             }
         }
@@ -294,7 +294,7 @@ public class Cursor {
         if (gp.selectedUnit == null && keyH.isShiftPressed() && !shiftPressed) {
             // Filter the light units to include only those that have wait == false
             List<LightUnit> activeUnits = new ArrayList<>();
-            for (LightUnit unit : gp.simLightUnits) {
+            for (LightUnit unit : gp.LightUnits) {
                 if (!unit.getWait()) {
                     activeUnits.add(unit);
                 }

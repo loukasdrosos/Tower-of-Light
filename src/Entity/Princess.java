@@ -91,7 +91,7 @@ public class Princess extends LightUnit{
                     if (gp.selectedUnit != null && gp.selectedUnit == this) {
                         gp.selectedUnit = null;
                     }
-                    gp.simLightUnits.remove(this);
+                    gp.LightUnits.remove(this);
                 });
             }
             tasks.add(() -> {

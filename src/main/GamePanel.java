@@ -1,7 +1,6 @@
 package main;
 
 import Entity.*;
-import Item.*;
 import Tile.TileManager;
 
 import javax.imageio.ImageIO;
@@ -30,12 +29,10 @@ public class GamePanel extends JPanel implements Runnable{
     private BufferedImage titleScreenImage, gameOverScreenImage;
 
     // UNITS
-    public static ArrayList<LightUnit> LightUnits = new ArrayList<>();  // List to store player units (Light Units) (permanent)
-    public static ArrayList<LightUnit> simLightUnits = new ArrayList<>(); // List to store active player units (Light Units) (simulation)
+    public static ArrayList<LightUnit> LightUnits = new ArrayList<>(); // List to store active player units (Light Units)
     public LightUnit selectedUnit = null; // Reference to the currently selected unit
 
-    public static ArrayList<ChaosUnit> ChaosUnits = new ArrayList<>(); // List to store enemy units (Chaos Units) (permanent)
-    public static ArrayList<ChaosUnit> simChaosUnits = new ArrayList<>();  // List to store active enemy units (Chaos Units) (simulation)
+    public static ArrayList<ChaosUnit> ChaosUnits = new ArrayList<>();  // List to store active enemy units (Chaos Units)
 
     // Key handler and managers for the game
     public KeyHandler keyH = new KeyHandler(this);
@@ -83,8 +80,6 @@ public class GamePanel extends JPanel implements Runnable{
     public void setupGame() {
         aSetter.setLightUnits();
         aSetter.setChaosUnits();
-        aSetter.copysetUnits(simLightUnits, LightUnits);
-        aSetter.copysetUnits(simChaosUnits, ChaosUnits);
         aSetter.setCursor();
 
       //  playSE(9);
@@ -141,12 +136,12 @@ public class GamePanel extends JPanel implements Runnable{
         if (gameState == playState) {
 
             // Update each Light Unit in the simulation
-            for (Entity lightunit : simLightUnits) {
+            for (Entity lightunit : LightUnits) {
                 lightunit.update();
             }
 
             // Update each Chaos Unit in the simulation
-            for (Entity chaosunit : simChaosUnits) {
+            for (Entity chaosunit : ChaosUnits) {
                 chaosunit.update();
             }
 
@@ -185,12 +180,12 @@ public class GamePanel extends JPanel implements Runnable{
             tileM.draw(g2);
 
             // Draw each Light Unit in the simulation
-            for (Entity lightunit : simLightUnits) {
+            for (Entity lightunit : LightUnits) {
                 lightunit.draw(g2);
             }
 
             // Draw each Chaos Unit in the simulation
-            for (Entity chaosunit : simChaosUnits) {
+            for (Entity chaosunit : ChaosUnits) {
                 chaosunit.draw(g2);
             }
 

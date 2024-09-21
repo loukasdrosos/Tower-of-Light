@@ -1173,6 +1173,7 @@ public class UI {
             // Only toggle the window when the V key is first pressed, not held down
             if (keyH.isVPressed() && !vKeyPressed) {
                 vKeyPressed = true;  // Mark the V key as pressed
+                gp.playSE(6);
                 if (!tileItems.isEmpty()) {
                     gp.tileM.setItemWindowOpen(!gp.tileM.isItemWindowOpen()); // Toggle the item window state
                 } else {
@@ -1187,6 +1188,7 @@ public class UI {
 
             // Draw the window if it is open
             if (gp.tileM.isItemWindowOpen()) {
+
                 drawSubWindow(g2, frameX, frameY, frameWidth, frameHeight);
                 // Draw Cursor
                 g2.setColor(Color.YELLOW);

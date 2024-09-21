@@ -41,6 +41,7 @@ public class Sound {
         soundEffectURL[17] = getClass().getResource("/Sound_Effects/Miss.wav");
         soundEffectURL[18] = getClass().getResource("/Sound_Effects/Defeated.wav");
         soundEffectURL[19] = getClass().getResource("/Sound_Effects/BeaconOfLight.wav");
+        soundEffectURL[20] = getClass().getResource("/Sound_Effects/Item_Equip.wav");
     }
 
 

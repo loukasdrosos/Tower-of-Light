@@ -48,7 +48,7 @@ public class ChaosUnit extends Entity {
                 gp.ui.addLogMessage(String.valueOf(getRace()) + " " + className + " is defeated");
             }
             dropItem();
-            gp.simChaosUnits.remove(this);
+            gp.ChaosUnits.remove(this);
         }
     }
 
