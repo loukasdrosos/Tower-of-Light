@@ -141,11 +141,12 @@ public class LightUnit extends Entity {
                 }
             }
 
-            System.out.println("");
-            System.out.println("isAttacking = " + isAttacking);
-            System.out.println("isMoving = " + isMoving);
-            System.out.println("SPACE PRESSED = " + keyH.isSpacePressed());
+//            System.out.println("");
+//            System.out.println("isAttacking = " + isAttacking);
+//            System.out.println("isMoving = " + isMoving);
+//            System.out.println("SPACE PRESSED = " + keyH.isSpacePressed());
 
+            /*
             // Process SPACE key press for attacking if already in attack mode
             if (isAttacking && keyH.isSpacePressed()) {
                 System.out.println("SPACE IS CLICKED");
@@ -153,6 +154,23 @@ public class LightUnit extends Entity {
                 endTurn();
                 if (gp.selectedUnit != null && gp.selectedUnit == this) {
                     gp.selectedUnit = null;
+                }
+            }
+
+             */
+
+            // Process SPACE key press for attacking if already in attack mode
+            if (isAttacking) {
+                System.out.println("Attacking Mode Active");
+                if (keyH.isSpacePressed()) {
+                    System.out.println("Space key detected");
+                    gp.battleSim.battlePlayerPhase(this, gp.cChecker.getEnemyOnTile(gp.cursor.getCol(), gp.cursor.getRow()));
+                    endTurn();
+                    if (gp.selectedUnit != null && gp.selectedUnit == this) {
+                        gp.selectedUnit = null;
+                    }
+                } else {
+                    System.out.println("Space key NOT detected");
                 }
             }
 
@@ -281,8 +299,9 @@ public class LightUnit extends Entity {
         }
     }
 
+
     public void pickUpItem() {
-        if (gp.selectedUnit != null && isSelected && !wait && isMoving) {
+        if (gp.selectedUnit != null && isSelected && !wait && isMoving && !isAttacking && !isHealing) {
             Item droppedItem = gp.ui.getSelectedItem();
             int droppedItemIndex = gp.ui.getItemOnSlot();
             if (keyH.isSpacePressed() && spaceKeyReleased) {
@@ -692,18 +711,16 @@ public class LightUnit extends Entity {
     public void update() {
         // Allow movement only during the player's phase
         if (gp.TurnM.getPlayerPhase()) {
-            if (!gp.tileM.isItemWindowOpen()) {
-                move();
-                SelectPlayerUnit();
-                cancelAction();
-                endSelectedUnitTurn();
-                chooseTarget();
-                usePotion();
-                healAlly();
-                switchWeapons();
-            } else if (gp.tileM.isItemWindowOpen()) {
-                pickUpItem();
-            }
+            move();
+            SelectPlayerUnit();
+            cancelAction();
+            endSelectedUnitTurn();
+            chooseTarget();
+            usePotion();
+            healAlly();
+            switchWeapons();
+    //        pickUpItem();
+
         }
 
         // Update unit's main hand weapon if possible (only for LightBringer)

@@ -1322,7 +1322,6 @@ public class UI {
         }
     }
 
-
     // Method to get items from the tile where the cursor is located
     public List<Item> getItemsAtTile() {
         // Get cursor position (assuming you have a way to get the cursor position, col and row)
