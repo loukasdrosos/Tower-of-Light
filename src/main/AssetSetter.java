@@ -32,18 +32,6 @@ public class AssetSetter {
         gp.ChaosUnits.add(new FallenHero(gp, true, 32, 16));
         gp.ChaosUnits.add(new FallenHero(gp, true, 28, 14));
         gp.ChaosUnits.add(new Titan(gp, true, false,34, 15));
-
-        gp.tileM.addItems(new IronSword(), 29, 14);
-        gp.tileM.addItems(new Elixir(), 29, 14);
-        gp.tileM.addItems(new Dracoshield(), 29, 14);
-        gp.tileM.addItems(new Gradivus(), 29, 14);
-        gp.tileM.addItems(new KillingEdge(), 29, 14);
-        gp.tileM.addItems(new SilverShield(), 29, 14);
-        gp.tileM.addItems(new IronShield(), 29, 14);
-        gp.tileM.addItems(new DemonRing(), 29, 14);
-        gp.tileM.addItems(new Vulnerary(), 29, 14);
-        gp.tileM.addItems(new Concoction(), 29, 14);
-        gp.tileM.addItems(new Armorslayer(), 29, 14);
     }
 
     public void setCursor() {
