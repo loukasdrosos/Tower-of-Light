@@ -7,12 +7,9 @@ public class KeyHandler implements KeyListener {
 
     // Flags to track whether specific keys are currently pressed
     private boolean UpPressed, DownPressed, LeftPressed, RightPressed;
-    private boolean APressed, ZPressed, WPressed, EPressed, VPressed, ShiftPressed, XPressed, DPressed, SPressed, CPressed, SpacePressed;
+    private boolean APressed, ZPressed, WPressed, EPressed, VPressed, BPressed, ShiftPressed, XPressed, DPressed, SPressed, CPressed, SpacePressed;
     private boolean ENTERPressed = false;
     private boolean QPressed = true;
-
-    // DEBUG
-    private boolean checkDrawTime = false;
 
     GamePanel gp;
 
@@ -82,6 +79,9 @@ public class KeyHandler implements KeyListener {
             if (code == KeyEvent.VK_S) {
                 SPressed = true;
             }
+            if (code == KeyEvent.VK_B) {
+                BPressed = true;
+            }
             if (code == KeyEvent.VK_C) {
                 CPressed = true;
             }
@@ -145,6 +145,9 @@ public class KeyHandler implements KeyListener {
             }
             if (code == KeyEvent.VK_E) {
                 EPressed = false;
+            }
+            if (code == KeyEvent.VK_B) {
+                BPressed = false;
             }
             if (code == KeyEvent.VK_X) {
                 XPressed = false;
@@ -232,6 +235,10 @@ public class KeyHandler implements KeyListener {
 
     public boolean isVPressed() {
         return VPressed;
+    }
+
+    public boolean isBPressed() {
+        return BPressed;
     }
 }
 

@@ -25,6 +25,10 @@ public class GamePanel extends JPanel implements Runnable{
     private final int screenHeight = tileSize * maxScreenRow; // Height of the screen in pixels (832 pixels)
     private final int FPS = 60;  // Game runs at 60 frames per second (FPS)
 
+    // Level selection
+    private final int maxMap = 7;
+    private int currentMap = 0;
+
     // Title Screen
     private BufferedImage titleScreenImage, gameOverScreenImage;
 
@@ -229,4 +233,9 @@ public class GamePanel extends JPanel implements Runnable{
 
     public int getMaxMapCol() { return maxMapCol; }
 
+    public int getMaxMap() { return maxMap;  }
+
+    public int getCurrentMap() {  return currentMap;  }
+
+    public void setCurrentMap(int currentMap) { this.currentMap = currentMap; }
 }

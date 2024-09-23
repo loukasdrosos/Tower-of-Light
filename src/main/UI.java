@@ -193,28 +193,28 @@ public class UI {
         int width = 32 * 16;
         int height = 2 * 16 - 5;
 
-        // if (Beacon of Light turns > 0 && numberofBeaconsUsed < 3)  {
-        //    g2.setColor(new Color(0, 0, 0, 150)); // Semi-transparent black
-        //  }
-        //  else if (Beacon of Light turns == 0 && numberofBeaconsUsed < 3) {
-        g2.setColor(new Color(236, 210, 19, 200)); // Semi-transparent yellow
-        // }
-        //   else if (numberofBeaconsUsed = 3) {
-        //   g2.setColor(new Color(0, 0, 255, 150)); // Semi-transparent blue
-        // }
+        if (gp.TurnM.getBeaconCooldownTimer() > 0 && gp.TurnM.getActiveBeacons() < 3)  {
+            g2.setColor(new Color(0, 0, 0, 150)); // Semi-transparent black
+        }
+        else if (gp.TurnM.getBeaconCooldownTimer() == 0 && gp.TurnM.getActiveBeacons() < 3) {
+             g2.setColor(new Color(236, 210, 19, 200)); // Semi-transparent yellow
+        }
+        else if (gp.TurnM.getActiveBeacons() == 3) {
+           g2.setColor(new Color(0, 0, 255, 150)); // Semi-transparent blue
+        }
         g2.fillRoundRect(x, y, width, height, 20, 20);
 
         g2.setFont(arial_20);
         g2.setColor(Color.WHITE);
-        // if (Beacon of Light turns > 0 && numberofBeaconsUsed < 3){
-      //  g2.drawString(Beacon of Light turns + " until Beacon of Light can be used", 53 * gp.getTileSize(), 4 * gp.getTileSize() + 5);
-        //  }
-        //  else if (Beacon of Light turns == 0 && numberofBeaconsUsed < 3) {
-        g2.drawString("Beacon of Light can be used", 53 * gp.getTileSize(), 4 * gp.getTileSize() + 5);
-        // }
-     //   else if (numberofBeaconsUsed = 3) {
-      //  g2.drawString("Defeat the boss and exit the floor", 53 * gp.getTileSize(), 4 * gp.getTileSize() + 5);
-        //    }
+        if (gp.TurnM.getBeaconCooldownTimer() > 0 && gp.TurnM.getActiveBeacons() < 3) {
+             g2.drawString(gp.TurnM.getBeaconCooldownTimer() + " turns until Beacon of Light can be used", 53 * gp.getTileSize(), 4 * gp.getTileSize() + 5);
+        }
+        else if (gp.TurnM.getBeaconCooldownTimer() == 0 && gp.TurnM.getActiveBeacons() < 3) {
+            g2.drawString("Beacon of Light can be used", 53 * gp.getTileSize(), 4 * gp.getTileSize() + 5);
+        }
+        else if (gp.TurnM.getActiveBeacons() == 3) {
+            g2.drawString("Defeat the boss and exit the floor", 53 * gp.getTileSize(), 4 * gp.getTileSize() + 5);
+        }
     }
 
     // COMBAT FORECAST UI

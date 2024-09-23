@@ -22,12 +22,14 @@ public class TileManager {
 
     private final int Max_Col; // Maximum number of columns in the map
     private final int Max_Row; // Maximum number of rows in the map
-    public int mapTileNum[][]; // 2D array to store the tile numbers of the map
+    public int mapTileNum[][][]; // 3D array to store the level and tile numbers for each level
     public Tile[] tile; // Array to hold different types of tiles
     private List<Item>[][] tileItems; // 2D array to hold item lists for each tile
     private static ArrayList<ChaosUnit> selectedEnemies = new ArrayList<>(); // List of selected enemy units
     private boolean aKeyPressed = false; // Flag to track if the A key was pressed in the last frame
     private boolean itemWindowOpen = false; // Flag to track if the item window is open
+    public boolean[][] visibleTiles;  // 2D array to hold visibility of tiles
+    public boolean[][] BeaconOfLightTiles; // 2D array that holds Beacon of Light tiles
 
     public TileManager(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
@@ -35,8 +37,10 @@ public class TileManager {
         Max_Col = gp.getMaxMapCol(); // Get maximum columns from the game panel
         Max_Row = gp.getMaxMapRow(); // Get maximum rows from the game panel
         tile = new Tile[24]; // Initialize the tile array with 14 different types of tiles
-        mapTileNum = new int[Max_Col][Max_Row]; // Initialize the map tile number array
+        mapTileNum = new int[gp.getMaxMap()][Max_Col][Max_Row]; // Initialize the map tile number array
         tileItems = new ArrayList[Max_Col][Max_Row]; // Initialize the item lists for each tile
+        visibleTiles = new boolean[Max_Col][Max_Row];  // Initialize the visibility array
+        BeaconOfLightTiles = new boolean[Max_Col][Max_Row];  // Initialize the beacon pf light array
 
         // Initialize the item lists for each tile
         for (int col = 0; col < Max_Col; col++) {
@@ -46,7 +50,9 @@ public class TileManager {
         }
 
         loadImage(); // Load tile images
-        loadMap("/Maps/Map_1.txt"); // Load the map from a file
+        loadMap("/Maps/Map_1.txt", 0); // Load the first map
+        loadMap("/Maps/Map_2.txt", 1); // Load the second map
+
     }
 
     // Method to load tile images
@@ -95,7 +101,7 @@ public class TileManager {
     }
 
     // Method to load the map from a text file
-    public void loadMap(String filePath) {
+    public void loadMap(String filePath, int map) {
         try {
             InputStream is = getClass().getResourceAsStream(filePath);
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -109,7 +115,7 @@ public class TileManager {
                 while (col < Max_Col) {
                     String numbers[] = line.split(" "); // Split the string at a space
                     int num = Integer.parseInt(numbers[col]); // Convert the string to an integer
-                    mapTileNum[col][row] = num; // Store the tile number in the array
+                    mapTileNum[map][col][row] = num; // Store the tile number in the array
                     col++;
                 }
                 if (col == Max_Col) {
@@ -120,6 +126,102 @@ public class TileManager {
             br.close(); // Close the buffered reader
         }
         catch (Exception e) {  }
+    }
+
+    // Method to add visible tiles from a unit, marking them as visible in the array
+    public void addVisibleTilesFromLightunit(LightUnit lightUnit) {
+        List<int[]> lightunitVisibleTiles = lightUnit.getVisibleTiles();
+
+        // Mark each tile as visible
+        for (int[] tile : lightunitVisibleTiles) {
+            int col = tile[0];
+            int row = tile[1];
+
+            // Ensure the tile is within map boundaries
+            if (gp.cChecker.isWithinMap(col, row) && !visibleTiles[col][row]) {
+                visibleTiles[col][row] = true;  // Mark the tile as visible
+            }
+        }
+    }
+
+    public void addBeaconOfLightTile(LightUnit lightUnit) {
+        int col = lightUnit.getCol();
+        int row = lightUnit.getRow();
+        BeaconOfLightTiles[col][row] = true;
+    }
+
+    public void addVisibleTilesFromBOL() {
+        for (int col = 0; col < Max_Col; col++) {
+            for (int row = 0; row < Max_Row; row++) {
+                if (BeaconOfLightTiles[col][row]) {
+                    visibleTiles[col][row] = true;
+
+                    // Add all tiles with 1 Euclidean distance from Beacon of Light Tile
+                    int[][] neighborTiles = {
+                            {col - 1, row},     // Left
+                            {col + 1, row},     // Right
+                            {col, row - 1},     // Up
+                            {col, row + 1},     // Down
+                            {col - 1, row - 1}, // Upper-left diagonal
+                            {col + 1, row - 1}, // Upper-right diagonal
+                            {col - 1, row + 1}, // Lower-left diagonal
+                            {col + 1, row + 1}  // Lower-right diagonal
+                    };
+
+                    // Add valid neighboring tiles
+                    for (int[] neighbor : neighborTiles) {
+                        int neighborCol = neighbor[0];
+                        int neighborRow = neighbor[1];
+
+                        if (gp.cChecker.isWithinMap(neighborCol, neighborRow) && !visibleTiles[neighborCol][neighborRow]) {
+                            visibleTiles[neighborCol][neighborRow] = true; // Mark the tile as visible
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Method to reset Beacon Of Light of all tiles
+    public void resetBeaconOfLightTiles() {
+        for (int col= 0; col < Max_Col; col++) {
+            for (int row = 0; row < Max_Row; row++) {
+                BeaconOfLightTiles[col][row] = false;
+            }
+        }
+    }
+
+    public void findAllVisibleTiles() {
+        resetAllVisibleTiles();
+
+        addVisibleTilesFromBOL();
+
+        for (LightUnit lightUnit : gp.LightUnits) {
+            addVisibleTilesFromLightunit(lightUnit);
+        }
+    }
+
+    // Method to reset visibility of all tiles
+    public void resetAllVisibleTiles() {
+        for (int col= 0; col < Max_Col; col++) {
+            for (int row = 0; row < Max_Row; row++) {
+                visibleTiles[col][row] = false;
+            }
+        }
+    }
+
+    // Method to draw all visible tiles
+    public void drawVisibleTiles(Graphics2D g2) {
+        for (int col= 0; col < Max_Col; col++) {
+            for (int row = 0; row < Max_Row; row++) {
+                if (visibleTiles[col][row]) {
+                    g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.35f));
+                    g2.setColor(Color.YELLOW);
+                    g2.fillRect(col * gp.getTileSize(), row * gp.getTileSize(), gp.getTileSize(), gp.getTileSize());
+                    g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+                }
+            }
+        }
     }
 
     // Method to draw tiles that the player can move to as blue
@@ -248,6 +350,14 @@ public class TileManager {
         }
     }
 
+    public void clearItems() {
+        for (int col = 0; col < Max_Col; col++) {
+            for (int row = 0; row < Max_Row; row++) {
+                tileItems[col][row].clear();
+            }
+        }
+    }
+
     public void switchItem(int itemIndex, Item item, int col, int row) {
         tileItems[col][row].set(itemIndex, item);
     }
@@ -292,7 +402,7 @@ public class TileManager {
 
         // Draw the map tiles based on the mapTileNum array
         while (col < Max_Col && row < Max_Row) {
-            int tileNum = mapTileNum[col][row];
+            int tileNum = mapTileNum[gp.getCurrentMap()][col][row];
             Tile currentTile = tile[tileNum];
             g2.drawImage(currentTile.image, x, y, null); // Draw the tile
 
@@ -319,6 +429,7 @@ public class TileManager {
     public void draw (Graphics2D g2) {
 
         drawMap(g2); // Draw the map
+        drawVisibleTiles(g2);
         EnemySelection(); // Handle enemy selection logic
 
         // Draw enemy movement tiles

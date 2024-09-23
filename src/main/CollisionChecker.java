@@ -77,7 +77,7 @@ public class CollisionChecker {
 
     // Method to check if the target tile does not have a collision property
     public boolean NonCollisionTile  (int targetCol, int targetRow) {
-        int tileNum = gp.tileM.mapTileNum[targetCol][targetRow];
+        int tileNum = gp.tileM.mapTileNum[gp.getCurrentMap()][targetCol][targetRow];
         if (gp.tileM.tile[tileNum].collision) {
             return false;
         }
@@ -90,6 +90,22 @@ public class CollisionChecker {
             return true;
         }
         return false;
+    }
+
+    // Method to check if the tile is valid for placing Beacon of Light
+    public boolean isValidBeaconOfLightTile(int targetCol, int targetRow) {
+        for (int col = 0; col < gp.getMaxMapCol(); col++) {
+            for (int row = 0; row < gp.getMaxMapRow(); row++) {
+                if (gp.tileM.BeaconOfLightTiles[col][row]) {
+                    // Calculate Manhattan distance between target tile and each Beacon of Light
+                    int distance = Math.abs(targetCol - col) + Math.abs(targetRow - row);
+                    if (distance < 10) {
+                        return false;  // Too close to an existing beacon
+                    }
+                }
+            }
+        }
+        return true;  // Valid tile, no beacons within 10-tile distance
     }
 }
 

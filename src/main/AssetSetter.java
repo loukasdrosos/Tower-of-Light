@@ -25,6 +25,8 @@ public class AssetSetter {
 //        gp.LightUnits.add(new Paladin(gp, keyH, "Valbar", Entity.UnitRace.Tauren, 27, 10));
 //      gp.LightUnits.add(new Warrior(gp, keyH, "Ike", Entity.UnitRace.Human, 29, 14));
  //         gp.LightUnits.add(new Princess(gp, keyH, "Celica", Entity.UnitRace.Human, 27, 13));
+
+        gp.tileM.findAllVisibleTiles();
     }
 
     // Initialize enemy units and set their starting positions

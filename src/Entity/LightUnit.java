@@ -24,6 +24,7 @@ public class LightUnit extends Entity {
     private boolean dKeyReleased = true; // To track if D key has been released
     private boolean sKeyReleased = true; // To track if S key has been released
     private boolean cKeyReleased = true; // To track if C key has been released
+    private boolean bKeyReleased = true; // To track if B key has been released
     private boolean spaceKeyReleased = true; // To track if SPACE key has been released
 
 
@@ -205,7 +206,7 @@ public class LightUnit extends Entity {
                             gp.ui.addLogMessage("No ally that needs healing in range");
                         }
                     } else if (!gp.cChecker.noPlayerOnTile(col, row)) {
-                        gp.ui.addLogMessage("Unit can't heal while on another unit's tile");
+                        gp.ui.addLogMessage(name + " can't heal while on another unit's tile");
                     }
                 } else {
                     gp.ui.addLogMessage(name + " can't use healing spells");
@@ -234,7 +235,7 @@ public class LightUnit extends Entity {
         }
     }
 
-    // Inside your Player class or wherever relevant
+    // Use Potion
     public void usePotion() {
         if (gp.selectedUnit != null && isSelected && isMoving && !wait) {
 
@@ -256,7 +257,7 @@ public class LightUnit extends Entity {
                             gp.ui.addLogMessage(name + " is at full health");
                         }
                     } else if (!gp.cChecker.noPlayerOnTile(col, row)) {
-                        gp.ui.addLogMessage("Unit can't use potion while on another unit's tile");
+                        gp.ui.addLogMessage(name + " can't use potion while on another unit's tile");
                     }
                 } else {
                     gp.ui.addLogMessage(name + " doesn't have a potion in inventory");
@@ -275,6 +276,49 @@ public class LightUnit extends Entity {
             HP = maxHP;
         }
     }
+
+    // Use Beacon Of Light
+    public void useBeaconOfLight() {
+        if (gp.selectedUnit != null && isSelected && isMoving && !wait) {
+
+            if (keyH.isBPressed() && bKeyReleased) {
+                bKeyReleased = false; // Mark that B key was pressed
+                if (BeaconOfLight) {
+                    if (gp.cChecker.noPlayerOnTile(col, row)) {
+                        // Check if the tile is a valid tile for Beacon of Light placement
+                        if (gp.cChecker.isValidBeaconOfLightTile(col, row)) {
+                            if (gp.TurnM.getActiveBeacons() < 3) {
+                                if (gp.TurnM.getBeaconCooldownTimer() == 0) {
+                                    gp.playSE(19);
+                                    gp.tileM.addBeaconOfLightTile(this);
+                                    gp.TurnM.addBeacon();
+                                    gp.TurnM.resetBeaconCooldownTimer();
+                                    gp.ui.addLogMessage(name + " used Beacon of Light");
+                                    endTurn();
+                                    gp.selectedUnit = null;
+                                } else {
+                                    gp.ui.addLogMessage("Beacon of Light cooldown is not yet zero");
+                                }
+                            } else {
+                                gp.ui.addLogMessage("Maximum Beacons of Light activated");
+                            }
+                        } else {
+                            gp.ui.addLogMessage("Beacons can't be used near each other");
+                        }
+                    } else {
+                        gp.ui.addLogMessage(name + " can't use Beacon of Light while on another unit's tile");
+                    }
+                } else {
+                    gp.ui.addLogMessage(name + " can't use Beacon of Light");
+                }
+            }
+            // Reset the dKeyReleased state when the key is no longer pressed
+            if (!keyH.isBPressed()) {
+                bKeyReleased = true;
+            }
+        }
+    }
+
 
     public void pickUpItem() {
         if (gp.selectedUnit != null && isSelected && !wait && isMoving && !isAttacking && !isHealing) {
@@ -298,8 +342,6 @@ public class LightUnit extends Entity {
                                     gp.playSE(20);
                                     gp.ui.addLogMessage(name + " picked up " + tileWeapon.getName());
                                     gp.tileM.removeItem(droppedItemIndex, col, row);
-                                    preCol = col;
-                                    preRow = row;
                                     movement = 0;
                                     calculateCombatStats();
                                 }
@@ -314,8 +356,6 @@ public class LightUnit extends Entity {
                                     gp.playSE(20);
                                     gp.ui.addLogMessage(name + " picked up " + tileWeapon.getName());
                                     gp.tileM.switchItem(droppedItemIndex, tempWeapon, col, row);
-                                    preCol = col;
-                                    preRow = row;
                                     movement = 0;
                                     calculateCombatStats();
                                 } else if (!mainHand.isRemovable()) {
@@ -333,8 +373,6 @@ public class LightUnit extends Entity {
                                     gp.playSE(20);
                                     gp.ui.addLogMessage(name + " picked up " + tileWeapon.getName());
                                     gp.tileM.removeItem(droppedItemIndex, col, row);
-                                    preCol = col;
-                                    preRow = row;
                                     movement = 0;
                                     calculateCombatStats();
                                 }
@@ -349,8 +387,6 @@ public class LightUnit extends Entity {
                                     gp.playSE(20);
                                     gp.ui.addLogMessage(name + " picked up " + tileWeapon.getName());
                                     gp.tileM.switchItem(droppedItemIndex, tempWeapon, col, row);
-                                    preCol = col;
-                                    preRow = row;
                                     movement = 0;
                                     calculateCombatStats();
                                 } else if (!offHand.isRemovable()) {
@@ -371,8 +407,6 @@ public class LightUnit extends Entity {
                                 gp.playSE(20);
                                 gp.ui.addLogMessage(name + " picked up " + tileTrinket.getName());
                                 gp.tileM.removeItem(droppedItemIndex, col, row);
-                                preCol = col;
-                                preRow = row;
                                 movement = 0;
                                 calculateCombatStats();
                             }
@@ -384,8 +418,6 @@ public class LightUnit extends Entity {
                                 gp.playSE(20);
                                 gp.ui.addLogMessage(name + " picked up " + tileTrinket.getName());
                                 gp.tileM.switchItem(droppedItemIndex, tempTrinket, col, row);
-                                preCol = col;
-                                preRow = row;
                                 movement = 0;
                                 calculateCombatStats();
                             }
@@ -400,8 +432,6 @@ public class LightUnit extends Entity {
                                 potion = tilePotion;
                                 gp.ui.addLogMessage(name + " picked up " + tilePotion.getName());
                                 gp.tileM.removeItem(droppedItemIndex, col, row);
-                                preCol = col;
-                                preRow = row;
                                 movement = 0;
                                 calculateCombatStats();
                             }
@@ -519,6 +549,7 @@ public class LightUnit extends Entity {
         preRow = row;       // Update the previous row to the current row
         direction = "none"; // Reset the direction
         isSelected = false; // Deselect the unit
+        gp.tileM.findAllVisibleTiles();
     }
 
     // Method to reset the unit's position to the previous position
@@ -704,6 +735,7 @@ public class LightUnit extends Entity {
                 usePotion();
                 healAlly();
                 switchWeapons();
+                useBeaconOfLight();
             }
             else if (gp.tileM.isItemWindowOpen()) {
                 pickUpItem();
@@ -730,8 +762,7 @@ public class LightUnit extends Entity {
     }
 
     /* Calculate all valid tiles the unit can move to within its movement range with the use of Breadth-First-Search (BFS)
-    BFS is well-suited for this scenario because explores all possible moves level by level, which means it considers
-    all closer tiles before moving on to further ones. This is useful in grid-based games where movement range is limited */
+    BFS is used in this scenario because it explores all possible moves starting from closer tiles before moving on to further ones  */
     public List<int[]> calculateValidMovement() {
         List<int[]> validMoves = new ArrayList<>();
 
@@ -772,6 +803,45 @@ public class LightUnit extends Entity {
             }
         }
         return validMoves; // Return the list of all valid move tiles
+    }
+
+    // Calculate all tiles the unit can see to within its vision range with the use of Breadth-First-Search (BFS)
+    public List<int[]> getVisibleTiles() {
+        List<int[]> visibleTiles = new ArrayList<>();
+
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[]{preCol, preRow, 0}); // Start from the current position with 0 distance traveled
+
+        // Track visited tiles to prevent revisiting the same tile
+        boolean[][] visited = new boolean[gp.getMaxMapCol()][gp.getMaxMapRow()];
+        visited[preCol][preRow] = true; // Mark the starting position as visited
+
+        // Continue exploring tiles until there are no more to explore
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll(); // Get the current tile from the front of the queue
+            int currentCol = current[0];
+            int currentRow = current[1];
+            int currentDistance = current[2];
+
+            // Add the current tile as a vision tile
+            visibleTiles.add(new int[]{currentCol, currentRow});
+
+            // Checks all possible directions (up, down, left, right) from the current tile
+            int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+            for (int[] dir : directions) {
+                int newCol = currentCol + dir[0];
+                int newRow = currentRow + dir[1];
+                int newDistance = currentDistance + 1;
+
+                // Check if the new tile is within the map bounds, not visited and within vision range
+                if (gp.cChecker.isWithinMap(newCol, newRow) && !visited[newCol][newRow] && newDistance <= vision ) {
+                    // If the tile is valid, add it to the queue to be explored
+                    queue.add(new int[]{newCol, newRow, newDistance});
+                    visited[newCol][newRow] = true; // Mark the tile as visited
+                }
+            }
+        }
+        return visibleTiles; // Return the list of all visible tiles
     }
 
     // Method to find all tiles with enemies in this unit's attack range based on its current position

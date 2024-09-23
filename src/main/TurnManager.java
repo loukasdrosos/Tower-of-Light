@@ -12,6 +12,10 @@ public class TurnManager {
     private boolean playerPhaseSoundPlayed = false;
     private boolean enemyPhaseSoundPlayed = false;
 
+    private int activeBeacons = 0; // Count of currently active beacons
+    private int beaconCooldown = 10; // Cooldown period for each beacon
+    private int beaconCooldownTimer = beaconCooldown; // Cooldown timer for beacons of light
+
     GamePanel gp;
     KeyHandler keyH;
 
@@ -105,6 +109,8 @@ public class TurnManager {
                 for (LightUnit unit : gp.LightUnits) {
                     unit.startTurn();
                 }
+
+                reduceBeaconCooldown();
             }
         }
     }
@@ -135,6 +141,23 @@ public class TurnManager {
         }
     }
 
+    public void resetBeaconCooldownTimer() {
+        beaconCooldownTimer = beaconCooldown;
+    }
+
+    public void addBeacon() {
+        activeBeacons++;
+    }
+
+    // Decrease the cooldown timer for Beacons of Light
+    public void reduceBeaconCooldown() {
+        if (beaconCooldownTimer > 0) {
+            beaconCooldownTimer--;
+        }
+    }
+
+
+
     public void update() {
         manageTurns();
         endPlayerTurn();
@@ -151,7 +174,16 @@ public class TurnManager {
     public int getTurnCounter() {
         return turnCounter;
     }
+
+    // Returns the number of active Beacons of light
+    public int getActiveBeacons() { return activeBeacons;}
+
+    // Returns the cooldown counter for Beacons of light
+    public int getBeaconCooldownTimer() { return beaconCooldownTimer; }
+
 }
+
+
 
 
 
