@@ -35,7 +35,7 @@ public class AssetSetter {
         int activeBeacons = gp.TurnM.getActiveBeacons(); // Number of active Beacons of Light
         int currentEnemies = gp.ChaosUnits.size();
         Random rand = new Random();
-        while (currentEnemies <= 30) {
+        while (currentEnemies <= 5) {
             // Randomly pick a tile on the map
             int targetCol = rand.nextInt(gp.getMaxMapCol());
             int targetRow = rand.nextInt(gp.getMaxMapRow());
@@ -85,8 +85,10 @@ public class AssetSetter {
                     currentEnemies = gp.ChaosUnits.size();
                 }
             }
-            // If enemies are more than minimum but less than half of maximum, spawn maxEnemies/2 + 5 enemies
-        } else if (currentEnemies >= minEnemies && currentEnemies <= maxEnemies/2) {
+            gp.ui.addLogMessage("More enemies appeared");
+        }
+        // If enemies are more than minimum but less than half of maximum, spawn maxEnemies/2 + 5 enemies
+        else if (currentEnemies >= minEnemies && currentEnemies <= maxEnemies/2) {
             while (currentEnemies < maxEnemies/2 + 5) {
                 // Randomly pick a tile on the map
                 int targetCol = rand.nextInt(gp.getMaxMapCol());
@@ -100,6 +102,7 @@ public class AssetSetter {
                     currentEnemies = gp.ChaosUnits.size();
                 }
             }
+            gp.ui.addLogMessage("More enemies appeared");
         }
     }
 
@@ -110,40 +113,42 @@ public class AssetSetter {
         int col = rand.nextInt(gp.getMaxMapCol());
         int row = rand.nextInt(gp.getMaxMapRow());
 
-        while (!gp.tileM.visibleTiles[col][row]) {
+        while (!gp.tileM.visibleTiles[col][row] && !gp.cChecker.validTile(col, row)) {
             // Randomly pick a tile on the map
             col = rand.nextInt(gp.getMaxMapCol());
             row = rand.nextInt(gp.getMaxMapRow());
         }
 
-        ChaosUnit enemy = new FallenHero(gp, col, row); // Placeholder in case enemy would return null for some reason
-        if (gp.getCurrentMap() == 0) {
-            enemy = new Titan(gp, true, col, row);
-        }
-        if (gp.getCurrentMap() == 1) {
-            enemy = new Necromancer(gp, col, row);
-        }
-        if (gp.getCurrentMap() == 2) {
-            enemy = new FireDragon(gp, true, col, row);
-        }
-        if (gp.getCurrentMap() == 3) {
-            enemy = new ChaosPaladin(gp, true, col, row);
-        }
-        if (gp.getCurrentMap() == 4) {
-            enemy = new Sorcerer(gp, col, row);
-        }
-        if (gp.getCurrentMap() == 5) {
-            enemy = new HeraldOfChaos(gp, true, col, row);
-        }
-        if (gp.getCurrentMap() == 6) {
-            enemy = new ChaosGod(gp, col, row);
+        ChaosUnit enemy;
+        switch (gp.getCurrentMap()) {
+            case 0:
+                enemy = new FireDragon(gp, true, col, row);
+                break;
+            case 1:
+                enemy = new Necromancer(gp, col, row);
+                break;
+            case 2:
+                enemy = new FireDragon(gp, true, col, row);
+                break;
+            case 3:
+                enemy = new ChaosPaladin(gp, true, col, row);
+                break;
+            case 4:
+                enemy = new Sorcerer(gp, col, row);
+                break;
+            case 5:
+                enemy = new HeraldOfChaos(gp, col, row);
+                break;
+            case 6:
+                enemy = new ChaosGod(gp, col, row);
+                break;
+            default:
+                enemy = new FallenHero(gp, col, row); // Default enemy type
         }
 
-        // Check if the tile is valid for spawning (not visible, no enemy, no player, no collision)
-        if (!gp.tileM.visibleTiles[col][row] && gp.cChecker.validTile(col, row)) {
-            // Spawn the boss randomly based on the map
-            gp.ChaosUnits.add(enemy); // Add the enemy to the list of Chaos units
-        }
+        // Spawn the boss randomly based on the map
+        gp.ChaosUnits.add(enemy); // Add the enemy to the list of Chaos units
+        gp.ui.addLogMessage("Boss appeared");
     }
 
     // Method to spawn a random enemy based on the current map and active Beacons of Light

@@ -5,7 +5,7 @@ import main.GamePanel;
 
 public class HeraldOfChaos extends ChaosUnit{
 
-    public HeraldOfChaos(GamePanel gp, boolean isBoss, int startCol, int startRow) {
+    public HeraldOfChaos(GamePanel gp, int startCol, int startRow) {
         super(gp);
         this.col = startCol;   // Initial column position
         this.row = startRow;    // Initial row position
@@ -13,7 +13,7 @@ public class HeraldOfChaos extends ChaosUnit{
         y = getY();          // Calculate initial y position based on row
         preCol = col;           // Set previous column to current column
         preRow = row;           // Set previous row to current row
-        boss = isBoss;
+        boss = true;
         setupStats();
         // Load unit's images for animations
         try {

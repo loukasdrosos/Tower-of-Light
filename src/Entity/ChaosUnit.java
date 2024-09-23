@@ -291,5 +291,9 @@ public class ChaosUnit extends Entity {
     // Placeholder method to randomize items
     public void randomizeItems() {}
 
+    // Getter
+
+    // Return if the unit is a boss
+    public boolean isBoss() { return boss;}
 }
 

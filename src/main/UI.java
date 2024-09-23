@@ -900,6 +900,10 @@ public class UI {
         }
         g2.drawString(enemy.getClassName(), textX, textY + nextLine * lineHeight);
         nextLine++;
+        if (enemy.isBoss()) {
+            g2.drawString("Boss", textX, textY + nextLine * lineHeight);
+            nextLine++;
+        }
         g2.drawString(String.valueOf(enemy.getRace()), textX, textY + nextLine * lineHeight);
         nextLine++;
         if (enemy.getUnitType() == Entity.UnitType.Armored) {

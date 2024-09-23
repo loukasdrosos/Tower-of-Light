@@ -98,7 +98,7 @@ public class CollisionChecker {
                 if (gp.tileM.BeaconOfLightTiles[col][row]) {
                     // Calculate Manhattan distance between target tile and each Beacon of Light
                     int distance = Math.abs(targetCol - col) + Math.abs(targetRow - row);
-                    if (distance < 10) {
+                    if (distance < 1) {
                         return false;  // Too close to an existing beacon
                     }
                 }

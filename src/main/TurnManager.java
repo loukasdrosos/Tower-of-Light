@@ -13,9 +13,10 @@ public class TurnManager {
     private boolean enemyPhaseSoundPlayed = false;
 
     private int activeBeacons = 0; // Count of currently active beacons
-    private int beaconCooldown = 10; // Cooldown period for each beacon
+    private int beaconCooldown = 1; // Cooldown period for each beacon
     private int beaconCooldownTimer = beaconCooldown; // Cooldown timer for beacons of light
 
+    private boolean enemiesSpawned;
     private boolean boss1Spawned, boss2Spawned, boss3Spawned, boss4Spawned, boss5Spawned, boss6Spawned;
 
     GamePanel gp;
@@ -63,32 +64,35 @@ public class TurnManager {
                     unit.endTurn();
                 }
 
-                gp.aSetter.spawnEnemies();
-                if (activeBeacons == 3) {
-                    if (!boss1Spawned) {
-                        gp.aSetter.spawnBosses();
-                        boss1Spawned = true;
+                if (!enemiesSpawned) {
+                    gp.aSetter.spawnEnemies();
+                    if (activeBeacons == 3) {
+                        if (!boss1Spawned) {
+                            gp.aSetter.spawnBosses();
+                            boss1Spawned = true;
+                        }
+                         else if (!boss2Spawned) {
+                            gp.aSetter.spawnBosses();
+                            boss2Spawned = true;
+                        }
+                        else if (!boss3Spawned) {
+                            gp.aSetter.spawnBosses();
+                            boss3Spawned = true;
+                        }
+                        else if (!boss4Spawned) {
+                            gp.aSetter.spawnBosses();
+                            boss4Spawned = true;
+                        }
+                        else if (!boss5Spawned) {
+                            gp.aSetter.spawnBosses();
+                            boss5Spawned = true;
+                        }
+                        else if (!boss6Spawned) {
+                            gp.aSetter.spawnBosses();
+                            boss6Spawned = true;
+                        }
                     }
-                    if (!boss2Spawned) {
-                        gp.aSetter.spawnBosses();
-                        boss2Spawned = true;
-                    }
-                    if (!boss3Spawned) {
-                        gp.aSetter.spawnBosses();
-                        boss3Spawned = true;
-                    }
-                    if (!boss4Spawned) {
-                        gp.aSetter.spawnBosses();
-                        boss4Spawned = true;
-                    }
-                    if (!boss5Spawned) {
-                        gp.aSetter.spawnBosses();
-                        boss5Spawned = true;
-                    }
-                    if (!boss6Spawned) {
-                        gp.aSetter.spawnBosses();
-                        boss6Spawned = true;
-                    }
+                    enemiesSpawned = true;
                 }
 
                 // Start the turn for the first enemy unit, if available
@@ -140,6 +144,7 @@ public class TurnManager {
                     unit.startTurn();
                 }
 
+                enemiesSpawned = false;
                 reduceBeaconCooldown();
             }
         }
