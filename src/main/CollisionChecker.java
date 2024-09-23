@@ -55,7 +55,6 @@ public class CollisionChecker {
         return null;
     }
 
-
     // Method to check if there is no player unit on the target tile
     public boolean noPlayerOnTile (int targetCol, int targetRow) {
         for (LightUnit player : gp.LightUnits) {

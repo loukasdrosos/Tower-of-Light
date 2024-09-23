@@ -6,8 +6,8 @@ import main.GamePanel;
 import main.UtilityTool;
 
 public class Necromancer extends ChaosUnit{
-    public Necromancer(GamePanel gp, boolean canMove, int startCol, int startRow) {
-        super(gp, canMove);
+    public Necromancer(GamePanel gp, int startCol, int startRow) {
+        super(gp);
         this.col = startCol;   // Initial column position
         this.row = startRow;    // Initial row position
         x = getX();          // Calculate initial x position based on column
@@ -42,9 +42,6 @@ public class Necromancer extends ChaosUnit{
         defense = 10;
         resistance = 12;
         movement = 3;
-        if (!canMove) {
-            movement = 0;
-        }
         race = UnitRace.Elf;
         attackSpell = new Fenrir();
         trinket = new SilverShield();

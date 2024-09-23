@@ -1,13 +1,15 @@
 package Item;
 
-import Entity.Entity;
-
+import main.GamePanel;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
 public class Lightbringer extends MainHand {
 
-    public Lightbringer() {
+    GamePanel gp;
+
+    public Lightbringer(GamePanel gp) {
+        this.gp = gp;
         setupStats();
         try {
             image = ImageIO.read((getClass().getResourceAsStream("/Weapons/Lightbringer.png")));
@@ -36,26 +38,29 @@ public class Lightbringer extends MainHand {
         effectiveType = null;
     }
 
-    /*
+
     @Override
     public void update() {
-            might = 9 + 3 * number of Beacon of Lights;
+        might = 9 + 3 * gp.TurnM.getActiveBeacons();
 
-        if (number of beacon of lights > 0 && number of beacon of lights < 3) {
+        if (gp.TurnM.getActiveBeacons() == 0) {
+            crit = 0;
+        }
+
+        if (gp.TurnM.getActiveBeacons() > 0 && gp.TurnM.getActiveBeacons() < 3) {
             crit = 5;
         }
 
-        if (number of beacon of lights < 3) {
+        if (gp.TurnM.getActiveBeacons() < 3) {
             range = 1;
+            hit = 85;
         }
 
-        if (number of beacon of lights == 3) {
+        if (gp.TurnM.getActiveBeacons() == 3) {
             range = 3;
             crit = 10;
             hit = 90;
         }
     }
-
-     */
 
 }

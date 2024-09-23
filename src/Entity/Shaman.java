@@ -6,8 +6,8 @@ import main.GamePanel;
 import main.UtilityTool;
 
 public class Shaman extends ChaosUnit{
-    public Shaman(GamePanel gp, boolean canMove, int startCol, int startRow) {
-        super(gp, canMove);
+    public Shaman(GamePanel gp,int startCol, int startRow) {
+        super(gp);
         this.col = startCol;   // Initial column position
         this.row = startRow;    // Initial row position
         x = getX();          // Calculate initial x position based on column
@@ -28,9 +28,6 @@ public class Shaman extends ChaosUnit{
     public void setupStats() {
         className = "Shaman";
         level = 3;
-        if (!canMove && !boss) {
-            level += 2;
-        }
         if (level > maxLevel) {
             level = maxLevel;
         }
@@ -43,9 +40,6 @@ public class Shaman extends ChaosUnit{
         defense = 7;
         resistance = 7;
         movement = 3;
-        if (!canMove) {
-            movement = 0;
-        }
         setupGrowthRates();
         setStats();
         randomizeRace();

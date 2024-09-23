@@ -5,8 +5,8 @@ import main.GamePanel;
 import main.UtilityTool;
 
 public class FireDragon extends ChaosUnit{
-    public FireDragon(GamePanel gp, boolean canMove, boolean boss, int startCol, int startRow) {
-        super(gp, canMove);
+    public FireDragon(GamePanel gp, boolean boss, int startCol, int startRow) {
+        super(gp);
         this.col = startCol;   // Initial column position
         this.row = startRow;    // Initial row position
         x = getX();          // Calculate initial x position based on column
@@ -28,9 +28,6 @@ public class FireDragon extends ChaosUnit{
     public void setupStats() {
         className = "Fire Dragon";
         level = 18;
-        if (!canMove && !boss) {
-            level += 2;
-        }
         if (level > maxLevel) {
             level = maxLevel;
         }
@@ -43,9 +40,6 @@ public class FireDragon extends ChaosUnit{
         defense = 10;
         resistance = 7;
         movement = 3;
-        if (!canMove) {
-            movement = 0;
-        }
         setupGrowthRates();
         setStats();
         if (boss) {

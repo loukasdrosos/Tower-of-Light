@@ -14,11 +14,9 @@ public class ChaosUnit extends Entity {
     protected int moveSpeed = 8; // Speed at which the unit moves between tiles
 
     protected boolean boss;
-    protected boolean canMove;
 
-    public ChaosUnit(GamePanel gp, boolean canMove) {
+    public ChaosUnit(GamePanel gp) {
         super(gp);
-        this.canMove = canMove;
     }
 
     // Method to start the unit's turn (called at the beginning of its turn)

@@ -6,8 +6,8 @@ import main.GamePanel;
 import main.UtilityTool;
 
 public class Spirit extends ChaosUnit{
-    public Spirit(GamePanel gp, boolean canMove, int startCol, int startRow) {
-        super(gp, canMove);
+    public Spirit(GamePanel gp,int startCol, int startRow) {
+        super(gp);
         this.col = startCol;   // Initial column position
         this.row = startRow;    // Initial row position
         x = getX();          // Calculate initial x position based on column
@@ -28,9 +28,6 @@ public class Spirit extends ChaosUnit{
     public void setupStats() {
         className = "Spirit";
         level = 15;
-        if (!canMove && !boss) {
-            level += 2;
-        }
         if (level > maxLevel) {
             level = maxLevel;
         }
@@ -43,9 +40,6 @@ public class Spirit extends ChaosUnit{
         defense = 2;
         resistance = 6;
         movement = 3;
-        if (!canMove) {
-            movement = 0;
-        }
         setupGrowthRates();
         setStats();
         randomizeRace();

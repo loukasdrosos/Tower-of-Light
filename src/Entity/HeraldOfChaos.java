@@ -5,8 +5,8 @@ import main.GamePanel;
 
 public class HeraldOfChaos extends ChaosUnit{
 
-    public HeraldOfChaos(GamePanel gp, boolean isBoss, boolean canMove, int startCol, int startRow) {
-        super(gp, canMove);
+    public HeraldOfChaos(GamePanel gp, boolean isBoss, int startCol, int startRow) {
+        super(gp);
         this.col = startCol;   // Initial column position
         this.row = startRow;    // Initial row position
         x = getX();          // Calculate initial x position based on column
@@ -41,9 +41,6 @@ public class HeraldOfChaos extends ChaosUnit{
         defense = 25;
         resistance = 30;
         movement = 3;
-        if (!canMove) {
-            movement = 0;
-        }
         equippedWeapon = new EdgeOfChaos();
         trinket =  new DemonRing();
         race = UnitRace.Human;

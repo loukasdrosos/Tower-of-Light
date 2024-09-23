@@ -6,8 +6,8 @@ import Spells.Goetia;
 import main.GamePanel;
 
 public class ChaosGod extends ChaosUnit{
-    public ChaosGod(GamePanel gp, boolean canMove, int startCol, int startRow) {
-        super(gp, canMove);
+    public ChaosGod(GamePanel gp, int startCol, int startRow) {
+        super(gp);
         this.col = startCol;   // Initial column position
         this.row = startRow;    // Initial row position
         x = getX();          // Calculate initial x position based on column
@@ -42,9 +42,6 @@ public class ChaosGod extends ChaosUnit{
         defense = 33;
         resistance = 33;
         movement = 3;
-        if (!canMove) {
-            movement = 0;
-        }
         race = UnitRace.Dragon;
         attackSpell = new Expiration();
         unitType = UnitType.Infantry;

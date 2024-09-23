@@ -20,7 +20,7 @@ public class Prince extends LightUnit{
         this.name = name;
         this.race = race;
         setupGrowthRates();
-        mainHand = new Lightbringer();
+        mainHand = new Lightbringer(gp);
         equippedWeapon = this.mainHand;
         trinket = new RoyalShield();
         potion = new Vulnerary();

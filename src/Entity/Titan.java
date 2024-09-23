@@ -5,8 +5,8 @@ import main.GamePanel;
 import main.UtilityTool;
 
 public class Titan extends ChaosUnit{
-    public Titan(GamePanel gp, boolean canMove, boolean boss, int startCol, int startRow) {
-        super(gp, canMove);
+    public Titan(GamePanel gp, boolean boss, int startCol, int startRow) {
+        super(gp);
         this.col = startCol;   // Initial column position
         this.row = startRow;    // Initial row position
         x = getX();          // Calculate initial x position based on column
@@ -28,9 +28,6 @@ public class Titan extends ChaosUnit{
     public void setupStats() {
         className = "Titan";
         level = 2;
-        if (!canMove && !boss) {
-            level += 2;
-        }
         if (level > maxLevel) {
             level = maxLevel;
         }
@@ -43,9 +40,6 @@ public class Titan extends ChaosUnit{
         defense = 5;
         resistance = 1;
         movement = 3;
-        if (!canMove) {
-            movement = 0;
-        }
         setupGrowthRates();
         setStats();
         if (boss) {

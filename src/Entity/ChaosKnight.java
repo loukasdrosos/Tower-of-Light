@@ -5,8 +5,8 @@ import main.GamePanel;
 import main.UtilityTool;
 
 public class ChaosKnight extends ChaosUnit{
-    public ChaosKnight(GamePanel gp, boolean canMove, int startCol, int startRow) {
-        super(gp, canMove);
+    public ChaosKnight(GamePanel gp, int startCol, int startRow) {
+        super(gp);
         this.col = startCol;   // Initial column position
         this.row = startRow;    // Initial row position
         x = getX();          // Calculate initial x position based on column
@@ -27,9 +27,6 @@ public class ChaosKnight extends ChaosUnit{
     public void setupStats() {
         className = "Chaos Knight";
         level = 6;
-        if (!canMove && !boss) {
-            level += 2;
-        }
         if (level > maxLevel) {
             level = maxLevel;
         }
@@ -42,9 +39,6 @@ public class ChaosKnight extends ChaosUnit{
         defense = 10;
         resistance = 6;
         movement = 4;
-        if (!canMove) {
-            movement = 0;
-        }
         setupGrowthRates();
         setStats();
         randomizeRace();

@@ -6,8 +6,8 @@ import main.GamePanel;
 import main.UtilityTool;
 
 public class ChaosDragon extends ChaosUnit{
-    public ChaosDragon(GamePanel gp, boolean canMove, int startCol, int startRow) {
-        super(gp, canMove);
+    public ChaosDragon(GamePanel gp, int startCol, int startRow) {
+        super(gp);
         this.col = startCol;   // Initial column position
         this.row = startRow;    // Initial row position
         x = getX();          // Calculate initial x position based on column
@@ -28,9 +28,6 @@ public class ChaosDragon extends ChaosUnit{
     public void setupStats() {
         className = "Chaos Dragon";
         level = 18;
-        if (!canMove && !boss) {
-            level += 2;
-        }
         if (level > maxLevel) {
             level = maxLevel;
         }
@@ -43,9 +40,6 @@ public class ChaosDragon extends ChaosUnit{
         defense = 7;
         resistance = 10;
         movement = 3;
-        if (!canMove) {
-            movement = 0;
-        }
         setupGrowthRates();
         setStats();
         race = UnitRace.Dragon;
@@ -114,8 +108,6 @@ public class ChaosDragon extends ChaosUnit{
             gp.tileM.addItems(item, col, row);
         }
     }
-
-
 
     //Load images for the unit's animations
     @Override

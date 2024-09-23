@@ -5,8 +5,8 @@ import main.GamePanel;
 import main.UtilityTool;
 
 public class FallenHero extends ChaosUnit{
-    public FallenHero(GamePanel gp, boolean canMove, int startCol, int startRow) {
-        super(gp, canMove);
+    public FallenHero(GamePanel gp, int startCol, int startRow) {
+        super(gp);
         this.col = startCol;   // Initial column position
         this.row = startRow;    // Initial row position
         x = getX();          // Calculate initial x position based on column
@@ -27,9 +27,6 @@ public class FallenHero extends ChaosUnit{
     public void setupStats() {
         className = "Fallen Hero";
         level = 1;
-        if (!canMove && !boss) {
-            level += 2;
-        }
         if (level > maxLevel) {
             level = maxLevel;
         }
@@ -42,9 +39,6 @@ public class FallenHero extends ChaosUnit{
         defense = 5;
         resistance = 3;
         movement = 3;
-        if (!canMove) {
-            movement = 0;
-        }
         setupGrowthRates();
         setStats();
         randomizeRace();

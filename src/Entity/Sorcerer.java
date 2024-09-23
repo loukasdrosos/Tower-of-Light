@@ -5,8 +5,8 @@ import Spells.*;
 import main.GamePanel;
 
 public class Sorcerer extends ChaosUnit{
-    public Sorcerer(GamePanel gp, boolean canMove, int startCol, int startRow) {
-        super(gp, canMove);
+    public Sorcerer(GamePanel gp, int startCol, int startRow) {
+        super(gp);
         this.col = startCol;   // Initial column position
         this.row = startRow;    // Initial row position
         x = getX();          // Calculate initial x position based on column
@@ -42,9 +42,6 @@ public class Sorcerer extends ChaosUnit{
         resistance = 23;
         movementInitial = 3;
         movement = movementInitial;
-        if (!canMove) {
-            movement = 0;
-        }
         race = UnitRace.Elf;
         attackSpell = new Goetia();
         trinket = new Dracoshield();
