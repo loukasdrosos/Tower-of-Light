@@ -16,6 +16,8 @@ public class TurnManager {
     private int beaconCooldown = 10; // Cooldown period for each beacon
     private int beaconCooldownTimer = beaconCooldown; // Cooldown timer for beacons of light
 
+    private boolean boss1Spawned, boss2Spawned, boss3Spawned, boss4Spawned, boss5Spawned, boss6Spawned;
+
     GamePanel gp;
     KeyHandler keyH;
 
@@ -59,6 +61,34 @@ public class TurnManager {
                 // Set all player units' wait = true to prevent them from acting during the enemy phase
                 for (LightUnit unit : gp.LightUnits) {
                     unit.endTurn();
+                }
+
+                gp.aSetter.spawnEnemies();
+                if (activeBeacons == 3) {
+                    if (!boss1Spawned) {
+                        gp.aSetter.spawnBosses();
+                        boss1Spawned = true;
+                    }
+                    if (!boss2Spawned) {
+                        gp.aSetter.spawnBosses();
+                        boss2Spawned = true;
+                    }
+                    if (!boss3Spawned) {
+                        gp.aSetter.spawnBosses();
+                        boss3Spawned = true;
+                    }
+                    if (!boss4Spawned) {
+                        gp.aSetter.spawnBosses();
+                        boss4Spawned = true;
+                    }
+                    if (!boss5Spawned) {
+                        gp.aSetter.spawnBosses();
+                        boss5Spawned = true;
+                    }
+                    if (!boss6Spawned) {
+                        gp.aSetter.spawnBosses();
+                        boss6Spawned = true;
+                    }
                 }
 
                 // Start the turn for the first enemy unit, if available

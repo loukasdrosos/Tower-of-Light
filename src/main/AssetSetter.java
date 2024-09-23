@@ -1,7 +1,6 @@
 package main;
 
 import Entity.*;
-import Item.*;
 import java.util.Random;
 
 public class AssetSetter {
@@ -33,15 +32,25 @@ public class AssetSetter {
     // Initialize enemy units and set their starting positions
     public void setChaosUnits() {
         gp.ChaosUnits.clear();
-        if (gp.getCurrentMap() == 0) {
-            gp.ChaosUnits.add(new FallenHero(gp, 32, 16));
-            gp.ChaosUnits.add(new FallenHero(gp, 28, 14));
-            gp.ChaosUnits.add(new Titan(gp, false, 34, 15));
+        int activeBeacons = gp.TurnM.getActiveBeacons(); // Number of active Beacons of Light
+        int currentEnemies = gp.ChaosUnits.size();
+        Random rand = new Random();
+        while (currentEnemies <= 30) {
+            // Randomly pick a tile on the map
+            int targetCol = rand.nextInt(gp.getMaxMapCol());
+            int targetRow = rand.nextInt(gp.getMaxMapRow());
+
+            // Check if the tile is valid for spawning (not visible, no enemy, no player, no collision)
+            if (!gp.tileM.visibleTiles[targetCol][targetRow] && gp.cChecker.validTile(targetCol, targetRow)) {
+                // Spawn the enemy type randomly based on the map and active Beacons
+                ChaosUnit enemy = spawnRandomEnemy(targetCol, targetRow, activeBeacons);
+                gp.ChaosUnits.add(enemy); // Add the enemy to the list of Chaos units
+                currentEnemies = gp.ChaosUnits.size();
+            }
         }
-        else if (gp.getCurrentMap() == 1) {
-            gp.ChaosUnits.add(new FallenHero(gp, 32, 16));
-            gp.ChaosUnits.add(new FallenHero(gp, 28, 14));
-            gp.ChaosUnits.add(new Titan(gp, false, 34, 15));
+
+        if (gp.getCurrentMap() == 6) {
+            spawnBosses();
         }
     }
 
@@ -63,7 +72,7 @@ public class AssetSetter {
 
         if (currentEnemies < minEnemies) {
             // Keep looping until we've spawned at least the minimum number of enemies
-            while (currentEnemies < minEnemies) {
+            while (currentEnemies < minEnemies + 4) {
                 // Randomly pick a tile on the map
                 int targetCol = rand.nextInt(gp.getMaxMapCol());
                 int targetRow = rand.nextInt(gp.getMaxMapRow());
@@ -76,9 +85,9 @@ public class AssetSetter {
                     currentEnemies = gp.ChaosUnits.size();
                 }
             }
-            // If enemies are more than minimum but less than half of maximum, spawn 5 enemies
-        } else if (currentEnemies >= minEnemies && currentEnemies < maxEnemies/2) {
-            while (currentEnemies < maxEnemies/2) {
+            // If enemies are more than minimum but less than half of maximum, spawn maxEnemies/2 + 5 enemies
+        } else if (currentEnemies >= minEnemies && currentEnemies <= maxEnemies/2) {
+            while (currentEnemies < maxEnemies/2 + 5) {
                 // Randomly pick a tile on the map
                 int targetCol = rand.nextInt(gp.getMaxMapCol());
                 int targetRow = rand.nextInt(gp.getMaxMapRow());
@@ -91,6 +100,49 @@ public class AssetSetter {
                     currentEnemies = gp.ChaosUnits.size();
                 }
             }
+        }
+    }
+
+    public void spawnBosses() {
+        Random rand = new Random();
+
+        // Randomly pick a tile on the map
+        int col = rand.nextInt(gp.getMaxMapCol());
+        int row = rand.nextInt(gp.getMaxMapRow());
+
+        while (!gp.tileM.visibleTiles[col][row]) {
+            // Randomly pick a tile on the map
+            col = rand.nextInt(gp.getMaxMapCol());
+            row = rand.nextInt(gp.getMaxMapRow());
+        }
+
+        ChaosUnit enemy = new FallenHero(gp, col, row); // Placeholder in case enemy would return null for some reason
+        if (gp.getCurrentMap() == 0) {
+            enemy = new Titan(gp, true, col, row);
+        }
+        if (gp.getCurrentMap() == 1) {
+            enemy = new Necromancer(gp, col, row);
+        }
+        if (gp.getCurrentMap() == 2) {
+            enemy = new FireDragon(gp, true, col, row);
+        }
+        if (gp.getCurrentMap() == 3) {
+            enemy = new ChaosPaladin(gp, true, col, row);
+        }
+        if (gp.getCurrentMap() == 4) {
+            enemy = new Sorcerer(gp, col, row);
+        }
+        if (gp.getCurrentMap() == 5) {
+            enemy = new HeraldOfChaos(gp, true, col, row);
+        }
+        if (gp.getCurrentMap() == 6) {
+            enemy = new ChaosGod(gp, col, row);
+        }
+
+        // Check if the tile is valid for spawning (not visible, no enemy, no player, no collision)
+        if (!gp.tileM.visibleTiles[col][row] && gp.cChecker.validTile(col, row)) {
+            // Spawn the boss randomly based on the map
+            gp.ChaosUnits.add(enemy); // Add the enemy to the list of Chaos units
         }
     }
 
