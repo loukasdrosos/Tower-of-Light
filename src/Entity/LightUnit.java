@@ -294,6 +294,12 @@ public class LightUnit extends Entity {
                                     gp.TurnM.addBeacon();
                                     gp.TurnM.resetBeaconCooldownTimer();
                                     gp.ui.addLogMessage(name + " used Beacon of Light");
+                                    // Update Prince's Lightbringer stats
+                                    if (gp.LightUnits.getFirst().mainHand != null) {
+                                        gp.LightUnits.getFirst().mainHand.update();
+                                    }
+                                    gp.LightUnits.getFirst().calculateCombatStats(); // Update Princes's combat stats since Lightbringer is getting stronger
+                                    gp.ui.addLogMessage("Alm: I can feel Lightbringer's power increasing");
                                     endTurn();
                                     gp.selectedUnit = null;
                                 } else {
@@ -740,11 +746,6 @@ public class LightUnit extends Entity {
             else if (gp.tileM.isItemWindowOpen()) {
                 pickUpItem();
             }
-        }
-
-        // Update unit's main hand weapon if possible (only for LightBringer)
-        if (mainHand != null) {
-            mainHand.update();
         }
 
         // Update sprite animation
