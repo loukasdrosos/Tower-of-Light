@@ -114,44 +114,44 @@ public class AssetSetter {
 
     public void setMusic() {
         if (gp.getCurrentMap() == 0) {
-            if (gp.TurnM.getActiveBeacons() < 3) {
+            if (gp.TurnM.getActiveBeacons() == 0) {
                 gp.playMusic(2);
-            } else {
+            } else if (gp.TurnM.getActiveBeacons() == 3){
                 gp.playMusic(3);
             }
         }
         if (gp.getCurrentMap() == 1) {
-            if (gp.TurnM.getActiveBeacons() < 3) {
+            if (gp.TurnM.getActiveBeacons() == 0) {
                 gp.playMusic(2);
-            } else {
+            } else if (gp.TurnM.getActiveBeacons() == 3) {
                 gp.playMusic(4);
             }
         }
         if (gp.getCurrentMap() == 2) {
-            if (gp.TurnM.getActiveBeacons() < 3) {
+            if (gp.TurnM.getActiveBeacons() == 0) {
                 gp.playMusic(5);
-            } else {
+            } else if (gp.TurnM.getActiveBeacons() == 3) {
                 gp.playMusic(3);
             }
         }
         if (gp.getCurrentMap() == 3) {
-            if (gp.TurnM.getActiveBeacons() < 3) {
+            if (gp.TurnM.getActiveBeacons() == 0) {
                 gp.playMusic(5);
-            } else {
+            } else if (gp.TurnM.getActiveBeacons() == 3) {
                 gp.playMusic(6);
             }
         }
         if (gp.getCurrentMap() == 4) {
-            if (gp.TurnM.getActiveBeacons() < 3) {
+            if (gp.TurnM.getActiveBeacons() == 0) {
                 gp.playMusic(7);
-            } else {
+            } else if (gp.TurnM.getActiveBeacons() == 3) {
                 gp.playMusic(8);
             }
         }
         if (gp.getCurrentMap() == 5) {
-            if (gp.TurnM.getActiveBeacons() < 3) {
+            if (gp.TurnM.getActiveBeacons() == 0) {
                 gp.playMusic(7);
-            } else {
+            } else if (gp.TurnM.getActiveBeacons() == 3) {
                 gp.playMusic(9);
             }
         }

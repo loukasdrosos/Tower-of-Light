@@ -52,10 +52,12 @@ public class GamePanel extends JPanel implements Runnable{
     // GAME STATE
     public int gameState;
     public final int titleState = 0;
-    public final int controlsState = 1;
-    public final int playState = 2;
-    public final int gameOverState = 3;
-    public final int creditsState = 4;
+    public final int introState = 1;
+    public final int introState2 = 2;
+    public final int controlsState = 3;
+    public final int playState = 4;
+    public final int gameOverState = 5;
+    public final int creditsState = 6;
 
     // SOUND
     Sound sound = new Sound();
@@ -85,9 +87,10 @@ public class GamePanel extends JPanel implements Runnable{
         aSetter.setLightUnits();
         aSetter.setChaosUnits();
         aSetter.setCursor();
+        ui.addLogMessage("Press P to view controls");
 
-      //  playSE(9);
-        gameState = playState;
+        playSE(9);
+        gameState = titleState;
     }
 
     public BufferedImage setup (String imagePath) {
@@ -173,6 +176,14 @@ public class GamePanel extends JPanel implements Runnable{
         if (gameState == titleState) {
             image = titleScreenImage;
             g2.drawImage(image, 0, 0,null);
+        }
+        else if (gameState == introState) {
+            // UI
+            ui.draw(g2);
+        }
+        else if (gameState == introState2) {
+            // UI
+            ui.draw(g2);
         }
         else if (gameState == controlsState) {
             // UI

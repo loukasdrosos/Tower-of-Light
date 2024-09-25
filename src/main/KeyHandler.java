@@ -30,8 +30,25 @@ public class KeyHandler implements KeyListener {
             if (code == KeyEvent.VK_ENTER) {
                 gp.stopMusic();
                 gp.playSE(3);
-                gp.gameState = gp.controlsState;  // Transition to controlsState
+                gp.gameState = gp.introState;  // Transition to introState
                 ENTERPressed = true;
+            }
+        }
+
+        if (gp.gameState == gp.introState && !ENTERPressed) {
+            if (code == KeyEvent.VK_ENTER) {
+                gp.playSE(6);
+                gp.gameState = gp.introState2;  // Transition to introState2
+                ENTERPressed = true;
+            }
+        }
+
+        if (gp.gameState == gp.introState2 && !ENTERPressed) {
+            if (code == KeyEvent.VK_ENTER) {
+                gp.playSE(6);
+                gp.gameState = gp.playState;  // Transition to playState
+                ENTERPressed = true;
+                gp.aSetter.setMusic();
             }
         }
 
@@ -114,7 +131,7 @@ public class KeyHandler implements KeyListener {
     public void keyReleased (KeyEvent e){
         int code = e.getKeyCode();
 
-        if (gp.gameState == gp.titleState || gp.gameState == gp.controlsState) {
+        if (gp.gameState == gp.titleState || gp.gameState == gp.introState || gp.gameState == gp.introState2 || gp.gameState == gp.controlsState) {
             if (code == KeyEvent.VK_ENTER) {
                 ENTERPressed = false;
             }

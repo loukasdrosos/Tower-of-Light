@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class UI {
 
@@ -61,6 +63,69 @@ public class UI {
         }
     }
 
+    // INTRO STATE UI
+
+    public void drawIntro() {
+        // Intro text
+        g2.setFont(arial_20);
+        String[] introText = {
+                "200 years ago, the Chaos God Grima and his Chaos army tried to take ",
+                "over the world. In the most fatal times, however, the Hero King Marth ",
+                "of the kingdom of Valentia and his companions used all of their power",
+                "to resist the Chaos army's invasion and win against them. ",
+                "The Hero King used his sword Lightbringer to unleash the last power",
+                "of Light left in the world to seal Grima, because Grima was too powerful",
+                "to be killed. To remind everyone of these heroic actions the Tower of Light",
+                "was built, which also holds enough Light power to help the next heroes defeat",
+                "the Chaos army if another invasion ver happens. Peace lasted for 200 years and",
+                "no one thought dark times would ever come again. However...",
+        };
+
+        // Draw each intro line
+        int lineHeight = 40; // Spacing between lines
+        for (int i = 0; i < introText.length; i++) {
+            g2.drawString(introText[i], 50, 2 * 16 + (i + 2) * lineHeight);
+        }
+
+        // "Press Enter to continue" at the bottom of the screen
+        g2.setFont(arial_30);
+        g2.drawString("Press Enter to continue", 30 * 16, 50 * 16);
+
+    }
+
+    // INTRO STATE 2 UI
+
+    public void drawIntro2() {
+        // Intro text
+        g2.setFont(arial_20);
+        String[] introText = {
+                "Alm: We are at the top of the Tower of Light, we can't hold them back",
+                "Rudolf: Young prince, we are the last hope of this world!",
+                "Boey: Hey Alm, use that sword you have, it defeated the Chaos army the last time",
+                "Alm: I don't know how to unleash its full power yet",
+                "Shade: I heard from a priest that you need to use Beacons of Light to unleash",
+                "Lightbringer's full power",
+                "Rudolf: Grima is that the ground floor of the Tower, use that sword to defeat him Alm!",
+                "Alm: But i am not strong enough",
+                "Rudolf: From the time you take your first breath, you become eligible to die.",
+                "You also become eligible to find your greatness and become the one warrior.",
+                "Remember, we don’t rise to the level of our expectations, we fall to the level of",
+                "our training. Use everything you learned so far and you will win.",
+                "Alm: Alright, lets do this!"
+        };
+
+        // Draw each intro line
+        int lineHeight = 40; // Spacing between lines
+        for (int i = 0; i < introText.length; i++) {
+            g2.drawString(introText[i], 50, 2 * 16 + (i + 2) * lineHeight);
+        }
+
+        // "Press Enter to continue" at the bottom of the screen
+        g2.setFont(arial_30);
+        g2.drawString("Press Enter to continue", 30 * 16, 50 * 16);
+
+    }
+
     // CONTROLS STATE UI
 
     public void drawControls() {
@@ -79,6 +144,7 @@ public class UI {
                 "B: Activate Beacon of Light",
                 "V: View items on the map",
                 "W: End player unit's turn",
+                "SPACE: If Alm is on stairs, go to the next floor",
                 "Z: Cancel action",
                 "Q: Toggle between unit's stats and unit's inventory",
                 "Shift: Switch between player units",
@@ -1357,6 +1423,16 @@ public class UI {
 
         g2.setFont(arial_30);
         g2.setColor(Color.WHITE);
+
+        // INTRO
+        if (gp.gameState == gp.introState) {
+            drawIntro();
+        }
+
+        // INTRO 2
+        if (gp.gameState == gp.introState2) {
+            drawIntro2();
+        }
 
         // CONTROLS
         if (gp.gameState == gp.controlsState) {
