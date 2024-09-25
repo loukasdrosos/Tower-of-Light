@@ -60,6 +60,8 @@ public class ChaosGod extends ChaosUnit{
     @Override
     public void Defeated() {
         if (HP <= 0) {
+            Graphics 2D g2;
+
             List<Runnable> tasks = new ArrayList<>();
             int delay = 700;  //700 ms delay between each task
 

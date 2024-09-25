@@ -36,6 +36,10 @@ public class TurnManager {
     // Manages the turns between player and enemy phases
     public void manageTurns() {
         if (playerPhase) {
+            if (!reinforcmentsAdded && gp.getCurrentMap() == 2){
+                reinforcmentsAdded = true;
+                gp.aSetter.addIagoIke();
+            }
             // Player's turn phase
             if (!turnCompleted && !gp.battleSim.isBattleInProgress()) {
                 turnCounter++; // Increment the turn counter
@@ -48,10 +52,6 @@ public class TurnManager {
                 gp.playSE(1);  // Play sound effect for player phase start
                 playerPhaseSoundPlayed = true; // Mark that the sound has been played
                 enemyPhaseSoundPlayed = false; // Reset enemy phase sound flag for the next switch
-                if (!reinforcmentsAdded && gp.getCurrentMap() == 1){
-                    reinforcmentsAdded = true;
-                    gp.aSetter.addIagoIke();
-                }
             }
 
             // Check if all player units have finished their turn

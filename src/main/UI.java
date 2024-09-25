@@ -20,7 +20,6 @@ public class UI {
     Graphics2D g2;
     BufferedImage attackSpellImage;
     BufferedImage healingSpellImage;
-    BufferedImage finale;
     BufferedImage creditsImage;
 
     // Variables to control the phase dipslay
@@ -56,7 +55,6 @@ public class UI {
         try {
             attackSpellImage = ImageIO.read(new File("res/Spells/Attack_Spell.png"));
             healingSpellImage = ImageIO.read(new File("res/Spells/Healing_Spell.png"));
-            finale = ImageIO.read(new File("res/FinaleImage/Finale.png"));
             creditsImage = ImageIO.read(new File("res/CreditsScreen/CreditsScreen.png"));
         } catch (IOException e) {
             e.printStackTrace();
