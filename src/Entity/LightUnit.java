@@ -13,7 +13,6 @@ public class LightUnit extends Entity {
 
     protected int moveDelayThreshold = 7; // Number of frames to wait before moving
 
-    protected boolean isSelected = false;  // Track if the unit is selected
     protected boolean isMoving = false;  // Track if the unit is moving
     protected boolean isAttacking = false; // Track whether the unit is Attacking
     protected boolean isHealing = false; // // Track whether the unit is Healing an ally
@@ -48,7 +47,6 @@ public class LightUnit extends Entity {
                 if (gp.cursor.getCol() == col && gp.cursor.getRow() == row) {
                     if (!wait) {
                         gp.selectedUnit = this; // Select player unit
-                        isSelected = true; //Activate the selected player unit
                         isMoving = true; // Allow player to move
                         gp.playSE(5);
                     } else {
@@ -69,20 +67,20 @@ public class LightUnit extends Entity {
             zKeyReleased = false; // Mark that Z key was pressed
 
             // Cancel battle forecast for player
-            if (gp.selectedUnit != null && isSelected && isAttacking && !isMoving) {
+            if (gp.selectedUnit != null && gp.selectedUnit == this && isAttacking && !isMoving) {
                 isMoving = true; // Player can move again
                 isAttacking = false; // Reset the attacking flag
                 gp.playSE(6);
             }
             // Cancel healing action for player
-            else if (gp.selectedUnit != null && isSelected && isHealing && !isMoving) {
+            else if (gp.selectedUnit != null && gp.selectedUnit == this && isHealing && !isMoving) {
                 isMoving = true; // Player can move again
                 isHealing = false; // Reset the healing flag
                 gp.playSE(6);
             }
 
             // Cancel player movement and unselect player if player hasn't picked up an item
-            else if (gp.selectedUnit != null && isSelected && isMoving) {
+            else if (gp.selectedUnit != null && gp.selectedUnit == this && isMoving) {
                 if (movement == movementInitial) {
                     resetPosition(); // Return player to starting position
                     gp.selectedUnit = null; // Deselect the player
@@ -104,7 +102,7 @@ public class LightUnit extends Entity {
         if (keyH.isWPressed() && wKeyReleased) {
             wKeyReleased = false; // Mark that W key was pressed
             // Only proceed if a unit is selected, is marked as selected, and is currently moving
-            if (gp.selectedUnit != null && isSelected && !wait && isMoving) {
+            if (gp.selectedUnit != null && gp.selectedUnit == this && !wait && isMoving) {
                 if (gp.cChecker.noPlayerOnTile(col, row)) {
                     // If HP < max HP and units doesn't take any action , it heals some HP
                     if (HP < maxHP) {
@@ -125,7 +123,7 @@ public class LightUnit extends Entity {
 
     // Method to choose which enemy to attack with physical attacks
     public void chooseTarget() {
-        if (gp.selectedUnit != null && isSelected) {
+        if (gp.selectedUnit != null && gp.selectedUnit == this) {
             List<ChaosUnit> enemiesInRange = getEnemiesInRange();  // To store the tiles with enemies
 
             if (keyH.isXPressed() && xKeyReleased) {
@@ -160,7 +158,7 @@ public class LightUnit extends Entity {
 
     // Physical units switch their equipped weapon
     public void switchWeapons() {
-        if (gp.selectedUnit != null && isSelected && isMoving && !wait) {
+        if (gp.selectedUnit != null && gp.selectedUnit == this && isMoving && !wait) {
             if (attackType == AttackType.Physical) {
 
                 if (keyH.isCPressed() && cKeyReleased) {
@@ -192,7 +190,7 @@ public class LightUnit extends Entity {
 
     // Method to choose which ally player to heal with healing spell
     public void healAlly() {
-        if (gp.selectedUnit != null && isSelected) {
+        if (gp.selectedUnit != null && gp.selectedUnit == this) {
             List<LightUnit> playersInRange = getPlayersInRange();  // To store the tiles with players
 
             if (keyH.isSPressed() && sKeyReleased) {
@@ -237,7 +235,7 @@ public class LightUnit extends Entity {
 
     // Use Potion
     public void usePotion() {
-        if (gp.selectedUnit != null && isSelected && isMoving && !wait) {
+        if (gp.selectedUnit != null && gp.selectedUnit == this && isMoving && !wait) {
 
             if (keyH.isDPressed() && dKeyReleased) {
                 dKeyReleased = false; // Mark that D key was pressed
@@ -279,7 +277,7 @@ public class LightUnit extends Entity {
 
     // Use Beacon Of Light
     public void useBeaconOfLight() {
-        if (gp.selectedUnit != null && isSelected && isMoving && !wait) {
+        if (gp.selectedUnit != null && gp.selectedUnit == this && isMoving && !wait) {
 
             if (keyH.isBPressed() && bKeyReleased) {
                 bKeyReleased = false; // Mark that B key was pressed
@@ -324,7 +322,7 @@ public class LightUnit extends Entity {
     }
 
     public void pickUpItem() {
-        if (gp.selectedUnit != null && isSelected && !wait && isMoving && !isAttacking && !isHealing) {
+        if (gp.selectedUnit != null && gp.selectedUnit == this && !wait && isMoving && !isAttacking && !isHealing) {
 
             Item droppedItem = gp.ui.getSelectedItem();
             int droppedItemIndex = gp.ui.getItemOnSlot();
@@ -477,7 +475,7 @@ public class LightUnit extends Entity {
     @Override
     public void move() {
         // Check if the unit is not in a waiting state, is selected, and is allowed to move
-        if (gp.selectedUnit != null && !wait && isSelected && isMoving) {
+        if (gp.selectedUnit != null && !wait && gp.selectedUnit == this && isMoving) {
             moveDelayCounter++; // Increment the move delay counter
 
             // Check if the delay counter has reached or exceeded the move delay threshold
@@ -567,7 +565,6 @@ public class LightUnit extends Entity {
         preCol = col;       // Update the previous column to the current column
         preRow = row;       // Update the previous row to the current row
         direction = "none"; // Reset the direction
-        isSelected = false; // Deselect the unit
         gp.tileM.findAllVisibleTiles();
     }
 
@@ -579,7 +576,6 @@ public class LightUnit extends Entity {
         x = getX();  // Update the x position in pixels
         y = getY();  // Update the y position in pixels
         direction = "none"; // Reset the direction
-        isSelected = false;   // Deselect the unit
     }
 
     public void healEndTurn() {
@@ -979,8 +975,6 @@ public class LightUnit extends Entity {
     public void goToNextMap() { }
 
     // Getters && Setters
-
-    public boolean getIsSelected () { return isSelected; } // Return whether the unit is selected
 
     public boolean getIsMoving () { return isMoving; } // Return whether the unit is moving
 

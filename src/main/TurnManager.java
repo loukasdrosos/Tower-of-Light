@@ -20,7 +20,7 @@ public class TurnManager {
     private int activeBeacons = 0; // Count of currently active beacons
     private int beaconCooldown = 1; // Cooldown period for each beacon
     private int beaconCooldownTimer = beaconCooldown; // Cooldown timer for beacons of light
-    private int reinforcmentCounter = 0;
+    private boolean reinforcmentsAdded = false;
 
     private boolean enemiesSpawned;
     private boolean boss1Spawned, boss2Spawned, boss3Spawned, boss4Spawned, boss5Spawned, boss6Spawned;
@@ -48,6 +48,10 @@ public class TurnManager {
                 gp.playSE(1);  // Play sound effect for player phase start
                 playerPhaseSoundPlayed = true; // Mark that the sound has been played
                 enemyPhaseSoundPlayed = false; // Reset enemy phase sound flag for the next switch
+                if (!reinforcmentsAdded && gp.getCurrentMap() == 1){
+                    reinforcmentsAdded = true;
+                    gp.aSetter.addIagoIke();
+                }
             }
 
             // Check if all player units have finished their turn
@@ -78,10 +82,6 @@ public class TurnManager {
                 // Start the turn for the first enemy unit, if available
                 if (!gp.ChaosUnits.isEmpty()) {
                     gp.ChaosUnits.get(currentEnemyUnitIndex).startTurn();
-                }
-
-                if (gp.getCurrentMap() == 1){
-                    gp.aSetter.addIagoIke();
                 }
             }
         }
@@ -130,9 +130,6 @@ public class TurnManager {
 
                 enemiesSpawned = false;
                 reduceBeaconCooldown();
-                if (gp.getCurrentMap() == 1){
-                    reinforcmentCounter++;
-                }
             }
         }
     }

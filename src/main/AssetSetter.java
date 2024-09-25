@@ -220,8 +220,8 @@ public class AssetSetter {
     }
 
     public void addIagoIke() {
-        gp.LightUnits.add(new Warrior(gp, keyH, "Ike", Entity.UnitRace.Human, 49, 49));
-        gp.LightUnits.add(new DarkMage(gp, keyH, "Iago", Entity.UnitRace.Orc, 50, 50));
+        gp.LightUnits.add(new Warrior(gp, keyH, "Ike", Entity.UnitRace.Human, 1, 49));
+        gp.LightUnits.add(new DarkMage(gp, keyH, "Iago", Entity.UnitRace.Orc, 1, 50));
 
         List<Runnable> tasks = new ArrayList<>();
         int delay = 300;  //300 ms delay between each message and sound effect
@@ -259,7 +259,7 @@ public class AssetSetter {
         });
 
         tasks.add(() -> {
-            gp.ui.addLogMessage("Iago: We will get to you young prince, don't worry");
+            gp.ui.addLogMessage("Iago: We will fight you my lord");
         });
 
         tasks.add(() -> {
@@ -356,8 +356,7 @@ public class AssetSetter {
         ChaosUnit enemy;
         switch (gp.getCurrentMap()) {
             case 0:
-             //   enemy = new Titan(gp, true, col, row);
-                enemy = new HeraldOfChaos(gp, col, row);
+                enemy = new Titan(gp, true, col, row);
                 break;
             case 1:
                 enemy = new Necromancer(gp, col, row);

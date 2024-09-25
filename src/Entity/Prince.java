@@ -88,7 +88,7 @@ public class Prince extends LightUnit{
 
     @Override
     public void goToNextMap() {
-        if (gp.selectedUnit != null && isSelected && isMoving && !wait) {
+        if (gp.selectedUnit != null && gp.selectedUnit == this && isMoving && !wait) {
             if (col == 50 && row == 1) {
                 if (keyH.isSpacePressed()) {
                     if (gp.cChecker.noPlayerOnTile(col, row)) {

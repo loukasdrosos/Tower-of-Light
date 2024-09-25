@@ -133,7 +133,7 @@ public class Cursor {
             }
 
             // Update cursor position if a player unit is selected
-            if (gp.selectedUnit != null && gp.selectedUnit.getIsSelected()) {
+            if (gp.selectedUnit != null) {
                 // Update cursor's position based on player unit's movement
                 if (gp.selectedUnit.getIsMoving()) {
                     col = gp.selectedUnit.getCol();

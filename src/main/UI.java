@@ -956,7 +956,7 @@ public class UI {
                     } else {
                         drawLightUnitDetails(player);
                     }
-                    if (gp. selectedUnit != null && gp.selectedUnit.getIsSelected() && !gp.selectedUnit.getIsMoving() && gp.selectedUnit.getIsHealing()) {
+                    if (gp. selectedUnit != null && !gp.selectedUnit.getIsMoving() && gp.selectedUnit.getIsHealing()) {
                         drawHealingForecast();
                     }
                 }
@@ -968,7 +968,7 @@ public class UI {
                 } else {
                     drawLightUnitDetails(gp.selectedUnit);
                 }
-                if (gp. selectedUnit != null && gp.selectedUnit.getIsSelected() && !gp.selectedUnit.getIsMoving() && gp.selectedUnit.getIsAttacking()) {
+                if (gp. selectedUnit != null && !gp.selectedUnit.getIsMoving() && gp.selectedUnit.getIsAttacking()) {
                     drawCombatForecast();
                 }
             }

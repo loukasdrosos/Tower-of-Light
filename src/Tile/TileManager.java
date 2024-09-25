@@ -252,7 +252,7 @@ public class TileManager {
     // Method to load and draw tiles for the player's available movement range
     public void getPlayerMovement(Graphics2D g2) {
         // Draw player movement tiles if a unit is selected
-        if (gp.selectedUnit != null && gp.selectedUnit.getIsSelected() && !gp.selectedUnit.getWait() && gp.selectedUnit.getIsMoving()) {
+        if (gp.selectedUnit != null && !gp.selectedUnit.getWait() && gp.selectedUnit.getIsMoving()) {
             // Get the movement range from the selected unit
             List<int[]> movementTiles = gp.selectedUnit.calculateValidMovement();
             // Check each possible move and draw the corresponding tile
@@ -266,7 +266,7 @@ public class TileManager {
 
     // Method to highlight ally players within selected player's healing range
     public void drawPlayersInRange(Graphics2D g2) {
-        if (gp.selectedUnit != null && gp.selectedUnit.getIsSelected() && !gp.selectedUnit.getWait() && gp.selectedUnit.getIsHealing()) {
+        if (gp.selectedUnit != null && !gp.selectedUnit.getWait() && gp.selectedUnit.getIsHealing()) {
             List<int[]> playersInRange = new ArrayList<>(); // To store the tiles with enemies
             playersInRange = gp.selectedUnit.getTilesWithPlayersInRange();
 
@@ -288,7 +288,7 @@ public class TileManager {
 
     // Method to highlight enemies within player's range
     public void drawEnemiesInRange(Graphics2D g2) {
-        if (gp.selectedUnit != null && gp.selectedUnit.getIsSelected() && !gp.selectedUnit.getWait() && gp.selectedUnit.getIsAttacking()) {
+        if (gp.selectedUnit != null && !gp.selectedUnit.getWait() && gp.selectedUnit.getIsAttacking()) {
             List<int[]> enemiesInRange = new ArrayList<>(); // To store the tiles with enemies
             enemiesInRange = gp.selectedUnit.getTilesWithEnemiesInRange();
 
