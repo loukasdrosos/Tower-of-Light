@@ -489,6 +489,8 @@ public class Entity {
 
     public void setDirection (String direction) { this.direction = direction; }
 
+    public String getFinalMapQuote() { return finalMapQuote;  }
+
 }
 
 

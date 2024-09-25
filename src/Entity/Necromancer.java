@@ -62,6 +62,28 @@ public class Necromancer extends ChaosUnit{
         }
     }
 
+    @Override
+    public void Defeated() {
+        if (HP <= 0) {
+            gp.ui.addLogMessage("");
+            gp.ui.addLogMessage("Nuibaba: Ah, lord Jedah forgive me...");
+            gp.ui.addLogMessage("Alm: Jedah? He is also here?");
+            gp.ui.addLogMessage("Nuibaba: Of course, he and the young princess are waiting for you");
+            gp.ui.addLogMessage("Alm: Princess? Celica? Is she alive?");
+            gp.ui.addLogMessage("Nuibaba: She is, but not for long");
+            gp.ui.addLogMessage("Alm: Jedah, Grima, you will pay for what you've done!");
+
+            if (name != null) {
+                gp.ui.addLogMessage(name + " is defeated");
+            } else {
+                gp.ui.addLogMessage(String.valueOf(getRace()) + " " + className + " is defeated");
+            }
+            dropItem();
+            gp.ChaosUnits.remove(this);
+            gp.tileM.loadStairs();
+        }
+    }
+
     //Load images for the unit's animations
     @Override
     public void loadImage() {

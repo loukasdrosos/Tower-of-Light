@@ -19,6 +19,16 @@ public class Sound {
         // Load music into the gameMusicURL array
         gameMusicURL[0] = getClass().getResource("/Music/Twilight of the Gods.wav");
         gameMusicURL[1] = getClass().getResource("/Music/And what if I can't.wav");
+        gameMusicURL[2] = getClass().getResource("/Music/Chaos.wav");
+        gameMusicURL[3] = getClass().getResource("/Music/Pray for Victory.wav");
+        gameMusicURL[4] = getClass().getResource("/Music/Annihilation.wav");
+        gameMusicURL[5] = getClass().getResource("/Music/Chaos2.wav");
+        gameMusicURL[6] = getClass().getResource("/Music/Divine Decree.wav");
+        gameMusicURL[7] = getClass().getResource("/Music/A Dark Fall.wav");
+        gameMusicURL[8] = getClass().getResource("/Music/Destiny.wav");
+        gameMusicURL[9] = getClass().getResource("/Music/Don't speak her name.wav");
+        gameMusicURL[10] = getClass().getResource("/Music/Purpose.wav");
+
 
         // Load sound effects into the soundEffectURL array
         soundEffectURL[0] = getClass().getResource("/Sound_Effects/Cursor_Movement.wav");

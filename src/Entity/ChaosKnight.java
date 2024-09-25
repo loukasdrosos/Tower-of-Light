@@ -26,7 +26,7 @@ public class ChaosKnight extends ChaosUnit{
     @Override
     public void setupStats() {
         className = "Chaos Knight";
-        level = 6;
+        level = gp.aSetter.getEnemyLevel();
         if (level > maxLevel) {
             level = maxLevel;
         }

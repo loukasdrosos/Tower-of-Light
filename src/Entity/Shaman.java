@@ -27,7 +27,7 @@ public class Shaman extends ChaosUnit{
     @Override
     public void setupStats() {
         className = "Shaman";
-        level = 3;
+        level = gp.aSetter.getEnemyLevel();
         if (level > maxLevel) {
             level = maxLevel;
         }

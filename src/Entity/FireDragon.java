@@ -27,7 +27,7 @@ public class FireDragon extends ChaosUnit{
     @Override
     public void setupStats() {
         className = "Fire Dragon";
-        level = 18;
+        level = gp.aSetter.getEnemyLevel();
         if (level > maxLevel) {
             level = maxLevel;
         }
@@ -122,6 +122,27 @@ public class FireDragon extends ChaosUnit{
 
         if (item != null) {
             gp.tileM.addItems(item, col, row);
+        }
+    }
+
+    @Override
+    public void Defeated() {
+        if (HP <= 0) {
+            if (name != null) {
+                gp.ui.addLogMessage(name + " is defeated");
+            } else {
+                gp.ui.addLogMessage(String.valueOf(getRace()) + " " + className + " is defeated");
+            }
+            if (boss) {
+                gp.ui.addLogMessage("");
+                gp.ui.addLogMessage("Alm: The dragon was as strong as the legend said");
+                if (gp.LightUnits.size() > 1) {
+                    gp.ui.addLogMessage("Alm: Let's keep going strong everyone!");
+                }
+                gp.tileM.loadStairs();
+            }
+            dropItem();
+            gp.ChaosUnits.remove(this);
         }
     }
 

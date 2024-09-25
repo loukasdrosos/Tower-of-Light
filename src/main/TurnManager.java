@@ -66,32 +66,6 @@ public class TurnManager {
 
                 if (!enemiesSpawned) {
                     gp.aSetter.spawnEnemies();
-                    if (activeBeacons == 3) {
-                        if (!boss1Spawned) {
-                            gp.aSetter.spawnBosses();
-                            boss1Spawned = true;
-                        }
-                         else if (!boss2Spawned) {
-                            gp.aSetter.spawnBosses();
-                            boss2Spawned = true;
-                        }
-                        else if (!boss3Spawned) {
-                            gp.aSetter.spawnBosses();
-                            boss3Spawned = true;
-                        }
-                        else if (!boss4Spawned) {
-                            gp.aSetter.spawnBosses();
-                            boss4Spawned = true;
-                        }
-                        else if (!boss5Spawned) {
-                            gp.aSetter.spawnBosses();
-                            boss5Spawned = true;
-                        }
-                        else if (!boss6Spawned) {
-                            gp.aSetter.spawnBosses();
-                            boss6Spawned = true;
-                        }
-                    }
                     enemiesSpawned = true;
                 }
 
@@ -150,6 +124,70 @@ public class TurnManager {
         }
     }
 
+    public void spawnBoss() {
+        if (activeBeacons == 3) {
+            if (!boss1Spawned && gp.getCurrentMap() == 0) {
+                gp.aSetter.spawnBosses();
+                boss1Spawned = true;
+                gp.ui.addLogMessage("");
+                gp.ui.addLogMessage("Alm: That Titan seems like its leading the others");
+                gp.ui.addLogMessage("Alm: We better take care of it if we want to reach the next floor");
+            }
+            else if (!boss2Spawned && gp.getCurrentMap() == 1) {
+                gp.aSetter.spawnBosses();
+                boss2Spawned = true;
+                gp.ui.addLogMessage("");
+                gp.ui.addLogMessage("Nuibaba: Your fate ends here prince Alm");
+                gp.ui.addLogMessage("Alm: Who are you?");
+                gp.ui.addLogMessage("Nuibaba: I am Nuibaba, one of the Chaos army's commanders");
+                gp.ui.addLogMessage("Alm: You will fall here then");
+                gp.ui.addLogMessage("Nuibaba: Try and withstand my magic!");
+            }
+            else if (!boss3Spawned && gp.getCurrentMap() == 2) {
+                gp.aSetter.spawnBosses();
+                boss3Spawned = true;
+                gp.ui.addLogMessage("");
+                gp.ui.addLogMessage("Alm: No way! Is that a Fire Dragon!");
+                gp.ui.addLogMessage("Alm: I thought their existence was only a legend");
+                gp.ui.addLogMessage("Alm: We better be careful");
+            }
+            else if (!boss4Spawned && gp.getCurrentMap() == 3) {
+                gp.aSetter.spawnBosses();
+                boss4Spawned = true;
+                gp.ui.addLogMessage("");
+                gp.ui.addLogMessage("Alm: That Chaos Paladin is their leader");
+                gp.ui.addLogMessage("Alm: It seems strong but we should be able to defeat it");
+            }
+            else if (!boss5Spawned && gp.getCurrentMap() == 4) {
+                gp.aSetter.spawnBosses();
+                boss5Spawned = true;
+                gp.ui.addLogMessage("");
+                gp.ui.addLogMessage("Jedah: You managed to make it here young prince");
+                gp.ui.addLogMessage("Alm: Jedah! What have you done to Celica?");
+                gp.ui.addLogMessage("Jedah: HAHAHAHAHA! Don't worry, she is not harmed!");
+                gp.ui.addLogMessage("Jedah: The princess awaits you on the next floor");
+                gp.ui.addLogMessage("Jedah: That is if you manage to get there");
+                gp.ui.addLogMessage("Alm: You will pay for what you've done!");
+                gp.ui.addLogMessage("Alm: The Chaos army and Grima WILL be defeated!");
+                gp.ui.addLogMessage("Jedah: Foolish prince your path ends here!");
+            }
+            else if (!boss6Spawned && gp.getCurrentMap() == 5) {
+                gp.aSetter.spawnBosses();
+                boss6Spawned = true;
+                gp.ui.addLogMessage("");
+                gp.ui.addLogMessage("Celica: ...");
+                gp.ui.addLogMessage("Alm: Celica, is that you? CELICA!!");
+                gp.ui.addLogMessage("Celica: Your struggles end here");
+                gp.ui.addLogMessage("Alm: Huh?");
+                gp.ui.addLogMessage("Celica: I, the Herald of Chaos, will bring glory to Grima");
+                gp.ui.addLogMessage("Alm: Celica what's going on?");
+                gp.ui.addLogMessage("Alm: It must be the edge of Chaos! It possessed her!");
+                gp.ui.addLogMessage("Alm: We have to defeat her...");
+                gp.ui.addLogMessage("Alm: I'll get you back Celica, just wait");
+            }
+        }
+    }
+
     // Method to end the turn for all player units when the 'E' key is pressed
     public void endPlayerTurn() {
         if (keyH.isEPressed() && !ePressed) {
@@ -191,7 +229,11 @@ public class TurnManager {
         }
     }
 
-
+    public void resetBeaconsofLight() {
+        if (gp.getCurrentMap() != 6) {
+            activeBeacons = 0;
+        }
+    }
 
     public void update() {
         manageTurns();

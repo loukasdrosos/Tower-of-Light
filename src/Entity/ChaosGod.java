@@ -52,6 +52,26 @@ public class ChaosGod extends ChaosUnit{
         description = new String[]{"The Chaos God who", "wants to destroy", "every trace of", "light from the world."};
     }
 
+    @Override
+    public void Defeated() {
+        if (HP <= 0) {
+            gp.ui.addLogMessage("");
+            gp.ui.addLogMessage("Grima: NOOOOO!");
+            gp.ui.addLogMessage("Alm: This is the end Grima!");
+            gp.ui.addLogMessage("Alm: This time you will not return");
+            gp.ui.addLogMessage("Grima: Even if it's not me, someone else will take my place");
+            gp.ui.addLogMessage("Alm: And we will be there to stop him!");
+            if (name != null) {
+                gp.ui.addLogMessage(name + " is defeated");
+            } else {
+                gp.ui.addLogMessage(String.valueOf(getRace()) + " " + className + " is defeated");
+            }
+
+            gp.ChaosUnits.clear();
+            gp.gameState = gp.gameOverState;
+        }
+    }
+
     //Load images for the unit's animations
     @Override
     public void loadImage() {

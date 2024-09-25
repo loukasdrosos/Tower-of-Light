@@ -52,7 +52,11 @@ public class TileManager {
         loadImage(); // Load tile images
         loadMap("/Maps/Map_1.txt", 0); // Load the first map
         loadMap("/Maps/Map_2.txt", 1); // Load the second map
-
+        loadMap("/Maps/Map_3.txt", 1); // Load the third map
+        loadMap("/Maps/Map_4.txt", 1); // Load the fourth map
+        loadMap("/Maps/Map_5.txt", 1); // Load the fifth map
+        loadMap("/Maps/Map_6.txt", 1); // Load the sixth map
+        loadMap("/Maps/Map_7.txt", 1); // Load the seventh map
     }
 
     // Method to load tile images
@@ -126,6 +130,20 @@ public class TileManager {
             br.close(); // Close the buffered reader
         }
         catch (Exception e) {  }
+    }
+
+    public void loadStairs() {
+        mapTileNum[gp.getCurrentMap()][50][1] = 19;
+        gp.ui.addLogMessage("Alm: The stairs appeared");
+        gp.ui.addLogMessage("Alm: Let's go to the next floor");
+    }
+
+    public void resetItems() {
+        for (int col= 0; col < Max_Col; col++) {
+            for (int row = 0; row < Max_Row; row++) {
+                tileItems[col][row].clear();
+            }
+        }
     }
 
     // Method to add visible tiles from a unit, marking them as visible in the array

@@ -49,14 +49,14 @@ public class Knight extends LightUnit{
         }
         exp = 0;
         maxHP = 25;
-        strength = 9;
+        strength = 100;
         magic = 0;
         skill = 7;
         speed = 8;
         luck = 0;
         defense = 9;
         resistance = 6;
-        movementInitial = 4;
+        movementInitial = 20;
         movement = movementInitial;
         vision = 6;
         unitType = UnitType.Mounted;

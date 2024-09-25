@@ -213,7 +213,11 @@ public class UI {
             g2.drawString("Beacon of Light can be used", 53 * gp.getTileSize(), 4 * gp.getTileSize() + 5);
         }
         else if (gp.TurnM.getActiveBeacons() == 3) {
-            g2.drawString("Defeat the boss and exit the floor", 53 * gp.getTileSize(), 4 * gp.getTileSize() + 5);
+            if (gp.getCurrentMap() < 6) {
+                g2.drawString("Defeat the boss and exit the floor", 53 * gp.getTileSize(), 4 * gp.getTileSize() + 5);
+            } else {
+                g2.drawString("Defeat the boss", 53 * gp.getTileSize(), 4 * gp.getTileSize() + 5);
+            }
         }
     }
 

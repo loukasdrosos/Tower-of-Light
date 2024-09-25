@@ -27,7 +27,7 @@ public class ChaosDragon extends ChaosUnit{
     @Override
     public void setupStats() {
         className = "Chaos Dragon";
-        level = 18;
+        level = gp.aSetter.getEnemyLevel();
         if (level > maxLevel) {
             level = maxLevel;
         }

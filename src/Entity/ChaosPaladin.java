@@ -27,7 +27,7 @@ public class ChaosPaladin extends ChaosUnit{
     @Override
     public void setupStats() {
         className = "Chaos Paladin";
-        level = 15;
+        level = gp.aSetter.getEnemyLevel();
         if (level > maxLevel) {
             level = maxLevel;
         }
@@ -219,6 +219,27 @@ public class ChaosPaladin extends ChaosUnit{
 
         if (item != null) {
             gp.tileM.addItems(item, col, row);
+        }
+    }
+
+    @Override
+    public void Defeated() {
+        if (HP <= 0) {
+            if (name != null) {
+                gp.ui.addLogMessage(name + " is defeated");
+            } else {
+                gp.ui.addLogMessage(String.valueOf(getRace()) + " " + className + " is defeated");
+            }
+            if (boss) {
+                gp.ui.addLogMessage("");
+                gp.ui.addLogMessage("Alm: That was tougher than i thought...");
+                if (gp.LightUnits.size() > 1) {
+                    gp.ui.addLogMessage("Alm: We are almost at the ground floor, let's do this!");
+                }
+                gp.tileM.loadStairs();
+            }
+            dropItem();
+            gp.ChaosUnits.remove(this);
         }
     }
 

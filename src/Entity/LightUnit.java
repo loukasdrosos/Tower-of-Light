@@ -292,7 +292,10 @@ public class LightUnit extends Entity {
                                     gp.playSE(19);
                                     gp.tileM.addBeaconOfLightTile(this);
                                     gp.TurnM.addBeacon();
+                                    gp.TurnM.spawnBoss();
                                     gp.TurnM.resetBeaconCooldownTimer();
+                                    gp.aSetter.increaseEnemyLevel();
+                                    gp.aSetter.setMusic();
                                     gp.ui.addLogMessage(name + " used Beacon of Light");
                                     // Update Prince's Lightbringer stats
                                     if (gp.LightUnits.getFirst().mainHand != null) {
@@ -324,7 +327,6 @@ public class LightUnit extends Entity {
             }
         }
     }
-
 
     public void pickUpItem() {
         if (gp.selectedUnit != null && isSelected && !wait && isMoving && !isAttacking && !isHealing) {
@@ -742,6 +744,7 @@ public class LightUnit extends Entity {
                 healAlly();
                 switchWeapons();
                 useBeaconOfLight();
+                goToNextMap();
             }
             else if (gp.tileM.isItemWindowOpen()) {
                 pickUpItem();
@@ -760,6 +763,15 @@ public class LightUnit extends Entity {
             }
             spriteCounter = 0;  // Reset the sprite counter
         }
+    }
+
+    public void setNextLevel(int newCol, int newRow) {
+        col = newCol;
+        row = newRow;
+        preCol = col;
+        preRow = row;
+        updatePosition();
+        startTurn();
     }
 
     /* Calculate all valid tiles the unit can move to within its movement range with the use of Breadth-First-Search (BFS)
@@ -978,6 +990,8 @@ public class LightUnit extends Entity {
         return playersInRange;
     }
 
+    // Placeholder for prince
+    public void goToNextMap() { }
 
     // Getters && Setters
 

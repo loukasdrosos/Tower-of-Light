@@ -55,7 +55,6 @@ public class Cleric extends LightUnit{
         boostStatsForClasses();
         HP = maxHP;
         calculateCombatStats();
-        BeaconOfLight = true;
         description = new String[]{"A follower of ", "the God of Light", "turned dark due", "to the uprise ", "of the Chaos army."} ;
     }
 

@@ -237,5 +237,5 @@ public class GamePanel extends JPanel implements Runnable{
 
     public int getCurrentMap() {  return currentMap;  }
 
-    public void setCurrentMap(int currentMap) { this.currentMap = currentMap; }
+    public void setNextMap() { currentMap++; }
 }

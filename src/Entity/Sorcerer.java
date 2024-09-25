@@ -62,6 +62,26 @@ public class Sorcerer extends ChaosUnit{
         }
     }
 
+    @Override
+    public void Defeated() {
+        if (HP <= 0) {
+            gp.ui.addLogMessage("");
+            gp.ui.addLogMessage("Jedah: God Grima...forgive me");
+            gp.ui.addLogMessage("Alm: That was for hurting Celica");
+            gp.ui.addLogMessage("Jedah: Go and find your loved one, HAHAHAHA!");
+
+            if (name != null) {
+                gp.ui.addLogMessage(name + " is defeated");
+            } else {
+                gp.ui.addLogMessage(String.valueOf(getRace()) + " " + className + " is defeated");
+            }
+            dropItem();
+            gp.ChaosUnits.remove(this);
+            gp.tileM.loadStairs();
+        }
+    }
+
+
 
     //Load images for the unit's animations
     @Override

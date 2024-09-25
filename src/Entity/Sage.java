@@ -40,13 +40,13 @@ public class Sage extends LightUnit{
         exp = 0;
         maxHP = 20;
         strength = 0;
-        magic = 7;
+        magic = 100;
         skill = 5;
         speed = 7;
         luck = 0;
         defense = 4;
         resistance = 5;
-        movementInitial = 3;
+        movementInitial = 20;
         movement = movementInitial;
         vision = 6;
         unitType = UnitType.Infantry;

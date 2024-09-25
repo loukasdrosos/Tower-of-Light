@@ -43,15 +43,15 @@ public class Prince extends LightUnit{
             level = maxLevel;
         }
         exp = 0;
-        maxHP = 23;
-        strength = 10;
+        maxHP = 100;
+        strength = 100;
         magic = 0;
         skill = 5;
         speed = 9;
         luck = 0;
         defense = 8;
         resistance = 3;
-        movementInitial = 3;
+        movementInitial = 20;
         movement = movementInitial;
         vision = 6;
         unitType = UnitType.Infantry;
@@ -74,6 +74,21 @@ public class Prince extends LightUnit{
         luckGrowthRate = 70;
         defenseGrowthRate = 60;
         resistanceGrowthRate = 25;
+    }
+
+    @Override
+    public void goToNextMap() {
+        if (gp.selectedUnit != null && isSelected && isMoving && !wait) {
+            if (col == 50 && row == 1) {
+                if (keyH.isSpacePressed()) {
+                    if (gp.cChecker.noPlayerOnTile(col, row)) {
+                        gp.aSetter.setNextMap();
+                    } else if (!gp.cChecker.noPlayerOnTile(col, row)) {
+                        gp.ui.addLogMessage(name + " has to be the only one on the stairs");
+                    }
+                }
+            }
+        }
     }
 
     //Load images for the unit's animations

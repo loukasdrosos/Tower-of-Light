@@ -26,7 +26,7 @@ public class FallenHero extends ChaosUnit{
     @Override
     public void setupStats() {
         className = "Fallen Hero";
-        level = 1;
+        level = gp.aSetter.getEnemyLevel();
         if (level > maxLevel) {
             level = maxLevel;
         }

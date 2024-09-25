@@ -21,6 +21,7 @@ public class Princess extends LightUnit{
         this.race = race;
         trinket = new MageRing();
         potion = new Elixir();
+        wait = true;
         setupStats();
         // Load unit's images for animations
         try { loadImage(); }

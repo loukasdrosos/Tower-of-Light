@@ -27,7 +27,7 @@ public class Spirit extends ChaosUnit{
     @Override
     public void setupStats() {
         className = "Spirit";
-        level = 15;
+        level = gp.aSetter.getEnemyLevel();
         if (level > maxLevel) {
             level = maxLevel;
         }

@@ -26,7 +26,7 @@ public class Assassin extends ChaosUnit{
     @Override
     public void setupStats() {
         className = "Assassin";
-        level = 3;
+        level = gp.aSetter.getEnemyLevel();
         if (level > maxLevel) {
             level = maxLevel;
         }

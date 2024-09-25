@@ -27,7 +27,7 @@ public class Titan extends ChaosUnit{
     @Override
     public void setupStats() {
         className = "Titan";
-        level = 2;
+        level = gp.aSetter.getEnemyLevel();
         if (level > maxLevel) {
             level = maxLevel;
         }
@@ -177,6 +177,27 @@ public class Titan extends ChaosUnit{
 
         if (item != null) {
             gp.tileM.addItems(item, col, row);
+        }
+    }
+
+    @Override
+    public void Defeated() {
+        if (HP <= 0) {
+            if (name != null) {
+                gp.ui.addLogMessage(name + " is defeated");
+            } else {
+                gp.ui.addLogMessage(String.valueOf(getRace()) + " " + className + " is defeated");
+            }
+            if (boss) {
+                gp.ui.addLogMessage("");
+                gp.ui.addLogMessage("Alm: That was tough...");
+                if (gp.LightUnits.size() > 1) {
+                    gp.ui.addLogMessage("Alm: Stay focused everyone");
+                }
+                gp.tileM.loadStairs();
+            }
+            dropItem();
+            gp.ChaosUnits.remove(this);
         }
     }
 

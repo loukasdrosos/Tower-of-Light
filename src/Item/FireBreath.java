@@ -22,7 +22,7 @@ public class FireBreath extends MainHand{
         name = "Fire Breath";
         description = "Effective: Armored";
         might = 12;
-        hit = 0;
+        hit = 90;
         crit = 0;
         range = 3;
         speed = 0;

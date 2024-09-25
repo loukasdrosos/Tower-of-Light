@@ -61,6 +61,27 @@ public class HeraldOfChaos extends ChaosUnit{
         }
     }
 
+    @Override
+    public void Defeated() {
+        if (HP <= 0) {
+            if (name != null) {
+                gp.ui.addLogMessage(name + " is defeated");
+            } else {
+                gp.ui.addLogMessage(String.valueOf(getRace()) + " " + className + " is defeated");
+            }
+            dropItem();
+            gp.aSetter.addPrincess(col, row);
+            gp.ChaosUnits.remove(this);
+            gp.tileM.loadStairs();
+            gp.ui.addLogMessage("");
+            gp.ui.addLogMessage("Alm: Celica, are you okay?");
+            gp.ui.addLogMessage("Celica: Alm, i am so sorry..");
+            gp.ui.addLogMessage("Alm: Don't worry, it's not your fault");
+            gp.ui.addLogMessage("Alm: Let's go and defeat Grima together!");
+            gp.ui.addLogMessage("Celica: Let's bring light back to the world!");
+        }
+            }
+
 
     //Load images for the unit's animations
     @Override
