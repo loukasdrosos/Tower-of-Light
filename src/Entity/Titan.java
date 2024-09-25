@@ -4,6 +4,9 @@ import Item.*;
 import main.GamePanel;
 import main.UtilityTool;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Titan extends ChaosUnit{
     public Titan(GamePanel gp, boolean boss, int startCol, int startRow) {
         super(gp);
@@ -189,12 +192,33 @@ public class Titan extends ChaosUnit{
                 gp.ui.addLogMessage(String.valueOf(getRace()) + " " + className + " is defeated");
             }
             if (boss) {
-                gp.ui.addLogMessage("");
-                gp.ui.addLogMessage("Alm: That was tough...");
+                List<Runnable> tasks = new ArrayList<>();
+                int delay = 300;  //300 ms delay between each message and sound effect
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: That was tougher than i expected...");
+                });
+
                 if (gp.LightUnits.size() > 1) {
-                    gp.ui.addLogMessage("Alm: Stay focused everyone");
+                    tasks.add(() -> {
+                        gp.ui.addLogMessage("Alm: Stay focused everyone");
+                    });
                 }
-                gp.tileM.loadStairs();
+
+                tasks.add(() -> {
+                    gp.tileM.loadStairs();
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: Let's go to the next floor");
+                });
+
+                // Execute the tasks one by one with a delay
+                executeWithDelay(tasks, delay);
             }
             dropItem();
             gp.ChaosUnits.remove(this);

@@ -2,6 +2,11 @@ package main;
 
 import Entity.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class TurnManager {
 
     private boolean playerPhase = true; // Sets player or enemy turn
@@ -15,6 +20,7 @@ public class TurnManager {
     private int activeBeacons = 0; // Count of currently active beacons
     private int beaconCooldown = 1; // Cooldown period for each beacon
     private int beaconCooldownTimer = beaconCooldown; // Cooldown timer for beacons of light
+    private int reinforcmentCounter = 0;
 
     private boolean enemiesSpawned;
     private boolean boss1Spawned, boss2Spawned, boss3Spawned, boss4Spawned, boss5Spawned, boss6Spawned;
@@ -73,6 +79,10 @@ public class TurnManager {
                 if (!gp.ChaosUnits.isEmpty()) {
                     gp.ChaosUnits.get(currentEnemyUnitIndex).startTurn();
                 }
+
+                if (gp.getCurrentMap() == 1){
+                    gp.aSetter.addIagoIke();
+                }
             }
         }
         else {
@@ -120,72 +130,253 @@ public class TurnManager {
 
                 enemiesSpawned = false;
                 reduceBeaconCooldown();
+                if (gp.getCurrentMap() == 1){
+                    reinforcmentCounter++;
+                }
             }
         }
     }
 
     public void spawnBoss() {
         if (activeBeacons == 3) {
+            List<Runnable> tasks = new ArrayList<>();
+            int delay = 300;  //300 ms delay between each message and sound effect
             if (!boss1Spawned && gp.getCurrentMap() == 0) {
                 gp.aSetter.spawnBosses();
                 boss1Spawned = true;
-                gp.ui.addLogMessage("");
-                gp.ui.addLogMessage("Alm: That Titan seems like its leading the others");
-                gp.ui.addLogMessage("Alm: We better take care of it if we want to reach the next floor");
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: That Titan seems like its leading the others");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: We better take care of it if we want to reach the next floor");
+                });
+
             }
             else if (!boss2Spawned && gp.getCurrentMap() == 1) {
                 gp.aSetter.spawnBosses();
                 boss2Spawned = true;
-                gp.ui.addLogMessage("");
-                gp.ui.addLogMessage("Nuibaba: Your fate ends here prince Alm");
-                gp.ui.addLogMessage("Alm: Who are you?");
-                gp.ui.addLogMessage("Nuibaba: I am Nuibaba, one of the Chaos army's commanders");
-                gp.ui.addLogMessage("Alm: You will fall here then");
-                gp.ui.addLogMessage("Nuibaba: Try and withstand my magic!");
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Nuibaba: Your fate ends here prince Alm");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: Who are you?");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Nuibaba: I am Nuibaba, one of the Chaos army's commanders");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: You will fall here then");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Nuibaba: Try and withstand my magic!");
+                });
+
             }
             else if (!boss3Spawned && gp.getCurrentMap() == 2) {
                 gp.aSetter.spawnBosses();
                 boss3Spawned = true;
-                gp.ui.addLogMessage("");
-                gp.ui.addLogMessage("Alm: No way! Is that a Fire Dragon!");
-                gp.ui.addLogMessage("Alm: I thought their existence was only a legend");
-                gp.ui.addLogMessage("Alm: We better be careful");
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: No way! Is that a Fire Dragon!");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: I thought their existence was only a legend");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: We better be careful");
+                });
+
             }
             else if (!boss4Spawned && gp.getCurrentMap() == 3) {
                 gp.aSetter.spawnBosses();
                 boss4Spawned = true;
-                gp.ui.addLogMessage("");
-                gp.ui.addLogMessage("Alm: That Chaos Paladin is their leader");
-                gp.ui.addLogMessage("Alm: It seems strong but we should be able to defeat it");
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: That Chaos Paladin is their leader");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: It's holding a Dracoshield so watch out");
+                });
+
             }
             else if (!boss5Spawned && gp.getCurrentMap() == 4) {
                 gp.aSetter.spawnBosses();
                 boss5Spawned = true;
-                gp.ui.addLogMessage("");
-                gp.ui.addLogMessage("Jedah: You managed to make it here young prince");
-                gp.ui.addLogMessage("Alm: Jedah! What have you done to Celica?");
-                gp.ui.addLogMessage("Jedah: HAHAHAHAHA! Don't worry, she is not harmed!");
-                gp.ui.addLogMessage("Jedah: The princess awaits you on the next floor");
-                gp.ui.addLogMessage("Jedah: That is if you manage to get there");
-                gp.ui.addLogMessage("Alm: You will pay for what you've done!");
-                gp.ui.addLogMessage("Alm: The Chaos army and Grima WILL be defeated!");
-                gp.ui.addLogMessage("Jedah: Foolish prince your path ends here!");
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Jedah: You managed to make it here young prince");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: Jedah! What have you done to my family?");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Jedah: Your parents weren't strong enough i'm afraid");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Jedah: They couldn't defeat the Herald of Chaos");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Jedah: The princess however is alive");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: Mother, father...NOOOOOOO");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: You will pay for what you've done!");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: Where is Celica, TELL ME");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Jedah: HAHAHAHAHA! Don't worry, she is not harmed!");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Jedah: The princess awaits you on the next floor");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Jedah: That is if you manage to defeat the Herald of Chaos there");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: Herald of Chaos?");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Jedah: Grima's strongest warrior that holds the Edge of Chaos");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Jedah: A weapon as powerful as that Lightbringer of yours");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: We will not lose!");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: The Chaos army and Grima WILL be defeated!");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Jedah: Foolish prince your path ends here!");
+                });
+
             }
             else if (!boss6Spawned && gp.getCurrentMap() == 5) {
                 gp.aSetter.spawnBosses();
                 boss6Spawned = true;
-                gp.ui.addLogMessage("");
-                gp.ui.addLogMessage("Celica: ...");
-                gp.ui.addLogMessage("Alm: Celica, is that you? CELICA!!");
-                gp.ui.addLogMessage("Celica: Your struggles end here");
-                gp.ui.addLogMessage("Alm: Huh?");
-                gp.ui.addLogMessage("Celica: I, the Herald of Chaos, will bring glory to Grima");
-                gp.ui.addLogMessage("Alm: Celica what's going on?");
-                gp.ui.addLogMessage("Alm: It must be the edge of Chaos! It possessed her!");
-                gp.ui.addLogMessage("Alm: We have to defeat her...");
-                gp.ui.addLogMessage("Alm: I'll get you back Celica, just wait");
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Celica: ...");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: Celica, is that you? CELICA!!");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Celica: Your struggles end here");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: Huh?");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Celica: I, the Herald of Chaos, will bring glory to Grima");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: Celica what's going on?");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: Why are you attacking me Celica?");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: It must be the Edge of Chaos! It possessed her!");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: We have to defeat her...");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: I'll get you back Celica, just wait");
+                });
+
             }
+
+            // Execute the tasks one by one with a delay
+            executeWithDelay(tasks, delay);
         }
+    }
+
+    protected void executeWithDelay(List<Runnable> tasks, int delay) {
+        Timer timer = new Timer();
+
+        for (int i = 0; i < tasks.size(); i++) {
+            int taskIndex = i;
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    tasks.get(taskIndex).run();
+                }
+            }, delay * i);
+        }
+
+        // Cancel the timer after all tasks have been executed
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                timer.cancel();
+            }
+        }, delay * tasks.size());
     }
 
     // Method to end the turn for all player units when the 'E' key is pressed

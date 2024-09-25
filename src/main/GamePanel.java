@@ -93,6 +93,21 @@ public class GamePanel extends JPanel implements Runnable{
         gameState = titleState;
     }
 
+    public void resetGame() {
+        resetCurrentMap();
+        tileM.clearSelectedEnemies();
+        ui.clearLog();
+        TurnM.resetBeaconCooldownTimer();
+        TurnM.resetBeaconsofLight();
+        LightUnits.clear();
+        aSetter.setLightUnits();
+        aSetter.setChaosUnits();
+        aSetter.setCursor();
+        playMusic(2);
+        gameState = playState;
+        ui.addLogMessage("Press P to view controls");
+    }
+
     public BufferedImage setup (String imagePath) {
         UtilityTool uTool = new UtilityTool();
         BufferedImage image = null;
@@ -189,6 +204,10 @@ public class GamePanel extends JPanel implements Runnable{
             // UI
             ui.draw(g2);
         }
+        else if (gameState == creditsState) {
+            // UI
+            ui.draw(g2);
+        }
         else if (gameState == playState) {
 
             // Draw the game map tiles
@@ -223,17 +242,21 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void playMusic(int i) {
         sound.setGameMusicFile(i);
-        sound.play();
-        sound.loop();
+        sound.playMusic();
+        sound.loopMusic();
     }
 
     public void stopMusic() {
-        sound.stop();
+        sound.stopMusic();
     }
 
     public void playSE(int i) {
         sound.setSoundEffectFile(i);
-        sound.play();
+        sound.playSE();
+    }
+
+    public void stopSE() {
+        sound.stopSE();
     }
 
     //GETTERS
@@ -249,4 +272,6 @@ public class GamePanel extends JPanel implements Runnable{
     public int getCurrentMap() {  return currentMap;  }
 
     public void setNextMap() { currentMap++; }
+
+    public void resetCurrentMap() { currentMap = 0;}
 }

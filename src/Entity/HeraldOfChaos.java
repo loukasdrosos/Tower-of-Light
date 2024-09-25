@@ -3,6 +3,9 @@ package Entity;
 import Item.*;
 import main.GamePanel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class HeraldOfChaos extends ChaosUnit{
 
     public HeraldOfChaos(GamePanel gp, int startCol, int startRow) {
@@ -73,14 +76,57 @@ public class HeraldOfChaos extends ChaosUnit{
             gp.aSetter.addPrincess(col, row);
             gp.ChaosUnits.remove(this);
             gp.tileM.loadStairs();
-            gp.ui.addLogMessage("");
-            gp.ui.addLogMessage("Alm: Celica, are you okay?");
-            gp.ui.addLogMessage("Celica: Alm, i am so sorry..");
-            gp.ui.addLogMessage("Alm: Don't worry, it's not your fault");
-            gp.ui.addLogMessage("Alm: Let's go and defeat Grima together!");
-            gp.ui.addLogMessage("Celica: Let's bring light back to the world!");
+
+            List<Runnable> tasks = new ArrayList<>();
+            int delay = 300;  //300 ms delay between each message and sound effect
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Alm: Celica, are you okay?");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Celica: Alm, your parents... i am so sorry");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Alm: Don't worry Celica, it's not your fault");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Celica: I remember Jedah said he wants to destroy Lightbringer");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Alm: Why is that?");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Celica: He said Lightbringer alone can only seal Grima");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Celica: But together with the Edge of Chaos Grima can be killed");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Alm: Let's go and defeat Grima together then!");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Celica: Let's bring light back to the world!");
+            });
+
+            // Execute the tasks one by one with a delay
+            executeWithDelay(tasks, delay);
+
         }
-            }
+    }
+
+
 
 
     //Load images for the unit's animations

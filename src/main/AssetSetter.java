@@ -1,7 +1,8 @@
 package main;
 
 import Entity.*;
-import java.util.Random;
+
+import java.util.*;
 
 public class AssetSetter {
 
@@ -24,54 +25,64 @@ public class AssetSetter {
             gp.LightUnits.add(new Knight(gp, keyH, "Berkut", Entity.UnitRace.Orc, 2, 49));
             gp.LightUnits.add(new Mage(gp, keyH, "Robin", Entity.UnitRace.Human, 6, 49));
             gp.LightUnits.add(new Paladin(gp, keyH, "Valbar", Entity.UnitRace.Tauren, 5, 48));
-        }
-        else if (gp.getCurrentMap() != 0) {
-            gp.LightUnits.getFirst().setNextLevel(4, 47);
-            if (gp.LightUnits.get(1) != null) {
+        } else if (gp.getCurrentMap() != 0) {
+
+            if (gp.LightUnits.size() > 0) {
+                gp.LightUnits.get(0).setNextLevel(4, 47);
+            }
+            if (gp.LightUnits.size() > 1) {
                 gp.LightUnits.get(1).setNextLevel(3, 48);
             }
-            if (gp.LightUnits.get(2) != null) {
+            if (gp.LightUnits.size() > 2) {
                 gp.LightUnits.get(2).setNextLevel(4, 49);
             }
-            if (gp.LightUnits.get(3) != null) {
+            if (gp.LightUnits.size() > 3) {
                 gp.LightUnits.get(3).setNextLevel(2, 47);
             }
-            if (gp.LightUnits.get(4) != null) {
+            if (gp.LightUnits.size() > 4) {
                 gp.LightUnits.get(4).setNextLevel(2, 49);
             }
-            if (gp.LightUnits.get(5) != null) {
-                gp.LightUnits.get(5).setNextLevel(6,49);
+            if (gp.LightUnits.size() > 5) {
+                gp.LightUnits.get(5).setNextLevel(6, 49);
             }
-            if (gp.LightUnits.get(6) != null) {
+            if (gp.LightUnits.size() > 6) {
                 gp.LightUnits.get(6).setNextLevel(5, 48);
             }
-            if (gp.LightUnits.get(7) != null) {
+            if (gp.LightUnits.size() > 7) {
                 gp.LightUnits.get(7).setNextLevel(6, 47);
             }
-            if (gp.LightUnits.get(8) != null) {
+            if (gp.LightUnits.size() > 8) {
                 gp.LightUnits.get(8).setNextLevel(7, 48);
             }
-            if (gp.LightUnits.get(9) != null) {
+            if (gp.LightUnits.size() > 9) {
                 gp.LightUnits.get(9).setNextLevel(8, 49);
             }
 
-            if (gp.getCurrentMap() == 2) {
-                gp.LightUnits.add(new Warrior(gp, keyH, "Ike", Entity.UnitRace.Human, 49, 49));
-                gp.LightUnits.add(new DarkMage(gp, keyH, "Iago", Entity.UnitRace.Orc, 50, 50));
-                gp.ui.addLogMessage("");
-                gp.ui.addLogMessage("Ike: Unbelievable, we are lost");
-                gp.ui.addLogMessage("Iago: Keep it quiet will you! We need to find the prince and the others");
-                gp.ui.addLogMessage("Alm: Phew, we made it to the fourth floor");
-                gp.ui.addLogMessage("Ike: Hey Iago, did you hear that?");
-                gp.ui.addLogMessage("Iago: Could it be? Prince Alm is that you?");
-                gp.ui.addLogMessage("Alm: Iago?");
-                gp.ui.addLogMessage("Ike: Hey, i am also here!");
-                gp.ui.addLogMessage("Iago: We will get to you young prince, don't worry");
-                gp.ui.addLogMessage("Alm: Be careful, especially you Ike");
-            }
+            gp.tileM.findAllVisibleTiles();
+        }
+    }
+
+
+    protected void executeWithDelay(List<Runnable> tasks, int delay) {
+        Timer timer = new Timer();
+
+        for (int i = 0; i < tasks.size(); i++) {
+            int taskIndex = i;
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    tasks.get(taskIndex).run();
+                }
+            }, delay * i);
         }
 
-        gp.tileM.findAllVisibleTiles();
+        // Cancel the timer after all tasks have been executed
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                timer.cancel();
+            }
+        }, delay * tasks.size());
     }
 
     // Initialize enemy units and set their starting positions
@@ -83,17 +94,47 @@ public class AssetSetter {
 
         if (gp.getCurrentMap() == 6) {
             spawnBosses();
-            gp.ui.addLogMessage("");
-            gp.ui.addLogMessage("Grima: You made it here in the end");
+            List<Runnable> tasks = new ArrayList<>();
+            int delay = 300;  //300 ms delay between each message and sound effect
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Grima: You managed to make it here, but it's no use");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Grima: The Tower will fall and i will prevail");
+            });
+
             for (LightUnit lightUnit : gp.LightUnits) {
                 if (lightUnit.getFinalMapQuote() != null) {
-                    gp.ui.addLogMessage(lightUnit.getName() + ": " + lightUnit.getFinalMapQuote());
+                    tasks.add(() -> {
+                        gp.ui.addLogMessage(lightUnit.getName() + ": " + lightUnit.getFinalMapQuote());
+                    });
                 }
             }
-            gp.ui.addLogMessage("Grima: HAHAHAHA! I will be the one to rule this world!");
-            gp.ui.addLogMessage("Grima: You will all perish here!");
-            gp.ui.addLogMessage("Alm: Be careful Celica!");
-            gp.ui.addLogMessage("Celica: Same goes to you Alm!");
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Grima: HAHAHAHA! I will be the one to rule this world!");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Grima: You will all perish here!");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Alm: Let's do this! Be careful Celica!");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Celica: Same goes to you Alm!");
+            });
+
+            // Execute the tasks one by one with a delay
+            executeWithDelay(tasks, delay);
         }
 
         Random rand = new Random();
@@ -115,47 +156,60 @@ public class AssetSetter {
     public void setMusic() {
         if (gp.getCurrentMap() == 0) {
             if (gp.TurnM.getActiveBeacons() == 0) {
+                gp.stopMusic();
                 gp.playMusic(2);
             } else if (gp.TurnM.getActiveBeacons() == 3){
+                gp.stopMusic();
                 gp.playMusic(3);
             }
         }
         if (gp.getCurrentMap() == 1) {
             if (gp.TurnM.getActiveBeacons() == 0) {
+                gp.stopMusic();
                 gp.playMusic(2);
             } else if (gp.TurnM.getActiveBeacons() == 3) {
+                gp.stopMusic();
                 gp.playMusic(4);
             }
         }
         if (gp.getCurrentMap() == 2) {
             if (gp.TurnM.getActiveBeacons() == 0) {
+                gp.stopMusic();
                 gp.playMusic(5);
             } else if (gp.TurnM.getActiveBeacons() == 3) {
+                gp.stopMusic();
                 gp.playMusic(3);
             }
         }
         if (gp.getCurrentMap() == 3) {
             if (gp.TurnM.getActiveBeacons() == 0) {
+                gp.stopMusic();
                 gp.playMusic(5);
             } else if (gp.TurnM.getActiveBeacons() == 3) {
+                gp.stopMusic();
                 gp.playMusic(6);
             }
         }
         if (gp.getCurrentMap() == 4) {
             if (gp.TurnM.getActiveBeacons() == 0) {
+                gp.stopMusic();
                 gp.playMusic(7);
             } else if (gp.TurnM.getActiveBeacons() == 3) {
+                gp.stopMusic();
                 gp.playMusic(8);
             }
         }
         if (gp.getCurrentMap() == 5) {
             if (gp.TurnM.getActiveBeacons() == 0) {
+                gp.stopMusic();
                 gp.playMusic(7);
             } else if (gp.TurnM.getActiveBeacons() == 3) {
+                gp.stopMusic();
                 gp.playMusic(9);
             }
         }
         if (gp.getCurrentMap() == 6) {
+            gp.stopMusic();
             gp.playMusic(0);
         }
     }
@@ -165,15 +219,70 @@ public class AssetSetter {
         gp.tileM.findAllVisibleTiles();
     }
 
+    public void addIagoIke() {
+        gp.LightUnits.add(new Warrior(gp, keyH, "Ike", Entity.UnitRace.Human, 49, 49));
+        gp.LightUnits.add(new DarkMage(gp, keyH, "Iago", Entity.UnitRace.Orc, 50, 50));
+
+        List<Runnable> tasks = new ArrayList<>();
+        int delay = 300;  //300 ms delay between each message and sound effect
+
+        tasks.add(() -> {
+            gp.ui.addLogMessage("");
+        });
+
+        tasks.add(() -> {
+            gp.ui.addLogMessage("Ike: Unbelievable, we are lost");
+        });
+
+        tasks.add(() -> {
+            gp.ui.addLogMessage("Iago: Keep it quiet will you! We need to find the prince and the others");
+        });
+
+        tasks.add(() -> {
+            gp.ui.addLogMessage("Alm: Phew, we made it to the fourth floor");
+        });
+
+        tasks.add(() -> {
+            gp.ui.addLogMessage("Ike: Hey Iago, did you hear that?");
+        });
+
+        tasks.add(() -> {
+            gp.ui.addLogMessage("Iago: Could it be? Prince Alm is that you?");
+        });
+
+        tasks.add(() -> {
+            gp.ui.addLogMessage("Alm: Iago?");
+        });
+
+        tasks.add(() -> {
+            gp.ui.addLogMessage("Ike: Hey, i am also here!");
+        });
+
+        tasks.add(() -> {
+            gp.ui.addLogMessage("Iago: We will get to you young prince, don't worry");
+        });
+
+        tasks.add(() -> {
+            gp.ui.addLogMessage("Alm: Be careful, especially you Ike");
+        });
+
+        // Execute the tasks one by one with a delay
+        executeWithDelay(tasks, delay);
+
+        gp.tileM.findAllVisibleTiles();
+    }
+
     public void setNextMap() {
         gp.selectedUnit = null;
         gp.setNextMap();
-        setMusic();
+        gp.tileM.clearSelectedEnemies();
+        gp.ui.clearLog();
         increaseEnemyLevel();
         gp.TurnM.resetBeaconsofLight();
         gp.TurnM.resetBeaconCooldownTimer();
         gp.tileM.resetBeaconOfLightTiles();
         gp.tileM.resetItems();
+        setMusic();
         setLightUnits();
         setChaosUnits();
         setCursor();
@@ -238,7 +347,7 @@ public class AssetSetter {
         int col = rand.nextInt(gp.getMaxMapCol());
         int row = rand.nextInt(gp.getMaxMapRow());
 
-        while (!gp.tileM.visibleTiles[col][row] && !gp.cChecker.validTile(col, row)) {
+        while (gp.tileM.visibleTiles[col][row] || !gp.cChecker.validTile(col, row)) {
             // Randomly pick a tile on the map
             col = rand.nextInt(gp.getMaxMapCol());
             row = rand.nextInt(gp.getMaxMapRow());
@@ -247,7 +356,8 @@ public class AssetSetter {
         ChaosUnit enemy;
         switch (gp.getCurrentMap()) {
             case 0:
-                enemy = new FireDragon(gp, true, col, row);
+             //   enemy = new Titan(gp, true, col, row);
+                enemy = new HeraldOfChaos(gp, col, row);
                 break;
             case 1:
                 enemy = new Necromancer(gp, col, row);

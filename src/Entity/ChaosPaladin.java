@@ -4,6 +4,9 @@ import Item.*;
 import main.GamePanel;
 import main.UtilityTool;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ChaosPaladin extends ChaosUnit{
     public ChaosPaladin(GamePanel gp, boolean boss, int startCol, int startRow) {
         super(gp);
@@ -231,11 +234,24 @@ public class ChaosPaladin extends ChaosUnit{
                 gp.ui.addLogMessage(String.valueOf(getRace()) + " " + className + " is defeated");
             }
             if (boss) {
-                gp.ui.addLogMessage("");
-                gp.ui.addLogMessage("Alm: That was tougher than i thought...");
-                if (gp.LightUnits.size() > 1) {
+                List<Runnable> tasks = new ArrayList<>();
+                int delay = 300;  //300 ms delay between each message and sound effect
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: That was tougher than i thought...");
+                });
+
+                tasks.add(() -> {
                     gp.ui.addLogMessage("Alm: We are almost at the ground floor, let's do this!");
-                }
+                });
+
+                // Execute the tasks one by one with a delay
+                executeWithDelay(tasks, delay);
+
                 gp.tileM.loadStairs();
             }
             dropItem();

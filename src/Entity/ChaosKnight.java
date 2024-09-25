@@ -43,7 +43,7 @@ public class ChaosKnight extends ChaosUnit{
         setStats();
         randomizeRace();
         randomizeItems();
-        unitType = UnitType.Mounted;
+        unitType = UnitType.Cavalry;
         attackType = AttackType.Physical;
         boostStatsForClasses();
         HP = maxHP;

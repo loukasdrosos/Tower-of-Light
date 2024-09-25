@@ -105,6 +105,7 @@ public class Princess extends LightUnit{
                 });
             }
             tasks.add(() -> {
+                gp.stopMusic();
                 gp.playMusic(1);
                 gp.gameState = gp.gameOverState;
             });

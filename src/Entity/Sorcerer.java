@@ -4,6 +4,9 @@ import Item.*;
 import Spells.*;
 import main.GamePanel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Sorcerer extends ChaosUnit{
     public Sorcerer(GamePanel gp, int startCol, int startRow) {
         super(gp);
@@ -65,10 +68,39 @@ public class Sorcerer extends ChaosUnit{
     @Override
     public void Defeated() {
         if (HP <= 0) {
-            gp.ui.addLogMessage("");
-            gp.ui.addLogMessage("Jedah: God Grima...forgive me");
-            gp.ui.addLogMessage("Alm: That was for hurting Celica");
-            gp.ui.addLogMessage("Jedah: Go and find your loved one, HAHAHAHA!");
+            List<Runnable> tasks = new ArrayList<>();
+            int delay = 300;  //300 ms delay between each message and sound effect
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Jedah: God Grima...forgive me");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Jedah: Defeat these fools and bring Chaos to the world");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Alm: This is your end Jedah");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Alm: This is for hurting my loved ones");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Jedah: Go and find the princess below HAHAHAHAH");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Alm: Herald of Chaos...you will be defeated");
+            });
+
+            // Execute the tasks one by one with a delay
+            executeWithDelay(tasks, delay);
 
             if (name != null) {
                 gp.ui.addLogMessage(name + " is defeated");

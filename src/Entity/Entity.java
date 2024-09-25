@@ -14,6 +14,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Entity {
 
@@ -98,7 +100,7 @@ public class Entity {
     protected UnitRace race;  // Variable to store the unit type
     public enum AttackType {Physical, Magical}
     protected AttackType attackType; // Variable to store the unit's attack type
-    public enum UnitType {Infantry, Armored, Mounted}
+    public enum UnitType {Infantry, Armored, Cavalry}
     protected UnitType unitType;
 
     public Weapon equippedWeapon = null; // Unit's equipped weapon, player units can switch between main hand and offhand weapon
@@ -149,10 +151,12 @@ public class Entity {
             bonusVision = trinket.getVision();
         }
         if (attackType == AttackType.Physical) {
-            bonusSpeed += equippedWeapon.getSpeed();
-            bonusDefense += equippedWeapon.getDefense();
-            bonusResistance += equippedWeapon.getResistance();
-            bonusVision += equippedWeapon.getVision();
+            if (equippedWeapon != null) {
+                bonusSpeed += equippedWeapon.getSpeed();
+                bonusDefense += equippedWeapon.getDefense();
+                bonusResistance += equippedWeapon.getResistance();
+                bonusVision += equippedWeapon.getVision();
+            }
         }
 
         effStrength = strength + bonusStrength;
@@ -182,14 +186,18 @@ public class Entity {
         effVision = vision + bonusVision;
 
         if (attackType == AttackType.Physical) {
-            might = effStrength + equippedWeapon.getMight();
-            critical = (effSkill/2) + equippedWeapon.getCrit();
-            hitRate = (((effSkill * 3) + luck) / 2) + equippedWeapon.getHit();
+            if (equippedWeapon != null) {
+                might = effStrength + equippedWeapon.getMight();
+                critical = (effSkill / 2) + equippedWeapon.getCrit();
+                hitRate = (((effSkill * 3) + luck) / 2) + equippedWeapon.getHit();
+            }
         }
         if (attackType == AttackType.Magical){
-            might = effMagic + attackSpell.getMight();
-            critical = (effSkill/2) + attackSpell.getCrit();
-            hitRate = (((effSkill * 3) + luck) / 2) + attackSpell.getHit();
+            if (attackSpell != null) {
+                might = effMagic + attackSpell.getMight();
+                critical = (effSkill / 2) + attackSpell.getCrit();
+                hitRate = (((effSkill * 3) + luck) / 2) + attackSpell.getHit();
+            }
         }
         evade = ((effSpeed * 3) + luck) / 2;
     }
@@ -313,6 +321,28 @@ public class Entity {
             e.printStackTrace();
         }
         return image;
+    }
+
+    protected void executeWithDelay(List<Runnable> tasks, int delay) {
+        Timer timer = new Timer();
+
+        for (int i = 0; i < tasks.size(); i++) {
+            int taskIndex = i;
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    tasks.get(taskIndex).run();
+                }
+            }, delay * i);
+        }
+
+        // Cancel the timer after all tasks have been executed
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                timer.cancel();
+            }
+        }, delay * tasks.size());
     }
 
     public void draw (Graphics2D g2) {

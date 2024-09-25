@@ -33,6 +33,6 @@ public class Ridersbane extends OffHand{
         vision = 0;
         removable = true;
         effectiveRace = null;
-        effectiveType = Entity.UnitType.Mounted;
+        effectiveType = Entity.UnitType.Cavalry;
     }
 }

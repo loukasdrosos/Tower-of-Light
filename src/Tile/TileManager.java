@@ -52,11 +52,11 @@ public class TileManager {
         loadImage(); // Load tile images
         loadMap("/Maps/Map_1.txt", 0); // Load the first map
         loadMap("/Maps/Map_2.txt", 1); // Load the second map
-        loadMap("/Maps/Map_3.txt", 1); // Load the third map
-        loadMap("/Maps/Map_4.txt", 1); // Load the fourth map
-        loadMap("/Maps/Map_5.txt", 1); // Load the fifth map
-        loadMap("/Maps/Map_6.txt", 1); // Load the sixth map
-        loadMap("/Maps/Map_7.txt", 1); // Load the seventh map
+        loadMap("/Maps/Map_3.txt", 2); // Load the third map
+        loadMap("/Maps/Map_4.txt", 3); // Load the fourth map
+        loadMap("/Maps/Map_5.txt", 4); // Load the fifth map
+        loadMap("/Maps/Map_6.txt", 5); // Load the sixth map
+        loadMap("/Maps/Map_7.txt", 6); // Load the seventh map
     }
 
     // Method to load tile images
@@ -134,8 +134,7 @@ public class TileManager {
 
     public void loadStairs() {
         mapTileNum[gp.getCurrentMap()][50][1] = 19;
-        gp.ui.addLogMessage("Alm: The stairs appeared");
-        gp.ui.addLogMessage("Alm: Let's go to the next floor");
+        gp.ui.addLogMessage("Alm: The stairs to the next floor appeared");
     }
 
     public void resetItems() {
@@ -325,6 +324,9 @@ public class TileManager {
 
     // Method to handle which enemies to highlight their range
     public void EnemySelection() {
+        // Remove any enemies that are no longer in gp.ChaosUnits from selectedEnemies
+        selectedEnemies.removeIf(enemy -> !gp.ChaosUnits.contains(enemy));
+
        if (gp.TurnM.getPlayerPhase() == true) {
            if (!itemWindowOpen) {
                if (gp.selectedUnit == null && keyH.isAPressed() && !aKeyPressed) {
@@ -332,6 +334,7 @@ public class TileManager {
 
                    // Check if the cursor's position matches the position of any enemy unit (ChaosUnit)
                    if (gp.selectedUnit == null) {
+
                        for (ChaosUnit enemy : gp.ChaosUnits) {
                            if (gp.cursor.getCol() == enemy.getCol() && gp.cursor.getRow() == enemy.getRow()) {
                                if (selectedEnemies.contains(enemy)) {
@@ -351,6 +354,10 @@ public class TileManager {
                }
            }
        }
+    }
+
+    public void clearSelectedEnemies() {
+        selectedEnemies.clear();
     }
 
     // Method to add an item to a specific tile at (col, row), max inventory size per tile is 20

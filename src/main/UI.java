@@ -2,9 +2,7 @@ package main;
 
 import Entity.*;
 import Item.*;
-import Spells.AttackSpell;
-import Spells.HealingSpell;
-
+import Spells.*;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -12,8 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class UI {
 
@@ -24,6 +20,8 @@ public class UI {
     Graphics2D g2;
     BufferedImage attackSpellImage;
     BufferedImage healingSpellImage;
+    BufferedImage finale;
+    BufferedImage creditsImage;
 
     // Variables to control the phase dipslay
     int phaseRectWidth = 300; // Width of the phase rectangle
@@ -58,6 +56,8 @@ public class UI {
         try {
             attackSpellImage = ImageIO.read(new File("res/Spells/Attack_Spell.png"));
             healingSpellImage = ImageIO.read(new File("res/Spells/Healing_Spell.png"));
+            finale = ImageIO.read(new File("res/FinaleImage/Finale.png"));
+            creditsImage = ImageIO.read(new File("res/CreditsScreen/CreditsScreen.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -77,7 +77,7 @@ public class UI {
                 "of Light left in the world to seal Grima, because Grima was too powerful",
                 "to be killed. To remind everyone of these heroic actions the Tower of Light",
                 "was built, which also holds enough Light power to help the next heroes defeat",
-                "the Chaos army if another invasion ver happens. Peace lasted for 200 years and",
+                "the Chaos army if another invasion ever happens. Peace lasted for 200 years and",
                 "no one thought dark times would ever come again. However...",
         };
 
@@ -101,11 +101,14 @@ public class UI {
         String[] introText = {
                 "Alm: We are at the top of the Tower of Light, we can't hold them back",
                 "Rudolf: Young prince, we are the last hope of this world!",
+                "Alm: I know, everyone outside the Tower is fighting for survival",
+                "Rudolf: Unfortunately sire your parents and the princess...your wife Celica...",
+                "Alm: The reports said they are missing but lets keep our hopes up",
                 "Boey: Hey Alm, use that sword you have, it defeated the Chaos army the last time",
-                "Alm: I don't know how to unleash its full power yet",
+                "Alm: I don't know how to master its true potential",
                 "Shade: I heard from a priest that you need to use Beacons of Light to unleash",
                 "Lightbringer's full power",
-                "Rudolf: Grima is that the ground floor of the Tower, use that sword to defeat him Alm!",
+                "Rudolf: Grima is at the ground floor of the Tower, use that sword to defeat him Alm!",
                 "Alm: But i am not strong enough",
                 "Rudolf: From the time you take your first breath, you become eligible to die.",
                 "You also become eligible to find your greatness and become the one warrior.",
@@ -124,6 +127,60 @@ public class UI {
         g2.setFont(arial_30);
         g2.drawString("Press Enter to continue", 30 * 16, 50 * 16);
 
+    }
+
+    // CREDITS STATE
+    public void drawCredits() {
+        g2.drawImage(creditsImage, 0, 0, 52 * gp.getTileSize(), 52 * gp.getTileSize(), null);
+
+        int rectX = 52 * 16;    // Starting X position of the rectangle
+        int rectY = 0;          // Starting Y position of the rectangle
+        int rectWidth = 32 * 16;
+        int rectHeight = 52 * 16;
+        g2.setColor(new Color(0, 0, 0, 150)); // Semi-transparent black
+        g2.fillRoundRect(rectX, rectY, rectWidth, rectHeight, 25, 25);
+
+        // Set text color and font
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.PLAIN, 20));
+
+        // Determine the line height based on the font metrics
+        FontMetrics metrics = g2.getFontMetrics();
+        int lineHeight = metrics.getHeight();
+
+        // Start drawing the text inside the rectangle, one line below the other
+        int startX = rectX + 20; // Padding from the left side of the rectangle
+        int startY = rectY + 40; // Padding from the top of the rectangle
+
+        // List of text to draw
+        String[] creditsText = {
+                "",
+                "",
+                "",
+                "THANKS FOR PLAYING",
+                "",
+                "",
+                "Program: Loukas Drosos",
+                "",
+                "Music/Art: Nintendo & Intelligent Systems",
+                "",
+                "All music and art in this game are used",
+                "for educational purposes only"
+        };
+
+        // Loop through each line and draw it, increasing Y position for each line
+        for (String text : creditsText) {
+            g2.drawString(text, startX, startY);
+            startY += lineHeight + 10; // Increase Y for the next line (10 is the spacing between lines)
+        }
+    }
+
+    // FINALE
+
+    public void drawFinale() {
+        if (gp.gameState == gp.playState) {
+            g2.drawImage(creditsImage, 0, 0, 52 * gp.getTileSize(), 52 * gp.getTileSize(), null);
+        }
     }
 
     // CONTROLS STATE UI
@@ -234,6 +291,11 @@ public class UI {
     public void scrollLog(int direction) {
         scrollPosition += direction;
         scrollPosition = Math.max(0, Math.min(scrollPosition, logMessages.size() - maxVisibleMessages));
+    }
+
+    public void clearLog() {
+        // Clear the log messages list
+        logMessages.clear();
     }
 
     // Draw a simple scrollbar
@@ -551,8 +613,8 @@ public class UI {
                 g2.drawString("Armored", textX, textY + nextLine * lineHeight);
                 nextLine++;
             }
-            if (player.getUnitType() == Entity.UnitType.Mounted) {
-                g2.drawString("Mounted", textX, textY + nextLine * lineHeight);
+            if (player.getUnitType() == Entity.UnitType.Cavalry) {
+                g2.drawString("Cavalry", textX, textY + nextLine * lineHeight);
                 nextLine++;
             }
             g2.drawString("Level: " + player.getLevel(), textX, textY + nextLine * lineHeight);
@@ -980,8 +1042,8 @@ public class UI {
             g2.drawString("Armored", textX, textY + nextLine * lineHeight);
             nextLine++;
         }
-        if (enemy.getUnitType() == Entity.UnitType.Mounted) {
-            g2.drawString("Mounted", textX, textY + nextLine * lineHeight);
+        if (enemy.getUnitType() == Entity.UnitType.Cavalry) {
+            g2.drawString("Cavalry", textX, textY + nextLine * lineHeight);
             nextLine++;
         }
         g2.drawString("Level: " + enemy.getLevel(), textX, textY + nextLine * lineHeight);
@@ -1447,6 +1509,11 @@ public class UI {
             drawLightUnitInfo();
             drawChaosUnitInfo();
             drawTileItems();
+        }
+
+        // CREDITS
+        if (gp.gameState == gp.creditsState) {
+            drawCredits();
         }
     }
 }

@@ -68,7 +68,7 @@ public class Knight extends LightUnit{
         movementInitial = 40;
         movement = movementInitial;
         vision = 6;
-        unitType = UnitType.Mounted;
+        unitType = UnitType.Cavalry;
         attackType = AttackType.Physical;
         boostStatsForClasses();
         HP = maxHP;

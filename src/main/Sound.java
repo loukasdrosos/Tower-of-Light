@@ -8,8 +8,9 @@ import java.net.URL;
 
 public class Sound {
 
-    // Clip object used to play sound
-    Clip clip;
+    // Separate Clip objects for music and sound effects
+    Clip musicClip;
+    Clip soundEffectClip;
 
     // Arrays to hold URLs for music and sound effects
     URL gameMusicURL[] = new URL [30];
@@ -60,17 +61,17 @@ public class Sound {
         try {
             // Obtain an AudioInputStream for the specified sound effect URL
             AudioInputStream ais = AudioSystem.getAudioInputStream(soundEffectURL[i]);
-            clip = AudioSystem.getClip(); // Get a sound clip resource
-            clip.open(ais); // Open the audio clip from the stream
+            soundEffectClip = AudioSystem.getClip(); // Get a sound clip resource
+            soundEffectClip.open(ais); // Open the audio clip from the stream
 
             // Adjust volume for sound effects
             if (i != 1 && i != 2) {
-                FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                gainControl.setValue(-13.0f); // Reduce the volume by 13 decibels
+                FloatControl gainControl = (FloatControl) soundEffectClip.getControl(FloatControl.Type.MASTER_GAIN);
+                gainControl.setValue(-11.0f); // Reduce the volume by 11 decibels
             }
             else if (i == 1 || i == 2) {
-                FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                gainControl.setValue(-10.0f); // Reduce the volume by 10 decibels
+                FloatControl gainControl = (FloatControl) soundEffectClip.getControl(FloatControl.Type.MASTER_GAIN);
+                gainControl.setValue(-8.0f); // Reduce the volume by 8 decibels
             }
         } catch (Exception e) {
         }
@@ -80,24 +81,34 @@ public class Sound {
     public void setGameMusicFile(int i) {
         try {
             AudioInputStream ais = AudioSystem.getAudioInputStream(gameMusicURL[i]);
-            clip = AudioSystem.getClip();
-            clip.open(ais);
+            musicClip = AudioSystem.getClip();
+            musicClip.open(ais);
         } catch (Exception e) {
         }
     }
 
     // Plays the currently loaded sound or music clip
-    public void play() {
-        clip.start();
+    public void playMusic() {
+        musicClip.start();
     }
 
     // Loops the currently loaded sound or music clip continuously
-    public void loop() {
-        clip.loop(clip.LOOP_CONTINUOUSLY);
+    public void loopMusic() {
+        musicClip.loop(musicClip.LOOP_CONTINUOUSLY);
     }
 
     // Stops the currently playing sound or music clip
-    public void stop() {
-        clip.stop();
+    public void stopMusic() {
+        musicClip.stop();
+    }
+
+    // Plays the currently loaded sound effect clip
+    public void playSE() {
+        soundEffectClip.start();
+    }
+
+    // Stops the currently playing sound effect clip
+    public void stopSE() {
+        soundEffectClip.stop();
     }
 }

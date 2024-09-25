@@ -5,6 +5,9 @@ import Spells.*;
 import main.GamePanel;
 import main.UtilityTool;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Necromancer extends ChaosUnit{
     public Necromancer(GamePanel gp, int startCol, int startRow) {
         super(gp);
@@ -65,13 +68,40 @@ public class Necromancer extends ChaosUnit{
     @Override
     public void Defeated() {
         if (HP <= 0) {
-            gp.ui.addLogMessage("");
-            gp.ui.addLogMessage("Nuibaba: Ah, lord Jedah forgive me...");
-            gp.ui.addLogMessage("Alm: Jedah? He is also here?");
-            gp.ui.addLogMessage("Nuibaba: Of course, he and the young princess are waiting for you");
-            gp.ui.addLogMessage("Alm: Princess? Celica? Is she alive?");
-            gp.ui.addLogMessage("Nuibaba: She is, but not for long");
-            gp.ui.addLogMessage("Alm: Jedah, Grima, you will pay for what you've done!");
+
+            List<Runnable> tasks = new ArrayList<>();
+            int delay = 300;  //300 ms delay between each message and sound effect
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Nuibaba: Ah, lord Jedah forgive me...");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Alm: Jedah? Grima's right hand? He is also here?");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Nuibaba: Of course, he and the young princess are waiting for you");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Alm: Princess? Celica? Is she alive?");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Nuibaba: She is, but not for long");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Alm: Jedah, Grima, you will pay for what you've done!");
+            });
+
+            // Execute the tasks one by one with a delay
+            executeWithDelay(tasks, delay);
 
             if (name != null) {
                 gp.ui.addLogMessage(name + " is defeated");

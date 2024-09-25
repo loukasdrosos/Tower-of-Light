@@ -28,7 +28,7 @@ public class KeyHandler implements KeyListener {
 
         if (gp.gameState == gp.titleState && !ENTERPressed) {
             if (code == KeyEvent.VK_ENTER) {
-                gp.stopMusic();
+                gp.stopSE();
                 gp.playSE(3);
                 gp.gameState = gp.introState;  // Transition to introState
                 ENTERPressed = true;
@@ -46,9 +46,18 @@ public class KeyHandler implements KeyListener {
         if (gp.gameState == gp.introState2 && !ENTERPressed) {
             if (code == KeyEvent.VK_ENTER) {
                 gp.playSE(6);
+                gp.playMusic(2);
                 gp.gameState = gp.playState;  // Transition to playState
                 ENTERPressed = true;
-                gp.aSetter.setMusic();
+            }
+        }
+
+        if (gp.gameState == gp.gameOverState) {
+            if (code == KeyEvent.VK_R) {
+                gp.stopMusic();
+                gp.resetGame();
+            } else if (code == KeyEvent.VK_Q) {
+                System.exit(0);
             }
         }
 

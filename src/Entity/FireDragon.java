@@ -4,6 +4,9 @@ import Item.*;
 import main.GamePanel;
 import main.UtilityTool;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FireDragon extends ChaosUnit{
     public FireDragon(GamePanel gp, boolean boss, int startCol, int startRow) {
         super(gp);
@@ -134,11 +137,24 @@ public class FireDragon extends ChaosUnit{
                 gp.ui.addLogMessage(String.valueOf(getRace()) + " " + className + " is defeated");
             }
             if (boss) {
-                gp.ui.addLogMessage("");
-                gp.ui.addLogMessage("Alm: The dragon was as strong as the legend said");
-                if (gp.LightUnits.size() > 1) {
-                    gp.ui.addLogMessage("Alm: Let's keep going strong everyone!");
-                }
+                List<Runnable> tasks = new ArrayList<>();
+                int delay = 300;  //300 ms delay between each message and sound effect
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: The dragon was as strong as the legends said");
+                });
+
+                tasks.add(() -> {
+                    gp.ui.addLogMessage("Alm: They Chaos army is getting stronger but we won't give up");
+                });
+
+                // Execute the tasks one by one with a delay
+                executeWithDelay(tasks, delay);
+
                 gp.tileM.loadStairs();
             }
             dropItem();

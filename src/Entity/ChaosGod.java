@@ -5,6 +5,11 @@ import Spells.Expiration;
 import Spells.Goetia;
 import main.GamePanel;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class ChaosGod extends ChaosUnit{
     public ChaosGod(GamePanel gp, int startCol, int startRow) {
         super(gp);
@@ -55,20 +60,55 @@ public class ChaosGod extends ChaosUnit{
     @Override
     public void Defeated() {
         if (HP <= 0) {
-            gp.ui.addLogMessage("");
-            gp.ui.addLogMessage("Grima: NOOOOO!");
-            gp.ui.addLogMessage("Alm: This is the end Grima!");
-            gp.ui.addLogMessage("Alm: This time you will not return");
-            gp.ui.addLogMessage("Grima: Even if it's not me, someone else will take my place");
-            gp.ui.addLogMessage("Alm: And we will be there to stop him!");
-            if (name != null) {
-                gp.ui.addLogMessage(name + " is defeated");
-            } else {
-                gp.ui.addLogMessage(String.valueOf(getRace()) + " " + className + " is defeated");
-            }
+            List<Runnable> tasks = new ArrayList<>();
+            int delay = 700;  //700 ms delay between each task
 
-            gp.ChaosUnits.clear();
-            gp.gameState = gp.gameOverState;
+            tasks.add(() -> {
+                gp.stopMusic();
+                gp.playMusic(10);
+                gp.ui.drawFinale();
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Grima: NOOOOO!");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Alm: This is the end Grima!");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Alm: This time you will not return");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Grima: Even if it's not me, someone else will take my place");
+            });
+
+            tasks.add(() -> {
+                gp.ui.addLogMessage("Alm: And we will be there to stop him!");
+            });
+
+            tasks.add(() -> {
+                if (name != null) {
+                    gp.ui.addLogMessage(name + " is defeated");
+                } else {
+                    gp.ui.addLogMessage(String.valueOf(getRace()) + " " + className + " is defeated");
+                }
+            });
+
+            tasks.add(() -> {
+                gp.ChaosUnits.clear();
+                gp.gameState = gp.creditsState;
+            });
+
+            // Execute the tasks one by one with a delay
+            executeWithDelay(tasks, delay);
+
         }
     }
 

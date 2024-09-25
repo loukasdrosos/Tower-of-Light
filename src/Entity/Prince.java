@@ -43,7 +43,7 @@ public class Prince extends LightUnit{
             level = maxLevel;
         }
         exp = 0;
-//        maxHP = 23;
+//        maxHP = 21;
 //        strength = 10;
 //        magic = 0;
 //        skill = 5;
@@ -51,7 +51,8 @@ public class Prince extends LightUnit{
 //        luck = 0;
 //        defense = 8;
 //        resistance = 3;
-//        movementInitial = 3;
+    //    movementInitial = 3;
+
         maxHP = 21;
         strength = 80;
         magic = 80;
@@ -100,6 +101,49 @@ public class Prince extends LightUnit{
         }
     }
 
+    // Method to update the unit's state, called every frame
+    @Override
+    public void update() {
+        // Allow movement only during the player's phase
+        if (gp.TurnM.getPlayerPhase()) {
+            if (!gp.tileM.isItemWindowOpen()) {
+                move();
+                SelectPlayerUnit();
+                cancelAction();
+                endSelectedUnitTurn();
+                chooseTarget();
+                usePotion();
+                healAlly();
+                switchWeapons();
+                useBeaconOfLight();
+                goToNextMap();
+            }
+            else if (gp.tileM.isItemWindowOpen()) {
+                pickUpItem();
+            }
+        }
+
+        // Update Prince's Lightbringer stats
+        if (mainHand != null) {
+            mainHand.update();
+        }
+        calculateCombatStats(); // Update Princes's combat stats since Lightbringer is getting stronger
+
+        // Update sprite animation
+        spriteCounter++;
+        // Toggle between sprite frames
+        if (spriteCounter > 20) {
+            if (spriteNum == 1) {
+                spriteNum = 2;
+            }
+            else if (spriteNum == 2) {
+                spriteNum = 1;
+            }
+            spriteCounter = 0;  // Reset the sprite counter
+        }
+    }
+
+
     //Load images for the unit's animations
     @Override
     public void loadImage() {
@@ -134,6 +178,7 @@ public class Prince extends LightUnit{
                 });
             }
             tasks.add(() -> {
+                gp.stopMusic();
                 gp.playMusic(1);
                 gp.gameState = gp.gameOverState;
             });
