@@ -29,6 +29,7 @@ public class GamePanel extends JPanel implements Runnable{
     private final int maxMap = 7;
     private int currentMap = 0;
 
+
     // Title Screen
     private BufferedImage titleScreenImage, gameOverScreenImage;
 
