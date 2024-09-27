@@ -111,7 +111,8 @@ public class TurnManager {
                     }
                 }
                 else {
-                    currentEnemy.takeAction(); // Only take action if the unit hasn't finished its turn
+                   // currentEnemy.takeAction(); // Only take action if the unit hasn't finished its turn
+                    currentEnemy.setAction();
                 }
             } else {
                 // All Chaos units have finished their turns, switch back to player phase

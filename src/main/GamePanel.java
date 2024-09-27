@@ -1,5 +1,6 @@
 package main;
 
+import AI.PathFinder;
 import Entity.*;
 import Tile.TileManager;
 
@@ -48,6 +49,7 @@ public class GamePanel extends JPanel implements Runnable{
     public UI ui = new UI(this, keyH);
     public AssetSetter aSetter = new AssetSetter(this, keyH);
     public BattleSimulator battleSim = new BattleSimulator(this);
+    public PathFinder pFinder = new PathFinder(this);
 
     // GAME STATE
     public int gameState;

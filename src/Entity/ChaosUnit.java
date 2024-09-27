@@ -15,6 +15,8 @@ public class ChaosUnit extends Entity {
 
     protected boolean boss;
 
+    private boolean onPath = false;
+
     public ChaosUnit(GamePanel gp) {
         super(gp);
     }
@@ -23,12 +25,14 @@ public class ChaosUnit extends Entity {
     @Override
     public void startTurn() {
         wait = false; // Allows the unit to perform actions
+        onPath = true;
     }
 
     // Method to end the unit's turn (called at the end of its turn)
     @Override
     public void endTurn() {
         wait = true;    // Prevents the unit from performing actions
+        onPath = false;
         preCol = col;   // Save the current column as the previous column
         preRow = row;   // Save the current row as the previous row
         direction = "none";  // Reset the movement direction
@@ -80,9 +84,8 @@ public class ChaosUnit extends Entity {
                 int newRow = currentRow + dir[1];
                 int newDistance = currentDistance + 1;
 
-                // Check if the new tile is within the map bounds, not visited, within movement range, not wall and not occupied by a player unit
-                if (gp.cChecker.isWithinMap(newCol, newRow) && !visited[newCol][newRow] &&
-                        newDistance <= movement && gp.cChecker.NonCollisionTile(newCol, newRow) && gp.cChecker.noPlayerOnTile(newCol, newRow)) {
+                // Check if the new tile is within the map bounds, not visited, within movement range, not wall and not occupied by a player or enemy unit
+                if (gp.cChecker.isWithinMap(newCol, newRow) && !visited[newCol][newRow] && newDistance <= movement && gp.cChecker.validTile(newCol, newRow)) {
                     // If the tile is valid, add it to the queue to be explored
                     queue.add(new int[]{newCol, newRow, newDistance});
                     visited[newCol][newRow] = true; // Mark the tile as visited
@@ -142,12 +145,107 @@ public class ChaosUnit extends Entity {
         if (!gp.TurnM.getPlayerPhase()) {
             // If the unit is allowed to move
             if (!wait) {
+                move();
                 endTurn();
             }
         }
     }
 
-/*
+    public void setAction() {
+        // If enemy phase
+        if (!gp.TurnM.getPlayerPhase()) {
+            // If the unit is allowed to move
+            if (!wait) {
+                if (onPath) {
+                    int goalCol = gp.LightUnits.get(0).getCol();
+                    int goalRow = gp.LightUnits.get(0).getRow();
+                    searchPath(goalCol, goalRow);
+                }
+            }
+        }
+    }
+
+
+    public void searchPath(int goalCol, int goalRow){
+        int startCol = col;
+        int startRow = row;
+
+        gp.pFinder.setNodes(startCol, startRow, goalCol, goalRow);
+
+        if (gp.pFinder.search() == true) {
+            // Next col and row
+            int nextCol = gp.pFinder.pathList.get(0).getCol();
+            int nextRow = gp.pFinder.pathList.get(0).getRow();
+
+            if (col > nextCol) {
+                direction = "left";
+            } else if (col < nextCol) {
+                direction = "right";
+            } else if (row > nextRow) {
+                direction = "up";
+            } else if (row < nextRow) {
+                direction = "down";
+            }
+
+            ChaosUnitMovement(nextCol, nextRow);
+
+            // If it reaches the goal stop the search
+            if (nextCol == goalCol && nextRow == goalRow){
+                onPath = false;
+                endTurn();
+            }
+        }
+    }
+
+    public void ChaosUnitMovement(int nextCol, int nextRow) {
+        moveDelayCounter++;  // Increment the delay counter
+
+        // Only move if the counter reaches the threshold
+        if (moveDelayCounter >= moveDelayThreshold) {
+            moveDelayCounter = 0; // Reset the counter after moving
+
+            // Update the ChaosUnit's position gradually
+            if (nextCol != col || nextRow != row) {
+                int targetX = nextCol * gp.getTileSize(); // Target x position
+                int targetY = nextRow * gp.getTileSize(); // Target y position
+
+                // Gradually move towards the target x position
+                if (x < targetX) {
+                    x += moveSpeed;
+                    if (x > targetX){
+                        x = targetX;
+                    }
+                } else if (x > targetX) {
+                    x -= moveSpeed;
+                    if (x < targetX){
+                        x = targetX;
+                    }
+                }
+
+                // Gradually move towards the target y position
+                if (y < targetY) {
+                    y += moveSpeed;
+                    if (y > targetY){
+                        y = targetY;
+                    }
+                } else if (y > targetY) {
+                    y -= moveSpeed;
+                    if (y < targetY){
+                        y = targetY;
+                    }
+                }
+
+                // Check if the unit has reached the new tile
+                if (x == targetX && y == targetY) {
+                    col = nextCol;    // Update the unit's column
+                    row = nextRow;    // Update the unit's row
+                    updatePosition();   // Update the col and row based on the new position
+                }
+            }
+        }
+    }
+
+
     //WRONG MOVEMENT METHOD
     // Method to handle the unit's movement logic
     @Override
@@ -195,8 +293,8 @@ public class ChaosUnit extends Entity {
 
                 // Update the ChaosUnit's position gradually
                 if (targetCol != col || targetRow != row) {
-                    int targetX = getX(targetCol); // Target x position
-                    int targetY = getY(targetRow); // Target y position
+                    int targetX = targetCol * gp.getTileSize(); // Target x position
+                    int targetY = targetRow * gp.getTileSize(); // Target y position
 
                     // Gradually move towards the target x position
                     if (x < targetX) {
@@ -228,7 +326,7 @@ public class ChaosUnit extends Entity {
         }
     }
 
- */
+
 
     public void setStats() {
         if (!boss && level > 1) {
@@ -266,7 +364,6 @@ public class ChaosUnit extends Entity {
     // Method to update the unit's state (called every frame)
     @Override
     public void update() {
-
         // Update the sprite animation
         spriteCounter++;  // Increment the sprite counter
         if (spriteCounter > 20) {   // Change sprite every 20 frames
