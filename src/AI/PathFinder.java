@@ -79,10 +79,11 @@ public class PathFinder {
         int col = 0;
         int row = 0;
 
-        while(col > maxCol && row < maxRow){
+        while(col < maxCol && row < maxRow){
             // Set Solid nodes
             int tileNum = gp.tileM.mapTileNum[gp.getCurrentMap()][col][row];
-            if (!gp.cChecker.validTile(col, row)) {
+
+            if (gp.tileM.tile[tileNum].collision == true) {
                 node[col][row].setSolid(true);
             }
 
@@ -114,7 +115,7 @@ public class PathFinder {
     }
 
     public boolean search() {
-        while (!goalReached && step < 50000) {
+        while (!goalReached && step < 500000000) {
             int col = currentNode.getCol();
             int row = currentNode.getRow();
 
