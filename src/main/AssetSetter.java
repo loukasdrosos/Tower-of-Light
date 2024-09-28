@@ -138,7 +138,7 @@ public class AssetSetter {
         }
 
         Random rand = new Random();
-        while (currentEnemies <= 10) {
+        while (currentEnemies <= 20) {
             // Randomly pick a tile on the map
             int targetCol = rand.nextInt(gp.getMaxMapCol());
             int targetRow = rand.nextInt(gp.getMaxMapRow());
@@ -306,7 +306,7 @@ public class AssetSetter {
 
         if (currentEnemies < minEnemies) {
             // Keep looping until we've spawned at least the minimum number of enemies
-            while (currentEnemies < minEnemies + 4) {
+            while (currentEnemies < minEnemies + 5) {
                 // Randomly pick a tile on the map
                 int targetCol = rand.nextInt(gp.getMaxMapCol());
                 int targetRow = rand.nextInt(gp.getMaxMapRow());

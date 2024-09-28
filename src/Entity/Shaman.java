@@ -122,7 +122,7 @@ public class Shaman extends ChaosUnit{
 
         if (level <= 7) {
             if (number <= 10) {
-                item = new Torch();
+                item = new SteelShield();
             } else if (number > 10 && number <= 20) {
                 item = new SteelSword();
             } else if (number > 20 && number <= 30) {
@@ -139,11 +139,11 @@ public class Shaman extends ChaosUnit{
             if (number <= 10) {
                 item = new SteelShield();
             } else if (number > 10 && number <= 20) {
-                item = new Torch();
+                item = new SpeedRing();
             } else if (number > 20 && number <= 30) {
                 item = new SteelLance();
             } else if (number > 30 && number <= 40) {
-                item = new SteelShield();
+                item = new BlessedRing();
             } else if (number > 40 && number <= 50) {
                 item = new SteelSword();
             } else if (number > 50 && number <= 70) {
@@ -152,7 +152,7 @@ public class Shaman extends ChaosUnit{
         }
         else if (level > 12) {
             if (number <= 10) {
-                item = new Torch();
+                item = new HexlockShield();
             } else if (number > 10 && number <= 20) {
                 item = new BlessedRing();
             } else if (number > 20 && number <= 30) {

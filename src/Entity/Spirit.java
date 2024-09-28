@@ -115,27 +115,25 @@ public class Spirit extends ChaosUnit{
         Item item = null;
 
         if (level <= 12) {
-            if (number <= 20) {
-                item = new Torch();
-            } else if (number > 20 && number <= 40) {
+            if (number <= 5) {
+                item = new MageRing();
+            } else if (number > 5 && number <= 30) {
                 item = new BlessedRing();
-            } else if (number > 40 && number <= 50) {
+            } else if (number > 30 && number <= 50) {
                 item = new SpeedRing();
             } else if (number > 50 && number <= 70) {
                 item = new Concoction();
             }
         }
         else if (level > 12 && level <= 18) {
-            if (number <= 10) {
-                item = new Torch();
-            } else if (number > 10 && number <= 20) {
-                item = new MageRing();
-            } else if (number > 20 && number <= 30) {
-                item = new BlessedRing();
-            } else if (number > 30 && number <= 50) {
-                item = new SpeedRing();
-            } else if (number > 50 && number <= 70) {
+            if (number <= 20) {
                 item = new Elixir();
+            } else if (number > 20 && number <= 40) {
+                item = new MageRing();
+            } else if (number > 40 && number <= 60) {
+                item = new BlessedRing();
+            } else if (number > 60 && number <= 80) {
+                item = new SpeedRing();
             }
         }
         else if (level > 18) {

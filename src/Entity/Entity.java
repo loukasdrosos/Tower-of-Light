@@ -31,7 +31,7 @@ public class Entity {
     // Movement-related variables
     protected String direction = "none"; // Direction the unit is currently moving in
     protected int moveDelayCounter = 0;  // Counter for delaying movement, allowing smooth movement between tiles
-    protected boolean wait = false; // Variable that controls if unit can take action or not
+    protected boolean wait = true; // Variable that controls if unit can take action or not
 
     // Unit stats
     protected String name; // Unit's name

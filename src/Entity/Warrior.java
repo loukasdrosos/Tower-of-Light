@@ -19,8 +19,7 @@ public class Warrior extends LightUnit{
         mainHand = new Ragnell();
         offHand = new Wyrmslayer();
         equippedWeapon = this.mainHand;
-        trinket = new Torch();
-        potion = new Concoction();
+        potion = new Elixir();
         setupStats();
         // Load unit's images for animations
         try { loadImage(); }

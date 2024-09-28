@@ -1,5 +1,6 @@
 package Entity;
 
+import AI.Node;
 import main.GamePanel;
 import main.UtilityTool;
 
@@ -10,8 +11,8 @@ import java.util.Queue;
 
 public class ChaosUnit extends Entity {
 
-    protected int moveDelayThreshold = 7; // Number of frames to wait before moving
-    protected int moveSpeed = 8; // Speed at which the unit moves between tiles
+    protected int moveDelayThreshold = 4; // Number of frames to wait before moving
+    protected int moveSpeed = 6; // Speed at which the unit moves between tiles
 
     protected boolean boss;
 
@@ -54,96 +55,7 @@ public class ChaosUnit extends Entity {
         }
     }
 
-    /* Calculate all valid tiles the unit can move to within its movement range with the use of Breadth-First-Search (BFS)
-    BFS is well-suited for this scenario because explores all possible moves level by level, which means it considers
-    all closer tiles before moving on to further ones. This is useful in grid-based games where movement range is limited */
-    public List<int[]> calculateMovementRange() {
-        List<int[]> movementRange = new ArrayList<>();
-
-        /* Use a queue for breadth-first search (BFS) to explore tiles within the movement range
-        This queue will hold the tiles to be explored, with each tile being represented by its column, row,
-        and the distance from the starting position */
-        Queue<int[]> queue = new LinkedList<>();
-        queue.add(new int[]{preCol, preRow, 0}); // Start from the current position with 0 distance traveled
-
-        // Track visited tiles to prevent revisiting the same tile
-        boolean[][] visited = new boolean[gp.getMaxMapCol()][gp.getMaxMapRow()];
-        visited[preCol][preRow] = true; // Mark the starting position as visited
-
-        // Continue exploring tiles until there are no more to explore
-        while (!queue.isEmpty()) {
-            int[] current = queue.poll(); // Get the current tile from the front of the queue
-            int currentCol = current[0];
-            int currentRow = current[1];
-            int currentDistance = current[2];
-
-            // Add the current tile as a valid move option
-            movementRange.add(new int[]{currentCol, currentRow});
-
-            // Checks all possible movement directions (up, down, left, right) from the current tile
-            int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-            for (int[] dir : directions) {
-                int newCol = currentCol + dir[0];
-                int newRow = currentRow + dir[1];
-                int newDistance = currentDistance + 1;
-
-                // Check if the new tile is within the map bounds, not visited, within movement range, not wall and not occupied by a player or enemy unit
-                if (gp.cChecker.isWithinMap(newCol, newRow) && !visited[newCol][newRow] && newDistance <= movement && gp.cChecker.validTile(newCol, newRow)) {
-                    // If the tile is valid, add it to the queue to be explored
-                    queue.add(new int[]{newCol, newRow, newDistance});
-                    visited[newCol][newRow] = true; // Mark the tile as visited
-                }
-            }
-        }
-        return movementRange; // Return the list of all valid move tiles
-    }
-
-    // Calculates unit's attack range based on its possible movement
-    public List<int[]> calculateAttackRange() {
-        UtilityTool uTool = new UtilityTool();
-        // List to store the positions of tiles within the attack range
-        List<int[]> attackRange = new ArrayList<>();
-
-        // Get the list of tiles the unit can move to
-        List<int[]> movementRange = calculateMovementRange();
-
-        // Determine the weapon range (the maximum distance at which the unit can attack)
-        int weaponRange = 0;
-        if (attackType == AttackType.Physical && equippedWeapon != null) {
-            weaponRange = equippedWeapon.getRange(); // Get range from equipped weapon
-        }
-        if (attackType == AttackType.Magical) {
-            weaponRange = attackSpell.getRange(); // Get range from equipped attack spell
-        }
-
-        // For each tile in the movement range, calculate the attack range
-        for (int[] moveTile : movementRange) {
-            int moveCol = moveTile[0];
-            int moveRow = moveTile[1];
-
-            // Calculate all possible attack positions within the Manhattan distance
-            for (int d = 1; d <= weaponRange; d++) {
-                // Loop through all combinations of x and y differences that sum up to d
-                for (int dx = -d; dx <= d; dx++) {
-                    int dy = d - Math.abs(dx); // dy is the remainder to ensure Manhattan distance
-                    // Check both positive and negative dy to cover all diagonals
-                    for (int[] delta : new int[][]{{dx, dy}, {dx, -dy}}) {
-                        int attackCol = moveCol + delta[0];
-                        int attackRow = moveRow + delta[1];
-
-                        // Check if the attack tile is within the map bounds and not already included in the list
-                        if (gp.cChecker.isWithinMap(attackCol, attackRow) && !uTool.containsTile(attackRange, attackCol, attackRow)) {
-                            // Add the tile to the attack range list
-                            attackRange.add(new int[]{attackCol, attackRow});
-                        }
-                    }
-                }
-            }
-        }
-        return attackRange; // Return the list of tiles within the attack range
-    }
-
-    public void setAction() {
+    public void takeAction() {
         // If enemy phase
         if (!gp.TurnM.getPlayerPhase()) {
             // If the unit is allowed to move
@@ -158,13 +70,14 @@ public class ChaosUnit extends Entity {
         }
     }
 
-    public void searchPath(LightUnit nearestPlayer){
+    public void searchPath(LightUnit nearestPlayer) {
         int goalCol = nearestPlayer.getCol();
         int goalRow = nearestPlayer.getRow();
 
         gp.pFinder.setNodes(nearestPlayer, this);
 
-        if (gp.pFinder.search() == true) {
+        if (gp.pFinder.search()) {
+
             // Next col and row
             int nextCol = gp.pFinder.pathList.get(0).getCol();
             int nextRow = gp.pFinder.pathList.get(0).getRow();
@@ -173,14 +86,86 @@ public class ChaosUnit extends Entity {
                 move(nextCol, nextRow);
             }
 
-            // If it reaches the goal or uses all movement tiles stop the search
-            if ((nextCol == goalCol && nextRow == goalRow) || movementCounter == 0){
-                onPath = false;
+            // If it reaches the goal or uses all available movement stop the search
+            if ((nextCol == goalCol && nextRow == goalRow) || movementCounter == 0) {
                 endTurn();
             }
         } else {
-            System.out.println("PATH IS FALSE");
-            endTurn();
+            // Manual movement
+            int nextCol, nextRow;
+
+            if (gp.cChecker.validTile(col, row + 1)) {
+                // Move down
+                nextCol = col;
+                nextRow = row + 1;
+            } else if (gp.cChecker.validTile(col - 1, row)) {
+                // Move left
+                nextCol = col - 1;
+                nextRow = row;
+            } else if (gp.cChecker.validTile(col + 1, row)) {
+                // Move right
+                nextCol = col + 1;
+                nextRow = row;
+            } else if (gp.cChecker.validTile(col, row - 1)) {
+                // Move up
+                nextCol = col - 1;
+                nextRow = row;
+            } else {
+                endTurn();
+                return;
+            }
+
+            move(nextCol, nextRow);
+
+            if (gp.cChecker.validTile(col, row + 1)) {
+                // Move down
+                nextCol = col;
+                nextRow = row + 1;
+            } else if (gp.cChecker.validTile(col - 1, row)) {
+                // Move left
+                nextCol = col - 1;
+                nextRow = row;
+            } else if (gp.cChecker.validTile(col + 1, row)) {
+                // Move right
+                nextCol = col + 1;
+                nextRow = row;
+            } else if (gp.cChecker.validTile(col, row - 1)) {
+                // Move up
+                nextCol = col - 1;
+                nextRow = row;
+            } else {
+                endTurn();
+                return;
+            }
+
+            move(nextCol, nextRow);
+
+            if (gp.cChecker.validTile(col, row + 1)) {
+                // Move down
+                nextCol = col;
+                nextRow = row + 1;
+            } else if (gp.cChecker.validTile(col - 1, row)) {
+                // Move left
+                nextCol = col - 1;
+                nextRow = row;
+            } else if (gp.cChecker.validTile(col + 1, row)) {
+                // Move right
+                nextCol = col + 1;
+                nextRow = row;
+            } else if (gp.cChecker.validTile(col, row - 1)) {
+                // Move up
+                nextCol = col - 1;
+                nextRow = row;
+            } else {
+                endTurn();
+                return;
+            }
+
+            move(nextCol, nextRow);
+
+            if (movementCounter == 0) {
+                endTurn();
+            }
         }
     }
 
@@ -312,6 +297,207 @@ public class ChaosUnit extends Entity {
             }
             spriteCounter = 0;  // Reset sprite counter
         }
+    }
+
+    // Method to find all tiles with players in this unit's static attack range
+    public List<int[]> getTilesWithPlayersInStaticAttackRange() {
+        // List to store the positions of players that are within healing range
+        List<int[]> tilesWithPlayersInRange = new ArrayList<>();
+
+        // Determine the attack range (the maximum distance at which the unit can attack)
+        int weaponRange = 0;
+        if (attackType == AttackType.Physical && equippedWeapon != null) {
+            weaponRange = equippedWeapon.getRange();  // Get range from equipped weapon
+        }
+        if (attackType == AttackType.Magical) {
+            weaponRange = attackSpell.getRange(); // Get range from equipped attack spell
+        }
+
+        // Iterate over all possible tiles within the maximum attack range
+        for (int dCol = -weaponRange; dCol <= weaponRange; dCol++) {
+            for (int dRow = -weaponRange; dRow <= weaponRange; dRow++) {
+                // Calculate Manhattan distance for the current offset (dCol, dRow)
+                int manhattanDistance = Math.abs(dCol) + Math.abs(dRow);
+
+                // Check if this tile is within the valid healing range (Manhattan distance between 1 and healingRange)
+                if (manhattanDistance >= 1 && manhattanDistance <= weaponRange) {
+                    // Calculate the actual column and row of the healing tile
+                    int attackCol = col + dCol;
+                    int attackRow = row + dRow;
+
+                    // Ensure the attack tile is within the bounds of the game map
+                    if (gp.cChecker.isWithinMap(attackCol, attackRow)) {
+                        // Check if there is a player on the current tile
+                        if (!gp.cChecker.noPlayerOnTile(attackCol, attackRow)) {
+                            // Add the position of the enemy to the list
+                            tilesWithPlayersInRange.add(new int[]{attackCol, attackRow});
+                        }
+                    }
+                }
+            }
+        }
+
+        // Return the list of players positions within range
+        return tilesWithPlayersInRange;
+    }
+
+    // Method to find all tiles with players in this unit's attack range based on its current position
+    public List<int[]> getTilesWithPlayersInAttackRange() {
+            List<int[]> tilesWithPlayersInRange = getTilesWithPlayersInStaticAttackRange();
+
+            // Loop through all the given tiles
+            for (int[] tile : tilesWithPlayersInRange) {
+                int attackCol = tile[0];
+                int attackRow = tile[1];
+
+                // Ensure the attack tile is within the bounds of the game map
+                if (gp.cChecker.isWithinMap(attackCol, attackRow)) {
+                    // Check if there is a player on the current tile
+                    if (!gp.cChecker.noPlayerOnTile(attackCol, attackRow)) {
+                        // Add the position of the enemy to the list
+                        tilesWithPlayersInRange.add(new int[]{attackCol, attackRow});
+                    }
+                }
+            }
+
+            return tilesWithPlayersInRange; // Return the list of found LightUnits
+        }
+
+    // Method to find the actual player units in this unit's in attack range
+    public List<LightUnit> getPlayersInRange(List<int[]> tilesWithEnemiesInRange) {
+        // List to store the player units that are within attack range
+        List<LightUnit> playersInRange = new ArrayList<>();
+
+        // Iterate over the list of tiles to find and collect the player units
+        for (int[] tile : tilesWithEnemiesInRange) {
+            int attackCol = tile[0];
+            int attackRow = tile[1];
+
+            // Retrieve the player unit on the current tile
+            LightUnit playerunit = gp.cChecker.getPlayerOnTile(attackCol, attackRow);
+
+            // If a player unit is found, add it to the list
+            if (playerunit != null) {
+                playersInRange.add(playerunit);
+            }
+        }
+        // Return the list of player units within range
+        return playersInRange;
+    }
+
+    public LightUnit findKillablePlayerUnit( List<LightUnit> playersInRange) {
+        LightUnit killablePlayer = null;
+        int damage = 0;
+
+        // Loop through all player units
+        for (LightUnit player : playersInRange) {
+
+            // Calculate potential damage enemy can deal to this player
+            if (attackType == AttackType.Physical && equippedWeapon != null) {
+                damage = might - player.getEffDefense();
+            }
+            if (attackType == AttackType.Magical && attackSpell != null) {
+                damage = might - player.getEffResistance();
+            }
+
+            // Check if the damage can kill the player
+            if (damage >= player.getHP()) {
+                killablePlayer = player;
+                break; // Return the first player that can be killed
+            }
+        }
+
+        return killablePlayer; // Return the player unit that can be killed, or null if none
+    }
+
+
+    /* Calculate all valid tiles the unit can move to within its movement range with the use of Breadth-First-Search (BFS)
+    BFS is well-suited for this scenario because explores all possible moves level by level, which means it considers
+    all closer tiles before moving on to further ones. This is useful in grid-based games where movement range is limited */
+    public List<int[]> calculateMovementRange() {
+        List<int[]> movementRange = new ArrayList<>();
+
+        /* Use a queue for breadth-first search (BFS) to explore tiles within the movement range
+        This queue will hold the tiles to be explored, with each tile being represented by its column, row,
+        and the distance from the starting position */
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[]{preCol, preRow, 0}); // Start from the current position with 0 distance traveled
+
+        // Track visited tiles to prevent revisiting the same tile
+        boolean[][] visited = new boolean[gp.getMaxMapCol()][gp.getMaxMapRow()];
+        visited[preCol][preRow] = true; // Mark the starting position as visited
+
+        // Continue exploring tiles until there are no more to explore
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll(); // Get the current tile from the front of the queue
+            int currentCol = current[0];
+            int currentRow = current[1];
+            int currentDistance = current[2];
+
+            // Add the current tile as a valid move option
+            movementRange.add(new int[]{currentCol, currentRow});
+
+            // Checks all possible movement directions (up, down, left, right) from the current tile
+            int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+            for (int[] dir : directions) {
+                int newCol = currentCol + dir[0];
+                int newRow = currentRow + dir[1];
+                int newDistance = currentDistance + 1;
+
+                // Check if the new tile is within the map bounds, not visited, within movement range, not wall and not occupied by a player or enemy unit
+                if (gp.cChecker.isWithinMap(newCol, newRow) && !visited[newCol][newRow] && newDistance <= movement && gp.cChecker.validTile(newCol, newRow)) {
+                    // If the tile is valid, add it to the queue to be explored
+                    queue.add(new int[]{newCol, newRow, newDistance});
+                    visited[newCol][newRow] = true; // Mark the tile as visited
+                }
+            }
+        }
+        return movementRange; // Return the list of all valid move tiles
+    }
+
+    // Calculates unit's attack range based on its possible movement
+    public List<int[]> calculateAttackRange() {
+        UtilityTool uTool = new UtilityTool();
+        // List to store the positions of tiles within the attack range
+        List<int[]> attackRange = new ArrayList<>();
+
+        // Get the list of tiles the unit can move to
+        List<int[]> movementRange = calculateMovementRange();
+
+        // Determine the weapon range (the maximum distance at which the unit can attack)
+        int weaponRange = 0;
+        if (attackType == AttackType.Physical && equippedWeapon != null) {
+            weaponRange = equippedWeapon.getRange(); // Get range from equipped weapon
+        }
+        if (attackType == AttackType.Magical) {
+            weaponRange = attackSpell.getRange(); // Get range from equipped attack spell
+        }
+
+        // For each tile in the movement range, calculate the attack range
+        for (int[] moveTile : movementRange) {
+            int moveCol = moveTile[0];
+            int moveRow = moveTile[1];
+
+            // Calculate all possible attack positions within the Manhattan distance
+            for (int d = 1; d <= weaponRange; d++) {
+                // Loop through all combinations of x and y differences that sum up to d
+                for (int dx = -d; dx <= d; dx++) {
+                    int dy = d - Math.abs(dx); // dy is the remainder to ensure Manhattan distance
+                    // Check both positive and negative dy to cover all diagonals
+                    for (int[] delta : new int[][]{{dx, dy}, {dx, -dy}}) {
+                        int attackCol = moveCol + delta[0];
+                        int attackRow = moveRow + delta[1];
+
+                        // Check if the attack tile is within the map bounds and not already included in the list
+                        if (gp.cChecker.isWithinMap(attackCol, attackRow) && !uTool.containsTile(attackRange, attackCol, attackRow)) {
+                            // Add the tile to the attack range list
+                            attackRange.add(new int[]{attackCol, attackRow});
+                        }
+                    }
+                }
+            }
+        }
+        return attackRange; // Return the list of tiles within the attack range
     }
 
     // Placeholder method for dropping items when defeated
