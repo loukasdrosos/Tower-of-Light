@@ -1,5 +1,6 @@
 package AI;
 
+import Entity.*;
 import main.GamePanel;
 
 import java.util.ArrayList;
@@ -67,8 +68,14 @@ public class PathFinder {
         step = 0;
     }
 
-    public void setNodes(int startCol, int startRow, int goalCol, int goalRow){
+    public void setNodes(LightUnit nearestPlayer, ChaosUnit currentEnemy){
         resetNodes();
+
+        int startCol = currentEnemy.getCol();
+        int startRow = currentEnemy.getRow();
+
+        int goalCol = nearestPlayer.getCol();
+        int goalRow = nearestPlayer.getRow();
 
         // Set Start and Goal nodes
         startNode = node[startCol][startRow];
@@ -81,14 +88,20 @@ public class PathFinder {
 
         while(col < maxCol && row < maxRow){
             // Set Solid nodes
-            int tileNum = gp.tileM.mapTileNum[gp.getCurrentMap()][col][row];
-
-            if (gp.tileM.tile[tileNum].collision == true) {
+            if (!gp.cChecker.NonCollisionTile(col, row)) {
                 node[col][row].setSolid(true);
             }
 
+            // Check if the tile is occupied by a unit (player or enemy)
+            if (isTileOccupiedByUnit(col, row, nearestPlayer, currentEnemy)) {
+                // Allow the current enemy to pass through its current position
+                if (!(col == startCol && row == startRow)) {
+                    node[col][row].setSolid(true);
+                }
+            }
+
             // Set Cost
-            getCost(node[col][row]);
+            setCost(node[col][row]);
 
             col++;
             if(col == maxCol){
@@ -98,7 +111,26 @@ public class PathFinder {
         }
     }
 
-    public void getCost(Node node){
+    // Helper method to check if a tile is occupied by a unit
+    private boolean isTileOccupiedByUnit(int col, int row, LightUnit nearestPlayer, ChaosUnit currentEnemy) {
+        // Check player units
+        for (LightUnit player : gp.LightUnits) {
+            if (player != nearestPlayer && player.getCol() == col && player.getRow() == row) {
+                return true; // The tile is occupied by a player unit
+            }
+        }
+
+        // Check other enemy units (excluding the current enemy unit being processed)
+        for (ChaosUnit enemy : gp.ChaosUnits) {
+            if (enemy != currentEnemy && enemy.getCol() == col && enemy.getRow() == row) {
+                return true; // The tile is occupied by another enemy unit
+            }
+        }
+
+        return false; // The tile is not occupied by any unit
+    }
+
+    public void setCost(Node node){
 
         // G Cost
         int xDistance = Math.abs(node.getCol() - startNode.getCol());
@@ -115,7 +147,7 @@ public class PathFinder {
     }
 
     public boolean search() {
-        while (!goalReached && step < 500000000) {
+        while (!goalReached && step < 999999999) {
             int col = currentNode.getCol();
             int row = currentNode.getRow();
 

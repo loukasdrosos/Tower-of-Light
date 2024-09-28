@@ -405,8 +405,6 @@ public class Entity {
 
     public void update() {    }  // Placeholder method to update the unit's state
 
-    public void move() {    }  // Placeholder method to move a unit
-
     public void setupStats() {   }  // Placeholder method to set up the unit's stats
 
     public void setupGrowthRates() {   }  // Placeholder method to set up the player growth rates

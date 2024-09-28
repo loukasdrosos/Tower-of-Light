@@ -17,6 +17,8 @@ public class ChaosUnit extends Entity {
 
     private boolean onPath = false;
 
+    private int movementCounter = movement;
+
     public ChaosUnit(GamePanel gp) {
         super(gp);
     }
@@ -33,6 +35,7 @@ public class ChaosUnit extends Entity {
     public void endTurn() {
         wait = true;    // Prevents the unit from performing actions
         onPath = false;
+        movementCounter = movement;
         preCol = col;   // Save the current column as the previous column
         preRow = row;   // Save the current row as the previous row
         direction = "none";  // Reset the movement direction
@@ -140,42 +143,53 @@ public class ChaosUnit extends Entity {
         return attackRange; // Return the list of tiles within the attack range
     }
 
-    public void takeAction() {
-        // If enemy phase
-        if (!gp.TurnM.getPlayerPhase()) {
-            // If the unit is allowed to move
-            if (!wait) {
-                move();
-                endTurn();
-            }
-        }
-    }
-
     public void setAction() {
         // If enemy phase
         if (!gp.TurnM.getPlayerPhase()) {
             // If the unit is allowed to move
             if (!wait) {
                 if (onPath) {
-                    int goalCol = gp.LightUnits.get(0).getCol();
-                    int goalRow = gp.LightUnits.get(0).getRow();
-                    searchPath(goalCol, goalRow);
+                    LightUnit nearestPlayer = findNearestPlayerUnit();
+                    if (nearestPlayer!= null) {
+                        searchPath(nearestPlayer);
+                    }
                 }
             }
         }
     }
 
+    public void searchPath(LightUnit nearestPlayer){
+        int goalCol = nearestPlayer.getCol();
+        int goalRow = nearestPlayer.getRow();
 
-    public void searchPath(int goalCol, int goalRow){
-        int startCol = col;
-        int startRow = row;
-
-        gp.pFinder.setNodes(startCol, startRow, goalCol, goalRow);
+        gp.pFinder.setNodes(nearestPlayer, this);
 
         if (gp.pFinder.search() == true) {
             // Next col and row
             int nextCol = gp.pFinder.pathList.get(0).getCol();
             int nextRow = gp.pFinder.pathList.get(0).getRow();
+
+            if (movementCounter > 0) {
+                move(nextCol, nextRow);
+            }
+
+            // If it reaches the goal or uses all movement tiles stop the search
+            if ((nextCol == goalCol && nextRow == goalRow) || movementCounter == 0){
+                onPath = false;
+                endTurn();
+            }
+        } else {
+            System.out.println("PATH IS FALSE");
+            endTurn();
+        }
+    }
+
+    public void move(int nextCol, int nextRow) {
+        moveDelayCounter++;  // Increment the delay counter
+
+        // Only move if the counter reaches the threshold
+        if (moveDelayCounter >= moveDelayThreshold) {
+            moveDelayCounter = 0; // Reset the counter after moving
 
             if (col > nextCol) {
                 direction = "left";
@@ -186,23 +200,6 @@ public class ChaosUnit extends Entity {
             } else if (row < nextRow) {
                 direction = "down";
             }
-
-            ChaosUnitMovement(nextCol, nextRow);
-
-            // If it reaches the goal stop the search
-            if (nextCol == goalCol && nextRow == goalRow){
-                onPath = false;
-                endTurn();
-            }
-        }
-    }
-
-    public void ChaosUnitMovement(int nextCol, int nextRow) {
-        moveDelayCounter++;  // Increment the delay counter
-
-        // Only move if the counter reaches the threshold
-        if (moveDelayCounter >= moveDelayThreshold) {
-            moveDelayCounter = 0; // Reset the counter after moving
 
             // Update the ChaosUnit's position gradually
             if (nextCol != col || nextRow != row) {
@@ -239,94 +236,35 @@ public class ChaosUnit extends Entity {
                 if (x == targetX && y == targetY) {
                     col = nextCol;    // Update the unit's column
                     row = nextRow;    // Update the unit's row
+                    movementCounter--;
                     updatePosition();   // Update the col and row based on the new position
                 }
             }
         }
     }
 
+    // Method to find the nearest player unit
+    public LightUnit findNearestPlayerUnit() {
+        LightUnit nearestPlayer = null;
+        int nearestDistance = Integer.MAX_VALUE; // Initialize with maximum value
 
-    //WRONG MOVEMENT METHOD
-    // Method to handle the unit's movement logic
-    @Override
-    public void move() {
-        if (!wait) { // If the unit is allowed to move
-            moveDelayCounter++;  // Increment the delay counter
+        // Loop through all player units
+        for (LightUnit player : gp.LightUnits) {
+            int playerCol = player.getCol();
+            int playerRow = player.getRow();
 
-            // Only move if the counter reaches the threshold
-            if (moveDelayCounter >= moveDelayThreshold) {
-                moveDelayCounter = 0; // Reset the counter after moving
+            // Calculate Manhattan distance to the player unit
+            int distance = Math.abs(playerCol - col) + Math.abs(playerRow - row);
 
-                // Determine the direction to move
-                if (gp.cChecker.isWithinMap(col, row - 1) && gp.cChecker.validTile(col, row - 1)) {
-                    direction = "up";
-                } else if (gp.cChecker.isWithinMap(col + 1, row) && gp.cChecker.validTile(col + 1, row)) {
-                    direction = "right";
-                } else if (gp.cChecker.isWithinMap(col, row + 1) && gp.cChecker.validTile(col, row + 1)) {
-                    direction = "down";
-                } else if (gp.cChecker.isWithinMap(col - 1, row) && gp.cChecker.validTile(col - 1, row)) {
-                    direction = "left";
-                }
-
-                // Determine target position based on direction
-                int targetCol = col;
-                int targetRow = row;
-
-                switch (direction) {
-                    case "up":
-                        targetRow = row - 1;
-                        break;
-                    case "down":
-                        targetRow = row + 1;
-                        break;
-                    case "left":
-                        targetCol = col - 1;
-                        break;
-                    case "right":
-                        targetCol = col + 1;
-                        break;
-                }
-
-                if (targetCol == col && targetRow == row) {
-                    endTurn();
-                }
-
-                // Update the ChaosUnit's position gradually
-                if (targetCol != col || targetRow != row) {
-                    int targetX = targetCol * gp.getTileSize(); // Target x position
-                    int targetY = targetRow * gp.getTileSize(); // Target y position
-
-                    // Gradually move towards the target x position
-                    if (x < targetX) {
-                        x += moveSpeed;
-                        if (x > targetX) x = targetX;
-                    } else if (x > targetX) {
-                        x -= moveSpeed;
-                        if (x < targetX) x = targetX;
-                    }
-
-                    // Gradually move towards the target y position
-                    if (y < targetY) {
-                        y += moveSpeed;
-                        if (y > targetY) y = targetY;
-                    } else if (y > targetY) {
-                        y -= moveSpeed;
-                        if (y < targetY) y = targetY;
-                    }
-
-                    // Check if the unit has reached the new tile
-                    if (x == targetX && y == targetY) {
-                        col = targetCol;    // Update the unit's column
-                        row = targetRow;    // Update the unit's row
-                        updatePosition();   // Update the col and row based on the new position
-                        endTurn();          // End the turn after moving
-                    }
-                }
+            // Check if this player unit is the nearest one found so far
+            if (distance < nearestDistance) {
+                nearestDistance = distance;
+                nearestPlayer = player;
             }
         }
+
+        return nearestPlayer; // Return the nearest player unit, or null if none found
     }
-
-
 
     public void setStats() {
         if (!boss && level > 1) {

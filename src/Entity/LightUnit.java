@@ -472,7 +472,6 @@ public class LightUnit extends Entity {
         }
     }
 
-    @Override
     public void move() {
         // Check if the unit is not in a waiting state, is selected, and is allowed to move
         if (gp.selectedUnit != null && !wait && gp.selectedUnit == this && isMoving) {
