@@ -44,6 +44,7 @@ public class Prince extends LightUnit{
         }
         exp = 0;
         maxHP = 21;
+        maxHP = 3;
         strength = 10;
         magic = 0;
         skill = 5;
@@ -51,7 +52,7 @@ public class Prince extends LightUnit{
         luck = 0;
         defense = 8;
         resistance = 3;
-        movementInitial = 3;
+        movementInitial = 7;
         movement = movementInitial;
         vision = 6;
         unitType = UnitType.Infantry;

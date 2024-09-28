@@ -26,12 +26,11 @@ public class Entity {
     protected BufferedImage default1, default2, up1, up2, down1, down2, left1, left2, right1, right2, portrait; // BufferedImages for different animation frames and directions
     protected int spriteCounter = 0;  // Counter to control sprite animation timing
     protected int spriteNum = 1;      // Variable to track which sprite frame to display
-    protected int dyingCounter = 0; // Counter for unit's dying animation
 
     // Movement-related variables
     protected String direction = "none"; // Direction the unit is currently moving in
     protected int moveDelayCounter = 0;  // Counter for delaying movement, allowing smooth movement between tiles
-    protected boolean wait = true; // Variable that controls if unit can take action or not
+    protected boolean wait = false; // Variable that controls if unit can take action or not
 
     // Unit stats
     protected String name; // Unit's name

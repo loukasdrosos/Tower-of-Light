@@ -21,6 +21,7 @@ public class ChaosUnit extends Entity {
 
     public ChaosUnit(GamePanel gp) {
         super(gp);
+        wait = true;
     }
 
     // Method to start the unit's turn (called at the beginning of its turn)

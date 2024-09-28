@@ -31,6 +31,21 @@ public class TurnManager {
     public TurnManager(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
+        turnCompleted = false;
+    }
+
+    public void resetBoolean(){
+        reinforcmentsAdded = false;
+        playerPhase = true;
+        playerPhaseSoundPlayed = false;
+        enemyPhaseSoundPlayed = false;
+        enemiesSpawned = false;
+        boss1Spawned = false;
+        boss2Spawned = false;
+        boss3Spawned = false;
+        boss4Spawned = false;
+        boss5Spawned = false;
+        boss6Spawned = false;
     }
 
     // Manages the turns between player and enemy phases
@@ -422,6 +437,10 @@ public class TurnManager {
         if (gp.getCurrentMap() != 6) {
             activeBeacons = 0;
         }
+    }
+
+    public void resetTurnCounter() {
+        turnCounter = 0;
     }
 
     public void update() {

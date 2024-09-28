@@ -96,15 +96,20 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void resetGame() {
+        selectedUnit = null;
         resetCurrentMap();
         tileM.clearSelectedEnemies();
         ui.clearLog();
         TurnM.resetBeaconCooldownTimer();
         TurnM.resetBeaconsofLight();
+        TurnM.resetTurnCounter();
+        TurnM.resetBoolean();
         LightUnits.clear();
         aSetter.setLightUnits();
         aSetter.setChaosUnits();
         aSetter.setCursor();
+        tileM.resetBeaconOfLightTiles();
+        tileM.resetItems();
         playMusic(2);
         gameState = playState;
         ui.addLogMessage("Press P to view controls");
