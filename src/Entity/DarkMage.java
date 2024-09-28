@@ -38,23 +38,16 @@ public class DarkMage extends LightUnit{
             level = maxLevel;
         }
         exp = 0;
-//        maxHP = 30;
-//        strength = 0;
-//        magic = 15;
-//        skill = 10;
-//        speed = 10;
-//        luck = 3;
-//        defense = 11;
-//        resistance = 13;
-//        movementInitial = 3;
-        maxHP = 21;
+        maxHP = 30;
         strength = 0;
-        magic = 80;
-        skill = 80;
-        speed = 80;
-        luck = 80;
-        defense = 80;
-        resistance = 80;
+        magic = 15;
+        skill = 10;
+        speed = 10;
+        luck = 3;
+        defense = 11;
+        resistance = 13;
+//        movementInitial = 3;
+
         movementInitial = 40;
         movement = movementInitial;
         vision = 6;

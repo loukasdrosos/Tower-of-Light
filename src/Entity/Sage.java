@@ -38,23 +38,16 @@ public class Sage extends LightUnit{
             level = maxLevel;
         }
         exp = 0;
-//        maxHP = 20;
-//        strength = 0;
-//        magic = 7;
-//        skill = 5;
-//        speed = 7;
-//        luck = 0;
-//        defense = 4;
-//        resistance = 5;
+        maxHP = 20;
+        strength = 0;
+        magic = 7;
+        skill = 5;
+        speed = 7;
+        luck = 0;
+        defense = 4;
+        resistance = 5;
 //        movementInitial = 3;
-        maxHP = 21;
-        strength = 80;
-        magic = 80;
-        skill = 80;
-        speed = 80;
-        luck = 80;
-        defense = 80;
-        resistance = 80;
+
         movementInitial = 40;
         movement = movementInitial;
         vision = 6;

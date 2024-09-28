@@ -37,23 +37,16 @@ public class Cleric extends LightUnit{
             level = maxLevel;
         }
         exp = 0;
-//        maxHP = 21;
-//        strength = 0;
-//        magic = 5;
-//        skill = 4;
-//        speed = 6;
-//        luck = 0;
-//        defense = 3;
-//        resistance = 8;
-//        movementInitial = 3;
         maxHP = 21;
         strength = 0;
-        magic = 80;
-        skill = 80;
-        speed = 80;
-        luck = 80;
-        defense = 80;
-        resistance = 80;
+        magic = 5;
+        skill = 4;
+        speed = 6;
+        luck = 0;
+        defense = 3;
+        resistance = 8;
+//        movementInitial = 3;
+
         movementInitial = 40;
         movement = movementInitial;
         vision = 6;

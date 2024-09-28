@@ -1,6 +1,5 @@
 package Entity;
 
-import AI.Node;
 import main.GamePanel;
 import main.UtilityTool;
 
@@ -60,14 +59,130 @@ public class ChaosUnit extends Entity {
         if (!gp.TurnM.getPlayerPhase()) {
             // If the unit is allowed to move
             if (!wait) {
+                List<LightUnit> playersInRange = new ArrayList<>();
+                LightUnit targetPlayer;
+
+                playersInRange = getPlayersInRange(getTilesWithPlayersInStaticAttackRange());
+
+                if (!playersInRange.isEmpty()) {
+                    targetPlayer = findKillablePlayerUnit(playersInRange);
+                    if (targetPlayer != null) {
+                        gp.battleSim.battleEnemyPhase(targetPlayer, this);
+                        endTurn();
+                        return;
+                    }
+
+                    targetPlayer = findMaxDamagePlayerUnit(playersInRange);
+                    if (targetPlayer != null) {
+                        gp.battleSim.battleEnemyPhase(targetPlayer, this);
+                        endTurn();
+                        return;
+                    }
+                }
+
+                playersInRange = getPlayersInRange(getTilesWithPlayersInAttackRange());
+
+                if (!playersInRange.isEmpty()) {
+                    targetPlayer = findKillablePlayerUnit(playersInRange);
+                    if (targetPlayer != null) {
+                        // Move toward the target player unit before attacking
+                        moveTowardsPlayer(targetPlayer);
+                        return; // Exit after moving
+                    }
+
+                    targetPlayer = findMaxDamagePlayerUnit(playersInRange);
+                    if (targetPlayer != null) {
+                        // Move toward the target player unit before attacking
+                        moveTowardsPlayer(targetPlayer);
+                        return; // Exit after moving
+                    }
+                }
+
+                // If on path and no other action was taken
                 if (onPath) {
                     LightUnit nearestPlayer = findNearestPlayerUnit();
-                    if (nearestPlayer!= null) {
+                    if (nearestPlayer != null) {
                         searchPath(nearestPlayer);
                     }
                 }
             }
         }
+    }
+
+    public void moveTowardsPlayer(LightUnit targetPlayer) {
+        // Calculate the path to the target player
+        gp.pFinder.setNodes(targetPlayer, this);
+
+        if (gp.pFinder.search()) {
+            // Get the next tile in the path
+            int nextCol = gp.pFinder.pathList.get(0).getCol();
+            int nextRow = gp.pFinder.pathList.get(0).getRow();
+
+            if (movementCounter > 0) {
+                move(nextCol, nextRow);
+            }
+
+            // Check if the enemy is now in attack range after moving
+            List<LightUnit> playersInRange = getPlayersInRange(getTilesWithPlayersInStaticAttackRange());
+            if (playersInRange.contains(targetPlayer)) {
+                gp.battleSim.battleEnemyPhase(targetPlayer, this);
+                endTurn();
+            }
+
+            // If it uses all available movement stop the search
+            if (movementCounter == 0) {
+                endTurn();
+            }
+        } else {
+            moveCloserToPlayer(targetPlayer);
+        }
+    }
+
+    private void moveCloserToPlayer(LightUnit targetPlayer) {
+        // Get the current position of the enemy
+        int enemyCol = this.getCol();
+        int enemyRow = this.getRow();
+
+        // Get the target player's position
+        int targetCol = targetPlayer.getCol();
+        int targetRow = targetPlayer.getRow();
+
+        // Determine the direction to move (manhattan distance)
+        int moveCol = enemyCol;
+        int moveRow = enemyRow;
+
+        // Decide whether to move in the x or y direction
+        if (Math.abs(targetCol - enemyCol) > Math.abs(targetRow - enemyRow)) {
+            // Move towards the target player in the x direction if it's further away
+            if (targetCol > enemyCol) {
+                moveCol++; // Move right
+            } else {
+                moveCol--; // Move left
+            }
+        } else {
+            // Move towards the target player in the y direction
+            if (targetRow > enemyRow) {
+                moveRow++; // Move down
+            } else {
+                moveRow--; // Move up
+            }
+        }
+
+        // Check if the new position is valid before moving
+        if (gp.cChecker.isWithinMap(moveCol, moveRow) && gp.cChecker.validTile(moveCol, moveRow)) {
+            if (movementCounter > 0) {
+                move(moveCol, moveRow); // Move to the valid tile
+            }
+        }
+
+        // Check if the enemy is now in attack range after moving
+        List<LightUnit> playersInRange = getPlayersInRange(getTilesWithPlayersInStaticAttackRange());
+        if (playersInRange.contains(targetPlayer)) {
+            gp.battleSim.battleEnemyPhase(targetPlayer, this);
+        }
+
+        // End the turn
+        endTurn();
     }
 
     public void searchPath(LightUnit nearestPlayer) {
@@ -342,26 +457,29 @@ public class ChaosUnit extends Entity {
     }
 
     // Method to find all tiles with players in this unit's attack range based on its current position
+// Method to find all tiles with players in this unit's attack range based on its current position
     public List<int[]> getTilesWithPlayersInAttackRange() {
-            List<int[]> tilesWithPlayersInRange = getTilesWithPlayersInStaticAttackRange();
+        List<int[]> tilesWithPlayersInRange = getTilesWithPlayersInStaticAttackRange();
+        List<int[]> playersInRange = new ArrayList<>(); // New list to store the valid tiles
 
-            // Loop through all the given tiles
-            for (int[] tile : tilesWithPlayersInRange) {
-                int attackCol = tile[0];
-                int attackRow = tile[1];
+        // Loop through all the given tiles
+        for (int[] tile : tilesWithPlayersInRange) {
+            int attackCol = tile[0];
+            int attackRow = tile[1];
 
-                // Ensure the attack tile is within the bounds of the game map
-                if (gp.cChecker.isWithinMap(attackCol, attackRow)) {
-                    // Check if there is a player on the current tile
-                    if (!gp.cChecker.noPlayerOnTile(attackCol, attackRow)) {
-                        // Add the position of the enemy to the list
-                        tilesWithPlayersInRange.add(new int[]{attackCol, attackRow});
-                    }
+            // Ensure the attack tile is within the bounds of the game map
+            if (gp.cChecker.isWithinMap(attackCol, attackRow)) {
+                // Check if there is a player on the current tile
+                if (!gp.cChecker.noPlayerOnTile(attackCol, attackRow)) {
+                    // Add the position of the enemy to the new list
+                    playersInRange.add(new int[]{attackCol, attackRow});
                 }
             }
-
-            return tilesWithPlayersInRange; // Return the list of found LightUnits
         }
+
+        return playersInRange; // Return the new list of found LightUnits
+    }
+
 
     // Method to find the actual player units in this unit's in attack range
     public List<LightUnit> getPlayersInRange(List<int[]> tilesWithEnemiesInRange) {
@@ -410,6 +528,31 @@ public class ChaosUnit extends Entity {
         return killablePlayer; // Return the player unit that can be killed, or null if none
     }
 
+    public LightUnit findMaxDamagePlayerUnit( List<LightUnit> playersInRange) {
+        LightUnit targetPlayer = null;
+        int maxDamage = 0;
+        int damage = 0;
+
+        // Loop through all player units
+        for (LightUnit player : playersInRange) {
+
+            // Calculate potential damage enemy can deal to this player
+            if (attackType == AttackType.Physical && equippedWeapon != null) {
+                damage = might - player.getEffDefense();
+            }
+            if (attackType == AttackType.Magical && attackSpell != null) {
+                damage = might - player.getEffResistance();
+            }
+
+            // Find the player this enemy does the most damage
+            if (damage > maxDamage) {
+                targetPlayer = player;
+                break; // Return the first player that can be killed
+            }
+        }
+
+        return targetPlayer; // Return the player unit that can be killed, or null if none
+    }
 
     /* Calculate all valid tiles the unit can move to within its movement range with the use of Breadth-First-Search (BFS)
     BFS is well-suited for this scenario because explores all possible moves level by level, which means it considers

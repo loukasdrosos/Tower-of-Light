@@ -43,24 +43,16 @@ public class Prince extends LightUnit{
             level = maxLevel;
         }
         exp = 0;
-//        maxHP = 21;
-//        strength = 10;
-//        magic = 0;
-//        skill = 5;
-//        speed = 9;
-//        luck = 0;
-//        defense = 8;
-//        resistance = 3;
+        maxHP = 21;
+        strength = 10;
+        magic = 0;
+        skill = 5;
+        speed = 9;
+        luck = 0;
+        defense = 8;
+        resistance = 3;
     //    movementInitial = 3;
 
-        maxHP = 21;
-        strength = 80;
-        magic = 80;
-        skill = 80;
-        speed = 80;
-        luck = 80;
-        defense = 80;
-        resistance = 80;
         movementInitial = 40;
         movement = movementInitial;
         vision = 6;
