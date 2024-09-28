@@ -51,9 +51,7 @@ public class Prince extends LightUnit{
         luck = 0;
         defense = 8;
         resistance = 3;
-    //    movementInitial = 3;
-
-        movementInitial = 40;
+        movementInitial = 3;
         movement = movementInitial;
         vision = 6;
         unitType = UnitType.Infantry;

@@ -46,9 +46,7 @@ public class Sage extends LightUnit{
         luck = 0;
         defense = 4;
         resistance = 5;
-//        movementInitial = 3;
-
-        movementInitial = 40;
+        movementInitial = 3;
         movement = movementInitial;
         vision = 6;
         unitType = UnitType.Infantry;

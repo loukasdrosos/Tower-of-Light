@@ -18,7 +18,7 @@ public class TurnManager {
     private boolean enemyPhaseSoundPlayed = false;
 
     private int activeBeacons = 0; // Count of currently active beacons
-    private int beaconCooldown = 1; // Cooldown period for each beacon
+    private int beaconCooldown = 10; // Cooldown period for each beacon
     private int beaconCooldownTimer = beaconCooldown; // Cooldown timer for beacons of light
     private boolean reinforcmentsAdded = false;
 

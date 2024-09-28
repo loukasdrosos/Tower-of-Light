@@ -46,9 +46,7 @@ public class DarkMage extends LightUnit{
         luck = 3;
         defense = 11;
         resistance = 13;
-//        movementInitial = 3;
-
-        movementInitial = 40;
+        movementInitial = 3;
         movement = movementInitial;
         vision = 6;
         unitType = UnitType.Infantry;

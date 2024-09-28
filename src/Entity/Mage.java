@@ -45,9 +45,7 @@ public class Mage extends LightUnit{
         luck = 0;
         defense = 3;
         resistance = 4;
-//        movementInitial = 3;
-
-        movementInitial = 40;
+        movementInitial = 3;
         movement = movementInitial;
         vision = 6;
         unitType = UnitType.Infantry;
