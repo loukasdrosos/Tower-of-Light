@@ -43,7 +43,7 @@ public class HeraldOfChaos extends ChaosUnit{
         luck = 0;
         defense = 25;
         resistance = 30;
-        movement = 3;
+        movement = 6;
         equippedWeapon = new EdgeOfChaos();
         trinket =  new DemonRing();
         race = UnitRace.Human;

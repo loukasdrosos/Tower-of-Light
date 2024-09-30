@@ -34,15 +34,15 @@ public class FireDragon extends ChaosUnit{
         if (level > maxLevel) {
             level = maxLevel;
         }
-        maxHP = 20;
-        strength = 10;
+        maxHP = 23;
+        strength = 12;
         magic = 0;
         skill = 4;
         speed = 7;
         luck = 0;
         defense = 10;
         resistance = 7;
-        movement = 3;
+        movement = 6;
         setupGrowthRates();
         setStats();
         if (boss) {
@@ -70,12 +70,12 @@ public class FireDragon extends ChaosUnit{
     @Override
     public void setupGrowthRates() {
         HPGrowthRate = 90;
-        strengthGrowthRate = 55;
+        strengthGrowthRate = 45;
         magicGrowthRate = 0;
-        skillGrowthRate = 45;
+        skillGrowthRate = 40;
         speedGrowthRate = 40;
         luckGrowthRate = 10;
-        defenseGrowthRate = 45;
+        defenseGrowthRate = 40;
         resistanceGrowthRate = 35;
     }
 

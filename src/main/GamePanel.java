@@ -85,6 +85,7 @@ public class GamePanel extends JPanel implements Runnable{
         gameThread.start();                // Start the game thread
     }
 
+    // Method to set up the game
     public void setupGame() {
         aSetter.setLightUnits();
         aSetter.setChaosUnits();
@@ -95,6 +96,7 @@ public class GamePanel extends JPanel implements Runnable{
         gameState = titleState;
     }
 
+    // Reset game if player defeated
     public void resetGame() {
         selectedUnit = null;
         resetCurrentMap();

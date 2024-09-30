@@ -43,7 +43,7 @@ public class Sorcerer extends ChaosUnit{
         luck = 0;
         defense = 16;
         resistance = 23;
-        movementInitial = 3;
+        movementInitial = 6;
         movement = movementInitial;
         race = UnitRace.Elf;
         attackSpell = new Goetia();

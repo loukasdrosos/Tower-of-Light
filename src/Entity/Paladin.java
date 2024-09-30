@@ -44,9 +44,9 @@ public class Paladin extends LightUnit{
         skill = 7;
         speed = 4;
         luck = 0;
-        defense = 13;
+        defense = 15;
         resistance = 3;
-        movementInitial = 3;
+        movementInitial = 6;
         movement = movementInitial;
         vision = 6;
         unitType = UnitType.Armored;

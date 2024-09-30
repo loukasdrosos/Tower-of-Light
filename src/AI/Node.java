@@ -2,20 +2,22 @@ package AI;
 
 public class Node {
 
-    Node parent;
-    private int col;
-    private int row;
-    private int gCost;
-    private int hCost;
-    private int fCost;
-    private boolean solid;
-    private boolean open;
-    private boolean checked;
+    Node parent; //Parent node
+    private int col; // Column position of the node
+    private int row; // Row position of the node
+    private int gCost; // G cost: distance from the start node to this node
+    private int hCost; // H cost: heuristic estimate from this node to the goal node
+    private int fCost; // F cost: the sum of gCost and hCost in A* pathfinding
+    private boolean solid; // Indicates if this node is solid
+    private boolean open;  // Marks if the node is currently in the open list for pathfinding
+    private boolean checked; // Marks if the node has already been checked during pathfinding
 
     public Node(int col, int row){
         this.col = col;
         this.row = row;
     }
+
+    // GETTERS & SETTERS
 
     public int getCol() {
         return col;

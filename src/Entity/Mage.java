@@ -37,15 +37,15 @@ public class Mage extends LightUnit{
             level = maxLevel;
         }
         exp = 0;
-        maxHP = 16;
+        maxHP = 18;
         strength = 0;
-        magic = 4;
-        skill = 3;
+        magic = 6;
+        skill = 5;
         speed = 6;
         luck = 0;
         defense = 3;
         resistance = 4;
-        movementInitial = 3;
+        movementInitial = 6;
         movement = movementInitial;
         vision = 6;
         unitType = UnitType.Infantry;

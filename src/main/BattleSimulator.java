@@ -26,6 +26,7 @@ public class BattleSimulator {
         this.gp = gp;
     }
 
+    // How battle work for player phase
     public void battlePlayerPhase(LightUnit player, ChaosUnit enemy) {
         battleInProgress = true;
         new Thread(() -> {
@@ -286,6 +287,7 @@ public class BattleSimulator {
         }).start();
     }
 
+    // How battles work for enemy phase
     public void battleEnemyPhase(LightUnit player, ChaosUnit enemy) {
         battleInProgress = true;
         new Thread(() -> {
@@ -534,6 +536,7 @@ public class BattleSimulator {
         }).start();
     }
 
+    //Methods to make units face their target
     public void faceTarget(Entity attacker, Entity defender) {
         if (defender.getX() > attacker.getX()) {
             attacker.setDirection("right");
@@ -546,6 +549,7 @@ public class BattleSimulator {
         }
     }
 
+    // Method to make units dash towards their target
     public void dashForward(Entity attacker) {
         int moveDistance = gp.getTileSize() / 2; // Half a tile size
 
@@ -572,6 +576,7 @@ public class BattleSimulator {
         }
     }
 
+    // Method to make units return to ther position after attacking
     public void dashBack(Entity attacker) {
         attacker.setX(originalX);
         attacker.setY(originalY);

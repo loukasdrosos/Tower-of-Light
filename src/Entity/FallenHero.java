@@ -36,9 +36,9 @@ public class FallenHero extends ChaosUnit{
         skill = 4;
         speed = 8;
         luck = 0;
-        defense = 5;
-        resistance = 3;
-        movement = 3;
+        defense = 3;
+        resistance = 1;
+        movement = 6;
         setupGrowthRates();
         setStats();
         randomizeRace();
@@ -54,14 +54,14 @@ public class FallenHero extends ChaosUnit{
     // Method to set up the player's growth rates
     @Override
     public void setupGrowthRates() {
-        HPGrowthRate = 90;
-        strengthGrowthRate = 40;
+        HPGrowthRate = 100;
+        strengthGrowthRate = 50;
         magicGrowthRate = 0;
         skillGrowthRate = 35;
         speedGrowthRate = 35;
-        luckGrowthRate = 50;
-        defenseGrowthRate = 60;
-        resistanceGrowthRate = 25;
+        luckGrowthRate = 60;
+        defenseGrowthRate = 25;
+        resistanceGrowthRate = 10;
     }
 
     @Override

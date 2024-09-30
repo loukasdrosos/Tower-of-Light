@@ -42,7 +42,7 @@ public class Titan extends ChaosUnit{
         luck = 0;
         defense = 5;
         resistance = 1;
-        movement = 3;
+        movement = 6;
         setupGrowthRates();
         setStats();
         if (boss) {
@@ -70,12 +70,12 @@ public class Titan extends ChaosUnit{
     @Override
     public void setupGrowthRates() {
         HPGrowthRate = 100;
-        strengthGrowthRate = 65;
+        strengthGrowthRate = 60;
         magicGrowthRate = 0;
-        skillGrowthRate = 40;
+        skillGrowthRate = 30;
         speedGrowthRate = 40;
         luckGrowthRate = 30;
-        defenseGrowthRate = 35;
+        defenseGrowthRate = 25;
         resistanceGrowthRate = 15;
     }
 

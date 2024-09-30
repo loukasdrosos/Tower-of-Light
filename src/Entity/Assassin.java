@@ -38,7 +38,7 @@ public class Assassin extends ChaosUnit{
         luck = 0;
         defense = 6;
         resistance = 4;
-        movement = 3;
+        movement = 6;
         setupGrowthRates();
         setStats();
         randomizeRace();
@@ -55,13 +55,13 @@ public class Assassin extends ChaosUnit{
     @Override
     public void setupGrowthRates() {
         HPGrowthRate = 80;
-        strengthGrowthRate = 45;
+        strengthGrowthRate = 40;
         magicGrowthRate = 0;
         skillGrowthRate = 50;
         speedGrowthRate = 50;
         luckGrowthRate = 50;
-        defenseGrowthRate = 30;
-        resistanceGrowthRate = 35;
+        defenseGrowthRate = 25;
+        resistanceGrowthRate = 30;
     }
 
     @Override

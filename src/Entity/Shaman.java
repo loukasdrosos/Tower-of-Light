@@ -39,7 +39,7 @@ public class Shaman extends ChaosUnit{
         luck = 0;
         defense = 7;
         resistance = 7;
-        movement = 3;
+        movement = 6;
         setupGrowthRates();
         setStats();
         randomizeRace();
@@ -55,14 +55,14 @@ public class Shaman extends ChaosUnit{
     // Method to set up the player's growth rates
     @Override
     public void setupGrowthRates() {
-        HPGrowthRate = 80;
+        HPGrowthRate = 90;
         strengthGrowthRate = 0;
-        magicGrowthRate = 50;
-        skillGrowthRate = 45;
+        magicGrowthRate = 40;
+        skillGrowthRate = 40;
         speedGrowthRate = 40;
         luckGrowthRate = 30;
-        defenseGrowthRate = 30;
-        resistanceGrowthRate = 45;
+        defenseGrowthRate = 35;
+        resistanceGrowthRate = 30;
     }
 
     @Override

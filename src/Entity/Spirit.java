@@ -39,7 +39,7 @@ public class Spirit extends ChaosUnit{
         luck = 0;
         defense = 2;
         resistance = 6;
-        movement = 3;
+        movement = 6;
         setupGrowthRates();
         setStats();
         randomizeRace();
@@ -60,7 +60,7 @@ public class Spirit extends ChaosUnit{
         magicGrowthRate = 50;
         skillGrowthRate = 40;
         speedGrowthRate = 50;
-        luckGrowthRate = 30;
+        luckGrowthRate = 35;
         defenseGrowthRate = 20;
         resistanceGrowthRate = 35;
     }

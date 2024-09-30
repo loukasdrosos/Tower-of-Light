@@ -44,7 +44,7 @@ public class Necromancer extends ChaosUnit{
         luck = 0;
         defense = 10;
         resistance = 12;
-        movement = 3;
+        movement = 6;
         race = UnitRace.Elf;
         attackSpell = new Fenrir();
         trinket = new SilverShield();

@@ -46,7 +46,7 @@ public class ChaosGod extends ChaosUnit{
         luck = 0;
         defense = 33;
         resistance = 33;
-        movement = 3;
+        movement = 8;
         race = UnitRace.Dragon;
         attackSpell = new Expiration();
         unitType = UnitType.Infantry;
@@ -56,6 +56,55 @@ public class ChaosGod extends ChaosUnit{
         calculateCombatStats();
         description = new String[]{"The Chaos God who", "wants to destroy", "every trace of", "light from the world."};
     }
+
+    @Override
+    public void takeAction() {
+        // If enemy phase
+        if (!gp.TurnM.getPlayerPhase()) {
+            // If the unit is allowed to move
+            if (!wait) {
+                List<LightUnit> playersInRange = new ArrayList<>();
+                LightUnit targetPlayer;
+
+                playersInRange = getPlayersInRange(getTilesWithPlayersInStaticAttackRange());
+
+                if (!playersInRange.isEmpty()) {
+                    targetPlayer = findKillablePlayerUnit(playersInRange);
+                    if (targetPlayer != null) {
+                        gp.battleSim.battleEnemyPhase(targetPlayer, this);
+                        endTurn();
+                        return;
+                    }
+
+                    targetPlayer = findMaxDamagePlayerUnit(playersInRange);
+                    if (targetPlayer != null) {
+                        gp.battleSim.battleEnemyPhase(targetPlayer, this);
+                        endTurn();
+                        return;
+                    }
+                }
+
+                playersInRange = getPlayersInRange(getTilesWithPlayersInAttackRange());
+
+                if (!playersInRange.isEmpty()) {
+                    targetPlayer = findKillablePlayerUnit(playersInRange);
+                    if (targetPlayer != null) {
+                        // Move toward the target player unit before attacking
+                        moveTowardsPlayer(targetPlayer);
+                        return; // Exit after moving
+                    }
+
+                    targetPlayer = findMaxDamagePlayerUnit(playersInRange);
+                    if (targetPlayer != null) {
+                        // Move toward the target player unit before attacking
+                        moveTowardsPlayer(targetPlayer);
+                        return; // Exit after moving
+                    }
+                }
+            }
+        }
+    }
+
 
     @Override
     public void Defeated() {

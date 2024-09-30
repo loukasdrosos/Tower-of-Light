@@ -34,6 +34,7 @@ public class TurnManager {
         turnCompleted = false;
     }
 
+    // Method to reset all booleans if game over
     public void resetBoolean(){
         reinforcmentsAdded = false;
         playerPhase = true;
