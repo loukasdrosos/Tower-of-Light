@@ -101,6 +101,8 @@ public class ChaosGod extends ChaosUnit{
                         return; // Exit after moving
                     }
                 }
+
+                endTurn();
             }
         }
     }

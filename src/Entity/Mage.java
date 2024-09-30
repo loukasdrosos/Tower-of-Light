@@ -39,7 +39,7 @@ public class Mage extends LightUnit{
         exp = 0;
         maxHP = 18;
         strength = 0;
-        magic = 6;
+        magic = 5;
         skill = 5;
         speed = 6;
         luck = 0;

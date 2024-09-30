@@ -30,8 +30,8 @@ public class FallenHero extends ChaosUnit{
         if (level > maxLevel) {
             level = maxLevel;
         }
-        maxHP = 22;
-        strength = 10;
+        maxHP = 21;
+        strength = 8;
         magic = 0;
         skill = 4;
         speed = 8;

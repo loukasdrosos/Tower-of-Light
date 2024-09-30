@@ -50,7 +50,7 @@ public class TileManager {
         }
 
         loadImage(); // Load tile images
-        loadMap("/Maps/Map_1.txt", 0); // Load the first map
+        loadMap("/Maps/Map_5.txt", 0); // Load the first map
         loadMap("/Maps/Map_2.txt", 1); // Load the second map
         loadMap("/Maps/Map_3.txt", 2); // Load the third map
         loadMap("/Maps/Map_4.txt", 3); // Load the fourth map

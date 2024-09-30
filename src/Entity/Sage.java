@@ -40,7 +40,7 @@ public class Sage extends LightUnit{
         exp = 0;
         maxHP = 20;
         strength = 0;
-        magic = 9;
+        magic = 7;
         skill = 5;
         speed = 7;
         luck = 0;

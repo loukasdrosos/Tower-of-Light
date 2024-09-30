@@ -88,11 +88,11 @@ public class GamePanel extends JPanel implements Runnable{
     // Method to set up the game
     public void setupGame() {
         aSetter.setLightUnits();
+        playSE(9);
         aSetter.setChaosUnits();
         aSetter.setCursor();
         ui.addLogMessage("Press P to view controls");
 
-        playSE(9);
         gameState = titleState;
     }
 
@@ -100,6 +100,7 @@ public class GamePanel extends JPanel implements Runnable{
     public void resetGame() {
         selectedUnit = null;
         resetCurrentMap();
+        playMusic(2);
         tileM.clearSelectedEnemies();
         ui.clearLog();
         TurnM.resetBeaconCooldownTimer();
@@ -112,7 +113,6 @@ public class GamePanel extends JPanel implements Runnable{
         aSetter.setCursor();
         tileM.resetBeaconOfLightTiles();
         tileM.resetItems();
-        playMusic(2);
         gameState = playState;
         ui.addLogMessage("Press P to view controls");
     }

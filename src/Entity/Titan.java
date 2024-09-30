@@ -34,11 +34,11 @@ public class Titan extends ChaosUnit{
         if (level > maxLevel) {
             level = maxLevel;
         }
-        maxHP = 30;
-        strength = 13;
+        maxHP = 24;
+        strength = 11;
         magic = 0;
         skill = 5;
-        speed = 11;
+        speed = 10;
         luck = 0;
         defense = 5;
         resistance = 1;
