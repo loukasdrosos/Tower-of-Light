@@ -42,7 +42,7 @@ public class Paladin extends LightUnit{
         strength = 12;
         magic = 0;
         skill = 7;
-        speed = 4;
+        speed = 6;
         luck = 0;
         defense = 15;
         resistance = 3;

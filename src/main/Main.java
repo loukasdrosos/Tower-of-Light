@@ -1,14 +1,19 @@
 package main;
 
 import javax.swing.JFrame;
+import java.awt.*;
 
 public class Main {
 
     public static void main (String[] args) {
         JFrame window = new JFrame();
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Close window when 'X' is pressed
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);  // Window can't be resized
         window.setTitle("Tower of Light");  // Set window title
+
+        // Set custom icon for the window
+        Image icon = Toolkit.getDefaultToolkit().getImage("res/Icon/Icon.png");
+        window.setIconImage(icon);
 
         // Add GamePanel to the window
         GamePanel gamePanel = new GamePanel();

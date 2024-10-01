@@ -38,7 +38,7 @@ public class Titan extends ChaosUnit{
         strength = 11;
         magic = 0;
         skill = 5;
-        speed = 10;
+        speed = 8;
         luck = 0;
         defense = 5;
         resistance = 1;
