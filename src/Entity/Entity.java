@@ -26,7 +26,6 @@ public class Entity {
     protected BufferedImage default1, default2, up1, up2, down1, down2, left1, left2, right1, right2, portrait; // BufferedImages for different animation frames and directions
     protected int spriteCounter = 0;  // Counter to control sprite animation timing
     protected int spriteNum = 1;      // Variable to track which sprite frame to display
-    protected int dyingCounter = 0; // Counter for unit's dying animation
 
     // Movement-related variables
     protected String direction = "none"; // Direction the unit is currently moving in
@@ -404,8 +403,6 @@ public class Entity {
     public void endTurn() {  }   // Placeholder method to end the unit's turn
 
     public void update() {    }  // Placeholder method to update the unit's state
-
-    public void move() {    }  // Placeholder method to move a unit
 
     public void setupStats() {   }  // Placeholder method to set up the unit's stats
 

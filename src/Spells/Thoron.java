@@ -13,6 +13,6 @@ public class Thoron extends AttackSpell {
         might = 14;
         hit = 80;
         crit = 10;
-        range = 3;
+        range = 4;
     }
 }

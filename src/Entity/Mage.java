@@ -37,24 +37,15 @@ public class Mage extends LightUnit{
             level = maxLevel;
         }
         exp = 0;
-//        maxHP = 16;
-//        strength = 0;
-//        magic = 4;
-//        skill = 3;
-//        speed = 6;
-//        luck = 0;
-//        defense = 3;
-//        resistance = 4;
-//        movementInitial = 3;
-        maxHP = 21;
-        strength = 80;
-        magic = 80;
-        skill = 80;
-        speed = 80;
-        luck = 80;
-        defense = 80;
-        resistance = 80;
-        movementInitial = 40;
+        maxHP = 18;
+        strength = 0;
+        magic = 5;
+        skill = 5;
+        speed = 6;
+        luck = 0;
+        defense = 3;
+        resistance = 4;
+        movementInitial = 6;
         movement = movementInitial;
         vision = 6;
         unitType = UnitType.Infantry;
@@ -97,14 +88,14 @@ public class Mage extends LightUnit{
     // Method to set up the player's growth rates
     @Override
     public void setupGrowthRates() {
-        HPGrowthRate = 75;
+        HPGrowthRate = 80;
         strengthGrowthRate = 0;
         magicGrowthRate = 75;
-        skillGrowthRate = 60;
+        skillGrowthRate = 65;
         speedGrowthRate = 70;
-        luckGrowthRate = 60;
+        luckGrowthRate = 70;
         defenseGrowthRate = 35;
-        resistanceGrowthRate = 45;
+        resistanceGrowthRate = 50;
     }
 
     //Load images for the unit's animations

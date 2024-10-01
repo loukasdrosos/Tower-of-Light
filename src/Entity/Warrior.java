@@ -19,8 +19,7 @@ public class Warrior extends LightUnit{
         mainHand = new Ragnell();
         offHand = new Wyrmslayer();
         equippedWeapon = this.mainHand;
-        trinket = new Torch();
-        potion = new Concoction();
+        potion = new Elixir();
         setupStats();
         // Load unit's images for animations
         try { loadImage(); }
@@ -40,24 +39,15 @@ public class Warrior extends LightUnit{
             level = maxLevel;
         }
         exp = 0;
-//        maxHP = 30;
-//        strength = 16;
-//        magic = 0;
-//        skill = 17;
-//        speed = 16;
-//        luck = 5;
-//        defense = 13;
-//        resistance = 5;
-//        movementInitial = 3;
-        maxHP = 21;
-        strength = 80;
-        magic = 80;
-        skill = 80;
-        speed = 80;
-        luck = 80;
-        defense = 80;
-        resistance = 80;
-        movementInitial = 40;
+        maxHP = 30;
+        strength = 16;
+        magic = 0;
+        skill = 17;
+        speed = 16;
+        luck = 5;
+        defense = 13;
+        resistance = 5;
+        movementInitial = 6;
         movement = movementInitial;
         vision = 6;
         unitType = UnitType.Infantry;

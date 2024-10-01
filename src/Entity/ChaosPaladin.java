@@ -40,9 +40,9 @@ public class ChaosPaladin extends ChaosUnit{
         skill = 7;
         speed = 4;
         luck = 0;
-        defense = 12;
+        defense = 15;
         resistance = 3;
-        movement = 3;
+        movement = 6;
         setupGrowthRates();
         setStats();
         if (boss) {
@@ -73,10 +73,10 @@ public class ChaosPaladin extends ChaosUnit{
         strengthGrowthRate = 50;
         magicGrowthRate = 0;
         skillGrowthRate = 35;
-        speedGrowthRate = 30;
+        speedGrowthRate = 25;
         luckGrowthRate = 40;
-        defenseGrowthRate = 45;
-        resistanceGrowthRate = 25;
+        defenseGrowthRate = 35;
+        resistanceGrowthRate = 20;
     }
 
     @Override

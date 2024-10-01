@@ -8,7 +8,7 @@ public class AssetSetter {
 
     GamePanel gp;
     KeyHandler keyH;
-    private int enemyLevel = 1;
+    private int enemyLevel = 1; // Tracks the enemy's current level
 
     public AssetSetter(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
@@ -17,6 +17,7 @@ public class AssetSetter {
 
     // Initialize player units and set their starting positions
     public void setLightUnits() {
+        // If the player is on the first map
         if (gp.getCurrentMap() == 0) {
             gp.LightUnits.add(new Prince(gp, keyH, "Alm", Entity.UnitRace.Human, 4, 47));
             gp.LightUnits.add(new Sage(gp, keyH, "Boey", Entity.UnitRace.Elf, 3, 48));
@@ -25,7 +26,9 @@ public class AssetSetter {
             gp.LightUnits.add(new Knight(gp, keyH, "Berkut", Entity.UnitRace.Orc, 2, 49));
             gp.LightUnits.add(new Mage(gp, keyH, "Robin", Entity.UnitRace.Human, 6, 49));
             gp.LightUnits.add(new Paladin(gp, keyH, "Valbar", Entity.UnitRace.Tauren, 5, 48));
-        } else if (gp.getCurrentMap() != 0) {
+        }
+        // If the player is on any map other than map 0 (moving to another level) set starting positions
+        else if (gp.getCurrentMap() != 0) {
 
             if (gp.LightUnits.size() > 0) {
                 gp.LightUnits.get(0).setNextLevel(4, 47);
@@ -62,10 +65,12 @@ public class AssetSetter {
         }
     }
 
-
+    // Method to execute a series of tasks with a specified delay between them
     protected void executeWithDelay(List<Runnable> tasks, int delay) {
+        // Create a timer object to schedule tasks
         Timer timer = new Timer();
 
+        // Loop through the list of tasks
         for (int i = 0; i < tasks.size(); i++) {
             int taskIndex = i;
             timer.schedule(new TimerTask() {
@@ -91,7 +96,7 @@ public class AssetSetter {
         int activeBeacons = gp.TurnM.getActiveBeacons(); // Number of active Beacons of Light
         int currentEnemies = gp.ChaosUnits.size();
 
-
+        //Spawn final boss and dialogue
         if (gp.getCurrentMap() == 6) {
             spawnBosses();
             List<Runnable> tasks = new ArrayList<>();
@@ -137,8 +142,9 @@ public class AssetSetter {
             executeWithDelay(tasks, delay);
         }
 
+        // Spawn 20 random enemies when map loads
         Random rand = new Random();
-        while (currentEnemies <= 10) {
+        while (currentEnemies <= 20) {
             // Randomly pick a tile on the map
             int targetCol = rand.nextInt(gp.getMaxMapCol());
             int targetRow = rand.nextInt(gp.getMaxMapRow());
@@ -153,6 +159,7 @@ public class AssetSetter {
         }
     }
 
+    // Set music for game progress
     public void setMusic() {
         if (gp.getCurrentMap() == 0) {
             if (gp.TurnM.getActiveBeacons() == 0) {
@@ -214,11 +221,13 @@ public class AssetSetter {
         }
     }
 
+    // Add princess player unit
     public void addPrincess(int col, int row) {
         gp.LightUnits.add(new Princess(gp, keyH, "Celica", Entity.UnitRace.Human, col, row));
         gp.tileM.findAllVisibleTiles();
     }
 
+    // Add mage and warrior unit
     public void addIagoIke() {
         gp.LightUnits.add(new Warrior(gp, keyH, "Ike", Entity.UnitRace.Human, 1, 49));
         gp.LightUnits.add(new DarkMage(gp, keyH, "Iago", Entity.UnitRace.Orc, 1, 50));
@@ -272,6 +281,7 @@ public class AssetSetter {
         gp.tileM.findAllVisibleTiles();
     }
 
+    // Reset what's necessary and proceed to the next map
     public void setNextMap() {
         gp.selectedUnit = null;
         gp.setNextMap();
@@ -288,6 +298,7 @@ public class AssetSetter {
         setCursor();
     }
 
+    // Set the cursor position
     public void setCursor() {
         int startCursorCol = gp.LightUnits.get(0).getCol();
         int startCursorRow = gp.LightUnits.get(0).getRow();
@@ -306,7 +317,7 @@ public class AssetSetter {
 
         if (currentEnemies < minEnemies) {
             // Keep looping until we've spawned at least the minimum number of enemies
-            while (currentEnemies < minEnemies + 4) {
+            while (currentEnemies < minEnemies + 5) {
                 // Randomly pick a tile on the map
                 int targetCol = rand.nextInt(gp.getMaxMapCol());
                 int targetRow = rand.nextInt(gp.getMaxMapRow());
@@ -340,6 +351,7 @@ public class AssetSetter {
         }
     }
 
+    // Spawn bosses for each level
     public void spawnBosses() {
         Random rand = new Random();
 

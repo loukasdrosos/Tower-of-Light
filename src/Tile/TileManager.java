@@ -228,10 +228,10 @@ public class TileManager {
     }
 
     // Method to draw all visible tiles
-    public void drawVisibleTiles(Graphics2D g2) {
+    public void drawBeaconOfLightTiles(Graphics2D g2) {
         for (int col= 0; col < Max_Col; col++) {
             for (int row = 0; row < Max_Row; row++) {
-                if (visibleTiles[col][row]) {
+                if (BeaconOfLightTiles[col][row]) {
                     g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.35f));
                     g2.setColor(Color.YELLOW);
                     g2.fillRect(col * gp.getTileSize(), row * gp.getTileSize(), gp.getTileSize(), gp.getTileSize());
@@ -454,7 +454,7 @@ public class TileManager {
     public void draw (Graphics2D g2) {
 
         drawMap(g2); // Draw the map
-        drawVisibleTiles(g2);
+        drawBeaconOfLightTiles(g2);
         EnemySelection(); // Handle enemy selection logic
 
         // Draw enemy movement tiles

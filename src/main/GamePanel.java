@@ -1,5 +1,6 @@
 package main;
 
+import AI.PathFinder;
 import Entity.*;
 import Tile.TileManager;
 
@@ -49,6 +50,7 @@ public class GamePanel extends JPanel implements Runnable{
     public UI ui = new UI(this, keyH);
     public AssetSetter aSetter = new AssetSetter(this, keyH);
     public BattleSimulator battleSim = new BattleSimulator(this);
+    public PathFinder pFinder = new PathFinder(this);
 
     // GAME STATE
     public int gameState;
@@ -84,27 +86,34 @@ public class GamePanel extends JPanel implements Runnable{
         gameThread.start();                // Start the game thread
     }
 
+    // Method to set up the game
     public void setupGame() {
         aSetter.setLightUnits();
         aSetter.setChaosUnits();
+        playSE(9);
         aSetter.setCursor();
         ui.addLogMessage("Press P to view controls");
 
-        playSE(9);
         gameState = titleState;
     }
 
+    // Reset game if player defeated
     public void resetGame() {
+        selectedUnit = null;
         resetCurrentMap();
+        playMusic(2);
         tileM.clearSelectedEnemies();
         ui.clearLog();
         TurnM.resetBeaconCooldownTimer();
         TurnM.resetBeaconsofLight();
+        TurnM.resetTurnCounter();
+        TurnM.resetBoolean();
         LightUnits.clear();
         aSetter.setLightUnits();
         aSetter.setChaosUnits();
         aSetter.setCursor();
-        playMusic(2);
+        tileM.resetBeaconOfLightTiles();
+        tileM.resetItems();
         gameState = playState;
         ui.addLogMessage("Press P to view controls");
     }

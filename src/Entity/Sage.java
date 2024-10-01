@@ -38,24 +38,15 @@ public class Sage extends LightUnit{
             level = maxLevel;
         }
         exp = 0;
-//        maxHP = 20;
-//        strength = 0;
-//        magic = 7;
-//        skill = 5;
-//        speed = 7;
-//        luck = 0;
-//        defense = 4;
-//        resistance = 5;
-//        movementInitial = 3;
-        maxHP = 21;
-        strength = 80;
-        magic = 80;
-        skill = 80;
-        speed = 80;
-        luck = 80;
-        defense = 80;
-        resistance = 80;
-        movementInitial = 40;
+        maxHP = 20;
+        strength = 0;
+        magic = 7;
+        skill = 5;
+        speed = 7;
+        luck = 0;
+        defense = 4;
+        resistance = 5;
+        movementInitial = 6;
         movement = movementInitial;
         vision = 6;
         unitType = UnitType.Infantry;
@@ -94,14 +85,14 @@ public class Sage extends LightUnit{
     // Method to set up the player's growth rates
     @Override
     public void setupGrowthRates() {
-        HPGrowthRate = 70;
+        HPGrowthRate = 75;
         strengthGrowthRate = 0;
         magicGrowthRate = 80;
-        skillGrowthRate = 60;
-        speedGrowthRate = 60;
+        skillGrowthRate = 65;
+        speedGrowthRate = 50;
         luckGrowthRate = 50;
         defenseGrowthRate = 35;
-        resistanceGrowthRate = 55;
+        resistanceGrowthRate = 60;
     }
 
     //Load images for the unit's animations

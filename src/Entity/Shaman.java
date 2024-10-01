@@ -39,7 +39,7 @@ public class Shaman extends ChaosUnit{
         luck = 0;
         defense = 7;
         resistance = 7;
-        movement = 3;
+        movement = 6;
         setupGrowthRates();
         setStats();
         randomizeRace();
@@ -55,14 +55,14 @@ public class Shaman extends ChaosUnit{
     // Method to set up the player's growth rates
     @Override
     public void setupGrowthRates() {
-        HPGrowthRate = 80;
+        HPGrowthRate = 90;
         strengthGrowthRate = 0;
-        magicGrowthRate = 50;
-        skillGrowthRate = 45;
+        magicGrowthRate = 40;
+        skillGrowthRate = 40;
         speedGrowthRate = 40;
         luckGrowthRate = 30;
-        defenseGrowthRate = 30;
-        resistanceGrowthRate = 45;
+        defenseGrowthRate = 35;
+        resistanceGrowthRate = 30;
     }
 
     @Override
@@ -122,7 +122,7 @@ public class Shaman extends ChaosUnit{
 
         if (level <= 7) {
             if (number <= 10) {
-                item = new Torch();
+                item = new SteelShield();
             } else if (number > 10 && number <= 20) {
                 item = new SteelSword();
             } else if (number > 20 && number <= 30) {
@@ -139,11 +139,11 @@ public class Shaman extends ChaosUnit{
             if (number <= 10) {
                 item = new SteelShield();
             } else if (number > 10 && number <= 20) {
-                item = new Torch();
+                item = new SpeedRing();
             } else if (number > 20 && number <= 30) {
                 item = new SteelLance();
             } else if (number > 30 && number <= 40) {
-                item = new SteelShield();
+                item = new BlessedRing();
             } else if (number > 40 && number <= 50) {
                 item = new SteelSword();
             } else if (number > 50 && number <= 70) {
@@ -152,7 +152,7 @@ public class Shaman extends ChaosUnit{
         }
         else if (level > 12) {
             if (number <= 10) {
-                item = new Torch();
+                item = new HexlockShield();
             } else if (number > 10 && number <= 20) {
                 item = new BlessedRing();
             } else if (number > 20 && number <= 30) {

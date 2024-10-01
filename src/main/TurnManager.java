@@ -18,7 +18,7 @@ public class TurnManager {
     private boolean enemyPhaseSoundPlayed = false;
 
     private int activeBeacons = 0; // Count of currently active beacons
-    private int beaconCooldown = 1; // Cooldown period for each beacon
+    private int beaconCooldown = 10; // Cooldown period for each beacon
     private int beaconCooldownTimer = beaconCooldown; // Cooldown timer for beacons of light
     private boolean reinforcmentsAdded = false;
 
@@ -31,6 +31,22 @@ public class TurnManager {
     public TurnManager(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
+        turnCompleted = false;
+    }
+
+    // Method to reset all booleans if game over
+    public void resetBoolean(){
+        reinforcmentsAdded = false;
+        playerPhase = true;
+        playerPhaseSoundPlayed = false;
+        enemyPhaseSoundPlayed = false;
+        enemiesSpawned = false;
+        boss1Spawned = false;
+        boss2Spawned = false;
+        boss3Spawned = false;
+        boss4Spawned = false;
+        boss5Spawned = false;
+        boss6Spawned = false;
     }
 
     // Manages the turns between player and enemy phases
@@ -111,7 +127,8 @@ public class TurnManager {
                     }
                 }
                 else {
-                    currentEnemy.takeAction(); // Only take action if the unit hasn't finished its turn
+                   // Only take action if the unit hasn't finished its turn
+                    currentEnemy.takeAction();
                 }
             } else {
                 // All Chaos units have finished their turns, switch back to player phase
@@ -421,6 +438,10 @@ public class TurnManager {
         if (gp.getCurrentMap() != 6) {
             activeBeacons = 0;
         }
+    }
+
+    public void resetTurnCounter() {
+        turnCounter = 0;
     }
 
     public void update() {

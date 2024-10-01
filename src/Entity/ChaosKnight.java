@@ -38,7 +38,7 @@ public class ChaosKnight extends ChaosUnit{
         luck = 0;
         defense = 10;
         resistance = 6;
-        movement = 4;
+        movement = 8;
         setupGrowthRates();
         setStats();
         randomizeRace();
@@ -54,7 +54,7 @@ public class ChaosKnight extends ChaosUnit{
     // Method to set up the player's growth rates
     @Override
     public void setupGrowthRates() {
-        HPGrowthRate = 85;
+        HPGrowthRate = 90;
         strengthGrowthRate = 45;
         magicGrowthRate = 0;
         skillGrowthRate = 40;

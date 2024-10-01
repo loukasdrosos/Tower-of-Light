@@ -698,16 +698,6 @@ public class UI {
             else if (player.getBonusResistance() < 0){
                 g2.drawString("Resistance: " + player.getResistance() + " - " + Math.abs(player.getBonusResistance()), statsX, statsY + 4 * lineHeight);
             }
-
-            if (player.getBonusVision() == 0){
-                g2.drawString("Vision: " + player.getVision(), statsX2, statsY + 4 * lineHeight);
-            }
-            else if (player.getBonusVision() > 0){
-                g2.drawString("Vision: " + player.getVision() + " + " + player.getBonusVision(), statsX2, statsY + 4 * lineHeight );
-            }
-            else if (player.getBonusVision() < 0){
-                g2.drawString("Vision: " + player.getVision() + " - " + Math.abs(player.getBonusVision()), statsX2, statsY + 4 * lineHeight );
-            }
         }
     }
 

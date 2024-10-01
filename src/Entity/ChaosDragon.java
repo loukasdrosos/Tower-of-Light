@@ -37,9 +37,9 @@ public class ChaosDragon extends ChaosUnit{
         skill = 6;
         speed = 8;
         luck = 0;
-        defense = 7;
-        resistance = 10;
-        movement = 3;
+        defense = 9;
+        resistance = 12;
+        movement = 6;
         setupGrowthRates();
         setStats();
         race = UnitRace.Dragon;
@@ -55,14 +55,14 @@ public class ChaosDragon extends ChaosUnit{
     // Method to set up the player's growth rates
     @Override
     public void setupGrowthRates() {
-        HPGrowthRate = 80;
+        HPGrowthRate = 90;
         strengthGrowthRate = 0;
-        magicGrowthRate = 60;
-        skillGrowthRate = 45;
-        speedGrowthRate = 50;
+        magicGrowthRate = 45;
+        skillGrowthRate = 40;
+        speedGrowthRate = 40;
         luckGrowthRate = 10;
         defenseGrowthRate = 35;
-        resistanceGrowthRate = 45;
+        resistanceGrowthRate = 40;
     }
 
     @Override

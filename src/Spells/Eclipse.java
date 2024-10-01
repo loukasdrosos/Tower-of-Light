@@ -12,6 +12,6 @@ public class Eclipse extends AttackSpell{
         might = 13;
         hit = 80;
         crit = 5;
-        range = 3;
+        range = 4;
     }
 }

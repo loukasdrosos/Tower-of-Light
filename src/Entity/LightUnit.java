@@ -472,7 +472,6 @@ public class LightUnit extends Entity {
         }
     }
 
-    @Override
     public void move() {
         // Check if the unit is not in a waiting state, is selected, and is allowed to move
         if (gp.selectedUnit != null && !wait && gp.selectedUnit == this && isMoving) {
@@ -787,9 +786,8 @@ public class LightUnit extends Entity {
                 int newRow = currentRow + dir[1];
                 int newDistance = currentDistance + 1;
 
-                // Check if the new tile is within the map bounds, not visited, within movement range, not wall and not occupied by an enemy unit
-                if (gp.cChecker.isWithinMap(newCol, newRow) && !visited[newCol][newRow] &&
-                        newDistance <= movement && gp.cChecker.NonCollisionTile(newCol, newRow) && gp.cChecker.noEnemyOnTile(newCol, newRow)) {
+                // Check if the new tile is within the map bounds, not visited, within movement range, not wall and not occupied by an enemy or player unit
+                if (gp.cChecker.isWithinMap(newCol, newRow) && !visited[newCol][newRow] && newDistance <= movement && gp.cChecker.validTile(newCol, newRow)) {
                     // If the tile is valid, add it to the queue to be explored
                     queue.add(new int[]{newCol, newRow, newDistance});
                     visited[newCol][newRow] = true; // Mark the tile as visited
@@ -908,28 +906,28 @@ public class LightUnit extends Entity {
 
     // Method to find all tiles with players in this unit's healing range based on its current position
     public List<int[]> getTilesWithPlayersInRange() {
-        // List to store the positions of enemies that are within attack range
+        // List to store the positions of players that are within healing range
         List<int[]> tilesWithPlayersInRange = new ArrayList<>();
 
-        // Determine the attack range (the maximum distance at which the unit can attack)
+        // Determine the healing range (the maximum distance at which the unit can heal)
         int healingRange = 0;
         if (healingSpell != null) {
             healingRange = healingSpell.getRange(); // Get range from healing spell
         }
 
-        // Iterate over all possible tiles within the maximum attack range
+        // Iterate over all possible tiles within the maximum healing range
         for (int dCol = -healingRange; dCol <= healingRange; dCol++) {
             for (int dRow = -healingRange; dRow <= healingRange; dRow++) {
                 // Calculate Manhattan distance for the current offset (dCol, dRow)
                 int manhattanDistance = Math.abs(dCol) + Math.abs(dRow);
 
-                // Check if this tile is within the valid attack range (Manhattan distance between 1 and weaponRange)
+                // Check if this tile is within the valid healing range (Manhattan distance between 1 and healingRange)
                 if (manhattanDistance >= 1 && manhattanDistance <= healingRange) {
-                    // Calculate the actual column and row of the attack tile
+                    // Calculate the actual column and row of the healing tile
                     int attackCol = col + dCol;
                     int attackRow = row + dRow;
 
-                    // Ensure the attack tile is within the bounds of the game map
+                    // Ensure the heLING tile is within the bounds of the game map
                     if (gp.cChecker.isWithinMap(attackCol, attackRow)) {
                         // Check if there is a player on the current tile
                         if (!gp.cChecker.noPlayerOnTile(attackCol, attackRow)) {
@@ -941,7 +939,7 @@ public class LightUnit extends Entity {
             }
         }
 
-        // Return the list of enemies' positions within range
+        // Return the list of players positions within range
         return tilesWithPlayersInRange;
     }
 
