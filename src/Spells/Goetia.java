@@ -12,6 +12,6 @@ public class Goetia extends AttackSpell{
         might = 15;
         hit = 80;
         crit = 10;
-        range = 3;
+        range = 4;
     }
 }

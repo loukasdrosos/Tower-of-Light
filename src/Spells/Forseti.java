@@ -12,6 +12,6 @@ public class Forseti extends AttackSpell{
         might = 12;
         hit = 85;
         crit = 15;
-        range = 3;
+        range = 4;
     }
 }

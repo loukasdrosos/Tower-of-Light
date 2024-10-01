@@ -12,6 +12,6 @@ public class Expiration extends AttackSpell{
         might = 20;
         hit = 85;
         crit = 5;
-        range = 3;
+        range = 6;
     }
 }

@@ -85,14 +85,14 @@ public class Sage extends LightUnit{
     // Method to set up the player's growth rates
     @Override
     public void setupGrowthRates() {
-        HPGrowthRate = 70;
+        HPGrowthRate = 75;
         strengthGrowthRate = 0;
         magicGrowthRate = 80;
-        skillGrowthRate = 60;
-        speedGrowthRate = 60;
+        skillGrowthRate = 65;
+        speedGrowthRate = 50;
         luckGrowthRate = 50;
         defenseGrowthRate = 35;
-        resistanceGrowthRate = 55;
+        resistanceGrowthRate = 60;
     }
 
     //Load images for the unit's animations

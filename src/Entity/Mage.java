@@ -88,14 +88,14 @@ public class Mage extends LightUnit{
     // Method to set up the player's growth rates
     @Override
     public void setupGrowthRates() {
-        HPGrowthRate = 75;
+        HPGrowthRate = 80;
         strengthGrowthRate = 0;
         magicGrowthRate = 75;
-        skillGrowthRate = 60;
+        skillGrowthRate = 65;
         speedGrowthRate = 70;
-        luckGrowthRate = 60;
+        luckGrowthRate = 70;
         defenseGrowthRate = 35;
-        resistanceGrowthRate = 45;
+        resistanceGrowthRate = 50;
     }
 
     //Load images for the unit's animations

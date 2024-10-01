@@ -12,6 +12,6 @@ public class Valflame extends AttackSpell{
         might = 10;
         hit = 80;
         crit = 5;
-        range = 3;
+        range = 4;
     }
 }

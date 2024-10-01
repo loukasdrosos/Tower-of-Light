@@ -88,8 +88,8 @@ public class GamePanel extends JPanel implements Runnable{
     // Method to set up the game
     public void setupGame() {
         aSetter.setLightUnits();
-        playSE(9);
         aSetter.setChaosUnits();
+        playSE(9);
         aSetter.setCursor();
         ui.addLogMessage("Press P to view controls");
 
