@@ -1,6 +1,6 @@
 # Tower of Light
 
-Tower of Light is an indie, 2D turn-based strategy RPG where you lead the Prince of the kingdom of Valentia and his army to take back the Tower of Light from the Chaos army that is trying to take over the world. The game emphasizes tactical decision-making, with each move being critical to the success of your army. The game is made from scratch in Java and it features 2D animations, as well as music and sound effects, and was made for my MSc course Object Oriented Programming.
+Tower of Light is an indie, 2D turn-based strategy RPG where you lead Prince Alm of the kingdom of Valentia and his army to take back the Tower of Light from the Chaos army and defeat the Chaos God Grima that is trying to take over the world. The game emphasizes tactical decision-making, with each move being critical to the success of your army. The game is made from scratch in Java and it features 2D animations, as well as music and sound effects, and was made for my MSc course Object Oriented Programming.
 
 ## Gameplay
 
@@ -9,6 +9,12 @@ Tower of Light is an indie, 2D turn-based strategy RPG where you lead the Prince
 ![Gameplay_1.jpg](README/Gameplay_1.jpg) 
 
 ## Game Narrative
+
+200 years ago, the Chaos God Grima and his Chaos army tried to take over the world. In the most fatal times, however, the Hero King Marth of the kingdom of Valentia
+and his companions used all of their power to resist the Chaos army's invasion and win against them. The Hero King used his sword Lightbringer to unleash the last power
+of Light left in the world to seal Grima, because Grima was too powerful to be killed. To remind everyone of these heroic actions the Tower of Light was built, which
+also holds enough Light power to help the next heroes defeat the Chaos army if another invasion ever happens. Peace lasted for 200 years and no one thought dark times 
+would ever come again. However...
 
 The incentive of the game is for the Prince and his army to reach the final floor of the Tower and defeat the Chaos God and the Chaos army from taking over the world.
 The player's army moves a floor at a time. To reach the next floor the Prince needs to create three beacons of light and then your army to defeat that floor's boss. 
