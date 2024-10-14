@@ -51,6 +51,10 @@ Ally Healing Forecast
             
 ![Ally_Heal.jpg](README/Ally_Heal.jpg) 
 
+**Item Selection:** select and pick up new weapons, shields, magic rings and healing potions that will help you in your battle against the chaos army.
+
+![Item_Selection.jpg](README/Item_Selection.jpg) 
+
 **Enemy Preview:** Select enemies and view their stats and attack range in order to plan your best moves.
 
 ![Enemy_Range.jpg](README/Enemy_Range.jpg) 
