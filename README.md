@@ -6,7 +6,7 @@ Tower of Light is an indie, 2D turn-based strategy RPG where you lead the Prince
 
 ![Start_screen.jpg](README/Start_screen.jpg) 
 
-![Gmaeplay_1.jpg](README/Gameplay_1.jpg) 
+![Gameplay_1.jpg](README/Gameplay_1.jpg) 
 
 ## Game Narrative
 
@@ -25,13 +25,32 @@ potion slot. Of course, if there are no potions on the inventory, the player can
 enemies might find him easier this way. Of course, your army also includes magic casters that can use both attacking spells on enemies and healing spells on 
 allies, and can use all spells from range, but these units generally have weaker defenses and their actions must be thoughfully planned. 
 
-### Features
+## Features
 
 **Turn-Based Combat:** Engage in strategic battles, carefully planning your moves to outwit your enemies.
 
 | Player Phase                                       | Enemy Phase                      |
 |---------------------------------                   |---------------------------------|
 | ![Player_Movement.jpg](README/Player_Movement.jpg) | ![Enemy_Phase.jpg](README/Enemy_Phase.jpg) |
+
+**Unique Classes:** Use a variety of character classes, either physical or magical, each with their own distinct strengths, and weaknesses.
+
+**Dynamic Battle System:** The combat system includes attack ranges, weapon types, trinket items and careful positioning, adding depth to each encounter.
+
+| Physical Battle Forecast                           | Magical Battle Forecast                      |
+|---------------------------------                   |---------------------------------|
+| ![Battle_Phase.jpg](README/Battle_Phase.jpg) | ![Magic_Attack.jpg](README/Magic_Attack.jpg) |
+
+**Enemy Preview:** Select enemies and view their stats and attack range in order to plan your best moves.
+
+![Enemy_Range.jpg](README/Enemy_Range.jpg) 
+
+**Level up:** Gain experience points to enhance your armys' stats as you progress through the Tower.
+
+**Story-Driven Adventure:** Uncover the mysteries of the Tower as you descend through its treacherous levels, battling powerful foes and discovering the lore
+behind the enemies actions.
+
+**Pixel Art Graphics:** Experience retro-style pixel art visuals that give life to the world and characters of Tower of Light.
 
 
 
