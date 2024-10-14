@@ -56,5 +56,6 @@ behind the enemies actions.
 
 **Pixel Art Graphics:** Experience retro-style pixel art visuals that give life to the world and characters of Tower of Light.
 
+## Controls
 
-
+![Controls.jpg](README/Controls.jpg) 
