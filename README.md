@@ -41,6 +41,10 @@ allies, and can use all spells from range, but these units generally have weaker
 |---------------------------------                   |---------------------------------|
 | ![Battle_Phase.jpg](README/Battle_Phase.jpg) | ![Magic_Attack.jpg](README/Magic_Attack.jpg) |
 
+Ally Healing Forecast                                 
+            
+![Ally_Heal.jpg](README/Ally_Heal.jpg) 
+
 **Enemy Preview:** Select enemies and view their stats and attack range in order to plan your best moves.
 
 ![Enemy_Range.jpg](README/Enemy_Range.jpg) 
