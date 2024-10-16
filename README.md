@@ -21,7 +21,7 @@ The player's army moves a floor at a time. To reach the next floor the Prince ne
 Then, the stairs on the north-east of the map appear and your army reaches the next floor.
 
 However, the battle to reach the Chaos God is hard. Your army is going to face a lot of enemies, some that are very powerful, that spawn at different map positions.
-The player might be able to get away, but not for long. All the enemies follow closely the player' army and try to eliminate them.  In addition, they get stronger 
+The player might be able to get away, but not for long. All the enemies follow closely the player's army and try to eliminate them.  In addition, they get stronger 
 and more ferocious with each beacon created. On the other hand, if the player kills the enemies they can drop valuable items, such as weapons, shields, magic rings
 and healing potions that will strengthen your army for the tough challenges it will face. The game ends either when the Chaos God is defeated or when the Prince 
 is defeated.
